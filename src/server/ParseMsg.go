@@ -3,47 +3,45 @@ package server
 import (
 	_"pojo"
 	"net"
-	_"encoding/json"
+	"encoding/json"
 	"fmt"
 	"sync"
+	_"time"
 )
 
 var mutex = &sync.Mutex{}
 
 func ParseMsg(msg string, conn net.Conn){
 
-	// if msg == "PING"{
-
-	// 	WriteBytes(conn, 1, []byte("PONG"))
-
-	// }else{
-
-	// 	var QueryObject = pojo.QueryParser{}
-
-	// 	pojoErr := json.Unmarshal([]byte(msg), &QueryObject)
-
-	// 	if pojoErr != nil{
-	// 		WriteBytes(conn, 2, []byte("Invalid message command..."))
-	// 		return
-	// 	}
-
-	// 	// Cache Query SET, GET, DEL method to be invoked
-
-	// 	if QueryObject.Ch != nil{
-	// 		if *QueryObject.Ch.DB < 0 || *QueryObject.Ch.DB > 14{
-	// 			WriteBytes(conn, 2, []byte("Invalid database selected, database lies between 0 - 14..."))
-	// 			return
-	// 		}
-	// 		CallCacheMethod(conn, QueryObject)
-	// 	}
-	// }
-
 	mutex.Lock()
 
-	fmt.Println("################")
-	fmt.Println(msg)
+	messageMap := make(map[string]interface{})
 
-	File.WriteString(msg)
+	err := json.Unmarshal([]byte(msg), &messageMap)
+
+	if err != nil{
+		fmt.Println(err.Error())
+		WriteLog(err.Error())
+		return
+	}
+	
+	if messageMap["_id"] == 0{
+		fmt.Println("Invalid message received..." + msg)
+		WriteLog("Invalid message received..." + msg)
+		return
+	}
+
+	if messageMap["channelName"] == ""{
+		fmt.Println("Invalid message received..." + msg)
+		WriteLog("Invalid message received..." + msg)
+		return
+	}
+
+	var channelName = messageMap["channelName"].(string)
+
+	var channelMess = TCPStorage[channelName]["bucketData"].(chan string)
+
+	channelMess <- messageMap["data"].(string)
 
 	mutex.Unlock()
 }

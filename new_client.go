@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"encoding/json"
 )
 
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
@@ -53,27 +54,8 @@ func main() {
 
 		//reader := bufio.NewReader(os.Stdin)
 
-		text := `{
-			"SchemeChartData":{
-				"schemeID":"5b87905a23cdd651de153918",
-		        "chartLimit":"1M"
-			},
-			"ClientData":{
-				"nanoTime":"`+strconv.FormatInt(currentTime.UnixNano(), 10)+`",
-				"amcCode":"",
-				"category":"EQUITY",
-				"limit":3,
-				"minimuInvestment":0,
-				"optionCode":"Z",
-				"order":"DESC",
-				"skip":1,
-				"sortedby":`+currentTime.Format("2006.01.02 15:04:05")+`,
-				"subCategory":"",
-				"timeDuration":"3Y",
-				"requestId":"5e21c02abba203289c401f80"
-			}
-		}`
-		
+		text := `{string:Account="T93992", long:AlgoEndTime=0, long:AlgoSlices=0, long:AlgoSliceSeconds=0, long:AlgoStartTime=0, long:ClientType=2, string:ClOrdID="102173109118", string:ClTxnID="D202002031731214230", string:ComplianceID="1111111111111088", long:CoveredOrUncovered=0, long:CreatedTime=1580731269703, long:CustomerOrFirm=0, double:DisclosedQty=0.000000e+00, double:DripPrice=0.000000e+00, long:DripSize=0, string:Exchange="BSE", string:ExchangeSegment="CM", long:ExecInst=0, string:Giveup="0", long:GoodTillDate=0, long:HandlInst=1, string:InstruType="E", string:IntiatedUserId="T93992", string:IntiatedRequestMode="D", long:LastModifiedTime=1580731269726, long:MastersLastUpdated=423, long:MaturityDay=0, double:MaxPricePercentage=0.000000e+00, string:MessageType="D", double:MinimumFillAon=0.000000e+00, string:OMSID="102_20200203173109_103", string:OptAttribute="S", double:OrderQty=1.000000e+00, string:OrdStatus="A", string:OrderRequestMode="D", string:Ordmsgtyp="1", long:OrdType=1, double:Price=0.000000e+00, long:PriceType=2, string:PrimaryDealer="NA", long:PutOrCall=0, string:rSymbol="523395_BSE_CM", string:ScripName="3M INDIA LTD.", string:SecondaryDealer="NA", string:Series="A", string:Settlor="0", long:Side=1, long:SpecialOrderFlag=4, string:Status="Pending New", string:Symbol="3MINDIA", long:TimeInForce=0, string:Token="523395", long:TradingSession=1, long:TransacationType=0, long:TransactTime=1580731281423, string:UniqueSessionId="eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ==.eyJjbGllbnRDb2RlIjoiVDkzOTkyIiwic2Vzc2lvbklkIjoiNWUzODAzNDJlZmM2NWEwNzEzZWUwN2ZlIiwidXNlclR5cGUiOiJDdXN0b21lciIsImNyZWF0ZWRBdCI6IjIwMjAtMDItMDNUMTE6MjU6NTQuMTM5WiJ9.8fLjJG0/eXWLbVGD7otgMOsiGn6rCV8UmIsMkYUFenw=", string:UserId="T93992", string:PAN="AAAAA1111A", long:ActivityTime=1580731269703, string:ClearingAccount="8036"}`
+
 		text = strings.TrimRight(text, "\r\n")
 
 		// if text == "" {
@@ -85,21 +67,39 @@ func main() {
 
 		buff := make([]byte, 4)
 
-		binary.LittleEndian.PutUint32(buff, uint32(len(text)))
+		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
+
+		var messageMap = make(map[string]interface{})
+		messageMap["_id"] = _id
+		messageMap["channelName"] = "SampleChannel"
+		messageMap["data"] = text
+
+		jsonData, err := json.Marshal(messageMap)
+
+		if err != nil{
+
+			fmt.Println(err)
+			return
+
+		}
+
+		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
 
 		packetBuffer.Write(buff)
 
-		packetBuffer.Write([]byte(text))
+		packetBuffer.Write(jsonData)
 
 		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
 
-		fmt.Println(text)
+		fmt.Println(jsonData)
 
-		_, err := conn.Write(packetBuffer.Bytes())
+		fmt.Println(time.Now())
+		_, err = conn.Write(packetBuffer.Bytes())
+
+		break
 
 		if err != nil {
 			fmt.Println("Error writing to stream." + err.Error())
-			continue
 		}
 	}
 }

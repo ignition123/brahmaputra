@@ -24,8 +24,6 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 
 	for {
 
-		time.Sleep(1)
-
 		conn.Read(sizeBuf)
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)

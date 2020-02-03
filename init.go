@@ -35,7 +35,7 @@ func main(){
 	flag.Parse()
 
 	if *serverRun != "default"{
-		runConfigFile(*serverRun)
+		runConfigFile(*serverRun, *channelType)
 	}else if *channelName != "default"{
 		createChannel(*path, *channelName, *channelType, *writeInterval)
 	}else{
@@ -50,7 +50,7 @@ func main(){
 	}
 }
 
-func runConfigFile(configPath string){
+func runConfigFile(configPath string, channelType string){
 	
 	data, err := ioutil.ReadFile(configPath)
 
@@ -68,9 +68,17 @@ func runConfigFile(configPath string){
 		return
 	}
 
-	if *configObj.Server.Host != "" && *configObj.Server.Port != ""{
-		server.HostTCP(configObj)
-	}
+	if channelType == "tcp"{
+		if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
+			server.HostTCP(configObj)
+		}
+	}else if channelType == "udp"{
+		if *configObj.Server.UDP.Host != "" && *configObj.Server.UDP.Port != ""{
+			server.HostUDP(configObj)
+		}
+	}else{
+		fmt.Println("Invalid protocol, must be either tcp or udp...")
+	}	
 }
 
 func createChannel(path string, channelName string, channelType string, writeInterval int){
@@ -109,17 +117,29 @@ func createChannel(path string, channelName string, channelType string, writeInt
 		}
 
 		defer fDes.Close()
-  	
-		var bytePacket []byte
 
-		server.Storage[channelName] = make(map[string]interface{})
+		if channelType == "tcp"{
+			server.TCPStorage[channelName] = make(map[string]interface{})
 
-		server.Storage[channelName]["path"] = path
-		server.Storage[channelName]["bytePacket"] = bytePacket
-		server.Storage[channelName]["writeInterval"] = writeInterval
-		server.Storage[channelName]["channelType"] = channelType
+			server.TCPStorage[channelName]["channelName"] = channelName
+			server.TCPStorage[channelName]["type"] = "channel"
+			server.TCPStorage[channelName]["path"] = path
+			server.TCPStorage[channelName]["writeInterval"] = writeInterval
+			server.TCPStorage[channelName]["channelType"] = channelType
+		}else if channelType == "udp"{
+			server.UDPStorage[channelName] = make(map[string]interface{})
 
-		jsonData, err := json.Marshal(server.Storage[channelName])
+			server.UDPStorage[channelName]["channelName"] = channelName
+			server.UDPStorage[channelName]["type"] = "channel"
+			server.UDPStorage[channelName]["path"] = path
+			server.UDPStorage[channelName]["writeInterval"] = writeInterval
+			server.UDPStorage[channelName]["channelType"] = channelType
+		}else{
+			fmt.Println("Invalid protocol, must be either tcp or udp...")
+			return
+		}
+
+		jsonData, err := json.Marshal(server.TCPStorage[channelName])
 
 		if err != nil{
 

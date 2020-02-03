@@ -8,36 +8,36 @@ import (
 	"time"
 )
 
-type ServerConnection struct{
+type ServerTCPConnection struct{
 	connections map[net.Conn] time.Time
 }
 
-var File *os.File
-
 func HostTCP(configObj pojo.Config){
 
-	server, err := net.Listen("tcp", *configObj.Server.Host +":"+ *configObj.Server.Port)
+	LoadTCPChannelsToMemory()
+
+	GetChannelData()
+
+	if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
+		HostTCPServer(configObj)
+	}
+}
+
+func HostTCPServer(configObj pojo.Config){
+
+	server, err := net.Listen("tcp", *configObj.Server.TCP.Host +":"+ *configObj.Server.TCP.Port)
 
     if err != nil {
         fmt.Println("Error listening:", err.Error())
+        WriteLog(err.Error())
         os.Exit(1)
 	}
 	
 	defer server.Close()
 
-	fmt.Println("Listening on " + *configObj.Server.Host + ":" + *configObj.Server.Port+"...")
-
-	File, err = os.OpenFile("D:/brahmaputra/log.out", os.O_APPEND|os.O_WRONLY, 0600)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer File.Close()
+	fmt.Println("Listening on " + *configObj.Server.TCP.Host + ":" + *configObj.Server.TCP.Port+"...")
 
     for {
-
-		// time.Sleep(1)
 
 		conn, err := server.Accept()
 
@@ -45,6 +45,8 @@ func HostTCP(configObj pojo.Config){
 		
         if err != nil {
             fmt.Println("Error accepting: ", err.Error())
+           	WriteLog(err.Error())
+            continue
 		}
 
 		var messageQueue = make(chan string)
@@ -54,6 +56,8 @@ func HostTCP(configObj pojo.Config){
 		go RecieveMessage(conn, messageQueue)
 
 		go HandleRequest(conn, messageQueue)
-		
+
+		fmt.Println("Loading log files...")
+		fmt.Println("Starting TCP server...")
 	}
 }

@@ -1,1 +1,1 @@
-{"bytePacket":null,"channelType":"tcp","path":"D:/brahmaputra/storage","writeInterval":1000}
+{"channelName":"SampleChannel","channelType":"tcp","path":"D:/brahmaputra/storage","type":"channel","writeInterval":1000}

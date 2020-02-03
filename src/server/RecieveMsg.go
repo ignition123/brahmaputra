@@ -3,7 +3,6 @@ package server
 
 import(
 	"net"
-	_"time"
 	"fmt"
 )
 
@@ -12,8 +11,6 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 	var stopIterate = false
 
 	for{
-
-		// time.Sleep(1)
 
 		if stopIterate{
 			break
@@ -27,7 +24,7 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 						break
 					}
 
-					ParseMsg(val, conn)
+					go ParseMsg(val, conn)
     
 				}else{
 					fmt.Println("Connection closed!")
