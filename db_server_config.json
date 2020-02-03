@@ -1,0 +1,17 @@
+{
+    "worker":4,
+    "server":{
+        "host":"127.0.0.1",
+        "port":"8900",
+        "max_sockets":0,
+        "socket_timeout":12000,
+        "auth":{
+            "username":"sudeep",
+            "password":"kaihiwatari"
+        }
+    },
+    "persistent":{
+        "writeInterval":1000,
+        "path":"d:/brahmaputra"
+    }
+}
