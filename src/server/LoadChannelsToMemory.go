@@ -43,7 +43,7 @@ func LoadTCPChannelsToMemory(){
 
 			if channelMap["type"] == "channel" && channelMap["channelType"] == "tcp"{
 
-				var bucketData  = make(chan string)
+				var bucketData  = make(chan map[string]interface{})
 
 				var channelName = channelMap["channelName"].(string)
 

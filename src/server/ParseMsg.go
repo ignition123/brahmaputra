@@ -13,8 +13,6 @@ var mutex = &sync.Mutex{}
 
 func ParseMsg(msg string, conn net.Conn){
 
-	mutex.Lock()
-
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(msg), &messageMap)
@@ -24,22 +22,36 @@ func ParseMsg(msg string, conn net.Conn){
 		WriteLog(err.Error())
 		return
 	}
-	
-	if messageMap["_id"] == 0{
-		fmt.Println("Invalid message received..." + msg)
-		WriteLog("Invalid message received..." + msg)
+
+	if messageMap["type"] == "publish"{
+
+		if messageMap["_id"] == 0{
+			fmt.Println("Invalid message received..." + msg)
+			WriteLog("Invalid message received..." + msg)
+			return
+		}
+
+		if messageMap["channelName"] == ""{
+			fmt.Println("Invalid message received..." + msg)
+			WriteLog("Invalid message received..." + msg)
+			return
+		}
+
+		var channelName = messageMap["channelName"].(string)
+
+		mutex.Lock()
+
+		TCPStorage[channelName].BucketData <- messageMap["data"].(map[string]interface{})
+
+		mutex.Unlock()
+
+	}else if messageMap["type"] == "subscribe"{
+
+		
+
+	}else{
+		fmt.Println("Invalid message type must be either publish or subscribe...")
+		WriteLog("Invalid message type must be either publish or subscribe...")
 		return
-	}
-
-	if messageMap["channelName"] == ""{
-		fmt.Println("Invalid message received..." + msg)
-		WriteLog("Invalid message received..." + msg)
-		return
-	}
-
-	var channelName = messageMap["channelName"].(string)
-
-	TCPStorage[channelName].BucketData <- messageMap["data"].(string)
-
-	mutex.Unlock()
+	}	
 }

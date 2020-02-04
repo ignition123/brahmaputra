@@ -20,7 +20,7 @@ func WriteLog(logMessage string){
 	currentTime := time.Now()
 	var logMsg = "############################### \r\n"
 	logMsg += currentTime.String() + "\r\n"
-	logMsg += logMsg
+	logMsg += logMessage + "\r\n"
 
 	ErrorFile.WriteString(logMsg)
 }

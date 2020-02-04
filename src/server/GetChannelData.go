@@ -4,6 +4,7 @@ import(
 	"fmt"
 	"pojo"
 	"time"
+	_"encoding/json"
 )
 
 func GetChannelData(){
@@ -18,8 +19,9 @@ func GetChannelData(){
 func runChannel(channel *pojo.ChannelStruct){
 
 	defer close(channel.BucketData)
-	
+
 	for{
+		
 		fmt.Println(<- channel.BucketData)
 	}
 

@@ -1,12 +1,3801 @@
 ############################### 
-2020-02-03 17:59:11.8365014 +0530 IST m=+0.005010801
+2020-02-04 19:12:13.227171 +0530 IST m=+60.887965501
+invalid character 'd' after top-level value
 ############################### 
-2020-02-03 17:59:11.8365014 +0530 IST m=+0.005010801
+2020-02-04 19:12:13.231163 +0530 IST m=+60.891957501
+invalid character 'd' after top-level value
 ############################### 
-2020-02-03 18:00:30.4569183 +0530 IST m=+0.004986701
+2020-02-04 19:12:13.2331267 +0530 IST m=+60.893921201
+Invalid message type must be either publish or subscribe...
 ############################### 
-2020-02-03 18:00:30.4569183 +0530 IST m=+0.004986701
+2020-02-04 19:12:13.2371168 +0530 IST m=+60.897911301
+invalid character 'd' after top-level value
 ############################### 
-2020-02-03 18:03:41.0020027 +0530 IST m=+0.006952701
+2020-02-04 19:12:13.238119 +0530 IST m=+60.898913501
+invalid character 'd' after top-level value
 ############################### 
-2020-02-03 18:03:41.0020027 +0530 IST m=+0.006952701
+2020-02-04 19:12:13.2411058 +0530 IST m=+60.901900301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2431253 +0530 IST m=+60.903919801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2471147 +0530 IST m=+60.907909201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2510785 +0530 IST m=+60.911872901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2530988 +0530 IST m=+60.913893201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2570878 +0530 IST m=+60.917882201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2590579 +0530 IST m=+60.919852301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2610772 +0530 IST m=+60.921871601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.265047 +0530 IST m=+60.925841401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2690312 +0530 IST m=+60.929825601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2710259 +0530 IST m=+60.931820301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2750152 +0530 IST m=+60.935809601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2790051 +0530 IST m=+60.939799501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2809994 +0530 IST m=+60.941793801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2849887 +0530 IST m=+60.945783101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2889778 +0530 IST m=+60.949772201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.2929675 +0530 IST m=+60.953761901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2949923 +0530 IST m=+60.955786701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.2999497 +0530 IST m=+60.960744101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3029398 +0530 IST m=+60.963734201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.30693 +0530 IST m=+60.967724401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3109193 +0530 IST m=+60.971713701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3169032 +0530 IST m=+60.977697601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3188971 +0530 IST m=+60.979691501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3228871 +0530 IST m=+60.983681501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3268766 +0530 IST m=+60.987671001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3308659 +0530 IST m=+60.991660301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3348544 +0530 IST m=+60.995648801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3388445 +0530 IST m=+60.999638901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3428333 +0530 IST m=+61.003627701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3468231 +0530 IST m=+61.007617501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3518092 +0530 IST m=+61.012603601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3548018 +0530 IST m=+61.015596201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3587904 +0530 IST m=+61.019584801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3627797 +0530 IST m=+61.023574101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.366769 +0530 IST m=+61.027563401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3707592 +0530 IST m=+61.031553601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3747487 +0530 IST m=+61.035543101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3797348 +0530 IST m=+61.040529201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3827264 +0530 IST m=+61.043520801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3877134 +0530 IST m=+61.048507801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3907054 +0530 IST m=+61.051499801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.3946951 +0530 IST m=+61.055489501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.3986837 +0530 IST m=+61.059478101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4006784 +0530 IST m=+61.061472801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4046676 +0530 IST m=+61.065462001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.408657 +0530 IST m=+61.069451401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4106516 +0530 IST m=+61.071446001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4156385 +0530 IST m=+61.076432901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4166358 +0530 IST m=+61.077430201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4206258 +0530 IST m=+61.081420201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4246153 +0530 IST m=+61.085409701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4256124 +0530 IST m=+61.086406801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.429602 +0530 IST m=+61.090396401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4316003 +0530 IST m=+61.092394701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4355853 +0530 IST m=+61.096379701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4385829 +0530 IST m=+61.099377301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4425718 +0530 IST m=+61.103366201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4465563 +0530 IST m=+61.107350701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4515432 +0530 IST m=+61.112337601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4545396 +0530 IST m=+61.115334001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4575318 +0530 IST m=+61.118326201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4615168 +0530 IST m=+61.122311201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4655059 +0530 IST m=+61.126300301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4704924 +0530 IST m=+61.131286801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4734844 +0530 IST m=+61.134278801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4774738 +0530 IST m=+61.138268201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4814632 +0530 IST m=+61.142257601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4854571 +0530 IST m=+61.146251501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4884492 +0530 IST m=+61.149243601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.4924342 +0530 IST m=+61.153228601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4974207 +0530 IST m=+61.158215101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.4994197 +0530 IST m=+61.160214101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5024116 +0530 IST m=+61.163206001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5063965 +0530 IST m=+61.167190901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5103905 +0530 IST m=+61.171184901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5153727 +0530 IST m=+61.176167101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5173717 +0530 IST m=+61.178166101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5213611 +0530 IST m=+61.182155501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5253457 +0530 IST m=+61.186140101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.527343 +0530 IST m=+61.188137401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5303371 +0530 IST m=+61.191131501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5343221 +0530 IST m=+61.195116501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5373137 +0530 IST m=+61.198108101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5413031 +0530 IST m=+61.202097501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5452971 +0530 IST m=+61.206091501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.549287 +0530 IST m=+61.210081401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5532709 +0530 IST m=+61.214065301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5572607 +0530 IST m=+61.218055101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5612499 +0530 IST m=+61.222044301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.565239 +0530 IST m=+61.226033401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5702257 +0530 IST m=+61.231020101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5732179 +0530 IST m=+61.234012301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5772068 +0530 IST m=+61.238001201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.5812016 +0530 IST m=+61.241996001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5851909 +0530 IST m=+61.245985301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5891758 +0530 IST m=+61.249970201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.59117 +0530 IST m=+61.251964401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5931642 +0530 IST m=+61.253958601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.5981516 +0530 IST m=+61.258946001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6011481 +0530 IST m=+61.261942501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6051325 +0530 IST m=+61.265926901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6091216 +0530 IST m=+61.269916001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6111157 +0530 IST m=+61.271910101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.613139 +0530 IST m=+61.273933401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6161033 +0530 IST m=+61.276897701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.618122 +0530 IST m=+61.278916401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6211145 +0530 IST m=+61.281908901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6250793 +0530 IST m=+61.285873701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6291045 +0530 IST m=+61.289898901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6310631 +0530 IST m=+61.291857501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6340868 +0530 IST m=+61.294881201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6370716 +0530 IST m=+61.297866001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6400662 +0530 IST m=+61.300860601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6440526 +0530 IST m=+61.304847001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6470517 +0530 IST m=+61.307846101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6510111 +0530 IST m=+61.311805501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6530293 +0530 IST m=+61.313823701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6549994 +0530 IST m=+61.315793801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6569937 +0530 IST m=+61.317788101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6590161 +0530 IST m=+61.319810501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6630029 +0530 IST m=+61.323797301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6679645 +0530 IST m=+61.328758901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6709811 +0530 IST m=+61.331775501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6749456 +0530 IST m=+61.335740001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6779659 +0530 IST m=+61.338760301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6829245 +0530 IST m=+61.343718901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6859166 +0530 IST m=+61.346711001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6899053 +0530 IST m=+61.350699701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.6938941 +0530 IST m=+61.354688501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.6978839 +0530 IST m=+61.358678301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7018982 +0530 IST m=+61.362692601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7049008 +0530 IST m=+61.365695201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7088799 +0530 IST m=+61.369674301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7118739 +0530 IST m=+61.372668301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.716834 +0530 IST m=+61.377628401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7188328 +0530 IST m=+61.379627201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7228227 +0530 IST m=+61.383617101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7268069 +0530 IST m=+61.387601301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7298034 +0530 IST m=+61.390597801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7318042 +0530 IST m=+61.392598601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7357863 +0530 IST m=+61.396580701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7397769 +0530 IST m=+61.400571301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7437619 +0530 IST m=+61.404556301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7477523 +0530 IST m=+61.408546701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7507431 +0530 IST m=+61.411537401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7547323 +0530 IST m=+61.415526601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.758722 +0530 IST m=+61.419516301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7637086 +0530 IST m=+61.424502901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.766704 +0530 IST m=+61.427498301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7706898 +0530 IST m=+61.431484101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7726836 +0530 IST m=+61.433477901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7756809 +0530 IST m=+61.436475201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7806638 +0530 IST m=+61.441458101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7837052 +0530 IST m=+61.444499501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7856499 +0530 IST m=+61.446444201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7876489 +0530 IST m=+61.448443201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.7916337 +0530 IST m=+61.452428001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7956239 +0530 IST m=+61.456418201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.7986145 +0530 IST m=+61.459408801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8016063 +0530 IST m=+61.462400601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8055973 +0530 IST m=+61.466391601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8105831 +0530 IST m=+61.471377401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8135745 +0530 IST m=+61.474368801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8175637 +0530 IST m=+61.478358001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8215533 +0530 IST m=+61.482347601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8255426 +0530 IST m=+61.486336901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8295572 +0530 IST m=+61.490351501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8345187 +0530 IST m=+61.495313001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8355159 +0530 IST m=+61.496310201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8395353 +0530 IST m=+61.500329601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8444922 +0530 IST m=+61.505286501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8465177 +0530 IST m=+61.507312001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8504766 +0530 IST m=+61.511270901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8534684 +0530 IST m=+61.514262701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8544965 +0530 IST m=+61.515290801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8564777 +0530 IST m=+61.517272001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8594523 +0530 IST m=+61.520246601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8604496 +0530 IST m=+61.521243901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8634422 +0530 IST m=+61.524236501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8644386 +0530 IST m=+61.525232901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8684284 +0530 IST m=+61.529222701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8724182 +0530 IST m=+61.533212501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8734153 +0530 IST m=+61.534209601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8784368 +0530 IST m=+61.539231101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.881419 +0530 IST m=+61.542213301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8853876 +0530 IST m=+61.546181901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8873821 +0530 IST m=+61.548176401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8903701 +0530 IST m=+61.551164401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.8933616 +0530 IST m=+61.554155901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.8973547 +0530 IST m=+61.558149001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9013447 +0530 IST m=+61.562139001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9043373 +0530 IST m=+61.565131601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9073247 +0530 IST m=+61.568119001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9103163 +0530 IST m=+61.571110601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9143048 +0530 IST m=+61.575099101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9173327 +0530 IST m=+61.578127001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9173327 +0530 IST m=+61.578127001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9193775 +0530 IST m=+61.580171801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9213763 +0530 IST m=+61.582170601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9243122 +0530 IST m=+61.585106501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.926362 +0530 IST m=+61.587156301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.92927 +0530 IST m=+61.590064301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9312655 +0530 IST m=+61.592059801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9332591 +0530 IST m=+61.594053401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9372487 +0530 IST m=+61.598043001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9412381 +0530 IST m=+61.602032401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9432326 +0530 IST m=+61.604026901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9472175 +0530 IST m=+61.608011801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.949243 +0530 IST m=+61.610037301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9522411 +0530 IST m=+61.613035401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9562271 +0530 IST m=+61.617021401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9592224 +0530 IST m=+61.620016701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9632078 +0530 IST m=+61.624002101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9652031 +0530 IST m=+61.625997401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.969192 +0530 IST m=+61.629986301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9741788 +0530 IST m=+61.634973101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9771709 +0530 IST m=+61.637965201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9791657 +0530 IST m=+61.639960001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9831592 +0530 IST m=+61.643953501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.9871574 +0530 IST m=+61.647951701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9891453 +0530 IST m=+61.649939601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.9921367 +0530 IST m=+61.652931001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:13.995134 +0530 IST m=+61.655928301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:13.999118 +0530 IST m=+61.659912301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0031091 +0530 IST m=+61.663903401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0061046 +0530 IST m=+61.666898901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0110867 +0530 IST m=+61.671881001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0140822 +0530 IST m=+61.674876501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0160734 +0530 IST m=+61.676867701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0200628 +0530 IST m=+61.680857101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0230594 +0530 IST m=+61.683853701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0270481 +0530 IST m=+61.687842401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0290387 +0530 IST m=+61.689833001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0310335 +0530 IST m=+61.691827801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0330272 +0530 IST m=+61.693821501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0350239 +0530 IST m=+61.695818201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0360194 +0530 IST m=+61.696813701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0400092 +0530 IST m=+61.700803501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0440032 +0530 IST m=+61.704797501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0489854 +0530 IST m=+61.709779701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0519822 +0530 IST m=+61.712776501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.055966 +0530 IST m=+61.716760301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0599562 +0530 IST m=+61.720750501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0609833 +0530 IST m=+61.721777601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0639734 +0530 IST m=+61.724767701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0679639 +0530 IST m=+61.728758201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0709261 +0530 IST m=+61.731720401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0739181 +0530 IST m=+61.734712401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0779074 +0530 IST m=+61.738701701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0828967 +0530 IST m=+61.743691001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.085887 +0530 IST m=+61.746681301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0898753 +0530 IST m=+61.750669601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.0948891 +0530 IST m=+61.755683401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.0988542 +0530 IST m=+61.759648501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1018756 +0530 IST m=+61.762669901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1048614 +0530 IST m=+61.765655701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1068553 +0530 IST m=+61.767649601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1088254 +0530 IST m=+61.769619701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1148106 +0530 IST m=+61.775604901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.115851 +0530 IST m=+61.776645301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1197966 +0530 IST m=+61.780590901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.12578 +0530 IST m=+61.786574301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1277743 +0530 IST m=+61.788568601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1317641 +0530 IST m=+61.792558401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1357535 +0530 IST m=+61.796547801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1367798 +0530 IST m=+61.797574101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1407402 +0530 IST m=+61.801534501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1457274 +0530 IST m=+61.806521701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1497511 +0530 IST m=+61.810545401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1517989 +0530 IST m=+61.812593201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1537862 +0530 IST m=+61.814580501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1587156 +0530 IST m=+61.819509901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1607183 +0530 IST m=+61.821512601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.164676 +0530 IST m=+61.825470301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1686649 +0530 IST m=+61.829459201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1716617 +0530 IST m=+61.832456001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1736518 +0530 IST m=+61.834446101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1786393 +0530 IST m=+61.839433601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.180786 +0530 IST m=+61.841580301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1828648 +0530 IST m=+61.843659101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1857745 +0530 IST m=+61.846568801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1887669 +0530 IST m=+61.849561201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.1917635 +0530 IST m=+61.852557801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1957486 +0530 IST m=+61.856542901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.1997422 +0530 IST m=+61.860536501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2037318 +0530 IST m=+61.864526101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2057262 +0530 IST m=+61.866520501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2077163 +0530 IST m=+61.868510601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2107082 +0530 IST m=+61.871502501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2137049 +0530 IST m=+61.874499201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2176896 +0530 IST m=+61.878483901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2196843 +0530 IST m=+61.880478601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2226972 +0530 IST m=+61.883491501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2237011 +0530 IST m=+61.884495401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2247028 +0530 IST m=+61.885497101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2286867 +0530 IST m=+61.889481001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2326799 +0530 IST m=+61.893474201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2366693 +0530 IST m=+61.897463601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2406553 +0530 IST m=+61.901449601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2436465 +0530 IST m=+61.904440801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2466438 +0530 IST m=+61.907438101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2506282 +0530 IST m=+61.911422401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2546183 +0530 IST m=+61.915412501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.25761 +0530 IST m=+61.918404201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2606023 +0530 IST m=+61.921396501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2636335 +0530 IST m=+61.924427701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2675831 +0530 IST m=+61.928377301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2695775 +0530 IST m=+61.930371701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2745654 +0530 IST m=+61.935359601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2765636 +0530 IST m=+61.937357801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2795514 +0530 IST m=+61.940345601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2825433 +0530 IST m=+61.943337501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2865324 +0530 IST m=+61.947326601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2915189 +0530 IST m=+61.952313101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.292518 +0530 IST m=+61.953312201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.2955464 +0530 IST m=+61.956340601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.2995275 +0530 IST m=+61.960321701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3025148 +0530 IST m=+61.963309001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3045183 +0530 IST m=+61.965312501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3094713 +0530 IST m=+61.970265501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3134602 +0530 IST m=+61.974254401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3164522 +0530 IST m=+61.977246401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3184792 +0530 IST m=+61.979273401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.323434 +0530 IST m=+61.984228201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3254583 +0530 IST m=+61.986252501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3274349 +0530 IST m=+61.988229101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3314435 +0530 IST m=+61.992237701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3344047 +0530 IST m=+61.995198901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3354018 +0530 IST m=+61.996196001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3393915 +0530 IST m=+62.000185701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3433801 +0530 IST m=+62.004174301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3453804 +0530 IST m=+62.006174601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3473698 +0530 IST m=+62.008164001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3493646 +0530 IST m=+62.010158801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3533541 +0530 IST m=+62.014148301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3573431 +0530 IST m=+62.018137301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3613327 +0530 IST m=+62.022126901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3653219 +0530 IST m=+62.026116101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3673164 +0530 IST m=+62.028110601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.371306 +0530 IST m=+62.032100201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3733001 +0530 IST m=+62.034094301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3762929 +0530 IST m=+62.037087101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3782918 +0530 IST m=+62.039086001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3822769 +0530 IST m=+62.043071101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3862695 +0530 IST m=+62.047063701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.389258 +0530 IST m=+62.050052201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3922533 +0530 IST m=+62.053047501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.3952463 +0530 IST m=+62.056040501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.3992317 +0530 IST m=+62.060025901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4032205 +0530 IST m=+62.064014701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.407214 +0530 IST m=+62.068008201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4092083 +0530 IST m=+62.070002501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4131941 +0530 IST m=+62.073988301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4191781 +0530 IST m=+62.079972301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4201787 +0530 IST m=+62.080972901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4251621 +0530 IST m=+62.085956301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4281586 +0530 IST m=+62.088952801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4321433 +0530 IST m=+62.092937501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4351353 +0530 IST m=+62.095929501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4381318 +0530 IST m=+62.098926001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4431141 +0530 IST m=+62.103908301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.444115 +0530 IST m=+62.104909201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4481039 +0530 IST m=+62.108898101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4520899 +0530 IST m=+62.112884101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4560792 +0530 IST m=+62.116873401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4590749 +0530 IST m=+62.119869101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4620678 +0530 IST m=+62.122862001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.46705 +0530 IST m=+62.127844201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.468047 +0530 IST m=+62.128841201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4720406 +0530 IST m=+62.132834801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4760256 +0530 IST m=+62.136819801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4790178 +0530 IST m=+62.139812001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4830069 +0530 IST m=+62.143801101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4840091 +0530 IST m=+62.144803301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4879984 +0530 IST m=+62.148792601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4899929 +0530 IST m=+62.150787101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4919867 +0530 IST m=+62.152780901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.4949797 +0530 IST m=+62.155773901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.4989644 +0530 IST m=+62.159758601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5009588 +0530 IST m=+62.161753001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5049521 +0530 IST m=+62.165746301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5089377 +0530 IST m=+62.169731901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.510936 +0530 IST m=+62.171730201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5129272 +0530 IST m=+62.173721401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5169181 +0530 IST m=+62.177712301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.517914 +0530 IST m=+62.178708201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5199084 +0530 IST m=+62.180702601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5239013 +0530 IST m=+62.184695501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5258962 +0530 IST m=+62.186690401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.527887 +0530 IST m=+62.188681201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5319639 +0530 IST m=+62.192758101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5348688 +0530 IST m=+62.195663001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5359544 +0530 IST m=+62.196748601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5399409 +0530 IST m=+62.200735101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.543932 +0530 IST m=+62.204726201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5468604 +0530 IST m=+62.207654601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5499146 +0530 IST m=+62.210708801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5539302 +0530 IST m=+62.214724401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5559958 +0530 IST m=+62.216790001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5579315 +0530 IST m=+62.218725701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5628903 +0530 IST m=+62.223684501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5649365 +0530 IST m=+62.225730701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5688733 +0530 IST m=+62.229667501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5729462 +0530 IST m=+62.233740401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5778499 +0530 IST m=+62.238644101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5808686 +0530 IST m=+62.241662801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5829195 +0530 IST m=+62.243713701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5848636 +0530 IST m=+62.245657801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5869078 +0530 IST m=+62.247702001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.590815 +0530 IST m=+62.251609201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5938087 +0530 IST m=+62.254602901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.5948304 +0530 IST m=+62.255624601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.5997907 +0530 IST m=+62.260584901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.600817 +0530 IST m=+62.261611201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6048591 +0530 IST m=+62.265653301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6087676 +0530 IST m=+62.269561801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6107977 +0530 IST m=+62.271591901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6138363 +0530 IST m=+62.274630501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6158355 +0530 IST m=+62.276629701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6188618 +0530 IST m=+62.279656001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6209403 +0530 IST m=+62.281734501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6228525 +0530 IST m=+62.283646701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.627839 +0530 IST m=+62.288633201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6298599 +0530 IST m=+62.290654101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.632826 +0530 IST m=+62.293620201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6368155 +0530 IST m=+62.297609701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6398072 +0530 IST m=+62.300601401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6427995 +0530 IST m=+62.303593701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6438263 +0530 IST m=+62.304620501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.647867 +0530 IST m=+62.308661201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6498712 +0530 IST m=+62.310665401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6518033 +0530 IST m=+62.312597501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6548483 +0530 IST m=+62.315642501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6577599 +0530 IST m=+62.318554101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6608352 +0530 IST m=+62.321629401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6647411 +0530 IST m=+62.325535301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.666735 +0530 IST m=+62.327529201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6688129 +0530 IST m=+62.329607101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6747146 +0530 IST m=+62.335508801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6767897 +0530 IST m=+62.337583901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6787038 +0530 IST m=+62.339498001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6806984 +0530 IST m=+62.341492601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6826931 +0530 IST m=+62.343487301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6866819 +0530 IST m=+62.347476101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.6906716 +0530 IST m=+62.351465801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6926664 +0530 IST m=+62.353460601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.6966558 +0530 IST m=+62.357450001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7006496 +0530 IST m=+62.361443801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7056333 +0530 IST m=+62.366427501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7086272 +0530 IST m=+62.369421401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7136103 +0530 IST m=+62.374404501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.716602 +0530 IST m=+62.377396201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7215909 +0530 IST m=+62.382385101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.72558 +0530 IST m=+62.386374201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7286617 +0530 IST m=+62.389455901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7315617 +0530 IST m=+62.392355901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7346433 +0530 IST m=+62.395437501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.738576 +0530 IST m=+62.399370201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7426205 +0530 IST m=+62.403414701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7446151 +0530 IST m=+62.405409301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7495136 +0530 IST m=+62.410307801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7515941 +0530 IST m=+62.412388201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7545869 +0530 IST m=+62.415381001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.759487 +0530 IST m=+62.420281101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7614873 +0530 IST m=+62.422281401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7654754 +0530 IST m=+62.426269501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7694624 +0530 IST m=+62.430256501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7734539 +0530 IST m=+62.434248001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7754485 +0530 IST m=+62.436242601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7774396 +0530 IST m=+62.438233701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7804363 +0530 IST m=+62.441230401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7824299 +0530 IST m=+62.443224001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7874131 +0530 IST m=+62.448207201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.790405 +0530 IST m=+62.451199101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.7923998 +0530 IST m=+62.453193901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.7963936 +0530 IST m=+62.457187701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8013778 +0530 IST m=+62.462171901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8033739 +0530 IST m=+62.464168001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8073632 +0530 IST m=+62.468157301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8103563 +0530 IST m=+62.471150401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8143452 +0530 IST m=+62.475139301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8183305 +0530 IST m=+62.479124601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8233174 +0530 IST m=+62.484111501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.824318 +0530 IST m=+62.485112101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8283072 +0530 IST m=+62.489101301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8302979 +0530 IST m=+62.491092001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8332922 +0530 IST m=+62.494086301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8342928 +0530 IST m=+62.495086901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8362861 +0530 IST m=+62.497080201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8412698 +0530 IST m=+62.502063901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8442657 +0530 IST m=+62.505059801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8462602 +0530 IST m=+62.507054301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8502497 +0530 IST m=+62.511043801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8522397 +0530 IST m=+62.513033801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8542379 +0530 IST m=+62.515032001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8582272 +0530 IST m=+62.519021301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8602221 +0530 IST m=+62.521016201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8632149 +0530 IST m=+62.524009001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8671997 +0530 IST m=+62.527993801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8711888 +0530 IST m=+62.531982901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8751824 +0530 IST m=+62.535976501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8791721 +0530 IST m=+62.539966201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8831566 +0530 IST m=+62.543950701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8871501 +0530 IST m=+62.547944201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.8911397 +0530 IST m=+62.551933801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8941323 +0530 IST m=+62.554926401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.8981174 +0530 IST m=+62.558911501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9021063 +0530 IST m=+62.562900401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9050985 +0530 IST m=+62.565892601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9080943 +0530 IST m=+62.568888401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.914074 +0530 IST m=+62.574868101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.914074 +0530 IST m=+62.574868101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9171524 +0530 IST m=+62.577946501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9211402 +0530 IST m=+62.581934301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9240474 +0530 IST m=+62.584841501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9251291 +0530 IST m=+62.585923201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9271256 +0530 IST m=+62.587919701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9311103 +0530 IST m=+62.591904401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9340463 +0530 IST m=+62.594840401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9360201 +0530 IST m=+62.596814201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9400085 +0530 IST m=+62.600802601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9449943 +0530 IST m=+62.605788401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9459892 +0530 IST m=+62.606783301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9499818 +0530 IST m=+62.610775901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.954077 +0530 IST m=+62.614871101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9550773 +0530 IST m=+62.615871401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9571093 +0530 IST m=+62.617903401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9610629 +0530 IST m=+62.621857001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9640905 +0530 IST m=+62.624884601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9671266 +0530 IST m=+62.627920701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9711156 +0530 IST m=+62.631909701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9750237 +0530 IST m=+62.635817801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9790951 +0530 IST m=+62.639889201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9810389 +0530 IST m=+62.641833001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9830836 +0530 IST m=+62.643877701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9850283 +0530 IST m=+62.645822401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9879892 +0530 IST m=+62.648783301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9890677 +0530 IST m=+62.649861801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9910614 +0530 IST m=+62.651855501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:14.9949707 +0530 IST m=+62.655764801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:14.9980456 +0530 IST m=+62.658839701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0021325 +0530 IST m=+62.662926601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.004131 +0530 IST m=+62.664925101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.006041 +0530 IST m=+62.666835101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0101119 +0530 IST m=+62.670906001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0121086 +0530 IST m=+62.672902701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0150172 +0530 IST m=+62.675811301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0160391 +0530 IST m=+62.676833201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0180921 +0530 IST m=+62.678886201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0200862 +0530 IST m=+62.680880301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0220825 +0530 IST m=+62.682876601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0260096 +0530 IST m=+62.686803701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0290602 +0530 IST m=+62.689854301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0330515 +0530 IST m=+62.693845601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0359613 +0530 IST m=+62.696755401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0369584 +0530 IST m=+62.697752501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0389576 +0530 IST m=+62.699751701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0429459 +0530 IST m=+62.703740001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0469318 +0530 IST m=+62.707725901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0509253 +0530 IST m=+62.711719401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0529204 +0530 IST m=+62.713714501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0579027 +0530 IST m=+62.718696801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0598968 +0530 IST m=+62.720690901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.060899 +0530 IST m=+62.721693101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0648877 +0530 IST m=+62.725681801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0688767 +0530 IST m=+62.729670801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0728628 +0530 IST m=+62.733656901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0748568 +0530 IST m=+62.735650901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0788505 +0530 IST m=+62.739644601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.08284 +0530 IST m=+62.743634101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0868248 +0530 IST m=+62.747618901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0888205 +0530 IST m=+62.749614601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0908188 +0530 IST m=+62.751612901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.0928089 +0530 IST m=+62.753603001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0958006 +0530 IST m=+62.756594701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.0987963 +0530 IST m=+62.759590401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1027856 +0530 IST m=+62.763579701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1067716 +0530 IST m=+62.767565701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1107644 +0530 IST m=+62.771558501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1137525 +0530 IST m=+62.774546601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1147549 +0530 IST m=+62.775549001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1177466 +0530 IST m=+62.778540701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1227292 +0530 IST m=+62.783523301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1237312 +0530 IST m=+62.784525301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1257256 +0530 IST m=+62.786519701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1277153 +0530 IST m=+62.788509401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1317092 +0530 IST m=+62.792503301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1366916 +0530 IST m=+62.797485701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1376888 +0530 IST m=+62.798482901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1406813 +0530 IST m=+62.801475401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1416827 +0530 IST m=+62.802476801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.145672 +0530 IST m=+62.806466101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1496605 +0530 IST m=+62.810454601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1526486 +0530 IST m=+62.813442701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.154648 +0530 IST m=+62.815442101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1566381 +0530 IST m=+62.817432201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1596349 +0530 IST m=+62.820429001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1616294 +0530 IST m=+62.822423501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1656187 +0530 IST m=+62.826412801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1696036 +0530 IST m=+62.830397701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1735973 +0530 IST m=+62.834391401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1775824 +0530 IST m=+62.838376501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1795767 +0530 IST m=+62.840370801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1825733 +0530 IST m=+62.843367401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1855664 +0530 IST m=+62.846360501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1895503 +0530 IST m=+62.850344401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.1916389 +0530 IST m=+62.852433001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.193624 +0530 IST m=+62.854418101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.1965319 +0530 IST m=+62.857326001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2005226 +0530 IST m=+62.861316701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2035171 +0530 IST m=+62.864311201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2065056 +0530 IST m=+62.867299701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2094968 +0530 IST m=+62.870290901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2134903 +0530 IST m=+62.874284401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.21648 +0530 IST m=+62.877274101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2174758 +0530 IST m=+62.878269901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2214693 +0530 IST m=+62.882263401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2254588 +0530 IST m=+62.886252901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2274524 +0530 IST m=+62.888246501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2294435 +0530 IST m=+62.890237601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2324361 +0530 IST m=+62.893230201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2344346 +0530 IST m=+62.895228701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2384196 +0530 IST m=+62.899213701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2424091 +0530 IST m=+62.903203201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2454007 +0530 IST m=+62.906194801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.248395 +0530 IST m=+62.909189101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2514134 +0530 IST m=+62.912207401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2514134 +0530 IST m=+62.912207401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.255379 +0530 IST m=+62.916173001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.260361 +0530 IST m=+62.921155001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2623603 +0530 IST m=+62.923154301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2653524 +0530 IST m=+62.926146401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2703345 +0530 IST m=+62.931128501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2733298 +0530 IST m=+62.934123801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.27732 +0530 IST m=+62.938114001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.281305 +0530 IST m=+62.942099001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2852977 +0530 IST m=+62.946091701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2892878 +0530 IST m=+62.950081801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.2922798 +0530 IST m=+62.953073801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.2972617 +0530 IST m=+62.958055701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3002587 +0530 IST m=+62.961052701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3032508 +0530 IST m=+62.964044801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.307239 +0530 IST m=+62.968033001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3122247 +0530 IST m=+62.973018701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3152143 +0530 IST m=+62.976008301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3182099 +0530 IST m=+62.979003901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3221954 +0530 IST m=+62.982989401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3261893 +0530 IST m=+62.986983301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3301742 +0530 IST m=+62.990968201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3331662 +0530 IST m=+62.993960201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3351654 +0530 IST m=+62.995959401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3391549 +0530 IST m=+62.999948901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.343139 +0530 IST m=+63.003933001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3451345 +0530 IST m=+63.005928501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3491269 +0530 IST m=+63.009920901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3531164 +0530 IST m=+63.013910401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3561093 +0530 IST m=+63.016903301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.361091 +0530 IST m=+63.021885001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3640835 +0530 IST m=+63.024877501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3680762 +0530 IST m=+63.028870201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3720668 +0530 IST m=+63.032860801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3760522 +0530 IST m=+63.036846201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3800454 +0530 IST m=+63.040839401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3840317 +0530 IST m=+63.044825701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.386036 +0530 IST m=+63.046830001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.390014 +0530 IST m=+63.050808001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.3920099 +0530 IST m=+63.052803901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.3969956 +0530 IST m=+63.057789601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.400021 +0530 IST m=+63.060815001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4039887 +0530 IST m=+63.064782701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4059833 +0530 IST m=+63.066777301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4099725 +0530 IST m=+63.070766501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.411972 +0530 IST m=+63.072766001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4149586 +0530 IST m=+63.075752601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4159568 +0530 IST m=+63.076750801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4189522 +0530 IST m=+63.079746201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4249324 +0530 IST m=+63.085726401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4269272 +0530 IST m=+63.087721201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4309208 +0530 IST m=+63.091714801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4349057 +0530 IST m=+63.095699701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4398929 +0530 IST m=+63.100686901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4428841 +0530 IST m=+63.103678101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4438865 +0530 IST m=+63.104680501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4468787 +0530 IST m=+63.107672701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4488732 +0530 IST m=+63.109667201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4528577 +0530 IST m=+63.113651701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4568476 +0530 IST m=+63.117641601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4608363 +0530 IST m=+63.121630301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4648294 +0530 IST m=+63.125623401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4668207 +0530 IST m=+63.127614701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4718083 +0530 IST m=+63.132602301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4747989 +0530 IST m=+63.135592901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4767939 +0530 IST m=+63.137587901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4787886 +0530 IST m=+63.139582601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4827779 +0530 IST m=+63.143571901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4897594 +0530 IST m=+63.150553401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.490756 +0530 IST m=+63.151550001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4937488 +0530 IST m=+63.154542801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.4947458 +0530 IST m=+63.155539801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.4977383 +0530 IST m=+63.158532301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5007296 +0530 IST m=+63.161523601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5047192 +0530 IST m=+63.165513201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5087083 +0530 IST m=+63.169502301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5126981 +0530 IST m=+63.173492101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.516687 +0530 IST m=+63.177481001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5196795 +0530 IST m=+63.180473501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5206761 +0530 IST m=+63.181470101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5226705 +0530 IST m=+63.183464501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5266609 +0530 IST m=+63.187454901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5306501 +0530 IST m=+63.191444101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5356374 +0530 IST m=+63.196431401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5376604 +0530 IST m=+63.198454401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5416204 +0530 IST m=+63.202414401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.543616 +0530 IST m=+63.204410001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5456097 +0530 IST m=+63.206403701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5495995 +0530 IST m=+63.210393501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.553588 +0530 IST m=+63.214382001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5555836 +0530 IST m=+63.216377601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5585997 +0530 IST m=+63.219393701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5615733 +0530 IST m=+63.222367301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5655883 +0530 IST m=+63.226382301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5705427 +0530 IST m=+63.231336701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5735651 +0530 IST m=+63.234359101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5755598 +0530 IST m=+63.236353801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5795189 +0530 IST m=+63.240312901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.5835103 +0530 IST m=+63.244304301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5884958 +0530 IST m=+63.249289801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.591487 +0530 IST m=+63.252281001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.595476 +0530 IST m=+63.256270001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.5975014 +0530 IST m=+63.258295401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6014916 +0530 IST m=+63.262285601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6064475 +0530 IST m=+63.267241501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6094775 +0530 IST m=+63.270271501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6115187 +0530 IST m=+63.272312701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6164209 +0530 IST m=+63.277214901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6194164 +0530 IST m=+63.280210401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6234064 +0530 IST m=+63.284200401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6273947 +0530 IST m=+63.288188701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6523247 +0530 IST m=+63.313118701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6543189 +0530 IST m=+63.315112901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6543189 +0530 IST m=+63.315112901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6573391 +0530 IST m=+63.318133101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6583084 +0530 IST m=+63.319102401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6583084 +0530 IST m=+63.319102401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6603318 +0530 IST m=+63.321125801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6603318 +0530 IST m=+63.321125801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6603318 +0530 IST m=+63.321125801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6643214 +0530 IST m=+63.325115401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6663237 +0530 IST m=+63.327117701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6703594 +0530 IST m=+63.331153401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6743809 +0530 IST m=+63.335174901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6803453 +0530 IST m=+63.341139301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6823402 +0530 IST m=+63.343134201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.684335 +0530 IST m=+63.345129001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6863337 +0530 IST m=+63.347127701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6893214 +0530 IST m=+63.350115401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6903188 +0530 IST m=+63.351112801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.695307 +0530 IST m=+63.356101001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.6982967 +0530 IST m=+63.359090701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.6992992 +0530 IST m=+63.360093201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7022911 +0530 IST m=+63.363085101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7072739 +0530 IST m=+63.368067901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7092723 +0530 IST m=+63.370066301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7122602 +0530 IST m=+63.373054201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7162488 +0530 IST m=+63.377042801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7182486 +0530 IST m=+63.379042601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7222332 +0530 IST m=+63.383027201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7272206 +0530 IST m=+63.388014601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7292186 +0530 IST m=+63.390012601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7342005 +0530 IST m=+63.394994501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7352031 +0530 IST m=+63.395997101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7391872 +0530 IST m=+63.399981201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7441746 +0530 IST m=+63.404968601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7451712 +0530 IST m=+63.405965201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7491657 +0530 IST m=+63.409959701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.751156 +0530 IST m=+63.411949901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7541525 +0530 IST m=+63.414946401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7591366 +0530 IST m=+63.419930501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.760132 +0530 IST m=+63.420925901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7621265 +0530 IST m=+63.422920401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7661206 +0530 IST m=+63.426914501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7701087 +0530 IST m=+63.430902601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7750932 +0530 IST m=+63.435887101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7780885 +0530 IST m=+63.438882401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7820776 +0530 IST m=+63.442871501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.786066 +0530 IST m=+63.446859901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.7920477 +0530 IST m=+63.452841601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7920477 +0530 IST m=+63.452841601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.7960356 +0530 IST m=+63.456829501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.801023 +0530 IST m=+63.461816901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8040148 +0530 IST m=+63.464808701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8080042 +0530 IST m=+63.468798101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8110004 +0530 IST m=+63.471794301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8139924 +0530 IST m=+63.474786301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8159863 +0530 IST m=+63.476780201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8199764 +0530 IST m=+63.480770301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8229653 +0530 IST m=+63.483759201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8259604 +0530 IST m=+63.486754301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8299498 +0530 IST m=+63.490743701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8339344 +0530 IST m=+63.494728301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8389218 +0530 IST m=+63.499715701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8409196 +0530 IST m=+63.501713501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8459573 +0530 IST m=+63.506751201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8469593 +0530 IST m=+63.507753201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8489536 +0530 IST m=+63.509747501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8539353 +0530 IST m=+63.514729201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8569273 +0530 IST m=+63.517721201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.858926 +0530 IST m=+63.519719901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8629164 +0530 IST m=+63.523710301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8669007 +0530 IST m=+63.527694601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8688993 +0530 IST m=+63.529693201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8718925 +0530 IST m=+63.532686401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8759057 +0530 IST m=+63.536699601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.879951 +0530 IST m=+63.540744901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8829406 +0530 IST m=+63.543734501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.884935 +0530 IST m=+63.545728901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.8889256 +0530 IST m=+63.549719501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.892913 +0530 IST m=+63.553706901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.8968469 +0530 IST m=+63.557640801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9008912 +0530 IST m=+63.561685101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9038853 +0530 IST m=+63.564679201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9077919 +0530 IST m=+63.568585801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.912778 +0530 IST m=+63.573571901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9138081 +0530 IST m=+63.574602001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9197599 +0530 IST m=+63.580553801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9197599 +0530 IST m=+63.580553801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9229504 +0530 IST m=+63.583744301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9249414 +0530 IST m=+63.585735301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9288788 +0530 IST m=+63.589672701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9308821 +0530 IST m=+63.591676001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9348359 +0530 IST m=+63.595629801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9378259 +0530 IST m=+63.598619801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9388241 +0530 IST m=+63.599618001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9429029 +0530 IST m=+63.603696801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9477999 +0530 IST m=+63.608593801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9507921 +0530 IST m=+63.611586001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9547857 +0530 IST m=+63.615579601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9587705 +0530 IST m=+63.619564401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9607697 +0530 IST m=+63.621563601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9657512 +0530 IST m=+63.626545101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9677748 +0530 IST m=+63.628568701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9708256 +0530 IST m=+63.631619501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9748137 +0530 IST m=+63.635607601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9787416 +0530 IST m=+63.639535501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9837287 +0530 IST m=+63.644522601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9857361 +0530 IST m=+63.646530001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.98772 +0530 IST m=+63.648513901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9897707 +0530 IST m=+63.650564601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9937816 +0530 IST m=+63.654575501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:15.9987672 +0530 IST m=+63.659561101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:15.9997621 +0530 IST m=+63.660556001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0037548 +0530 IST m=+63.664548701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0077441 +0530 IST m=+63.668538001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0107371 +0530 IST m=+63.671531001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0147238 +0530 IST m=+63.675517701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0167166 +0530 IST m=+63.677510501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0207059 +0530 IST m=+63.681499801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0237023 +0530 IST m=+63.684496201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0296815 +0530 IST m=+63.690475401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0306819 +0530 IST m=+63.691475801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0326786 +0530 IST m=+63.693472501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0366679 +0530 IST m=+63.697461801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0396588 +0530 IST m=+63.700452701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0416501 +0530 IST m=+63.702444001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0466375 +0530 IST m=+63.707431401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0486311 +0530 IST m=+63.709425001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0496281 +0530 IST m=+63.710422001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0536217 +0530 IST m=+63.714415601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0576125 +0530 IST m=+63.718406401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0625968 +0530 IST m=+63.723390701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0656213 +0530 IST m=+63.726415201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0676088 +0530 IST m=+63.728402701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0685778 +0530 IST m=+63.729371701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0706012 +0530 IST m=+63.731395101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.075559 +0530 IST m=+63.736352901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0785532 +0530 IST m=+63.739347101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0815787 +0530 IST m=+63.742372601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0845349 +0530 IST m=+63.745328801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0856182 +0530 IST m=+63.746412101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0876099 +0530 IST m=+63.748403801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0895275 +0530 IST m=+63.750321401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0935116 +0530 IST m=+63.754305501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.0945101 +0530 IST m=+63.755304001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0965026 +0530 IST m=+63.757296501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.0994988 +0530 IST m=+63.760292701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1024877 +0530 IST m=+63.763281601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1054829 +0530 IST m=+63.766276801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1094687 +0530 IST m=+63.770262601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1134625 +0530 IST m=+63.774256401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1164535 +0530 IST m=+63.777247401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1214367 +0530 IST m=+63.782230601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1224333 +0530 IST m=+63.783227201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1264232 +0530 IST m=+63.787217101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1304131 +0530 IST m=+63.791207001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1324109 +0530 IST m=+63.793204801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1364014 +0530 IST m=+63.797195301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1403895 +0530 IST m=+63.801183401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1443752 +0530 IST m=+63.805169101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1483645 +0530 IST m=+63.809158401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1513602 +0530 IST m=+63.812154101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1543532 +0530 IST m=+63.815147101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1583398 +0530 IST m=+63.819133701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1603319 +0530 IST m=+63.821125801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1643265 +0530 IST m=+63.825120401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1683148 +0530 IST m=+63.829108701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1723003 +0530 IST m=+63.833094201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1762905 +0530 IST m=+63.837084401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1802828 +0530 IST m=+63.841076701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1842681 +0530 IST m=+63.845062001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.187264 +0530 IST m=+63.848057901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1902522 +0530 IST m=+63.851046101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1932446 +0530 IST m=+63.854038501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.1952446 +0530 IST m=+63.856038501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.1992285 +0530 IST m=+63.860022401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2022242 +0530 IST m=+63.863018101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2062101 +0530 IST m=+63.867004001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.211197 +0530 IST m=+63.871990901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2141886 +0530 IST m=+63.874982501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2181814 +0530 IST m=+63.878975301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2221684 +0530 IST m=+63.882962301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.224162 +0530 IST m=+63.884955901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2291484 +0530 IST m=+63.889942301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2321453 +0530 IST m=+63.892939201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2351375 +0530 IST m=+63.895931401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2391213 +0530 IST m=+63.899915201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2401238 +0530 IST m=+63.900917701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2441087 +0530 IST m=+63.904902601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2480978 +0530 IST m=+63.908891701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2500926 +0530 IST m=+63.910886401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.254083 +0530 IST m=+63.914876801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2580713 +0530 IST m=+63.918865101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2620652 +0530 IST m=+63.922859001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.26605 +0530 IST m=+63.926843801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2700394 +0530 IST m=+63.930833201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2720378 +0530 IST m=+63.932831601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2760231 +0530 IST m=+63.936816901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2780173 +0530 IST m=+63.938811101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2820118 +0530 IST m=+63.942805601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2859979 +0530 IST m=+63.946791701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2899907 +0530 IST m=+63.950784501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2919852 +0530 IST m=+63.952779001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.2959702 +0530 IST m=+63.956764001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.2989666 +0530 IST m=+63.959760401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3029517 +0530 IST m=+63.963745501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.30495 +0530 IST m=+63.965743801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3079429 +0530 IST m=+63.968736701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3119314 +0530 IST m=+63.972725201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3139265 +0530 IST m=+63.974720301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3159166 +0530 IST m=+63.976710401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3179131 +0530 IST m=+63.978706901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3209037 +0530 IST m=+63.981697501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3238999 +0530 IST m=+63.984693701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3258901 +0530 IST m=+63.986683901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3298796 +0530 IST m=+63.990673401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3338689 +0530 IST m=+63.994662701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.336864 +0530 IST m=+63.997657801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3409495 +0530 IST m=+64.001743301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3419499 +0530 IST m=+64.002743701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3439806 +0530 IST m=+64.004774401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3459703 +0530 IST m=+64.006764101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3499291 +0530 IST m=+64.010722901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3519228 +0530 IST m=+64.012716601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3549507 +0530 IST m=+64.015744501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3569094 +0530 IST m=+64.017703201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3609026 +0530 IST m=+64.021696401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3658853 +0530 IST m=+64.026679101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3688768 +0530 IST m=+64.029670601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3728706 +0530 IST m=+64.033664401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3768597 +0530 IST m=+64.037653501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3798527 +0530 IST m=+64.040646501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3828447 +0530 IST m=+64.043638501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.385832 +0530 IST m=+64.046625801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3888242 +0530 IST m=+64.049618001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3928169 +0530 IST m=+64.053610701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.3948118 +0530 IST m=+64.055605601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.3978002 +0530 IST m=+64.058594001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4007955 +0530 IST m=+64.061589301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4047848 +0530 IST m=+64.065578601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4087706 +0530 IST m=+64.069564401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4107651 +0530 IST m=+64.071558901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4147552 +0530 IST m=+64.075549001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4177512 +0530 IST m=+64.078545001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4197415 +0530 IST m=+64.080535301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4237341 +0530 IST m=+64.084527901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.42573 +0530 IST m=+64.086523801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4297161 +0530 IST m=+64.090509901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.433708 +0530 IST m=+64.094501801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4357022 +0530 IST m=+64.096496001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4376968 +0530 IST m=+64.098490601
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4416826 +0530 IST m=+64.102476401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4456725 +0530 IST m=+64.106466301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.449661 +0530 IST m=+64.110454801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4526576 +0530 IST m=+64.113451401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4546522 +0530 IST m=+64.115446001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4566467 +0530 IST m=+64.117440501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4616305 +0530 IST m=+64.122424301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4636291 +0530 IST m=+64.124422901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4686101 +0530 IST m=+64.129403901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4716025 +0530 IST m=+64.132396301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4745981 +0530 IST m=+64.135391901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4785835 +0530 IST m=+64.139377301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4805829 +0530 IST m=+64.141376701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4825731 +0530 IST m=+64.143366901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4855694 +0530 IST m=+64.146363201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4895581 +0530 IST m=+64.150351901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4935454 +0530 IST m=+64.154339201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4965363 +0530 IST m=+64.157330101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.4976205 +0530 IST m=+64.158414301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.4996173 +0530 IST m=+64.160411101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5015535 +0530 IST m=+64.162347301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5055945 +0530 IST m=+64.166388301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5095029 +0530 IST m=+64.170296701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5145127 +0530 IST m=+64.175306501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5175887 +0530 IST m=+64.178382501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5206647 +0530 IST m=+64.181458501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5236615 +0530 IST m=+64.184455301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5266477 +0530 IST m=+64.187441501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5286461 +0530 IST m=+64.189439901
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5306364 +0530 IST m=+64.191430201
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5325512 +0530 IST m=+64.193345001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5345456 +0530 IST m=+64.195339401
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5365403 +0530 IST m=+64.197334101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5385395 +0530 IST m=+64.199333301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.543522 +0530 IST m=+64.204315801
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5465139 +0530 IST m=+64.207307701
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5485129 +0530 IST m=+64.209306701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5525015 +0530 IST m=+64.213295301
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5554943 +0530 IST m=+64.216288101
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5584864 +0530 IST m=+64.219280201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:16.5624747 +0530 IST m=+64.223268501
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:16.5664992 +0530 IST m=+64.227293001
+invalid character 'd' after top-level value
+############################### 
+2020-02-04 19:12:48.1226542 +0530 IST m=+95.783441701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.1286084 +0530 IST m=+95.789395901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.136623 +0530 IST m=+95.797410501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.1456054 +0530 IST m=+95.806392901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.1555365 +0530 IST m=+95.816324001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.1645429 +0530 IST m=+95.825330401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.173489 +0530 IST m=+95.834276501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.185457 +0530 IST m=+95.846244501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.1944332 +0530 IST m=+95.855220701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2024119 +0530 IST m=+95.863199401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.212385 +0530 IST m=+95.873172501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2213606 +0530 IST m=+95.882148101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2313344 +0530 IST m=+95.892121901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2423058 +0530 IST m=+95.903093301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2542767 +0530 IST m=+95.915064101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2642506 +0530 IST m=+95.925038001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2752175 +0530 IST m=+95.936004901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2802429 +0530 IST m=+95.941030301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2891825 +0530 IST m=+95.949969901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.2961656 +0530 IST m=+95.956953001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3071444 +0530 IST m=+95.967931801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3171049 +0530 IST m=+95.977892301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3270781 +0530 IST m=+95.987865501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3370529 +0530 IST m=+95.997840301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3470245 +0530 IST m=+96.007811901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3540067 +0530 IST m=+96.014794101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3619847 +0530 IST m=+96.022772101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3709613 +0530 IST m=+96.031748701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.3809342 +0530 IST m=+96.041721601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.392902 +0530 IST m=+96.053689401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4028754 +0530 IST m=+96.063662801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4088648 +0530 IST m=+96.069652201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4198592 +0530 IST m=+96.080646601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4238197 +0530 IST m=+96.084607101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4347948 +0530 IST m=+96.095582201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4417714 +0530 IST m=+96.102558801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4507476 +0530 IST m=+96.111535001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4607205 +0530 IST m=+96.121507901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4706938 +0530 IST m=+96.131481201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4776754 +0530 IST m=+96.138462801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4866509 +0530 IST m=+96.147438301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.493633 +0530 IST m=+96.154420401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.4996167 +0530 IST m=+96.160404101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.508593 +0530 IST m=+96.169380401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5185704 +0530 IST m=+96.179357801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5285411 +0530 IST m=+96.189328501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5395103 +0530 IST m=+96.200297701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5484862 +0530 IST m=+96.209273601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5574616 +0530 IST m=+96.218249001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.567435 +0530 IST m=+96.228222401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5784062 +0530 IST m=+96.239193601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5884011 +0530 IST m=+96.249188501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.5993819 +0530 IST m=+96.260169301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6113173 +0530 IST m=+96.272104701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6153077 +0530 IST m=+96.276095101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6223293 +0530 IST m=+96.283116701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6312643 +0530 IST m=+96.292051701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.642235 +0530 IST m=+96.303022401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6522097 +0530 IST m=+96.312997101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6592148 +0530 IST m=+96.320002201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6691683 +0530 IST m=+96.329955701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6791368 +0530 IST m=+96.339924201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6891104 +0530 IST m=+96.349897801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.6960906 +0530 IST m=+96.356878001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7060649 +0530 IST m=+96.366852301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7170351 +0530 IST m=+96.377822501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7260117 +0530 IST m=+96.386799101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.730998 +0530 IST m=+96.391785401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7399739 +0530 IST m=+96.400761301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7489501 +0530 IST m=+96.409737501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7589237 +0530 IST m=+96.419711001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.765927 +0530 IST m=+96.426714301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7729107 +0530 IST m=+96.433698001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7809486 +0530 IST m=+96.441735901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.7908666 +0530 IST m=+96.451653901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.798817 +0530 IST m=+96.459604301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8048824 +0530 IST m=+96.465669701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8168515 +0530 IST m=+96.477638801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8278207 +0530 IST m=+96.488608001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8357295 +0530 IST m=+96.496516801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8446943 +0530 IST m=+96.505481601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8507606 +0530 IST m=+96.511547901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8586964 +0530 IST m=+96.519483701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8676328 +0530 IST m=+96.528420101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8786043 +0530 IST m=+96.539391601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8885771 +0530 IST m=+96.549364401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.8965557 +0530 IST m=+96.557343001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9035366 +0530 IST m=+96.564323901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9135101 +0530 IST m=+96.574297401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9234835 +0530 IST m=+96.584270801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9285602 +0530 IST m=+96.589347501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9375682 +0530 IST m=+96.598355501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.946634 +0530 IST m=+96.607421301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9546131 +0530 IST m=+96.615400401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9635282 +0530 IST m=+96.624315501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9724769 +0530 IST m=+96.633264201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9824506 +0530 IST m=+96.643237901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9894356 +0530 IST m=+96.650222901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:48.9974108 +0530 IST m=+96.658198101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0083808 +0530 IST m=+96.669168101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0163637 +0530 IST m=+96.677151001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0263333 +0530 IST m=+96.687120601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.038302 +0530 IST m=+96.699089301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0473591 +0530 IST m=+96.708146401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0562539 +0530 IST m=+96.717041201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.065229 +0530 IST m=+96.726016301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0712151 +0530 IST m=+96.732002401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0772331 +0530 IST m=+96.738020401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.0961471 +0530 IST m=+96.756934401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1001376 +0530 IST m=+96.760924901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.108115 +0530 IST m=+96.768902301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1170904 +0530 IST m=+96.777877701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1231077 +0530 IST m=+96.783895001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1320775 +0530 IST m=+96.792864801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1420535 +0530 IST m=+96.802840801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1510021 +0530 IST m=+96.811789401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1619701 +0530 IST m=+96.822757401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1709469 +0530 IST m=+96.831734201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1779325 +0530 IST m=+96.838719801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1859067 +0530 IST m=+96.846694001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.1929712 +0530 IST m=+96.853758501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2018926 +0530 IST m=+96.862679901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2069329 +0530 IST m=+96.867720201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.215827 +0530 IST m=+96.876614301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2257996 +0530 IST m=+96.886586901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2357738 +0530 IST m=+96.896561101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2457466 +0530 IST m=+96.906533901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2557202 +0530 IST m=+96.916507401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2607086 +0530 IST m=+96.921495801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2716776 +0530 IST m=+96.932464801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2796567 +0530 IST m=+96.940443901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2876342 +0530 IST m=+96.948421401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.2976113 +0530 IST m=+96.958398501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3065835 +0530 IST m=+96.967370701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3165572 +0530 IST m=+96.977344401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3215488 +0530 IST m=+96.982336001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3305596 +0530 IST m=+96.991346801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3395224 +0530 IST m=+97.000309601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3484762 +0530 IST m=+97.009263401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3604396 +0530 IST m=+97.021226801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3675085 +0530 IST m=+97.028295701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3764798 +0530 IST m=+97.037267001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3843808 +0530 IST m=+97.045168001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.3953511 +0530 IST m=+97.056138301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4043231 +0530 IST m=+97.065110301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4103101 +0530 IST m=+97.071097301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.418286 +0530 IST m=+97.079073201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.426264 +0530 IST m=+97.087051201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.438234 +0530 IST m=+97.099021201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4442158 +0530 IST m=+97.105003001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4541909 +0530 IST m=+97.114978101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4621725 +0530 IST m=+97.122959701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4721446 +0530 IST m=+97.132931801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4851071 +0530 IST m=+97.145894301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.4931717 +0530 IST m=+97.153958901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5030588 +0530 IST m=+97.163846001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5130565 +0530 IST m=+97.173843701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5240067 +0530 IST m=+97.184793901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5309843 +0530 IST m=+97.191771501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5419549 +0530 IST m=+97.202742101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5529259 +0530 IST m=+97.213713101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5628988 +0530 IST m=+97.223686001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5698801 +0530 IST m=+97.230667301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5778632 +0530 IST m=+97.238650401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.5878316 +0530 IST m=+97.248618801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.597807 +0530 IST m=+97.258594201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6088039 +0530 IST m=+97.269591101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6147596 +0530 IST m=+97.275546801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6248032 +0530 IST m=+97.285590401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6307318 +0530 IST m=+97.291519001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6406903 +0530 IST m=+97.301477501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6506642 +0530 IST m=+97.311451401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6576443 +0530 IST m=+97.318431501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6716075 +0530 IST m=+97.332394701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6815813 +0530 IST m=+97.342368501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.6925519 +0530 IST m=+97.353339101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.70255 +0530 IST m=+97.363337201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7115022 +0530 IST m=+97.372289401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7214742 +0530 IST m=+97.382261401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7265479 +0530 IST m=+97.387335101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7324758 +0530 IST m=+97.393263001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7385455 +0530 IST m=+97.399332701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7495976 +0530 IST m=+97.410384801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7614842 +0530 IST m=+97.422271301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7734538 +0530 IST m=+97.434240901
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.782447 +0530 IST m=+97.443234101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.7934176 +0530 IST m=+97.454204701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8024793 +0530 IST m=+97.463266401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8114529 +0530 IST m=+97.472240001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8213449 +0530 IST m=+97.482132001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8283245 +0530 IST m=+97.489111601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.840292 +0530 IST m=+97.501079101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8463129 +0530 IST m=+97.507100001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8542895 +0530 IST m=+97.515076601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8652577 +0530 IST m=+97.526044801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8762286 +0530 IST m=+97.537015701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8871989 +0530 IST m=+97.547986001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.8981695 +0530 IST m=+97.558956601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9082482 +0530 IST m=+97.569035301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9132382 +0530 IST m=+97.574025301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9212132 +0530 IST m=+97.582000301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.932185 +0530 IST m=+97.592972101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9411601 +0530 IST m=+97.601947201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9531276 +0530 IST m=+97.613914701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9660936 +0530 IST m=+97.626880701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9760709 +0530 IST m=+97.636858001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9830485 +0530 IST m=+97.643835601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:49.9940434 +0530 IST m=+97.654830501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0031222 +0530 IST m=+97.663909301
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0101085 +0530 IST m=+97.670895601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0172291 +0530 IST m=+97.678016201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0252426 +0530 IST m=+97.686029701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0351831 +0530 IST m=+97.695970201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0461863 +0530 IST m=+97.706973401
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0561525 +0530 IST m=+97.716939601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0671797 +0530 IST m=+97.727966801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0790995 +0530 IST m=+97.739886601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0891226 +0530 IST m=+97.749909701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.0980149 +0530 IST m=+97.758802001
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.108987 +0530 IST m=+97.769774101
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1169895 +0530 IST m=+97.777776601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1269631 +0530 IST m=+97.787750201
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1379087 +0530 IST m=+97.798695801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1448945 +0530 IST m=+97.805681601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1558607 +0530 IST m=+97.816647801
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1658384 +0530 IST m=+97.826625501
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1778065 +0530 IST m=+97.838593601
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1887756 +0530 IST m=+97.849562701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.1947566 +0530 IST m=+97.855543701
+Invalid message type must be either publish or subscribe...
+############################### 
+2020-02-04 19:12:50.2047309 +0530 IST m=+97.865518001
+Invalid message type must be either publish or subscribe...

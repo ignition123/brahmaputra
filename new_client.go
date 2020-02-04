@@ -54,7 +54,53 @@ func main() {
 
 		//reader := bufio.NewReader(os.Stdin)
 
-		text := `{string:Account="T93992", long:AlgoEndTime=0, long:AlgoSlices=0, long:AlgoSliceSeconds=0, long:AlgoStartTime=0, long:ClientType=2, string:ClOrdID="102173109118", string:ClTxnID="D202002031731214230", string:ComplianceID="1111111111111088", long:CoveredOrUncovered=0, long:CreatedTime=1580731269703, long:CustomerOrFirm=0, double:DisclosedQty=0.000000e+00, double:DripPrice=0.000000e+00, long:DripSize=0, string:Exchange="BSE", string:ExchangeSegment="CM", long:ExecInst=0, string:Giveup="0", long:GoodTillDate=0, long:HandlInst=1, string:InstruType="E", string:IntiatedUserId="T93992", string:IntiatedRequestMode="D", long:LastModifiedTime=1580731269726, long:MastersLastUpdated=423, long:MaturityDay=0, double:MaxPricePercentage=0.000000e+00, string:MessageType="D", double:MinimumFillAon=0.000000e+00, string:OMSID="102_20200203173109_103", string:OptAttribute="S", double:OrderQty=1.000000e+00, string:OrdStatus="A", string:OrderRequestMode="D", string:Ordmsgtyp="1", long:OrdType=1, double:Price=0.000000e+00, long:PriceType=2, string:PrimaryDealer="NA", long:PutOrCall=0, string:rSymbol="523395_BSE_CM", string:ScripName="3M INDIA LTD.", string:SecondaryDealer="NA", string:Series="A", string:Settlor="0", long:Side=1, long:SpecialOrderFlag=4, string:Status="Pending New", string:Symbol="3MINDIA", long:TimeInForce=0, string:Token="523395", long:TradingSession=1, long:TransacationType=0, long:TransactTime=1580731281423, string:UniqueSessionId="eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ==.eyJjbGllbnRDb2RlIjoiVDkzOTkyIiwic2Vzc2lvbklkIjoiNWUzODAzNDJlZmM2NWEwNzEzZWUwN2ZlIiwidXNlclR5cGUiOiJDdXN0b21lciIsImNyZWF0ZWRBdCI6IjIwMjAtMDItMDNUMTE6MjU6NTQuMTM5WiJ9.8fLjJG0/eXWLbVGD7otgMOsiGn6rCV8UmIsMkYUFenw=", string:UserId="T93992", string:PAN="AAAAA1111A", long:ActivityTime=1580731269703, string:ClearingAccount="8036"}`
+		text := `{ 
+			"Exchange":"BSE", 
+			"ExchangeSegment":"CM", 
+			"ExecInst":0, 
+			"Giveup":"0", 
+			"GoodTillDate":0, 
+			"HandlInst":1, 
+			"InstruType":"E", 
+			"IntiatedUserId":"T93992", 
+			"IntiatedRequestMode":"D", 
+			"LastModifiedTime":1580731269726, 
+			"MastersLastUpdated":423, 
+			"MaturityDay":0, 
+			"MaxPricePercentage":0.000000e+00, 
+			"MessageType":"D", 
+			"MinimumFillAon":0.000000e+00, 
+			"OMSID":"102_20200203173109_103", 
+			"OptAttribute":"S", 
+			"OrderQty":1.000000e+00, 
+			"OrdStatus":"A", 
+			"OrderRequestMode":"D", 
+			"Ordmsgtyp":"1", 
+			"OrdType":1, 
+			"Price":0.000000e+00, 
+			"PriceType":2, 
+			"PrimaryDealer":"NA", 
+			"PutOrCall":0, 
+			"rSymbol":"523395_BSE_CM", 
+			"ScripName":"3M INDIA LTD.", 
+			"SecondaryDealer":"NA", 
+			"Series":"A", 
+			"Settlor":"0", 
+			"Side":1, 
+			"SpecialOrderFlag":4, 
+			"Status":"Pending New", 
+			"Symbol":"3MINDIA", 
+			"TimeInForce":0, 
+			"Token":"523395", 
+			"TradingSession":1, 
+			"TransacationType":0, 
+			"TransactTime":1580731281423, 
+			"UniqueSessionId":"eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ==.eyJjbGllbnRDb2RlIjoiVDkzOTkyIiwic2Vzc2lvbklkIjoiNWUzODAzNDJlZmM2NWEwNzEzZWUwN2ZlIiwidXNlclR5cGUiOiJDdXN0b21lciIsImNyZWF0ZWRBdCI6IjIwMjAtMDItMDNUMTE6MjU6NTQuMTM5WiJ9.8fLjJG0/eXWLbVGD7otgMOsiGn6rCV8UmIsMkYUFenw"=", 
+			"UserId":"T93992", 
+			"PAN":"AAAAA1111A", 
+			"ActivityTime":1580731269703, 
+			"ClearingAccount":"8036"
+		}`
 
 		text = strings.TrimRight(text, "\r\n")
 
@@ -72,9 +118,31 @@ func main() {
 		var messageMap = make(map[string]interface{})
 		messageMap["_id"] = _id
 		messageMap["channelName"] = "SampleChannel"
-		messageMap["data"] = text
+		messageMap["type"] = "publish"
+
+		var bodyMap = make(map[string]interface{})
+ 		
+ 		bodyMap["Account"] = "T93992"
+		bodyMap["AlgoEndTime"] = 0
+		bodyMap["AlgoSlices"] = 0
+		bodyMap["AlgoSliceSeconds"] = 0 
+		bodyMap["AlgoStartTime"] = 0
+		bodyMap["ClientType"] = 2
+		bodyMap["ClOrdID"] = "102173109118"
+		bodyMap["ClTxnID"] = "D202002031731214230"
+		bodyMap["ComplianceID"] = "1111111111111088"
+		bodyMap["CoveredOrUncovered"] = 0
+		bodyMap["CreatedTime"] = 1580731269703
+		bodyMap["CustomerOrFirm"] = 0.0
+		bodyMap["DisclosedQty"] = 0.0
+		bodyMap["DripPrice"] = 0.0
+		bodyMap["DripSize"] = 0.0
+
+		messageMap["data"] = bodyMap
 
 		jsonData, err := json.Marshal(messageMap)
+
+		fmt.Println(string(jsonData))
 
 		if err != nil{
 
@@ -90,8 +158,6 @@ func main() {
 		packetBuffer.Write(jsonData)
 
 		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
-
-		fmt.Println(jsonData)
 
 		fmt.Println(time.Now())
 		_, err = conn.Write(packetBuffer.Bytes())
