@@ -1,7 +1,7 @@
 package server
 
 import (
-	_"pojo"
+	"pojo"
 	"net"
 	"encoding/json"
 	"fmt"
@@ -37,17 +37,43 @@ func ParseMsg(msg string, conn net.Conn){
 			return
 		}
 
+		if messageMap["data"] == ""{
+			fmt.Println("Data missing..." + msg)
+			WriteLog("Data missing..." + msg)
+			return
+		}
+
 		var channelName = messageMap["channelName"].(string)
 
 		mutex.Lock()
 
+		cm := make(map[string]interface{})
+
+		cm["exchange"] = "NSE"
+		cm["segment"] = "CM"
+
+		messageMap["contentMatcher"] = cm
+
+		var socketDetails = &pojo.SocketDetails{
+			Conn:conn,
+			ContentMatcher: messageMap["contentMatcher"].(map[string]interface{}),
+		}
+
+		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)
+		
 		TCPStorage[channelName].BucketData <- messageMap["data"].(map[string]interface{})
 
 		mutex.Unlock()
 
 	}else if messageMap["type"] == "subscribe"{
 
-		
+		// var channelName = messageMap["channelName"].(string)
+
+		// mutex.Lock()
+
+		// TCPSocketDetails[channelName] =  
+
+		// mutex.Unlock()
 
 	}else{
 		fmt.Println("Invalid message type must be either publish or subscribe...")
