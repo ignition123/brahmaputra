@@ -46,20 +46,6 @@ func ParseMsg(msg string, conn net.Conn){
 		var channelName = messageMap["channelName"].(string)
 
 		mutex.Lock()
-
-		cm := make(map[string]interface{})
-
-		cm["exchange"] = "NSE"
-		cm["segment"] = "CM"
-
-		messageMap["contentMatcher"] = cm
-
-		var socketDetails = &pojo.SocketDetails{
-			Conn:conn,
-			ContentMatcher: messageMap["contentMatcher"].(map[string]interface{}),
-		}
-
-		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)
 		
 		TCPStorage[channelName].BucketData <- messageMap["data"].(map[string]interface{})
 
@@ -67,13 +53,42 @@ func ParseMsg(msg string, conn net.Conn){
 
 	}else if messageMap["type"] == "subscribe"{
 
-		// var channelName = messageMap["channelName"].(string)
+		if messageMap["channelName"] == ""{
+			fmt.Println("Invalid message received..." + msg)
+			WriteLog("Invalid message received..." + msg)
+			return
+		}
 
-		// mutex.Lock()
+		if messageMap["contentMatcher"] == ""{
+			fmt.Println("Content matcher cannot be empty..." + msg)
+			WriteLog("Content matcher cannot be empty..." + msg)
+			return
+		}
 
-		// TCPSocketDetails[channelName] =  
+		var channelName = messageMap["channelName"].(string)
 
-		// mutex.Unlock()
+		mutex.Lock()
+
+		var socketDetails *pojo.SocketDetails
+
+		if messageMap["contentMatcher"] == "all"{
+
+			socketDetails = &pojo.SocketDetails{
+				Conn:conn,
+				ContentMatcher: nil,
+			}
+
+		}else{
+			socketDetails = &pojo.SocketDetails{
+				Conn:conn,
+				ContentMatcher: messageMap["contentMatcher"].(map[string]interface{}),
+			}
+		}
+		
+
+		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)  
+
+		mutex.Unlock()
 
 	}else{
 		fmt.Println("Invalid message type must be either publish or subscribe...")

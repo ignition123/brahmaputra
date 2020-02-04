@@ -44,8 +44,6 @@ func main() {
 
 	//go readConnection(conn)
 
-	fmt.Print("127.0.0.1:8900>")
-
 	for {
 
 		time.Sleep(10)
@@ -119,10 +117,13 @@ func main() {
 		messageMap["_id"] = _id
 		messageMap["channelName"] = "SampleChannel"
 		messageMap["type"] = "publish"
+		messageMap["contentMatcher"] = "all"
 
 		var bodyMap = make(map[string]interface{})
  		
  		bodyMap["Account"] = "T93992"
+ 		bodyMap["Exchange"] = "NSE"
+ 		bodyMap["Segment"] = "CM"
 		bodyMap["AlgoEndTime"] = 0
 		bodyMap["AlgoSlices"] = 0
 		bodyMap["AlgoSliceSeconds"] = 0 
@@ -142,8 +143,6 @@ func main() {
 
 		jsonData, err := json.Marshal(messageMap)
 
-		fmt.Println(string(jsonData))
-
 		if err != nil{
 
 			fmt.Println(err)
@@ -156,6 +155,8 @@ func main() {
 		packetBuffer.Write(buff)
 
 		packetBuffer.Write(jsonData)
+
+		fmt.Println(string(jsonData))
 
 		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
 
@@ -170,10 +171,15 @@ func main() {
 
 		//#############################################################
 
+		bodyMap["Exchange"] = "NSE"
+ 		bodyMap["Segment"] = "FO"
+
 		messageMap = make(map[string]interface{})
 		messageMap["_id"] = _id
-		messageMap["channelName"] = "Abhik"
-		messageMap["data"] = text
+		messageMap["channelName"] = "SampleChannel"
+		messageMap["type"] = "publish"
+		messageMap["contentMatcher"] = "all"
+		messageMap["data"] = bodyMap
 
 		jsonData, err = json.Marshal(messageMap)
 
@@ -190,14 +196,14 @@ func main() {
 
 		packetBuffer.Write(jsonData)
 
-		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+		fmt.Println(string(jsonData))
 
-		fmt.Println(jsonData)
+		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
 
 		fmt.Println(time.Now())
 		_, err = conn.Write(packetBuffer.Bytes())
 
-		break
+		// break
 
 		// break
 
