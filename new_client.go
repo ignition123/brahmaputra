@@ -96,7 +96,7 @@ func main() {
 		fmt.Println(time.Now())
 		_, err = conn.Write(packetBuffer.Bytes())
 
-		break
+		// break
 
 		if err != nil {
 			fmt.Println("Error writing to stream." + err.Error())

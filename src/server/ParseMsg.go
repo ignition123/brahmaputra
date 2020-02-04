@@ -39,9 +39,7 @@ func ParseMsg(msg string, conn net.Conn){
 
 	var channelName = messageMap["channelName"].(string)
 
-	var channelMess = TCPStorage[channelName]["bucketData"].(chan string)
-
-	channelMess <- messageMap["data"].(string)
+	TCPStorage[channelName].BucketData <- messageMap["data"].(string)
 
 	mutex.Unlock()
 }

@@ -5,6 +5,7 @@ import(
 	"io/ioutil"
 	"path/filepath"
 	"encoding/json"
+	"pojo"
 )
 
 func LoadTCPChannelsToMemory(){
@@ -46,10 +47,13 @@ func LoadTCPChannelsToMemory(){
 
 				var channelName = channelMap["channelName"].(string)
 
-				TCPStorage[channelName] = make(map[string]interface{})
-				TCPStorage[channelName]["path"] = channelMap["path"]
-				TCPStorage[channelName]["writeInterval"] = channelMap["writeInterval"]
-				TCPStorage[channelName]["bucketData"] = bucketData
+				var channelObject = &pojo.ChannelStruct{
+					Path: channelMap["path"].(string),
+					WriteInterval:int32(channelMap["writeInterval"].(float64)),
+					BucketData: bucketData,
+				}
+
+				TCPStorage[channelName] = channelObject
 
 			}	
 

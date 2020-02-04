@@ -1,4 +1,8 @@
 package server
 
-var TCPStorage = make(map[string]map[string]interface{})
-var UDPStorage = make(map[string]map[string]interface{})
+import(
+	"pojo"
+)
+
+var TCPStorage = make(map[string] *pojo.ChannelStruct)
+var UDPStorage = make(map[string] *pojo.ChannelStruct)

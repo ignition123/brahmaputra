@@ -118,28 +118,30 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 		defer fDes.Close()
 
+		var storage = make(map[string]map[string]interface{})
+
 		if channelType == "tcp"{
-			server.TCPStorage[channelName] = make(map[string]interface{})
+			storage[channelName] = make(map[string]interface{})
 
-			server.TCPStorage[channelName]["channelName"] = channelName
-			server.TCPStorage[channelName]["type"] = "channel"
-			server.TCPStorage[channelName]["path"] = path
-			server.TCPStorage[channelName]["writeInterval"] = writeInterval
-			server.TCPStorage[channelName]["channelType"] = channelType
+			storage[channelName]["channelName"] = channelName
+			storage[channelName]["type"] = "channel"
+			storage[channelName]["path"] = path
+			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["channelType"] = channelType
 		}else if channelType == "udp"{
-			server.UDPStorage[channelName] = make(map[string]interface{})
+			storage[channelName] = make(map[string]interface{})
 
-			server.UDPStorage[channelName]["channelName"] = channelName
-			server.UDPStorage[channelName]["type"] = "channel"
-			server.UDPStorage[channelName]["path"] = path
-			server.UDPStorage[channelName]["writeInterval"] = writeInterval
-			server.UDPStorage[channelName]["channelType"] = channelType
+			storage[channelName]["channelName"] = channelName
+			storage[channelName]["type"] = "channel"
+			storage[channelName]["path"] = path
+			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["channelType"] = channelType
 		}else{
 			fmt.Println("Invalid protocol, must be either tcp or udp...")
 			return
 		}
 
-		jsonData, err := json.Marshal(server.TCPStorage[channelName])
+		jsonData, err := json.Marshal(storage[channelName])
 
 		if err != nil{
 
