@@ -45,8 +45,6 @@ func LoadTCPChannelsToMemory(){
 
 				var bucketData  = make(chan string)
 
-				defer close(bucketData)
-
 				var channelName = channelMap["channelName"].(string)
 
 				var channelObject = &pojo.ChannelStruct{

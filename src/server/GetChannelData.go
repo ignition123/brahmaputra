@@ -2,23 +2,25 @@ package server
 
 import(
 	"fmt"
+	"pojo"
+	"time"
 )
 
 func GetChannelData(){
 
-	go func(){
-		for{
-			fmt.Println("$$$$$$$$$$$$$$$$$")
-			fmt.Println(<- TCPStorage["SampleChannel"].BucketData)
-			fmt.Println("$$$$$$$$$$$$$$$$$")
-		}
-	}()
+	for channelName := range TCPStorage {
+	    go runChannel(TCPStorage[channelName])
+	    time.Sleep(1000)
+	}
 
-	go func(){
-		for{
-			fmt.Println("##################")
-			fmt.Println(<- TCPStorage["Abhik"].BucketData)
-			fmt.Println("##################")
-		}
-	}()
+}
+
+func runChannel(channel *pojo.ChannelStruct){
+
+	defer close(channel.BucketData)
+	
+	for{
+		fmt.Println(<- channel.BucketData)
+	}
+
 }

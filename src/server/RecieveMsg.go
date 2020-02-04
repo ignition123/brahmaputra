@@ -17,7 +17,7 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 			break
 		}
 
-		time.Sleep(0.1)
+		time.Sleep(1)
 
 		select {
 			case val, ok := <-messageQueue:
