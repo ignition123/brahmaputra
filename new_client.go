@@ -101,6 +101,41 @@ func main() {
 		if err != nil {
 			fmt.Println("Error writing to stream." + err.Error())
 		}
+
+		//#############################################################
+
+		messageMap = make(map[string]interface{})
+		messageMap["_id"] = _id
+		messageMap["channelName"] = "Abhik"
+		messageMap["data"] = text
+
+		jsonData, err = json.Marshal(messageMap)
+
+		if err != nil{
+
+			fmt.Println(err)
+			return
+
+		}
+
+		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+
+		packetBuffer.Write(buff)
+
+		packetBuffer.Write(jsonData)
+
+		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+
+		fmt.Println(jsonData)
+
+		fmt.Println(time.Now())
+		_, err = conn.Write(packetBuffer.Bytes())
+
+		// break
+
+		if err != nil {
+			fmt.Println("Error writing to stream." + err.Error())
+		}
 	}
 }
 

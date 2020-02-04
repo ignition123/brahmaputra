@@ -13,4 +13,12 @@ func GetChannelData(){
 			fmt.Println("$$$$$$$$$$$$$$$$$")
 		}
 	}()
+
+	go func(){
+		for{
+			fmt.Println("##################")
+			fmt.Println(<- TCPStorage["Abhik"].BucketData)
+			fmt.Println("##################")
+		}
+	}()
 }

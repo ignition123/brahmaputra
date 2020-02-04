@@ -39,6 +39,8 @@ func HostTCPServer(configObj pojo.Config){
 
     for {
 
+    	time.Sleep(1)
+    	
 		conn, err := server.Accept()
 
 		fmt.Println("connection accepted...")
