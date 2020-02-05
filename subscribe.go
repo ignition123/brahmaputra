@@ -64,11 +64,11 @@ func main() {
 
 	var messageMap = make(map[string]interface{})
 
-	var cm = make(map[string]interface{})
-	cm["Exchange"] = "NSE"
-	cm["Segment"] = "CM"
+	// var cm = make(map[string]interface{})
+	// cm["Exchange"] = "NSE"
+	// cm["Segment"] = "CM"
 
-	messageMap["contentMatcher"] = cm
+	messageMap["contentMatcher"] = "all"
 	messageMap["channelName"] = "SampleChannel"
 	messageMap["type"] = "subscribe"
 

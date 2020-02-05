@@ -69,9 +69,11 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 
 			var matchFound = true
 
+			var messageData = message["data"].(map[string]interface{})
+
 			for key := range cm{
 
-				if cm[key] != message[key]{
+				if cm[key] != messageData[key]{
 					matchFound = false
 					break
 				}

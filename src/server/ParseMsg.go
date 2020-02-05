@@ -6,7 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
-	_"time"
+	"time"
+	"strconv"
 )
 
 var mutex = &sync.Mutex{}
@@ -25,12 +26,6 @@ func ParseMsg(msg string, conn net.Conn){
 
 	if messageMap["type"] == "publish"{
 
-		if messageMap["_id"] == 0{
-			fmt.Println("Invalid message received..." + msg)
-			WriteLog("Invalid message received..." + msg)
-			return
-		}
-
 		if messageMap["channelName"] == ""{
 			fmt.Println("Invalid message received..." + msg)
 			WriteLog("Invalid message received..." + msg)
@@ -46,8 +41,14 @@ func ParseMsg(msg string, conn net.Conn){
 		var channelName = messageMap["channelName"].(string)
 
 		mutex.Lock()
+
+		currentTime := time.Now()
+
+		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
+
+		messageMap["_id"] = _id
 		
-		TCPStorage[channelName].BucketData <- messageMap["data"].(map[string]interface{})
+		TCPStorage[channelName].BucketData <- messageMap
 
 		mutex.Unlock()
 

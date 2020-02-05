@@ -48,7 +48,7 @@ func main() {
 
 		time.Sleep(10)
 
-		currentTime := time.Now()
+		// currentTime := time.Now()
 
 		//reader := bufio.NewReader(os.Stdin)
 
@@ -111,13 +111,9 @@ func main() {
 
 		buff := make([]byte, 4)
 
-		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
-
 		var messageMap = make(map[string]interface{})
-		messageMap["_id"] = _id
 		messageMap["channelName"] = "SampleChannel"
 		messageMap["type"] = "publish"
-		messageMap["contentMatcher"] = "all"
 
 		var bodyMap = make(map[string]interface{})
  		
@@ -175,10 +171,8 @@ func main() {
  		bodyMap["Segment"] = "FO"
 
 		messageMap = make(map[string]interface{})
-		messageMap["_id"] = _id
 		messageMap["channelName"] = "SampleChannel"
 		messageMap["type"] = "publish"
-		messageMap["contentMatcher"] = "all"
 		messageMap["data"] = bodyMap
 
 		jsonData, err = json.Marshal(messageMap)
