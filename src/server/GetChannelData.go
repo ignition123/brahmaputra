@@ -7,30 +7,38 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
+	_"sync"
 )
+
+// var channelmutex = &sync.Mutex{}
 
 func GetChannelData(){
 
 	for channelName := range TCPStorage {
-	    go runChannel(TCPStorage[channelName], channelName)
+	    go runChannel(channelName)
 	    time.Sleep(1000)
 	}
 
 }
 
-func runChannel(channel *pojo.ChannelStruct, channelName string){
+func runChannel(channelName string){
 
-	defer close(channel.BucketData)
+	defer close(TCPStorage[channelName].BucketData)
 
 	for{
 
-		var message = <- channel.BucketData
+		select {
+			case message, ok := <- TCPStorage[channelName].BucketData:
+				if ok{
+					var subchannelName = message["channelName"].(string)
 
-		if(len(TCPSocketDetails[channelName]) > 0){
-			
-			sendMessageToClient(message, TCPSocketDetails, channelName)
-
-		}
+					if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
+						sendMessageToClient(message, TCPSocketDetails, channelName)
+					}
+				}
+			default:
+				//fmt.Println("Waiting for messagses...")
+		}		
 	}
 
 }

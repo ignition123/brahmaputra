@@ -38,9 +38,9 @@ func ParseMsg(msg string, conn net.Conn){
 			return
 		}
 
-		var channelName = messageMap["channelName"].(string)
-
 		mutex.Lock()
+
+		var channelName = messageMap["channelName"].(string)
 
 		currentTime := time.Now()
 
@@ -66,9 +66,9 @@ func ParseMsg(msg string, conn net.Conn){
 			return
 		}
 
-		var channelName = messageMap["channelName"].(string)
-
 		mutex.Lock()
+
+		var channelName = messageMap["channelName"].(string)
 
 		var socketDetails *pojo.SocketDetails
 

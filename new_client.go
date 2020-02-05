@@ -44,7 +44,7 @@ func main() {
 
 	//go readConnection(conn)
 
-	for {
+	for i:=0;i<100;i++{
 
 		time.Sleep(10)
 
@@ -107,12 +107,9 @@ func main() {
 		// 	continue
 		// }
 
-		var packetBuffer bytes.Buffer
-
-		buff := make([]byte, 4)
 
 		var messageMap = make(map[string]interface{})
-		messageMap["channelName"] = "SampleChannel"
+		messageMap["channelName"] = "Abhik"
 		messageMap["type"] = "publish"
 
 		var bodyMap = make(map[string]interface{})
@@ -137,73 +134,75 @@ func main() {
 
 		messageMap["data"] = bodyMap
 
-		jsonData, err := json.Marshal(messageMap)
-
-		if err != nil{
-
-			fmt.Println(err)
-			return
-
-		}
-
-		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
-
-		packetBuffer.Write(buff)
-
-		packetBuffer.Write(jsonData)
-
-		fmt.Println(string(jsonData))
-
-		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
-
-		fmt.Println(time.Now())
-		_, err = conn.Write(packetBuffer.Bytes())
-
-		// break
-
-		if err != nil {
-			fmt.Println("Error writing to stream." + err.Error())
-		}
+		sendMessage(messageMap, conn)
 
 		//#############################################################
-
-		bodyMap["Exchange"] = "NSE"
- 		bodyMap["Segment"] = "FO"
 
 		messageMap = make(map[string]interface{})
 		messageMap["channelName"] = "SampleChannel"
 		messageMap["type"] = "publish"
+
+		bodyMap = make(map[string]interface{})
+ 		
+ 		bodyMap["Account"] = "T93992"
+ 		bodyMap["Exchange"] = "NSE"
+ 		bodyMap["Segment"] = "FO"
+		bodyMap["AlgoEndTime"] = 0
+		bodyMap["AlgoSlices"] = 0
+		bodyMap["AlgoSliceSeconds"] = 0 
+		bodyMap["AlgoStartTime"] = 0
+		bodyMap["ClientType"] = 2
+		bodyMap["ClOrdID"] = "102173109118"
+		bodyMap["ClTxnID"] = "D202002031731214230"
+		bodyMap["ComplianceID"] = "1111111111111088"
+		bodyMap["CoveredOrUncovered"] = 0
+		bodyMap["CreatedTime"] = 1580731269703
+		bodyMap["CustomerOrFirm"] = 0.0
+		bodyMap["DisclosedQty"] = 0.0
+		bodyMap["DripPrice"] = 0.0
+		bodyMap["DripSize"] = 0.0
+
 		messageMap["data"] = bodyMap
 
-		jsonData, err = json.Marshal(messageMap)
+		sendMessage(messageMap, conn)
+		
+	}
+}
 
-		if err != nil{
+func sendMessage(messageMap map[string]interface{}, conn net.Conn){
 
-			fmt.Println(err)
-			return
+	var packetBuffer bytes.Buffer
 
-		}
+	buff := make([]byte, 4)
 
-		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+	jsonData, err := json.Marshal(messageMap)
 
-		packetBuffer.Write(buff)
+	if err != nil{
 
-		packetBuffer.Write(jsonData)
+		fmt.Println(err)
+		return
 
-		fmt.Println(string(jsonData))
+	}
 
-		conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
 
-		fmt.Println(time.Now())
-		_, err = conn.Write(packetBuffer.Bytes())
+	packetBuffer.Write(buff)
 
-		// break
+	packetBuffer.Write(jsonData)
 
-		// break
+	fmt.Println(string(jsonData))
 
-		if err != nil {
-			fmt.Println("Error writing to stream." + err.Error())
-		}
+	conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+
+	fmt.Println(time.Now())
+	_, err = conn.Write(packetBuffer.Bytes())
+
+	// break
+
+	// break
+
+	if err != nil {
+		fmt.Println("Error writing to stream." + err.Error())
 	}
 }
 

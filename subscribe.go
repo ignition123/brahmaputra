@@ -69,7 +69,7 @@ func main() {
 	// cm["Segment"] = "CM"
 
 	messageMap["contentMatcher"] = "all"
-	messageMap["channelName"] = "SampleChannel"
+	messageMap["channelName"] = "Abhik"
 	messageMap["type"] = "subscribe"
 
 	jsonData, err := json.Marshal(messageMap)
@@ -141,7 +141,20 @@ func readConnection(conn net.Conn) {
 		var message = string(completePacket)
 
 		fmt.Println(message)
+		go writeLog(message)
 	}
 
 	conn.Close()
+}
+
+func writeLog(logMessage string){
+	ErrorFile, err := os.OpenFile("./subscribe.log", os.O_APPEND|os.O_WRONLY, 0600)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	defer ErrorFile.Close()
+	ErrorFile.WriteString(logMessage)
 }
