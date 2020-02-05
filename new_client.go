@@ -44,7 +44,7 @@ func main() {
 
 	//go readConnection(conn)
 
-	for i:=0;i<100;i++{
+	for i:=0;i<100000;i++{
 
 		time.Sleep(10)
 

@@ -28,8 +28,7 @@ func HostTCPServer(configObj pojo.Config){
 	server, err := net.Listen("tcp", *configObj.Server.TCP.Host +":"+ *configObj.Server.TCP.Port)
 
     if err != nil {
-        fmt.Println("Error listening:", err.Error())
-        WriteLog(err.Error())
+        WriteLog("Error listening: "+err.Error())
         os.Exit(1)
 	}
 	
@@ -37,17 +36,17 @@ func HostTCPServer(configObj pojo.Config){
 
 	fmt.Println("Listening on " + *configObj.Server.TCP.Host + ":" + *configObj.Server.TCP.Port+"...")
 
+	WriteLog("Loading log files...")
+	WriteLog("Starting TCP server...")
+
     for {
 
-    	time.Sleep(1)
-    	
 		conn, err := server.Accept()
 
 		fmt.Println("connection accepted...")
 		
         if err != nil {
-            fmt.Println("Error accepting: ", err.Error())
-           	WriteLog(err.Error())
+           	go WriteLog("Error accepting: "+err.Error())
             continue
 		}
 
@@ -58,8 +57,5 @@ func HostTCPServer(configObj pojo.Config){
 		go RecieveMessage(conn, messageQueue)
 
 		go HandleRequest(conn, messageQueue)
-
-		fmt.Println("Loading log files...")
-		fmt.Println("Starting TCP server...")
 	}
 }
