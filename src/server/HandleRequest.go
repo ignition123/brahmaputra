@@ -23,8 +23,6 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 	sizeBuf := make([]byte, 4)
 
 	for {
-
-		time.Sleep(1)
 		
 		conn.Read(sizeBuf)
 

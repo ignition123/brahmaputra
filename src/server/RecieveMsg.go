@@ -4,7 +4,6 @@ package server
 import(
 	"net"
 	"fmt"
-	"time"
 )
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
@@ -16,8 +15,6 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 		if stopIterate{
 			break
 		}
-
-		time.Sleep(1)
 
 		select {
 			case val, ok := <-messageQueue:

@@ -7,6 +7,7 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
+	_"bufio"
 )
 
 func GetChannelData(){
@@ -43,6 +44,10 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 
 		sizeBuff := make([]byte, 4)
 
+		if len(TCPSocketDetails[channelName]) <= index{
+			break
+		} 
+
 		if TCPSocketDetails[channelName][index].ContentMatcher == nil{
 
 			jsonData, err := json.Marshal(message)
@@ -53,8 +58,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				break
 			}
 
-			binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)+2))
-
+			binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
@@ -85,8 +89,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 					break
 				}
 
-				binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)+2))
-
+				binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
 
@@ -100,6 +103,12 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 }
 
 func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string, index int, packetBuffer bytes.Buffer){
+
+	if len(TCPSocketDetails[channelName]) <= index{
+		return
+	} 
+
+	fmt.Println(time.Now())
 
 	_, err := TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
 

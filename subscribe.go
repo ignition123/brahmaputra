@@ -42,6 +42,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	conn.(*net.TCPConn).SetKeepAlive(true)
+	conn.(*net.TCPConn).SetKeepAlive(true)
+	conn.(*net.TCPConn).SetLinger(1)
+	conn.(*net.TCPConn).SetNoDelay(true)
+	conn.(*net.TCPConn).SetReadBuffer(10000)
+	conn.(*net.TCPConn).SetWriteBuffer(10000)
+	conn.(*net.TCPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
 
 	time.Sleep(10)
 
@@ -55,11 +64,11 @@ func main() {
 
 	var messageMap = make(map[string]interface{})
 
-	var cm = make(map[string]interface{})
-	cm["Exchange"] = "NSE"
-	cm["Segment"] = "CM"
+	// var cm = make(map[string]interface{})
+	// cm["Exchange"] = "NSE"
+	// cm["Segment"] = "CM"
 
-	messageMap["contentMatcher"] = cm
+	messageMap["contentMatcher"] = "all"
 	messageMap["channelName"] = "SampleChannel"
 	messageMap["type"] = "subscribe"
 
@@ -105,11 +114,11 @@ func allZero(s []byte) bool {
 
 func readConnection(conn net.Conn) {
 
-	sizeBuf := make([]byte, 4)
-
 	for {
 
 		time.Sleep(1)
+
+		sizeBuf := make([]byte, 4)
 
 		conn.Read(sizeBuf)
 
