@@ -6,6 +6,7 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
+	"context"
 )
 
 func GetChannelData(){
@@ -21,6 +22,8 @@ func runChannel(channelName string){
 
 	defer close(TCPStorage[channelName].BucketData)
 
+	ctx := context.Background()
+
 	for{
 
 		select {
@@ -32,6 +35,9 @@ func runChannel(channelName string){
 						sendMessageToClient(message, TCPSocketDetails, channelName)
 					}
 				}
+			case <-ctx.Done():
+				go WriteLog("Channel closed...")
+				break	
 			default:
 				//fmt.Println("Waiting for messagses...")
 		}		
