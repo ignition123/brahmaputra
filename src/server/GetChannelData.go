@@ -7,7 +7,6 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	_"bufio"
 )
 
 func GetChannelData(){
@@ -108,14 +107,10 @@ func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string,
 		return
 	} 
 
-	fmt.Println(time.Now())
-
 	_, err := TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
 
 	if err != nil {
-		
-		time.Sleep(5000)
-
+	
 		fmt.Println(err.Error())
 		WriteLog(err.Error())
 
