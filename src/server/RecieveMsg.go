@@ -25,7 +25,10 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 		}
 
 		mutex.Lock()
-		
+
 		go ParseMsg(message, mutex, conn)
 	}
+
+	WriteLog("Connection closed!")
+	WriteLog("Channel closed!")
 }

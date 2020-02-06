@@ -62,7 +62,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
-			send(TCPSocketDetails, channelName, index, packetBuffer)
+			go send(TCPSocketDetails, channelName, index, packetBuffer)
 
 		}else{
 
@@ -94,7 +94,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
 
-				send(TCPSocketDetails, channelName, index, packetBuffer)
+				go send(TCPSocketDetails, channelName, index, packetBuffer)
 
 			}
 

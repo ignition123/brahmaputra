@@ -26,25 +26,31 @@ var host = flag.String("host", "localhost", "The hostname or IP to connect to; d
 var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
-	flag.Parse()
+	
+	for i:=0;i<100;i++{
+		flag.Parse()
 
-	dest := *host + ":" + strconv.Itoa(*port)
-	fmt.Printf("Connecting to %s...\n", dest)
+		dest := *host + ":" + strconv.Itoa(*port)
+		fmt.Printf("Connecting to %s...\n", dest)
 
-	conn, err := net.Dial("tcp", dest)
+		conn, err := net.Dial("tcp", dest)
 
-	if err != nil {
-		if _, t := err.(*net.OpError); t {
-			fmt.Println("Some problem connecting.")
-		} else {
-			fmt.Println("Unknown error: " + err.Error())
+		if err != nil {
+			if _, t := err.(*net.OpError); t {
+				fmt.Println("Some problem connecting.")
+			} else {
+				fmt.Println("Unknown error: " + err.Error())
+			}
+			os.Exit(1)
 		}
-		os.Exit(1)
+
+		go createWorker(conn)
 	}
 
-	//go readConnection(conn)
+}
 
-	for i:=0;i<10000;i++{
+func createWorker(conn net.Conn){
+	for i:=0;i<1000;i++{
 
 		time.Sleep(10)
 
@@ -113,10 +119,10 @@ func main() {
 		messageMap["type"] = "publish"
 
 		var bodyMap = make(map[string]interface{})
- 		
- 		bodyMap["Account"] = "T93992"
- 		bodyMap["Exchange"] = "NSE"
- 		bodyMap["Segment"] = "CM"
+			
+			bodyMap["Account"] = "T93992"
+			bodyMap["Exchange"] = "NSE"
+			bodyMap["Segment"] = "CM"
 		bodyMap["AlgoEndTime"] = 0
 		bodyMap["AlgoSlices"] = 0
 		bodyMap["AlgoSliceSeconds"] = 0 
@@ -143,10 +149,10 @@ func main() {
 		messageMap["type"] = "publish"
 
 		bodyMap = make(map[string]interface{})
- 		
- 		bodyMap["Account"] = "T93992"
- 		bodyMap["Exchange"] = "NSE"
- 		bodyMap["Segment"] = "FO"
+			
+			bodyMap["Account"] = "T93992"
+			bodyMap["Exchange"] = "NSE"
+			bodyMap["Segment"] = "FO"
 		bodyMap["AlgoEndTime"] = 0
 		bodyMap["AlgoSlices"] = 0
 		bodyMap["AlgoSliceSeconds"] = 0 
@@ -167,6 +173,8 @@ func main() {
 		sendMessage(messageMap, conn)
 		
 	}
+
+	conn.Close()
 }
 
 func sendMessage(messageMap map[string]interface{}, conn net.Conn){
