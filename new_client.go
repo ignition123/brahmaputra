@@ -27,25 +27,23 @@ var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
 	
-	for i:=0;i<100;i++{
-		flag.Parse()
+	flag.Parse()
 
-		dest := *host + ":" + strconv.Itoa(*port)
-		fmt.Printf("Connecting to %s...\n", dest)
+	dest := *host + ":" + strconv.Itoa(*port)
+	fmt.Printf("Connecting to %s...\n", dest)
 
-		conn, err := net.Dial("tcp", dest)
+	conn, err := net.Dial("tcp", dest)
 
-		if err != nil {
-			if _, t := err.(*net.OpError); t {
-				fmt.Println("Some problem connecting.")
-			} else {
-				fmt.Println("Unknown error: " + err.Error())
-			}
-			os.Exit(1)
+	if err != nil {
+		if _, t := err.(*net.OpError); t {
+			fmt.Println("Some problem connecting.")
+		} else {
+			fmt.Println("Unknown error: " + err.Error())
 		}
-
-		go createWorker(conn)
+		os.Exit(1)
 	}
+
+	createWorker(conn)
 
 }
 

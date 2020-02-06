@@ -45,7 +45,7 @@ func LoadTCPChannelsToMemory(){
 				var bucketData  = make([]chan map[string]interface{}, worker)
 
 				for i := range bucketData {
-				   bucketData[i] = make(chan map[string]interface{})
+				   bucketData[i] = make(chan map[string]interface{}, *ConfigTCPObj.Server.TCP.BufferRead)
 				}
 
 				var channelName = channelMap["channelName"].(string)

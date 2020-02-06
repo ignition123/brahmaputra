@@ -15,6 +15,7 @@ type TCPStruct struct{
 	Port *string 
 	MaxSockets *int
 	SocketTimeout *int
+	BufferRead *int
 }
 
 type UDPStruct struct{

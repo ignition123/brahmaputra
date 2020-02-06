@@ -18,7 +18,8 @@
             "auth":{
                 "username":"sudeep",
                 "password":"kaihiwatari"
-            }
+            },
+            "bufferRead":100
         },
         "udp":{}
     },

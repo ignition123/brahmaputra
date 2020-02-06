@@ -12,20 +12,24 @@ type ServerTCPConnection struct{
 	connections map[net.Conn] time.Time
 }
 
+var ConfigTCPObj pojo.Config
+
 func HostTCP(configObj pojo.Config){
+
+	ConfigTCPObj = configObj
 
 	LoadTCPChannelsToMemory()
 
 	GetChannelData()
 
-	if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
-		HostTCPServer(configObj)
+	if *ConfigTCPObj.Server.TCP.Host != "" && *ConfigTCPObj.Server.TCP.Port != ""{
+		HostTCPServer(ConfigTCPObj)
 	}
 }
 
-func HostTCPServer(configObj pojo.Config){
+func HostTCPServer(ConfigTCPObj pojo.Config){
 
-	server, err := net.Listen("tcp", *configObj.Server.TCP.Host +":"+ *configObj.Server.TCP.Port)
+	server, err := net.Listen("tcp", *ConfigTCPObj.Server.TCP.Host +":"+ *ConfigTCPObj.Server.TCP.Port)
 
     if err != nil {
         WriteLog("Error listening: "+err.Error())
@@ -34,7 +38,7 @@ func HostTCPServer(configObj pojo.Config){
 	
 	defer server.Close()
 
-	fmt.Println("Listening on " + *configObj.Server.TCP.Host + ":" + *configObj.Server.TCP.Port+"...")
+	fmt.Println("Listening on " + *ConfigTCPObj.Server.TCP.Host + ":" + *ConfigTCPObj.Server.TCP.Port+"...")
 
 	WriteLog("Loading log files...")
 	WriteLog("Starting TCP server...")
@@ -50,7 +54,7 @@ func HostTCPServer(configObj pojo.Config){
             continue
 		}
 
-		var messageQueue = make(chan string)
+		var messageQueue = make(chan string, *ConfigTCPObj.Server.TCP.BufferRead)
 
 		defer close(messageQueue)
 		
