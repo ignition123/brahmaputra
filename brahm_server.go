@@ -128,6 +128,7 @@ func createChannel(path string, channelName string, channelType string, writeInt
 			storage[channelName]["type"] = "channel"
 			storage[channelName]["path"] = path
 			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["worker"] = 1
 			storage[channelName]["channelType"] = channelType
 		}else if channelType == "udp"{
 			storage[channelName] = make(map[string]interface{})
@@ -136,6 +137,7 @@ func createChannel(path string, channelName string, channelType string, writeInt
 			storage[channelName]["type"] = "channel"
 			storage[channelName]["path"] = path
 			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["worker"] = 1
 			storage[channelName]["channelType"] = channelType
 		}else{
 			fmt.Println("Invalid protocol, must be either tcp or udp...")

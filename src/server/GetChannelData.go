@@ -5,42 +5,36 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	"context"
 )
 
 func GetChannelData(){
 
 	for channelName := range TCPStorage {
-	    go runChannel(channelName)
+	    runChannel(channelName)
 	}
 
 }
 
 func runChannel(channelName string){
 
-	defer close(TCPStorage[channelName].BucketData)
+	for index := range TCPStorage[channelName].BucketData{
+		go func(BucketData chan map[string]interface{}, channelName string){
 
-	ctx := context.Background()
+			defer close(BucketData)
 
-	for{
+			for{
 
-		select {
-			case message, ok := <- TCPStorage[channelName].BucketData:
-				if ok{
-					var subchannelName = message["channelName"].(string)
+				var message = <-BucketData
+		
+				var subchannelName = message["channelName"].(string)
 
-					if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
-						sendMessageToClient(message, TCPSocketDetails, channelName)
-					}
-				}
-			case <-ctx.Done():
-				go WriteLog("Channel closed...")
-				break	
-			default:
-				//fmt.Println("Waiting for messagses...")
-		}		
+				if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
+					sendMessageToClient(message, TCPSocketDetails, channelName)
+				}		
+			}
+
+		}(TCPStorage[channelName].BucketData[index], channelName)
 	}
-
 }
 
 func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string){
@@ -68,7 +62,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
-			go send(TCPSocketDetails, channelName, index, packetBuffer)
+			send(TCPSocketDetails, channelName, index, packetBuffer)
 
 		}else{
 
@@ -100,7 +94,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
 
-				go send(TCPSocketDetails, channelName, index, packetBuffer)
+				send(TCPSocketDetails, channelName, index, packetBuffer)
 
 			}
 

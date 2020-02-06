@@ -40,13 +40,20 @@ func LoadTCPChannelsToMemory(){
 
 			if channelMap["type"] == "channel" && channelMap["channelType"] == "tcp"{
 
-				var bucketData  = make(chan map[string]interface{})
+				var worker = int16(channelMap["worker"].(float64))
+
+				var bucketData  = make([]chan map[string]interface{}, worker)
+
+				for i := range bucketData {
+				   bucketData[i] = make(chan map[string]interface{})
+				}
 
 				var channelName = channelMap["channelName"].(string)
 
 				var channelObject = &pojo.ChannelStruct{
 					Path: channelMap["path"].(string),
 					WriteInterval:int32(channelMap["writeInterval"].(float64)),
+					Worker: worker,
 					BucketData: bucketData,
 				}
 

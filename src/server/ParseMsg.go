@@ -4,14 +4,12 @@ import (
 	"pojo"
 	"net"
 	"encoding/json"
-	"sync"
 	"time"
 	"strconv"
+	"sync"
 )
 
-var mutex = &sync.Mutex{}
-
-func ParseMsg(msg string, conn net.Conn){
+func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 
 	messageMap := make(map[string]interface{})
 
@@ -34,19 +32,19 @@ func ParseMsg(msg string, conn net.Conn){
 			return
 		}
 
-		mutex.Lock()
-
 		var channelName = messageMap["channelName"].(string)
 
 		currentTime := time.Now()
+
+		epoch := currentTime.Unix()
 
 		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
 
 		messageMap["_id"] = _id
 		
-		TCPStorage[channelName].BucketData <- messageMap
-
-		mutex.Unlock()
+		var indexNo = epoch % int64(TCPStorage[channelName].Worker)
+		
+		TCPStorage[channelName].BucketData[indexNo] <- messageMap
 
 	}else if messageMap["type"] == "subscribe"{
 
@@ -59,8 +57,6 @@ func ParseMsg(msg string, conn net.Conn){
 			go WriteLog("Content matcher cannot be empty..." + msg)
 			return
 		}
-
-		mutex.Lock()
 
 		var channelName = messageMap["channelName"].(string)
 
@@ -83,10 +79,10 @@ func ParseMsg(msg string, conn net.Conn){
 
 		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)  
 
-		mutex.Unlock()
-
 	}else{
 		go WriteLog("Invalid message type must be either publish or subscribe...")
 		return
 	}	
+
+	mutex.Unlock()
 }

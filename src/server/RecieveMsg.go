@@ -3,7 +3,10 @@ package server
 
 import(
 	"net"
+	"sync"
 )
+
+var mutex = &sync.Mutex{}
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
 
@@ -15,25 +18,14 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 			break
 		}
 
-		select {
-			case val, ok := <-messageQueue:
-				if ok{
+		var message = <-messageQueue
 
-					if val == "BRAHMAPUTRA_DISCONNECT"{
-						break
-					}
-
-					go ParseMsg(val, conn)
-    
-				}else{
-					WriteLog("Connection closed!")
-					WriteLog("Channel closed!")
-					stopIterate = true
-					break
-				
-				}
-			default:
-				//fmt.Println("Waiting for messagses...")
+		if message == "BRAHMAPUTRA_DISCONNECT"{
+			break
 		}
+
+		mutex.Lock()
+		
+		go ParseMsg(message, mutex, conn)
 	}
 }

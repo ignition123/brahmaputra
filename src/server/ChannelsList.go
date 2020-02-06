@@ -5,6 +5,9 @@ import(
 )
 
 var TCPStorage = make(map[string] *pojo.ChannelStruct)
+
+var TCPChannelWorker = make(map[string]int)
+
 var UDPStorage = make(map[string] *pojo.ChannelStruct)
 
 var TCPSocketDetails = make(map[string] []*pojo.SocketDetails)

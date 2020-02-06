@@ -44,11 +44,11 @@ func main() {
 
 	//go readConnection(conn)
 
-	for i:=0;i<100000;i++{
+	for i:=0;i<10000;i++{
 
 		time.Sleep(10)
 
-		// currentTime := time.Now()
+		currentTime := time.Now()
 
 		//reader := bufio.NewReader(os.Stdin)
 
@@ -126,7 +126,7 @@ func main() {
 		bodyMap["ClTxnID"] = "D202002031731214230"
 		bodyMap["ComplianceID"] = "1111111111111088"
 		bodyMap["CoveredOrUncovered"] = 0
-		bodyMap["CreatedTime"] = 1580731269703
+		bodyMap["CreatedTime"] = currentTime.Unix()
 		bodyMap["CustomerOrFirm"] = 0.0
 		bodyMap["DisclosedQty"] = 0.0
 		bodyMap["DripPrice"] = 0.0
@@ -156,7 +156,7 @@ func main() {
 		bodyMap["ClTxnID"] = "D202002031731214230"
 		bodyMap["ComplianceID"] = "1111111111111088"
 		bodyMap["CoveredOrUncovered"] = 0
-		bodyMap["CreatedTime"] = 1580731269703
+		bodyMap["CreatedTime"] = currentTime.Unix()
 		bodyMap["CustomerOrFirm"] = 0.0
 		bodyMap["DisclosedQty"] = 0.0
 		bodyMap["DripPrice"] = 0.0
