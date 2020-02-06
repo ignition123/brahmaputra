@@ -44,7 +44,7 @@ func main() {
 
 	//go readConnection(conn)
 
-	for i:=0;i<100;i++{
+	for i:=0;i<100000;i++{
 
 		time.Sleep(10)
 
@@ -139,7 +139,7 @@ func main() {
 		//#############################################################
 
 		messageMap = make(map[string]interface{})
-		messageMap["channelName"] = "SampleChannel"
+		messageMap["channelName"] = "Abhik"
 		messageMap["type"] = "publish"
 
 		bodyMap = make(map[string]interface{})
