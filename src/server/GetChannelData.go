@@ -2,7 +2,6 @@ package server
 
 import(
 	"pojo"
-	"time"
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
@@ -13,7 +12,6 @@ func GetChannelData(){
 
 	for channelName := range TCPStorage {
 	    go runChannel(channelName)
-	    time.Sleep(1000)
 	}
 
 }

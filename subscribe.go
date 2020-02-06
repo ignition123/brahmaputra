@@ -23,7 +23,7 @@ import (
 )
 
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
-var port = flag.Int("port", 8900, "The port to connect to; defaults to 8000.")
+var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
 	flag.Parse()

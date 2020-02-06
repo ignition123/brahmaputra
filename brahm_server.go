@@ -45,7 +45,8 @@ func main(){
 			2) -create-channel=TestChannel -path=d:\brahmaputra\storage\
 			3) -delete-channel=TestChannel -path=d:\brahmaputra\storage\
 			4) -rename-channel=TestChannel -old-channel=TestChannel -new-channel=Test1Channel -path=d:\brahmaputra\storage\
-			5) -host-panel=true -hosts=["192.168.90.22:7890","192.168.90.21:7890","192.168.90.20:7890"]
+			5) -reclaim-drive=true -path=d:\brahmaputra\storage\
+			6)
 		`)
 	}
 }

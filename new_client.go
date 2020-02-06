@@ -23,7 +23,7 @@ import (
 )
 
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
-var port = flag.Int("port", 8900, "The port to connect to; defaults to 8000.")
+var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
 	flag.Parse()
@@ -103,7 +103,7 @@ func main() {
 		text = strings.TrimRight(text, "\r\n")
 
 		// if text == "" {
-		// 	fmt.Print("127.0.0.1:8900>")
+		// 	fmt.Print("127.0.0.1:8100>")
 		// 	continue
 		// }
 
@@ -259,7 +259,7 @@ func readConnection(conn net.Conn) {
 			fmt.Println("Exception: " + message)
 		}
 
-		fmt.Print("127.0.0.1:8900>")
+		fmt.Print("127.0.0.1:8100>")
 	}
 
 	conn.Close()
