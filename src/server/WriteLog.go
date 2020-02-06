@@ -22,5 +22,6 @@ func WriteLog(logMessage string){
 	logMsg += currentTime.String() + "\r\n"
 	logMsg += logMessage + "\r\n"
 
+	fmt.Println(logMsg)
 	ErrorFile.WriteString(logMsg)
 }

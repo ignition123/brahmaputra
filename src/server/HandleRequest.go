@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/binary"
-	"fmt"
 	"net"
 	"time"
 )
@@ -46,7 +45,7 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 		err := conn.SetReadDeadline(time.Now().Add(10 * time.Hour))
 
 		if err != nil {
-			fmt.Println("Error in tcp connection: " + err.Error())
+			go WriteLog("Error in tcp connection: " + err.Error())
 			messageQueue <- "BRAHMAPUTRA_DISCONNECT"
 			break
 		}

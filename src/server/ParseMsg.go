@@ -4,7 +4,6 @@ import (
 	"pojo"
 	"net"
 	"encoding/json"
-	"fmt"
 	"sync"
 	"time"
 	"strconv"
@@ -19,22 +18,19 @@ func ParseMsg(msg string, conn net.Conn){
 	err := json.Unmarshal([]byte(msg), &messageMap)
 
 	if err != nil{
-		fmt.Println(err.Error())
-		WriteLog(err.Error())
+		go WriteLog(err.Error())
 		return
 	}
 
 	if messageMap["type"] == "publish"{
 
 		if messageMap["channelName"] == ""{
-			fmt.Println("Invalid message received..." + msg)
-			WriteLog("Invalid message received..." + msg)
+			go WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["data"] == ""{
-			fmt.Println("Data missing..." + msg)
-			WriteLog("Data missing..." + msg)
+			go WriteLog("Data missing..." + msg)
 			return
 		}
 
@@ -55,14 +51,12 @@ func ParseMsg(msg string, conn net.Conn){
 	}else if messageMap["type"] == "subscribe"{
 
 		if messageMap["channelName"] == ""{
-			fmt.Println("Invalid message received..." + msg)
-			WriteLog("Invalid message received..." + msg)
+			go WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["contentMatcher"] == ""{
-			fmt.Println("Content matcher cannot be empty..." + msg)
-			WriteLog("Content matcher cannot be empty..." + msg)
+			go WriteLog("Content matcher cannot be empty..." + msg)
 			return
 		}
 
@@ -92,8 +86,7 @@ func ParseMsg(msg string, conn net.Conn){
 		mutex.Unlock()
 
 	}else{
-		fmt.Println("Invalid message type must be either publish or subscribe...")
-		WriteLog("Invalid message type must be either publish or subscribe...")
+		go WriteLog("Invalid message type must be either publish or subscribe...")
 		return
 	}	
 }

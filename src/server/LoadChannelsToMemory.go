@@ -1,7 +1,6 @@
 package server
 
 import(
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"encoding/json"
@@ -26,7 +25,6 @@ func LoadTCPChannelsToMemory(){
         	data, err := ioutil.ReadFile("./storage/"+file.Name())
 
 			if err != nil{
-				fmt.Println(err.Error())
 				WriteLog(err.Error())
 				break
 			}
@@ -36,7 +34,6 @@ func LoadTCPChannelsToMemory(){
 			err = json.Unmarshal(data, &channelMap)
 
 			if err != nil{
-				fmt.Println(err.Error())
 				WriteLog(err.Error())
 				break
 			}

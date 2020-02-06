@@ -1,16 +1,13 @@
 package server
 
 import(
-	"fmt"
 	"pojo"
 	"time"
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	_"sync"
+	"context"
 )
-
-// var channelmutex = &sync.Mutex{}
 
 func GetChannelData(){
 
@@ -25,6 +22,8 @@ func runChannel(channelName string){
 
 	defer close(TCPStorage[channelName].BucketData)
 
+	ctx := context.Background()
+
 	for{
 
 		select {
@@ -36,6 +35,9 @@ func runChannel(channelName string){
 						sendMessageToClient(message, TCPSocketDetails, channelName)
 					}
 				}
+			case <-ctx.Done():
+				go WriteLog("Channel closed...")
+				break	
 			default:
 				//fmt.Println("Waiting for messagses...")
 		}		
@@ -60,8 +62,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 			jsonData, err := json.Marshal(message)
 
 			if err != nil{
-				fmt.Println(err.Error())
-				WriteLog(err.Error())
+				go WriteLog(err.Error())
 				break
 			}
 
@@ -93,8 +94,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				jsonData, err := json.Marshal(message)
 
 				if err != nil{
-					fmt.Println(err.Error())
-					WriteLog(err.Error())
+					go WriteLog(err.Error())
 					break
 				}
 
@@ -121,8 +121,7 @@ func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string,
 
 	if err != nil {
 	
-		fmt.Println(err.Error())
-		WriteLog(err.Error())
+		go WriteLog(err.Error())
 
 		var channelArray = TCPSocketDetails[channelName]
 
