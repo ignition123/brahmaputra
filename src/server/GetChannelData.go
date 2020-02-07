@@ -5,6 +5,7 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
+	"context"
 )
 
 func GetChannelData(){
@@ -22,14 +23,26 @@ func runChannel(channelName string){
 
 			defer close(BucketData)
 
+			ctx := context.Background()
+
 			for{
 
-				var message = <-BucketData
-		
-				var subchannelName = message["channelName"].(string)
+				select {
 
-				if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
-					sendMessageToClient(message, TCPSocketDetails, channelName)
+					case message, ok := <-BucketData:	
+
+					if ok{
+						var subchannelName = message["channelName"].(string)
+
+						if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
+							sendMessageToClient(message, TCPSocketDetails, channelName)
+						}
+					}		
+
+					break
+					case <-ctx.Done():
+						go WriteLog("Channel closed...")
+					break
 				}		
 			}
 

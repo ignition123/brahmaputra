@@ -64,11 +64,11 @@ func main() {
 
 	var messageMap = make(map[string]interface{})
 
-	var cm = make(map[string]interface{})
-	cm["Exchange"] = "NSE"
-	cm["Segment"] = "CM"
+	// var cm = make(map[string]interface{})
+	// cm["Exchange"] = "NSE"
+	// cm["Segment"] = "CM"
 
-	messageMap["contentMatcher"] = cm
+	messageMap["contentMatcher"] = "all"
 	messageMap["channelName"] = "Abhik"
 	messageMap["type"] = "subscribe"
 
@@ -115,8 +115,6 @@ func allZero(s []byte) bool {
 func readConnection(conn net.Conn) {
 
 	for {
-
-		time.Sleep(1)
 
 		sizeBuf := make([]byte, 4)
 

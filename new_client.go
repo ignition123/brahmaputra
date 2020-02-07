@@ -48,9 +48,7 @@ func main() {
 }
 
 func createWorker(conn net.Conn){
-	for i:=0;i<1000;i++{
-
-		time.Sleep(10)
+	for i:=0;i<100000;i++{
 
 		currentTime := time.Now()
 
