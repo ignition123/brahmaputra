@@ -6,7 +6,10 @@ import(
 	"bytes"
 	"encoding/binary"
 	"context"
+	"sync"
 )
+
+var channelMutex = &sync.Mutex{}
 
 func GetChannelData(){
 
@@ -34,8 +37,8 @@ func runChannel(channelName string){
 					if ok{
 						var subchannelName = message["channelName"].(string)
 
-						if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){					
-							sendMessageToClient(message, TCPSocketDetails, channelName)
+						if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){	
+							go sendMessageToClient(message, TCPSocketDetails, channelName)
 						}
 					}		
 
@@ -118,6 +121,8 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 
 func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string, index int, packetBuffer bytes.Buffer){
 
+	channelMutex.Lock()
+	
 	if len(TCPSocketDetails[channelName]) <= index{
 		return
 	} 
@@ -140,4 +145,5 @@ func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string,
 
 	}
 
+	channelMutex.Unlock()
 }
