@@ -7,6 +7,7 @@ import (
 	"time"
 	"strconv"
 	"sync"
+	"fmt"
 )
 
 func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
@@ -18,6 +19,13 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 	if err != nil{
 		go WriteLog(err.Error())
 		return
+	}
+
+	if messageMap["type"] == "heart_beat"{
+
+		fmt.Println("HEART BEAT RECEIVED...")
+		return
+
 	}
 
 	if messageMap["type"] == "publish"{

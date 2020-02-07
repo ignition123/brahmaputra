@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"io/ioutil"
-	"pojo"
 	"encoding/json"
 	"keeper"
 	"flag"
@@ -40,16 +39,15 @@ func runConfigFile(configPath string){
 		return
 	}
 
-	var configObj = pojo.KeeperStruct{}
-
-	pojoErr := json.Unmarshal(data, &configObj)
+	pojoErr := json.Unmarshal(data, &keeper.TCPClusters)
 
 	if pojoErr != nil{
+		fmt.Println(pojoErr)
 		fmt.Println("Invalid config file, json is not valid")
 		return
 	}
 
-	if *configObj.Host != "" && *configObj.Port != ""{
-		keeper.HostServer(configObj)
+	if keeper.TCPClusters["host"] != "" && keeper.TCPClusters["port"] != ""{
+		keeper.HostTCPServer()
 	}
 }

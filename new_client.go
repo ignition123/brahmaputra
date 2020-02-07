@@ -20,6 +20,7 @@ import (
 	"strings"
 	"time"
 	"encoding/json"
+	"sync"
 )
 
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
@@ -27,6 +28,19 @@ var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
 	
+	var wg sync.WaitGroup
+
+	wg.Add(1000)
+
+	for i := 0; i < 1000; i++ {
+        go createWorker(&wg)
+    }	
+
+    wg.Wait()
+}
+
+func createWorker(wg *sync.WaitGroup){
+
 	flag.Parse()
 
 	dest := *host + ":" + strconv.Itoa(*port)
@@ -43,12 +57,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	createWorker(conn)
-
-}
-
-func createWorker(conn net.Conn){
-	for i:=0;i<100000;i++{
+	for i:=0;i<100;i++{
 
 		currentTime := time.Now()
 
@@ -171,6 +180,8 @@ func createWorker(conn net.Conn){
 	}
 
 	conn.Close()
+
+	wg.Done()
 }
 
 func sendMessage(messageMap map[string]interface{}, conn net.Conn){
