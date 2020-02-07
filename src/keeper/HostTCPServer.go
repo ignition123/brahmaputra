@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func HostServer(configObj pojo.KeeperStruct){
+func HostTCPServer(configObj pojo.KeeperStruct){
 
 	server, err := net.Listen("tcp", *configObj.Host +":"+ *configObj.Port)
 
@@ -20,7 +20,7 @@ func HostServer(configObj pojo.KeeperStruct){
 
 	fmt.Println("Listening on " + *configObj.Host + ":" + *configObj.Port+"...")
 
-	go ConnectClusters(configObj)
+	go ConnectTCPClusters(configObj)
 
 	for {
 

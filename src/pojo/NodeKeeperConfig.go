@@ -1,5 +1,9 @@
 package pojo
 
+import(
+	"net"
+)
+
 type KeeperStruct struct{
 	Host *string
 	Port *string 
@@ -8,5 +12,8 @@ type KeeperStruct struct{
 
 type ClustersStruct struct{
 	Host *string
-	Port *string 
+	Port *string
+	Status *string
+	ClusterMode *string 
+	ConnObj net.Conn
 }
