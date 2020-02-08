@@ -7,6 +7,7 @@ import(
 	"encoding/binary"
 	"context"
 	"sync"
+	"fmt"
 )
 
 var channelMutex = &sync.Mutex{}
@@ -60,6 +61,8 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 		var packetBuffer bytes.Buffer
 
 		sizeBuff := make([]byte, 4)
+
+		fmt.Println(len(TCPSocketDetails[channelName]))
 
 		if len(TCPSocketDetails[channelName]) <= index{
 			break
@@ -123,26 +126,20 @@ func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string,
 
 	channelMutex.Lock()
 	
-	if len(TCPSocketDetails[channelName]) <= index{
-		return
-	} 
+	if len(TCPSocketDetails[channelName]) > index{
+		_, err := TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
 
-	_, err := TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
+		if err != nil {
+		
+			go WriteLog(err.Error())
 
-	if err != nil {
-	
-		go WriteLog(err.Error())
+			var channelArray = TCPSocketDetails[channelName]
+		
+			copy(channelArray[index:], channelArray[index+1:])
+			channelArray[len(channelArray)-1] = nil
+			TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
 
-		var channelArray = TCPSocketDetails[channelName]
-
-		if len(channelArray) <= index{
-			return
 		}
-	
-		copy(channelArray[index:], channelArray[index+1:])
-		channelArray[len(channelArray)-1] = nil
-		TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
-
 	}
 
 	channelMutex.Unlock()
