@@ -1,0 +1,77 @@
+<html>
+
+  <button onclick="SendMessage()">Click</button>
+    <script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script>
+    
+        var saveData = $.ajax({
+            type: 'POST',
+            url: "http://localhost:2000/get_cluster_list",
+            beforeSend: function(request) {
+                request.setRequestHeader("Content-Type", "application/json");
+            },
+            data: JSON.stringify({
+              "GetClusters":{}
+            }),
+            success: function(resultData)
+            { 
+                console.log(resultData)
+            }
+        });
+
+        function SendMessage()
+        {
+          webS.send(
+            JSON.stringify({
+              "GetClusters":{}
+            })
+          );
+        }
+
+        var webS = null;
+        function WebSocketTest()
+        {
+            if ("WebSocket" in window)
+            {               
+               // Let us open a web socket
+               var ws = new WebSocket("ws://localhost:2000/get_clusters");
+
+               webS = ws;
+				
+               ws.onopen = function()
+               {
+                  
+                  // Web Socket is connected, send data using send()
+                  ws.send(
+                    JSON.stringify({
+                      "GetClusters":{}
+                    })
+                  );
+               };
+				
+               ws.onmessage = function (evt)
+               { 
+                  var received_msg = evt.data;
+                  console.log(received_msg);
+               };
+				
+               ws.onclose = function()
+               { 
+                  
+                  // websocket is closed.
+                  console.log("Connection is closed..."); 
+               };
+            } else {
+              
+               // The browser doesn't support WebSocket
+               console.log("WebSocket NOT supported by your Browser!");
+            }
+         }
+
+         WebSocketTest();
+
+    </script>
+</html>

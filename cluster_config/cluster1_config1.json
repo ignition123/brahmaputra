@@ -1,0 +1,30 @@
+{
+    "worker":4,
+    "server":{
+        "tcp":{
+            "host":"127.0.0.1",
+            "port":"8100",
+            "max_sockets":0,
+            "socket_timeout":12000,
+            "replicationServer":{
+                "replication":true,
+                "nodeKeeper":[
+                    {
+                        "host":"127.0.0.1",
+                        "port":"4500"
+                    }
+                ]
+            },
+            "auth":{
+                "username":"sudeep",
+                "password":"kaihiwatari"
+            },
+            "bufferRead":100
+        },
+        "udp":{}
+    },
+    "persistent":{
+        "writeInterval":1000,
+        "path":"d:/brahmaputra"
+    }
+}

@@ -1,23 +1,46 @@
 {
-	"host":"127.0.0.1",
-	"port":"3100",
+	"logPrint":true,
+	"httpHost":{
+		"ssl":{
+			"crt":"D:/pounze_go_project/brahmaputra/ssl/https-server.crt",
+			"key":"D:/pounze_go_project/brahmaputra/ssl/https-server.key"
+		},
+		"secure":false,
+		"active":true,
+		"host":"127.0.0.1",
+		"port":"2000"
+	},
+	"tcpHost":{
+		"active":true,
+		"host":"127.0.0.1",
+		"port":"3100"
+	},
+	"udpHost":{
+		"active":false,
+		"host":"127.0.0.1",
+		"port":"3100"
+	},
 	"clusters":{
 		"cluster1":[
 			{
+				"uniqueName":"HOST1",
 				"host":"127.0.0.1",
 				"port":"8100"
 			},
 			{
+				"uniqueName":"HOST2",
 				"host":"127.0.0.1",
 				"port":"8200"
 			}
 		],
 		"cluster2":[
 			{
+				"uniqueName":"HOST1",
 				"host":"127.0.0.1",
 				"port":"8400"
 			},
 			{
+				"uniqueName":"HOST2",
 				"host":"127.0.0.1",
 				"port":"8500"
 			}
