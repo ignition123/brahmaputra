@@ -89,7 +89,9 @@ func main() {
 
 	packetBuffer.Write(jsonData)
 
-	conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+
+	conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 
 	fmt.Println(time.Now())
 	_, err = conn.Write(packetBuffer.Bytes())

@@ -207,7 +207,7 @@ func sendMessage(messageMap map[string]interface{}, conn net.Conn){
 
 	fmt.Println(string(jsonData))
 
-	conn.SetWriteDeadline(time.Now().Add(1 * time.Second))
+	conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 
 	fmt.Println(time.Now())
 	_, err = conn.Write(packetBuffer.Bytes())

@@ -21,8 +21,6 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 		return
 	}
 
-	fmt.Println(messageMap)
-
 	if messageMap["type"] == "heart_beat"{
 
 		if messageMap["channelName"] == ""{
