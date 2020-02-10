@@ -18,7 +18,7 @@ func HostTCP(configObj pojo.Config){
 
 	ConfigTCPObj = configObj
 
-	LoadTCPChannelsToMemory()
+	LoadTCPChannelsToMemory(ConfigTCPObj)
 
 	GetChannelData()
 
@@ -46,9 +46,7 @@ func HostTCPServer(ConfigTCPObj pojo.Config){
     for {
 
 		conn, err := server.Accept()
-		conn.SetReadDeadline(time.Now().Add(5 * time.Second))
-		conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
-
+		
 		fmt.Println("connection accepted...")
 		
         if err != nil {

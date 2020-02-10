@@ -35,6 +35,7 @@ type Config struct{
 	Storage StorageStruct
 	ChildWrite ChildWriteStruct
 	ClusterWrite *bool
+	ChannelConfigFiles *string 
 }
 
 type StorageStruct struct{
