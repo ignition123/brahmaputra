@@ -1,1 +1,1 @@
-{"channelName":"SampleChannel","channelType":"tcp","path":"D:/brahmaputra/storage","type":"channel","worker":10,"writeInterval":1000}
+{"channelName":"SampleChannel","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage\\SampleChannel.br","type":"channel","worker":10,"offset":0}

@@ -5,6 +5,7 @@ import (
 	"os"
 	"io/ioutil"
 	"encoding/json"
+	"node_keeper"
 	"keeper"
 	"flag"
 )
@@ -39,7 +40,7 @@ func runConfigFile(configPath string){
 		return
 	}
 
-	pojoErr := json.Unmarshal(data, &keeper.TCPClusters)
+	pojoErr := json.Unmarshal(data, &node_keeper.TCPClusters)
 
 	if pojoErr != nil{
 		fmt.Println(pojoErr)
@@ -47,7 +48,23 @@ func runConfigFile(configPath string){
 		return
 	}
 
-	if keeper.TCPClusters["host"] != "" && keeper.TCPClusters["port"] != ""{
-		keeper.HostTCPServer()
+	var tcpNode = node_keeper.TCPClusters["tcpHost"].(map [string]interface{})
+
+	if tcpNode["active"].(bool){
+		if tcpNode["host"] != "" && tcpNode["port"] != ""{
+			defer keeper.HostTCPServer(tcpNode)
+		}
 	}
+
+	go func(){
+
+		var httpNode = node_keeper.TCPClusters["httpHost"].(map [string]interface{})
+
+		if httpNode["active"].(bool){
+			if httpNode["host"] != "" && httpNode["port"] != ""{
+				defer keeper.HostHTTPServer(httpNode)
+			}
+		}
+
+	}()
 }

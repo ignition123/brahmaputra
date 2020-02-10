@@ -6,9 +6,9 @@ import (
 	"os"
 )
 
-func HostTCPServer(){
+func HostTCPServer(tcpNode map [string]interface{}){
 
-	server, err := net.Listen("tcp", TCPClusters["host"].(string) +":"+ TCPClusters["port"].(string))
+	server, err := net.Listen("tcp", tcpNode["host"].(string) +":"+ tcpNode["port"].(string))
 
     if err != nil {
         WriteLog("Error listening: "+err.Error())
@@ -17,7 +17,7 @@ func HostTCPServer(){
 
 	defer server.Close()
 
-	fmt.Println("Listening on " + TCPClusters["host"].(string) + ":" + TCPClusters["port"].(string)+"...")
+	fmt.Println("Listening on " + tcpNode["host"].(string) + ":" + tcpNode["port"].(string)+"...")
 
 	go ConnectTCPClusters()
 

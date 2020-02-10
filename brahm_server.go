@@ -29,15 +29,13 @@ func main(){
 	path := flag.String("path", "default", "a string")
 
 	channelType := flag.String("channelType", "tcp", "a string")
-
-	writeInterval := flag.Int("writeInterval", 1000, "a string")
-
+	
 	flag.Parse()
 
 	if *serverRun != "default"{
 		runConfigFile(*serverRun, *channelType)
 	}else if *channelName != "default"{
-		createChannel(*path, *channelName, *channelType, *writeInterval)
+		createChannel(*path, *channelName, *channelType)
 	}else{
 		fmt.Println(`
 			possible commands:
@@ -82,7 +80,7 @@ func runConfigFile(configPath string, channelType string){
 	}	
 }
 
-func createChannel(path string, channelName string, channelType string, writeInterval int){
+func createChannel(path string, channelName string, channelType string){
 
 	if path == "default"{
 		fmt.Println("Please set a path for the channel storage...")
@@ -100,11 +98,6 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 		if channelType != "tcp" && channelType != "udp"{
 			fmt.Println("Channel must be either tcp or udp...")
-			return
-		}
-
-		if writeInterval <= 1{
-			fmt.Println("writeInterval must be greater than 0...")
 			return
 		}
 
@@ -126,8 +119,8 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
-			storage[channelName]["path"] = path
-			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["path"] = filePath
+			storage[channelName]["offset"] = 0
 			storage[channelName]["worker"] = 1
 			storage[channelName]["channelType"] = channelType
 		}else if channelType == "udp"{
@@ -135,8 +128,8 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
-			storage[channelName]["path"] = path
-			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["path"] = filePath
+			storage[channelName]["offset"] = 0
 			storage[channelName]["worker"] = 1
 			storage[channelName]["channelType"] = channelType
 		}else{

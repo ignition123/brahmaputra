@@ -23,19 +23,28 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 
 	if messageMap["type"] == "heart_beat"{
 
+		if messageMap["channelName"] == ""{
+			conn.Close()
+			go WriteLog("Invalid message received..." + msg)
+			return
+		}
+
 		fmt.Println("HEART BEAT RECEIVED...")
-		return
 
-	}
+		TCPStorage["heart_beat"].BucketData[0] <- messageMap
 
-	if messageMap["type"] == "publish"{
+		conn.Write([]byte(msg))
+
+	}else if messageMap["type"] == "publish"{
 
 		if messageMap["channelName"] == ""{
+			conn.Close()
 			go WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["data"] == ""{
+			conn.Close()
 			go WriteLog("Data missing..." + msg)
 			return
 		}
@@ -57,11 +66,13 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 	}else if messageMap["type"] == "subscribe"{
 
 		if messageMap["channelName"] == ""{
+			conn.Close()
 			go WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["contentMatcher"] == ""{
+			conn.Close()
 			go WriteLog("Content matcher cannot be empty..." + msg)
 			return
 		}
@@ -88,6 +99,7 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)  
 
 	}else{
+		conn.Close()
 		go WriteLog("Invalid message type must be either publish or subscribe...")
 		return
 	}	

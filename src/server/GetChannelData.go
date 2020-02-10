@@ -7,7 +7,6 @@ import(
 	"encoding/binary"
 	"context"
 	"sync"
-	"fmt"
 )
 
 var channelMutex = &sync.Mutex{}
@@ -61,8 +60,6 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 		var packetBuffer bytes.Buffer
 
 		sizeBuff := make([]byte, 4)
-
-		fmt.Println(len(TCPSocketDetails[channelName]))
 
 		if len(TCPSocketDetails[channelName]) <= index{
 			break

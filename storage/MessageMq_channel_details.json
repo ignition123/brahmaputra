@@ -1,1 +1,1 @@
-{"channelName":"MessageMq","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage","type":"channel","worker":1,"writeInterval":1000}
+{"channelName":"MessageMq","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage\\MessageMq.br","type":"channel","worker":1,"offset":0}
