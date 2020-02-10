@@ -7,9 +7,12 @@ import(
 	"encoding/binary"
 	"context"
 	"sync"
+	_"fmt"
 )
 
 var channelMutex = &sync.Mutex{}
+
+var parseMessageMutex = &sync.Mutex{}
 
 func GetChannelData(){
 
@@ -56,6 +59,10 @@ func runChannel(channelName string){
 func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string){
 
 	for index := range TCPSocketDetails[channelName]{
+
+		parseMessageMutex.Lock()
+
+		defer parseMessageMutex.Unlock()
 
 		var packetBuffer bytes.Buffer
 

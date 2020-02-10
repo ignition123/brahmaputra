@@ -3,11 +3,8 @@ package server
 
 import(
 	"net"
-	"sync"
 	"context"
 )
-
-var mutex = &sync.Mutex{}
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
 
@@ -29,9 +26,7 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 						break
 					}
 
-					mutex.Lock()
-
-					go ParseMsg(val, mutex, conn)
+					go ParseMsg(val, conn)
 
 				}else{
 					WriteLog("Connection closed!")

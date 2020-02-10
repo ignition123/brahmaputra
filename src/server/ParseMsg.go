@@ -6,14 +6,21 @@ import (
 	"encoding/json"
 	"time"
 	"strconv"
-	"sync"
 	"fmt"
 	"bytes"
 	"encoding/binary"
 	"io"
+	"sync"
 )
 
-func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
+var writeDataCallback = make(chan bool)
+var writeCallback = make(chan bool)
+
+var AckMutex = &sync.Mutex{}
+var FileWriteLock = &sync.Mutex{}
+var FileTableLock = &sync.Mutex{}
+
+func ParseMsg(msg string, conn net.Conn){
 
 	messageMap := make(map[string]interface{})
 
@@ -67,23 +74,29 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 		jsonData, err := json.Marshal(messageMap)
 
 		if err != nil{
-			fmt.Println(err.Error())
+			go WriteLog(err.Error())
 			return
 		}
 
 		if *ConfigTCPObj.Storage.File.Active{
 			var byteLen = len(jsonData)
+		
+			WRITEFILE: 
+				go WriteData(jsonData, channelName, byteLen, writeDataCallback)
 
-			WRITEFILE :if !WriteData(jsonData, channelName, byteLen){
-				goto WRITEFILE
-				return
-			}
+				if !<- writeDataCallback{
+					goto WRITEFILE
+				}
 
-			WRITEOFFSET: if !WriteOffset(jsonData, channelName, byteLen, _id){
-				goto WRITEOFFSET
-				return
-			}
+			WRITEOFFSET: 
+				go WriteOffset(jsonData, channelName, byteLen, _id, writeCallback)
+
+				if !<- writeCallback{
+					goto WRITEOFFSET
+				}
 		}
+
+		go SendAck(messageMap, conn)
 
 		TCPStorage[channelName].BucketData[indexNo] <- messageMap
 
@@ -119,7 +132,6 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 			}
 		}
 		
-
 		TCPSocketDetails[channelName] = append(TCPSocketDetails[channelName], socketDetails)  
 
 	}else{
@@ -127,8 +139,6 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 		go WriteLog("Invalid message type must be either publish or subscribe...")
 		return
 	}	
-
-	mutex.Unlock()
 }
 
 // func ReadDataUsingOffset(){
@@ -157,7 +167,50 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 // 	}
 // }
 
-func WriteData(jsonData []byte, channelName string, byteLen int) bool{
+func SendAck(messageMap map[string]interface{}, conn net.Conn){
+
+	AckMutex.Lock()
+	defer AckMutex.Unlock()
+
+	if(messageMap["type"] == "publish"){
+
+		var messageResp = make(map[string]interface{})
+
+		messageResp["producer_id"] = messageMap["producer_id"].(string)
+
+		jsonData, err := json.Marshal(messageResp)
+
+		if err != nil{
+			go WriteLog(err.Error())
+			return
+		}
+
+		var packetBuffer bytes.Buffer
+
+		buff := make([]byte, 4)
+
+		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+
+		packetBuffer.Write(buff)
+
+		packetBuffer.Write(jsonData)
+
+		RETRY: _, err = conn.Write(packetBuffer.Bytes())
+
+		if err != nil{
+
+			time.Sleep(2 * time.Second)
+
+			goto RETRY
+
+		}
+	}	
+}
+
+func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
+
+	FileWriteLock.Lock()
+	defer FileWriteLock.Unlock()
 
 	var packetBuffer bytes.Buffer
 
@@ -171,14 +224,16 @@ func WriteData(jsonData []byte, channelName string, byteLen int) bool{
 
 	if _, err := TCPStorage[channelName].FD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
 		go WriteLog(err.Error())
-		return false
+		writeDataCallback <- false
 	}
 
-	return true
-
+	writeDataCallback <- true
 }
 
-func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string) bool{
+func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, writeCallback chan bool){
+
+	FileTableLock.Lock()
+	defer FileTableLock.Unlock()
 
 	var byteSize = (byteLen + 4)
 
@@ -199,9 +254,8 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string) b
 
 	if _, err := TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
 		go WriteLog(err.Error())
-		return false
+		writeCallback <- false
 	}
 
-	return true
-
+	writeCallback <- true
 }

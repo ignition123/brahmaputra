@@ -10,7 +10,7 @@ import(
 
 func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 
-    files, err := ioutil.ReadDir("./storage/")
+    files, err := ioutil.ReadDir(*ConfigTCPObj.ChannelConfigFiles)
 
     if err != nil {
         WriteLog(err.Error())
@@ -23,7 +23,7 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 
         if extension == ".json"{
 
-        	data, err := ioutil.ReadFile("./storage/"+file.Name())
+        	data, err := ioutil.ReadFile(*ConfigTCPObj.ChannelConfigFiles+"/"+file.Name())
 
 			if err != nil{
 				WriteLog(err.Error())

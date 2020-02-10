@@ -89,9 +89,9 @@ func main() {
 
 	packetBuffer.Write(jsonData)
 
-	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+	// conn.SetReadDeadline(time.Now().Add(5 * time.Second))
 
-	conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
+	// conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 
 	fmt.Println(time.Now())
 	_, err = conn.Write(packetBuffer.Bytes())
@@ -141,7 +141,7 @@ func readConnection(conn net.Conn) {
 		var message = string(completePacket)
 
 		fmt.Println(message)
-		writeLog(message)
+		// writeLog(message)
 	}
 
 	conn.Close()

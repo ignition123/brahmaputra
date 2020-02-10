@@ -4,9 +4,16 @@ import (
 	"time"
 	"fmt"
 	"os"
+	"sync"
 )
 
+var mutex = &sync.Mutex{}
+
 func WriteLog(logMessage string){
+
+	mutex.Lock()
+
+	defer mutex.Unlock()
 
 	ErrorFile, err := os.OpenFile("./storage/error.log", os.O_APPEND|os.O_WRONLY, 0600)
 

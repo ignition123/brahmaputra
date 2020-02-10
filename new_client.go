@@ -14,7 +14,6 @@ import (
 	"flag"
 	"fmt"
 	"net"
-	"os"
 	_ "regexp"
 	"strconv"
 	"strings"
@@ -27,12 +26,12 @@ var host = flag.String("host", "localhost", "The hostname or IP to connect to; d
 var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
 func main() {
-	
+		
 	var wg sync.WaitGroup
 
-	wg.Add(100)
+	wg.Add(1000)
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
         go createWorker(&wg)
     }	
 
@@ -58,9 +57,13 @@ func createWorker(wg *sync.WaitGroup){
 		return
 	}
 
-	for i:=0;i<100;i++{
+	go readConnection(conn)
+
+	for i:=0;i<100000000;i++{
 
 		currentTime := time.Now()
+
+		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
 
 		//reader := bufio.NewReader(os.Stdin)
 
@@ -123,6 +126,7 @@ func createWorker(wg *sync.WaitGroup){
 		var messageMap = make(map[string]interface{})
 		messageMap["channelName"] = "Abhik"
 		messageMap["type"] = "publish"
+		messageMap["producer_id"] = _id
 
 		var bodyMap = make(map[string]interface{})
 			
@@ -153,6 +157,7 @@ func createWorker(wg *sync.WaitGroup){
 		messageMap = make(map[string]interface{})
 		messageMap["channelName"] = "Abhik"
 		messageMap["type"] = "publish"
+		messageMap["producer_id"] = _id
 
 		bodyMap = make(map[string]interface{})
 			
@@ -208,8 +213,6 @@ func sendMessage(messageMap map[string]interface{}, conn net.Conn){
 
 	fmt.Println(string(jsonData))
 
-	conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
-
 	fmt.Println(time.Now())
 	_, err = conn.Write(packetBuffer.Bytes())
 
@@ -233,13 +236,9 @@ func allZero(s []byte) bool {
 
 func readConnection(conn net.Conn) {
 
-	sizeBuf := make([]byte, 4)
-
-	statusBuf := make([]byte, 2)
-
 	for {
 
-		time.Sleep(1)
+		sizeBuf := make([]byte, 4)
 
 		conn.Read(sizeBuf)
 
@@ -249,33 +248,18 @@ func readConnection(conn net.Conn) {
 			continue
 		}
 
-		conn.Read(statusBuf)
-
-		packetStatus := binary.LittleEndian.Uint16(statusBuf)
-
-		if packetStatus != 1 && packetStatus != 2 {
-			continue
-		}
-
 		completePacket := make([]byte, packetSize)
 
 		conn.Read(completePacket)
 
 		if allZero(completePacket) {
 			fmt.Println("Server disconnected")
-			os.Exit(1)
 			break
 		}
 
 		var message = string(completePacket)
 
-		if packetStatus == 1 {
-			fmt.Println(message)
-		} else {
-			fmt.Println("Exception: " + message)
-		}
-
-		fmt.Print("127.0.0.1:8100>")
+		fmt.Println(message)
 	}
 
 	conn.Close()
