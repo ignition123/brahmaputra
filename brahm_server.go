@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"server"
 	"flag"
+	"syscall"
+	"os/signal"
 )
 
 
@@ -29,15 +31,14 @@ func main(){
 	path := flag.String("path", "default", "a string")
 
 	channelType := flag.String("channelType", "tcp", "a string")
-
-	writeInterval := flag.Int("writeInterval", 1000, "a string")
-
+	
 	flag.Parse()
 
 	if *serverRun != "default"{
 		runConfigFile(*serverRun, *channelType)
 	}else if *channelName != "default"{
-		createChannel(*path, *channelName, *channelType, *writeInterval)
+		createChannel(*path, *channelName, *channelType)
+		createChannelTable(*path, *channelName, *channelType)
 	}else{
 		fmt.Println(`
 			possible commands:
@@ -48,6 +49,21 @@ func main(){
 			5) -reclaim-drive=true -path=d:\brahmaputra\storage\
 			6)
 		`)
+	}
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+	  <- sigs
+	  cleanupAllTheThings()
+	  os.Exit(0)
+	}()
+}
+
+func cleanupAllTheThings(){
+	for key := range server.TCPStorage{
+		server.TCPStorage[key].FD.Close()
+		server.TCPStorage[key].TableFD.Close()
 	}
 }
 
@@ -82,14 +98,14 @@ func runConfigFile(configPath string, channelType string){
 	}	
 }
 
-func createChannel(path string, channelName string, channelType string, writeInterval int){
+func createChannel(path string, channelName string, channelType string){
 
 	if path == "default"{
 		fmt.Println("Please set a path for the channel storage...")
 		return
 	}
 
-	var filePath = path+"/"+channelName+".br";
+	var filePath = path+"\\"+channelName+".br";
 
 	if _, err := os.Stat(filePath); err == nil{
 
@@ -100,11 +116,6 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 		if channelType != "tcp" && channelType != "udp"{
 			fmt.Println("Channel must be either tcp or udp...")
-			return
-		}
-
-		if writeInterval <= 1{
-			fmt.Println("writeInterval must be greater than 0...")
 			return
 		}
 
@@ -126,18 +137,18 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
-			storage[channelName]["path"] = path
-			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["path"] = filePath
 			storage[channelName]["worker"] = 1
+			storage[channelName]["table"] = path+"\\"+channelName+".tbl"
 			storage[channelName]["channelType"] = channelType
 		}else if channelType == "udp"{
 			storage[channelName] = make(map[string]interface{})
 
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
-			storage[channelName]["path"] = path
-			storage[channelName]["writeInterval"] = writeInterval
+			storage[channelName]["path"] = filePath
 			storage[channelName]["worker"] = 1
+			storage[channelName]["table"] = path+"\\"+channelName+".tbl"
 			storage[channelName]["channelType"] = channelType
 		}else{
 			fmt.Println("Invalid protocol, must be either tcp or udp...")
@@ -155,7 +166,7 @@ func createChannel(path string, channelName string, channelType string, writeInt
 
 		d1 := []byte(jsonData)
 
-		err = ioutil.WriteFile("./storage/"+channelName+"_channel_details.json", d1, 0644)
+		err = ioutil.WriteFile(path+"\\"+channelName+"_channel_details.json", d1, 0644)
 
 		if err != nil{
 
@@ -165,6 +176,48 @@ func createChannel(path string, channelName string, channelType string, writeInt
 		}
 
 		fmt.Println("Channel created successfully...")
+
+	}else{
+	  
+		fmt.Println("Error")
+
+	}
+
+}
+
+func createChannelTable(path string, channelName string, channelType string){
+
+	if path == "default"{
+		fmt.Println("Please set a path for the channel storage...")
+		return
+	}
+
+	var filePath = path+"/"+channelName+".tbl";
+
+	if _, err := os.Stat(filePath); err == nil{
+
+	  	fmt.Println("Table already exists with name : "+channelName+"...")
+		return
+
+	}else if os.IsNotExist(err){
+
+		if channelType != "tcp" && channelType != "udp"{
+			fmt.Println("Table must be either tcp or udp...")
+			return
+		}
+
+		fDes, err := os.Create(filePath)
+
+		if err != nil{
+
+			fmt.Println(err)
+			return
+
+		}
+
+		defer fDes.Close()
+
+		fmt.Println("Table created successfully...")
 
 	}else{
 	  

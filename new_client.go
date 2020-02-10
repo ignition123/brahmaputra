@@ -30,9 +30,9 @@ func main() {
 	
 	var wg sync.WaitGroup
 
-	wg.Add(1000)
+	wg.Add(100)
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
         go createWorker(&wg)
     }	
 
@@ -54,7 +54,8 @@ func createWorker(wg *sync.WaitGroup){
 		} else {
 			fmt.Println("Unknown error: " + err.Error())
 		}
-		os.Exit(1)
+		go createWorker(wg)
+		return
 	}
 
 	for i:=0;i<100;i++{

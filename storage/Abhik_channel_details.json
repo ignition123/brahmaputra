@@ -1,1 +1,1 @@
-{"channelName":"Abhik","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage","type":"channel","worker":10000,"writeInterval":1000}
+{"channelName":"Abhik","channelType":"tcp","path":"D:\\brahm\\brahmaputra\\storage\\Abhik.br","table":"D:\\brahm\\brahmaputra\\storage\\Abhik.tbl","type":"channel","worker":1}

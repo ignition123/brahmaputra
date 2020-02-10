@@ -6,15 +6,8 @@
             "port":"8200",
             "max_sockets":0,
             "socket_timeout":12000,
-            "replicationServer":{
-                "replication":true,
-                "nodeKeeper":[
-                    {
-                        "host":"127.0.0.1",
-                        "port":"4500"
-                    }
-                ]
-            },
+            "clusterName":"cluster1",
+            "hostName":"host2",
             "auth":{
                 "username":"sudeep",
                 "password":"kaihiwatari"
@@ -23,8 +16,32 @@
         },
         "udp":{}
     },
-    "persistent":{
-        "writeInterval":1000,
-        "path":"d:/brahmaputra"
-    }
+    "storage":{
+        "file":{
+            "active":true
+        },
+        "mongodb":{
+            "active":false,
+            "url":""
+        },
+        "mySQL":{
+            "active":false
+        },
+        "hbase":{
+            "active":false
+        },
+        "couchDB":{
+            "active":false
+        },
+        "cassandra":{
+            "active":false
+        },
+        "postgres":{
+            "active":false
+        }
+    },
+    "childWrite":{
+        "writeConcern":1
+    },
+    "clusterWrite":true
 }

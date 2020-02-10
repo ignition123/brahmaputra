@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"sync"
 	"fmt"
+	"bytes"
+	"encoding/binary"
+	"io"
 )
 
 func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
@@ -58,9 +61,30 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 		var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
 
 		messageMap["_id"] = _id
-		
+
 		var indexNo = epoch % int64(TCPStorage[channelName].Worker)
 		
+		jsonData, err := json.Marshal(messageMap)
+
+		if err != nil{
+			fmt.Println(err.Error())
+			return
+		}
+
+		if *ConfigTCPObj.Storage.File.Active{
+			var byteLen = len(jsonData)
+
+			WRITEFILE :if !WriteData(jsonData, channelName, byteLen){
+				goto WRITEFILE
+				return
+			}
+
+			WRITEOFFSET: if !WriteOffset(jsonData, channelName, byteLen, _id){
+				goto WRITEOFFSET
+				return
+			}
+		}
+
 		TCPStorage[channelName].BucketData[indexNo] <- messageMap
 
 	}else if messageMap["type"] == "subscribe"{
@@ -105,4 +129,79 @@ func ParseMsg(msg string, mutex *sync.Mutex, conn net.Conn){
 	}	
 
 	mutex.Unlock()
+}
+
+// func ReadDataUsingOffset(){
+// 	var byteSize = (byteLen + 4)
+
+// 	var readByte = make([]byte, byteSize)
+
+// 	_, err = TCPStorage[channelName].FD.ReadAt(readByte, TCPStorage[channelName].Offset)
+
+// 	if err != nil{
+// 		fmt.Println(err.Error())
+// 		return
+// 	}
+
+// 	TCPStorage[channelName].Offset += int64(byteSize)
+
+// 	readByte = readByte[4:]
+
+// 	messageMap = make(map[string]interface{})
+
+// 	err = json.Unmarshal(readByte, &messageMap)
+
+// 	if err != nil{
+// 		go WriteLog(err.Error())
+// 		return
+// 	}
+// }
+
+func WriteData(jsonData []byte, channelName string, byteLen int) bool{
+
+	var packetBuffer bytes.Buffer
+
+	buff := make([]byte, 4)
+
+	binary.LittleEndian.PutUint32(buff, uint32(byteLen))
+
+	packetBuffer.Write(buff)
+
+	packetBuffer.Write(jsonData)
+
+	if _, err := TCPStorage[channelName].FD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
+		go WriteLog(err.Error())
+		return false
+	}
+
+	return true
+
+}
+
+func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string) bool{
+
+	var byteSize = (byteLen + 4)
+
+	TCPStorage[channelName].Offset += int64(byteSize)
+
+	var offset = strconv.FormatInt(TCPStorage[channelName].Offset, 10)
+
+	var offsetString = *ConfigTCPObj.Server.TCP.ClusterName+"|"+offset+"|"+_id+"\r\n"
+
+	var packetBuffer bytes.Buffer
+
+	buff := make([]byte, 2)
+
+	binary.LittleEndian.PutUint16(buff, uint16(len(offsetString)))
+
+	packetBuffer.Write(buff)
+	packetBuffer.Write([]byte(offsetString))
+
+	if _, err := TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
+		go WriteLog(err.Error())
+		return false
+	}
+
+	return true
+
 }

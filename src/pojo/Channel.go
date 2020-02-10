@@ -2,11 +2,14 @@ package pojo
 
 import(
 	"net"
+	"os"
 )
 
 type ChannelStruct struct{
+	FD *os.File
+	TableFD *os.File
 	Path string
-	WriteInterval int32
+	Offset int64
 	Worker int16
 	BucketData [] chan map[string]interface{}
 }
