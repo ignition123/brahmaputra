@@ -20,7 +20,7 @@ func Connect() bool{
 		Setting URL for mongodb connections
 	*/
 
-	clientOptions := options.Client().ApplyURI(*ChannelList.ConfigTCPObj.Storage.Mongodb.Url)
+	clientOptions := options.Client().ApplyURI(*ChannelList.ConfigTCPObj.Storage.Mongodb.Url).SetMinPoolSize(*ChannelList.ConfigTCPObj.Storage.Mongodb.MinPoolSize).SetMaxPoolSize(*ChannelList.ConfigTCPObj.Storage.Mongodb.MaxPoolSize).SetRetryWrites(true)
 
 	// Connecting to Mongodb with server host localhost and port 27017
 

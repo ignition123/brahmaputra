@@ -5,6 +5,7 @@ import(
 	"net"
 	"context"
 	"ChannelList"
+	"strconv"
 )
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
@@ -12,6 +13,10 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 	var stopIterate = false
 
 	ctx := context.Background()
+
+	TCPTotalConnection += 1
+
+	ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
 
 	for{
 
@@ -32,6 +37,8 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 				}else{
 					ChannelList.WriteLog("Connection closed!")
 					ChannelList.WriteLog("Channel closed!")
+					TCPTotalConnection -= 1
+					ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
 					stopIterate = true
 					break
 				

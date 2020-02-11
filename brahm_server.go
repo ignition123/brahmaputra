@@ -11,12 +11,27 @@ import (
 	"syscall"
 	"os/signal"
 	"ChannelList"
+	"time"
+	"runtime"
 )
 
 
 var commandLineMap = make(map[string]interface{})
 
 func main(){
+
+	sigs := make(chan os.Signal, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGQUIT)
+
+	go func() {
+
+	  <- sigs
+	  fmt.Println("Closing process...")
+	  cleanupAllTheThings()
+	  os.Exit(0)
+
+	}()
 
 	commandLineargs := os.Args
 	
@@ -51,25 +66,30 @@ func main(){
 			6)
 		`)
 	}
-
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	go func() {
-	  <- sigs
-	  cleanupAllTheThings()
-	  os.Exit(0)
-	}()
 }
 
 func cleanupAllTheThings(){
+
+	time.Sleep(1 * time.Second)
+
+	server.CloseTCPServers()
+
+	time.Sleep(1 * time.Second)
+
 	for key := range ChannelList.TCPStorage{
+
+		time.Sleep(1 * time.Second)
+
+		fmt.Println("Closing storage files of the channel "+ key+"...")
 		ChannelList.TCPStorage[key].FD.Close()
+
+		fmt.Println("Closing table files of the channel "+ key+"...")
 		ChannelList.TCPStorage[key].TableFD.Close()
 	}
 }
 
 func runConfigFile(configPath string, channelType string){
-	
+
 	data, err := ioutil.ReadFile(configPath)
 
 	if err != nil{
@@ -85,6 +105,8 @@ func runConfigFile(configPath string, channelType string){
 		fmt.Println("Invalid config file, json is not valid")
 		return
 	}
+
+	runtime.GOMAXPROCS(*configObj.Worker)
 
 	if channelType == "tcp"{
 		if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{

@@ -14,6 +14,9 @@ type ServerTCPConnection struct{
 	connections map[net.Conn] time.Time
 }
 
+var closeTCP = false
+var TCPTotalConnection = 0
+
 func HostTCP(configObj pojo.Config){
 
 	ChannelList.ConfigTCPObj = configObj
@@ -50,6 +53,11 @@ func HostTCPServer(){
 
     for {
 
+    	if closeTCP{
+    		server.Close()
+    		return
+    	}
+
 		conn, err := server.Accept()
 		
 		fmt.Println("connection accepted...")
@@ -67,6 +75,11 @@ func HostTCPServer(){
 
 		go HandleRequest(conn, messageQueue)
 	}
+}
+
+func CloseTCPServers(){
+	fmt.Println("Closing tcp socket...")
+	closeTCP = true
 }
 
 func ConnectStorage() bool{

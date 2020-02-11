@@ -16,28 +16,21 @@
         },
         "udp":{}
     },
-    "channelConfigFiles":"D:\\brahmaputra\\storage\\",
+    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage\\",
     "storage":{
         "file":{
             "active":false
         },
         "mongodb":{
             "active":true,
-            "url":"mongodb://127.0.0.1:27017/brahmaputra"
+            "url":"mongodb://127.0.0.1:27017/brahmaputra",
+            "maxpoolSize":1000,
+            "minpoolSize":100
         },
         "mySQL":{
             "active":false
         },
-        "hbase":{
-            "active":false
-        },
-        "couchDB":{
-            "active":false
-        },
         "cassandra":{
-            "active":false
-        },
-        "postgres":{
             "active":false
         }
     },

@@ -18,6 +18,7 @@ type TCPStruct struct{
 	BufferRead *int
 	ClusterName *string
 	HostName *string
+	TotalConnection *int64
 }
 
 type UDPStruct struct{
@@ -42,10 +43,7 @@ type StorageStruct struct{
 	File FileStruct
 	Mongodb MongodbStruct
 	MySQL MySQStruct
-	Hbase HbaseStruct
-	CouchDB CouchDBStruct
 	Cassandra CassandraStruct
-	Postgres PostgresStruct
 }
 
 type FileStruct struct{
@@ -55,25 +53,15 @@ type FileStruct struct{
 type MongodbStruct struct{
 	Active *bool
 	Url *string
+	MinPoolSize *uint64
+	MaxPoolSize *uint64
 }
 
 type MySQStruct struct{
 	Active *bool
 }
 
-type HbaseStruct struct{
-	Active *bool
-}
-
-type CouchDBStruct struct{
-	Active *bool
-}
-
 type CassandraStruct struct{
-	Active *bool
-}
-
-type PostgresStruct struct{
 	Active *bool
 }
 
