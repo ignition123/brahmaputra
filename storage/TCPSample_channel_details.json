@@ -1,1 +1,1 @@
-{"channelName":"TCPSample","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage\\TCPSample.br","table":"D:\\pounze_go_project\\brahmaputra\\storage\\TCPSample.tbl","type":"channel","worker":1}
+{"channelName":"TCPSample","channelType":"tcp","path":"D:\\brahmaputra\\storage\\TCPSample.br","table":"D:\\brahmaputra\\storage\\TCPSample.tbl","type":"channel","worker":1}

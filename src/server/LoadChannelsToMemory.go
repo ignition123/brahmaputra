@@ -6,14 +6,15 @@ import(
 	"encoding/json"
 	"pojo"
 	"os"
+	"ChannelList"
 )
 
-func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
+func LoadTCPChannelsToMemory(){
 
-    files, err := ioutil.ReadDir(*ConfigTCPObj.ChannelConfigFiles)
+    files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
     if err != nil {
-        WriteLog(err.Error())
+        ChannelList.WriteLog(err.Error())
         return
     }
 
@@ -23,10 +24,10 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 
         if extension == ".json"{
 
-        	data, err := ioutil.ReadFile(*ConfigTCPObj.ChannelConfigFiles+"/"+file.Name())
+        	data, err := ioutil.ReadFile(*ChannelList.ConfigTCPObj.ChannelConfigFiles+"/"+file.Name())
 
 			if err != nil{
-				WriteLog(err.Error())
+				ChannelList.WriteLog(err.Error())
 				break
 			}
 
@@ -35,7 +36,7 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 			err = json.Unmarshal(data, &channelMap)
 
 			if err != nil{
-				WriteLog(err.Error())
+				ChannelList.WriteLog(err.Error())
 				break
 			}
 
@@ -46,7 +47,7 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 				var bucketData  = make([]chan map[string]interface{}, worker)
 
 				for i := range bucketData {
-				   bucketData[i] = make(chan map[string]interface{}, *ConfigTCPObj.Server.TCP.BufferRead)
+				   bucketData[i] = make(chan map[string]interface{}, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
 				}
 
 				var channelName = channelMap["channelName"].(string)
@@ -58,12 +59,12 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
 					BucketData: bucketData,
 				}
 
-				if *ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{
-					channelObject = openDataFile("tcp", channelObject, ConfigTCPObj, channelMap)
-					channelObject = openTableFile("tcp", channelObject, ConfigTCPObj, channelMap)
+				if *ChannelList.ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{
+					channelObject = openDataFile("tcp", channelObject, channelMap)
+					channelObject = openTableFile("tcp", channelObject, channelMap)
 				}
 
-				TCPStorage[channelName] = channelObject
+				ChannelList.TCPStorage[channelName] = channelObject
 
 			}	
 
@@ -71,7 +72,7 @@ func LoadTCPChannelsToMemory(ConfigTCPObj pojo.Config){
     }
 }
 
-func openDataFile(protocol string, channelObject *pojo.ChannelStruct, ConfigTCPObj pojo.Config, channelMap map[string]interface{}) *pojo.ChannelStruct{
+func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
 	if protocol == "tcp"{
 
@@ -79,7 +80,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, ConfigTCPO
 			os.O_APPEND|os.O_RDWR, 0700)
 
 		if err != nil {
-			WriteLog(err.Error())
+			ChannelList.WriteLog(err.Error())
 			return channelObject
 		}
 
@@ -93,7 +94,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, ConfigTCPO
 	return channelObject
 }
 
-func openTableFile(protocol string, channelObject *pojo.ChannelStruct, ConfigTCPObj pojo.Config, channelMap map[string]interface{}) *pojo.ChannelStruct{
+func openTableFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
 	if protocol == "tcp"{
 
@@ -101,7 +102,7 @@ func openTableFile(protocol string, channelObject *pojo.ChannelStruct, ConfigTCP
 			os.O_APPEND|os.O_RDWR, 0700)
 
 		if err != nil {
-			WriteLog(err.Error())
+			ChannelList.WriteLog(err.Error())
 			return channelObject
 		}
 

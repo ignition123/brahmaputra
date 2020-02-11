@@ -16,14 +16,14 @@
         },
         "udp":{}
     },
-    "channelConfigFiles":"E:\\deleted_message\\storage\\",
+    "channelConfigFiles":"D:\\brahmaputra\\storage\\",
     "storage":{
         "file":{
             "active":true
         },
         "mongodb":{
             "active":false,
-            "url":""
+            "url":"mongodb://127.0.0.1:27017/brahmaputra"
         },
         "mySQL":{
             "active":false

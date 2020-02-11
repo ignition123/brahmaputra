@@ -4,6 +4,7 @@ package server
 import(
 	"net"
 	"context"
+	"ChannelList"
 )
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
@@ -29,15 +30,15 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 					go ParseMsg(val, conn)
 
 				}else{
-					WriteLog("Connection closed!")
-					WriteLog("Channel closed!")
+					ChannelList.WriteLog("Connection closed!")
+					ChannelList.WriteLog("Channel closed!")
 					stopIterate = true
 					break
 				
 				}
 			break
 			case <-ctx.Done():
-				go WriteLog("Channel closed...")
+				go ChannelList.WriteLog("Channel closed...")
 		}
 	}
 }

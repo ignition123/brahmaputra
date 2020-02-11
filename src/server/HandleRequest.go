@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"net"
 	"time"
+	"ChannelList"
 )
 
 func allZero(s []byte) bool {
@@ -45,7 +46,7 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 		err := conn.SetReadDeadline(time.Now().Add(10 * time.Hour))
 
 		if err != nil {
-			go WriteLog("Error in tcp connection: " + err.Error())
+			go ChannelList.WriteLog("Error in tcp connection: " + err.Error())
 			messageQueue <- "BRAHMAPUTRA_DISCONNECT"
 			break
 		}

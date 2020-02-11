@@ -1,13 +1,14 @@
 package server
 
 import(
-	"pojo"
+	_"pojo"
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
 	"context"
 	"sync"
 	_"fmt"
+	"ChannelList"
 )
 
 var channelMutex = &sync.Mutex{}
@@ -16,7 +17,7 @@ var parseMessageMutex = &sync.Mutex{}
 
 func GetChannelData(){
 
-	for channelName := range TCPStorage {
+	for channelName := range ChannelList.TCPStorage {
 	    runChannel(channelName)
 	}
 
@@ -24,7 +25,7 @@ func GetChannelData(){
 
 func runChannel(channelName string){
 
-	for index := range TCPStorage[channelName].BucketData{
+	for index := range ChannelList.TCPStorage[channelName].BucketData{
 		go func(BucketData chan map[string]interface{}, channelName string){
 
 			defer close(BucketData)
@@ -40,25 +41,25 @@ func runChannel(channelName string){
 					if ok{
 						var subchannelName = message["channelName"].(string)
 
-						if(channelName == subchannelName && len(TCPSocketDetails[channelName]) > 0){	
-							go sendMessageToClient(message, TCPSocketDetails, channelName)
+						if(channelName == subchannelName && len(ChannelList.TCPSocketDetails[channelName]) > 0){	
+							go sendMessageToClient(message, channelName)
 						}
 					}		
 
 					break
 					case <-ctx.Done():
-						go WriteLog("Channel closed...")
+						go ChannelList.WriteLog("Channel closed...")
 					break
 				}		
 			}
 
-		}(TCPStorage[channelName].BucketData[index], channelName)
+		}(ChannelList.TCPStorage[channelName].BucketData[index], channelName)
 	}
 }
 
-func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string){
+func sendMessageToClient(message map[string]interface{}, channelName string){
 
-	for index := range TCPSocketDetails[channelName]{
+	for index := range ChannelList.TCPSocketDetails[channelName]{
 
 		parseMessageMutex.Lock()
 
@@ -68,16 +69,16 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 
 		sizeBuff := make([]byte, 4)
 
-		if len(TCPSocketDetails[channelName]) <= index{
+		if len(ChannelList.TCPSocketDetails[channelName]) <= index{
 			break
 		} 
 
-		if TCPSocketDetails[channelName][index].ContentMatcher == nil{
+		if ChannelList.TCPSocketDetails[channelName][index].ContentMatcher == nil{
 
 			jsonData, err := json.Marshal(message)
 
 			if err != nil{
-				go WriteLog(err.Error())
+				go ChannelList.WriteLog(err.Error())
 				break
 			}
 
@@ -85,11 +86,11 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
-			go send(TCPSocketDetails, channelName, index, packetBuffer)
+			go send(channelName, index, packetBuffer)
 
 		}else{
 
-			var cm = TCPSocketDetails[channelName][index].ContentMatcher
+			var cm = ChannelList.TCPSocketDetails[channelName][index].ContentMatcher
 
 			var matchFound = true
 
@@ -109,7 +110,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				jsonData, err := json.Marshal(message)
 
 				if err != nil{
-					go WriteLog(err.Error())
+					go ChannelList.WriteLog(err.Error())
 					break
 				}
 
@@ -117,7 +118,7 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
 
-				go send(TCPSocketDetails, channelName, index, packetBuffer)
+				go send(channelName, index, packetBuffer)
 
 			}
 
@@ -126,22 +127,22 @@ func sendMessageToClient(message map[string]interface{}, TCPSocketDetails map[st
 	}
 }
 
-func send(TCPSocketDetails map[string][]*pojo.SocketDetails, channelName string, index int, packetBuffer bytes.Buffer){
+func send(channelName string, index int, packetBuffer bytes.Buffer){
 
 	channelMutex.Lock()
 	
-	if len(TCPSocketDetails[channelName]) > index{
-		_, err := TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
+	if len(ChannelList.TCPSocketDetails[channelName]) > index{
+		_, err := ChannelList.TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
 
 		if err != nil {
 		
-			go WriteLog(err.Error())
+			go ChannelList.WriteLog(err.Error())
 
-			var channelArray = TCPSocketDetails[channelName]
+			var channelArray = ChannelList.TCPSocketDetails[channelName]
 		
 			copy(channelArray[index:], channelArray[index+1:])
 			channelArray[len(channelArray)-1] = nil
-			TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
+			ChannelList.TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
 
 		}
 	}

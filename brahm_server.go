@@ -10,6 +10,7 @@ import (
 	"flag"
 	"syscall"
 	"os/signal"
+	"ChannelList"
 )
 
 
@@ -61,9 +62,9 @@ func main(){
 }
 
 func cleanupAllTheThings(){
-	for key := range server.TCPStorage{
-		server.TCPStorage[key].FD.Close()
-		server.TCPStorage[key].TableFD.Close()
+	for key := range ChannelList.TCPStorage{
+		ChannelList.TCPStorage[key].FD.Close()
+		ChannelList.TCPStorage[key].TableFD.Close()
 	}
 }
 

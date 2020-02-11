@@ -6,42 +6,47 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"MongoConnection"
+	"ChannelList"
 )
 
 type ServerTCPConnection struct{
 	connections map[net.Conn] time.Time
 }
 
-var ConfigTCPObj pojo.Config
-
 func HostTCP(configObj pojo.Config){
 
-	ConfigTCPObj = configObj
+	ChannelList.ConfigTCPObj = configObj
 
-	LoadTCPChannelsToMemory(ConfigTCPObj)
+	if !ConnectStorage(){
+		ChannelList.WriteLog("Unable to connect to storage...")
+		return
+	}
+
+	LoadTCPChannelsToMemory()
 
 	GetChannelData()
 
-	if *ConfigTCPObj.Server.TCP.Host != "" && *ConfigTCPObj.Server.TCP.Port != ""{
-		HostTCPServer(ConfigTCPObj)
+	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
+		HostTCPServer()
 	}
 }
 
-func HostTCPServer(ConfigTCPObj pojo.Config){
+func HostTCPServer(){
 
-	server, err := net.Listen("tcp", *ConfigTCPObj.Server.TCP.Host +":"+ *ConfigTCPObj.Server.TCP.Port)
+	server, err := net.Listen("tcp", *ChannelList.ConfigTCPObj.Server.TCP.Host +":"+ *ChannelList.ConfigTCPObj.Server.TCP.Port)
 
     if err != nil {
-        WriteLog("Error listening: "+err.Error())
+        ChannelList.WriteLog("Error listening: "+err.Error())
         os.Exit(1)
 	}
 	
 	defer server.Close()
 
-	fmt.Println("Listening on " + *ConfigTCPObj.Server.TCP.Host + ":" + *ConfigTCPObj.Server.TCP.Port+"...")
+	fmt.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
 
-	WriteLog("Loading log files...")
-	WriteLog("Starting TCP server...")
+	ChannelList.WriteLog("Loading log files...")
+	ChannelList.WriteLog("Starting TCP server...")
 
     for {
 
@@ -50,11 +55,11 @@ func HostTCPServer(ConfigTCPObj pojo.Config){
 		fmt.Println("connection accepted...")
 		
         if err != nil {
-           	go WriteLog("Error accepting: "+err.Error())
+           	go ChannelList.WriteLog("Error accepting: "+err.Error())
             continue
 		}
 
-		var messageQueue = make(chan string, *ConfigTCPObj.Server.TCP.BufferRead)
+		var messageQueue = make(chan string, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
 
 		defer close(messageQueue)
 		
@@ -62,4 +67,25 @@ func HostTCPServer(ConfigTCPObj pojo.Config){
 
 		go HandleRequest(conn, messageQueue)
 	}
+}
+
+func ConnectStorage() bool{
+
+	if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
+		
+		if(!MongoConnection.Connect()){
+			
+			fmt.Println("Failed to connect Mongodb")
+
+			return false
+		}
+
+		if !MongoConnection.SetupCollection(){
+			return false
+		}
+
+	}
+	
+	return true
+
 }
