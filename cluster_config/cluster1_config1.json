@@ -19,10 +19,10 @@
     "channelConfigFiles":"D:\\brahmaputra\\storage\\",
     "storage":{
         "file":{
-            "active":true
+            "active":false
         },
         "mongodb":{
-            "active":false,
+            "active":true,
             "url":"mongodb://127.0.0.1:27017/brahmaputra"
         },
         "mySQL":{

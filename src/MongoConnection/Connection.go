@@ -11,7 +11,6 @@ import(
     "io/ioutil"
 	"path/filepath"
 	"encoding/json"
-	"strconv"
 )
 
 var MongoDB *mongo.Database
@@ -98,7 +97,7 @@ func SetupCollection() bool{
 
 			mod := mongo.IndexModel{
 				Keys: bson.M{
-				"LUT": -1,
+				"offsetID": -1,
 				}, Options: nil,
 			}
 
@@ -107,9 +106,22 @@ func SetupCollection() bool{
 			if err != nil{
 				ChannelList.WriteLog(err.Error())
 				return false
-			}else{
-				ChannelList.WriteLog("Mongodb initiated successfully for channel name: "+channelName)
 			}
+
+			mod = mongo.IndexModel{
+				Keys: bson.M{
+				"cluster": 1,
+				}, Options: nil,
+			}
+
+			_, err = col.Indexes().CreateOne(ctx, mod)
+
+			if err != nil{
+				ChannelList.WriteLog(err.Error())
+				return false
+			}
+
+			ChannelList.WriteLog("Mongodb initiated successfully for channel name: "+channelName)
 
         }
     }
@@ -117,7 +129,7 @@ func SetupCollection() bool{
     return true
 }
 
-func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,string){
+func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,interface{}){
 
 	ctx, _ := context.WithTimeout(context.Background(), 15*time.Second)
 
@@ -131,7 +143,7 @@ func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,string
 
 	}else{
 		
-		return true, strconv.FormatInt(result.InsertedID.(int64), 10)
+		return true, result.InsertedID
 
 	}
 

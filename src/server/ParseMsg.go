@@ -241,8 +241,8 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 
 	var oneDoc = make(map[string]interface{})
 
-	oneDoc["_id"] = _id
-	oneDoc["LUT"] = _id
+	oneDoc["offsetID"] = _id
+	oneDoc["cluster"] = *ChannelList.ConfigTCPObj.Server.TCP.ClusterName
 	oneDoc["data"] = packetBuffer.Bytes()
 
 	var status, _ = MongoConnection.InsertOne(channelName, oneDoc)

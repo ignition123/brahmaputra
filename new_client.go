@@ -30,9 +30,9 @@ func main() {
 		
 	var wg sync.WaitGroup
 
-	wg.Add(1000)
+	wg.Add(100)
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
         go createWorker(&wg)
     }	
 
@@ -60,7 +60,7 @@ func createWorker(wg *sync.WaitGroup){
 
 	go readConnection(conn)
 
-	for i:=0;i<100000000;i++{
+	for i:=0;i<1000;i++{
 
 		currentTime := time.Now()
 
