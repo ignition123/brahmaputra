@@ -22,6 +22,7 @@ import (
 	"sync"
 )
 
+var mutex = &sync.Mutex{}
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
 var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
 
@@ -242,6 +243,8 @@ func readConnection(conn net.Conn) {
 
 		conn.Read(sizeBuf)
 
+		mutex.Lock()
+
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 
 		if packetSize < 0 {
@@ -260,6 +263,8 @@ func readConnection(conn net.Conn) {
 		var message = string(completePacket)
 
 		fmt.Println(message)
+
+		mutex.Unlock()
 	}
 
 	conn.Close()
