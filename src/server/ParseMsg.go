@@ -84,32 +84,30 @@ func ParseMsg(msg string, conn net.Conn){
 		}
 
 		if *ChannelList.ConfigTCPObj.Storage.File.Active{
+
 			var byteLen = len(jsonData)
 		
-			WRITEFILE: 
-				go WriteData(jsonData, channelName, byteLen, writeDataCallback)
+			go WriteData(jsonData, channelName, byteLen, writeDataCallback)
 
-				if !<- writeDataCallback{
-					goto WRITEFILE
-				}
+			if !<- writeDataCallback{
+				return
+			}
 
-			WRITEOFFSET: 
-				go WriteOffset(jsonData, channelName, byteLen, _id, writeCallback)
+			go WriteOffset(jsonData, channelName, byteLen, _id, writeCallback)
 
-				if !<- writeCallback{
-					goto WRITEOFFSET
-				}
+			if !<- writeCallback{
+				return
+			}
 		}
 
 		if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
 
 			var byteLen = len(jsonData)
-
-			WRITEMONGODB: 
-				go WriteMongodbData(nanoEpoch, jsonData, channelName, byteLen, writeDataCallback)
+ 
+			go WriteMongodbData(nanoEpoch, jsonData, channelName, byteLen, writeDataCallback)
 
 			if !<- writeDataCallback{
-				goto WRITEMONGODB
+				return
 			}
 		} 
 
@@ -189,39 +187,40 @@ func SendAck(messageMap map[string]interface{}, conn net.Conn){
 	AckMutex.Lock()
 	defer AckMutex.Unlock()
 
-	if(messageMap["type"] == "publish"){
+	var messageResp = make(map[string]interface{})
 
-		var messageResp = make(map[string]interface{})
+	messageResp["producer_id"] = messageMap["producer_id"].(string)
 
-		messageResp["producer_id"] = messageMap["producer_id"].(string)
+	jsonData, err := json.Marshal(messageResp)
 
-		jsonData, err := json.Marshal(messageResp)
+	if err != nil{
+		go ChannelList.WriteLog(err.Error())
+		return
+	}
 
-		if err != nil{
-			go ChannelList.WriteLog(err.Error())
-			return
-		}
+	var packetBuffer bytes.Buffer
 
-		var packetBuffer bytes.Buffer
+	buff := make([]byte, 4)
 
-		buff := make([]byte, 4)
+	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
 
-		binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+	packetBuffer.Write(buff)
 
-		packetBuffer.Write(buff)
+	packetBuffer.Write(jsonData)
 
-		packetBuffer.Write(jsonData)
+	var counter = 0
 
-		RETRY: _, err = conn.Write(packetBuffer.Bytes())
+	RETRY: _, err = conn.Write(packetBuffer.Bytes())
 
-		if err != nil{
+	if err != nil && counter <= 5{
 
-			time.Sleep(2 * time.Second)
+		time.Sleep(2 * time.Second)
 
-			goto RETRY
+		counter += 1
 
-		}
-	}	
+		goto RETRY
+
+	}
 }
 
 func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
@@ -245,12 +244,24 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 	oneDoc["cluster"] = *ChannelList.ConfigTCPObj.Server.TCP.ClusterName
 	oneDoc["data"] = packetBuffer.Bytes()
 
-	var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
+	var counter = 0
 
-	if status{
-		writeDataCallback <- true
-	}else{
+	WRITEMONGODB:
+
+		var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
+
+		if !status && counter <= 5{
+			
+			counter += 1
+
+			goto WRITEMONGODB
+
+		}
+
+	if counter >= 5{
 		writeDataCallback <- false
+	}else{
+		writeDataCallback <- true
 	}
 }
 
@@ -269,12 +280,24 @@ func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallba
 
 	packetBuffer.Write(jsonData)
 
-	if _, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
-		go ChannelList.WriteLog(err.Error())
-		writeDataCallback <- false
-	}
+	var counter = 0
 
-	writeDataCallback <- true
+	WRITEFILE: 
+		_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
+		
+		if (err != nil && err != io.EOF ) && counter <= 5{
+			go ChannelList.WriteLog(err.Error())
+
+			counter += 1
+
+			goto WRITEFILE
+		}
+
+	if counter >= 5{
+		writeDataCallback <- false
+	}else{
+		writeDataCallback <- true
+	}	
 }
 
 func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, writeCallback chan bool){
@@ -299,10 +322,24 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, w
 	packetBuffer.Write(buff)
 	packetBuffer.Write([]byte(offsetString))
 
-	if _, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes()); err != nil && err != io.EOF {
-		go ChannelList.WriteLog(err.Error())
-		writeCallback <- false
-	}
+	var counter = 0
 
-	writeCallback <- true
+	WRITEOFFSET:
+		_, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes())
+
+		if (err != nil && err != io.EOF) && counter <= 5{
+
+			go ChannelList.WriteLog(err.Error())
+
+			counter += 1
+
+			goto WRITEOFFSET
+
+		}
+
+	if counter >= 5{
+		writeCallback <- false
+	}else{
+		writeCallback <- true
+	}
 }
