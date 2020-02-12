@@ -12,7 +12,6 @@ import (
 	"os/signal"
 	"ChannelList"
 	"time"
-	"runtime"
 )
 
 
@@ -69,13 +68,6 @@ func main(){
 }
 
 func cleanupAllTheThings(){
-
-	time.Sleep(1 * time.Second)
-
-	server.CloseTCPServers()
-
-	time.Sleep(1 * time.Second)
-
 	for key := range ChannelList.TCPStorage{
 
 		time.Sleep(1 * time.Second)
@@ -89,7 +81,7 @@ func cleanupAllTheThings(){
 }
 
 func runConfigFile(configPath string, channelType string){
-
+	
 	data, err := ioutil.ReadFile(configPath)
 
 	if err != nil{
@@ -105,8 +97,6 @@ func runConfigFile(configPath string, channelType string){
 		fmt.Println("Invalid config file, json is not valid")
 		return
 	}
-
-	runtime.GOMAXPROCS(*configObj.Worker)
 
 	if channelType == "tcp"{
 		if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{

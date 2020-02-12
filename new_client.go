@@ -25,6 +25,9 @@ import (
 var mutex = &sync.Mutex{}
 var host = flag.String("host", "localhost", "The hostname or IP to connect to; defaults to \"localhost\".")
 var port = flag.Int("port", 8100, "The port to connect to; defaults to 8000.")
+var RequestMutex = &sync.Mutex{}
+
+var counter = 0
 
 func main() {
 		
@@ -58,9 +61,11 @@ func createWorker(wg *sync.WaitGroup){
 		return
 	}
 
+	defer conn.Close()
+
 	go readConnection(conn)
 
-	for i:=0;i<1000;i++{
+	for i:=0;i<10000;i++{
 
 		currentTime := time.Now()
 
@@ -155,40 +160,37 @@ func createWorker(wg *sync.WaitGroup){
 
 		//#############################################################
 
-		messageMap = make(map[string]interface{})
-		messageMap["channelName"] = "Abhik"
-		messageMap["type"] = "publish"
-		messageMap["producer_id"] = _id
+		var messageMap1 = make(map[string]interface{})
+		messageMap1["channelName"] = "Abhik"
+		messageMap1["type"] = "publish"
+		messageMap1["producer_id"] = _id
 
-		bodyMap = make(map[string]interface{})
+		var bodyMap1 = make(map[string]interface{})
 			
-			bodyMap["Account"] = "T93992"
-			bodyMap["Exchange"] = "NSE"
-			bodyMap["Segment"] = "FO"
-		bodyMap["AlgoEndTime"] = 0
-		bodyMap["AlgoSlices"] = 0
-		bodyMap["AlgoSliceSeconds"] = 0 
-		bodyMap["AlgoStartTime"] = 0
-		bodyMap["ClientType"] = 2
-		bodyMap["ClOrdID"] = "102173109118"
-		bodyMap["ClTxnID"] = "D202002031731214230"
-		bodyMap["ComplianceID"] = "1111111111111088"
-		bodyMap["CoveredOrUncovered"] = 0
-		bodyMap["CreatedTime"] = currentTime.Unix()
-		bodyMap["CustomerOrFirm"] = 0.0
-		bodyMap["DisclosedQty"] = 0.0
-		bodyMap["DripPrice"] = 0.0
-		bodyMap["DripSize"] = 0.0
+		bodyMap1["Account"] = "T93992"
+		bodyMap1["Exchange"] = "NSE"
+		bodyMap1["Segment"] = "FO"
+		bodyMap1["AlgoEndTime"] = 0
+		bodyMap1["AlgoSlices"] = 0
+		bodyMap1["AlgoSliceSeconds"] = 0 
+		bodyMap1["AlgoStartTime"] = 0
+		bodyMap1["ClientType"] = 2
+		bodyMap1["ClOrdID"] = "102173109118"
+		bodyMap1["ClTxnID"] = "D202002031731214230"
+		bodyMap1["ComplianceID"] = "1111111111111088"
+		bodyMap1["CoveredOrUncovered"] = 0
+		bodyMap1["CreatedTime"] = currentTime.Unix()
+		bodyMap1["CustomerOrFirm"] = 0.0
+		bodyMap1["DisclosedQty"] = 0.0
+		bodyMap1["DripPrice"] = 0.0
+		bodyMap1["DripSize"] = 0.0
 
-		messageMap["data"] = bodyMap
+		messageMap1["data"] = bodyMap1
 
-		sendMessage(messageMap, conn)
+		sendMessage(messageMap1, conn)
 		
 	}
-
-	conn.Close()
-
-	wg.Done()
+	// wg.Done()
 }
 
 func sendMessage(messageMap map[string]interface{}, conn net.Conn){
@@ -215,7 +217,17 @@ func sendMessage(messageMap map[string]interface{}, conn net.Conn){
 	fmt.Println(string(jsonData))
 
 	fmt.Println(time.Now())
+
+
+	// RequestMutex.Lock()
+	
+	// RequestMutex.Unlock()
+
 	_, err = conn.Write(packetBuffer.Bytes())
+
+	counter += 1
+
+	fmt.Println(counter)
 
 	// break
 
@@ -237,13 +249,15 @@ func allZero(s []byte) bool {
 
 func readConnection(conn net.Conn) {
 
-	for {
+	defer conn.Close()
 
-		mutex.Lock()
+	for {
 
 		sizeBuf := make([]byte, 4)
 
 		conn.Read(sizeBuf)
+
+		mutex.Lock()
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 
@@ -266,6 +280,4 @@ func readConnection(conn net.Conn) {
 
 		mutex.Unlock()
 	}
-
-	conn.Close()
 }

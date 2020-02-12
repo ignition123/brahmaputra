@@ -7,6 +7,8 @@ import (
 	"ChannelList"
 )
 
+var closeTCP = false
+
 func allZero(s []byte) bool {
 	for _, v := range s {
 		if v != 0 {
@@ -17,12 +19,18 @@ func allZero(s []byte) bool {
 }
 
 func HandleRequest(conn net.Conn, messageQueue chan string) {
-
-	defer ChannelList.Handlepanic()
+	
+	defer conn.Close()
 
 	sizeBuf := make([]byte, 4)
 
 	for {
+
+		if closeTCP{
+			go ChannelList.WriteLog("Closing all current sockets...")
+			conn.Close()
+			break
+		}
 		
 		conn.Read(sizeBuf)
 
@@ -55,4 +63,20 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 			messageQueue <- message
 		}
 	}
+
+	close(messageQueue)
+}
+
+func CloseTCPServers(){
+	
+	// defer func(){	
+	//        if err := recover(); err != nil {
+	//        ChannelList.WriteLog("RECOVER "+err.(string))
+	//        runtime.Goexit()
+	//    }	
+	// }()	
+
+	ChannelList.WriteLog("Closing tcp socket...")
+
+	closeTCP = true
 }

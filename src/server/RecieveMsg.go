@@ -3,20 +3,15 @@ package server
 
 import(
 	"net"
+	"context"
 	"ChannelList"
-	"strconv"
-	"time"
 )
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
 
-	defer ChannelList.Handlepanic()
-	
 	var stopIterate = false
 
-	TCPTotalConnection += 1
-
-	ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
+	ctx := context.Background()
 
 	for{
 
@@ -24,29 +19,26 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 			break
 		}
 
-		time.Sleep(time.Millisecond)
-
 		select {
 			case val, ok := <-messageQueue:
 				if ok{
 
 					if val == "BRAHMAPUTRA_DISCONNECT"{
-						ChannelList.WriteLog("Connection closed!")
-						ChannelList.WriteLog("Channel closed!")
-						TCPTotalConnection -= 1
-						ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
-						stopIterate = true
 						break
 					}
 
-					ParseMsg(val, conn)
+					go ParseMsg(val, conn)
 
+				}else{
+					ChannelList.WriteLog("Connection closed!")
+					ChannelList.WriteLog("Channel closed!")
+					stopIterate = true
 					break
-
+				
 				}
+			break
+			case <-ctx.Done():
+				go ChannelList.WriteLog("Channel closed...")
 		}
 	}
-
-	close(messageQueue)
-	conn.Close()
 }

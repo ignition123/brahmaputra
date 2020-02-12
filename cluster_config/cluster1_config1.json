@@ -16,7 +16,7 @@
         },
         "udp":{}
     },
-    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage\\",
+    "channelConfigFiles":"D:\\brahmaputra\\storage\\",
     "storage":{
         "file":{
             "active":false

@@ -4,10 +4,10 @@
         "tcp":{
             "host":"127.0.0.1",
             "port":"8200",
-            "maxSockets":0,
-            "socketTimeout":12000,
+            "max_sockets":0,
+            "socket_timeout":12000,
             "clusterName":"cluster1",
-            "hostName":"host1",
+            "hostName":"host2",
             "auth":{
                 "username":"sudeep",
                 "password":"kaihiwatari"
@@ -16,21 +16,27 @@
         },
         "udp":{}
     },
-    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage\\",
     "storage":{
         "file":{
-            "active":false
+            "active":true
         },
         "mongodb":{
-            "active":true,
-            "url":"mongodb://127.0.0.1:27017/brahmaputra",
-            "maxpoolSize":1000,
-            "minpoolSize":100
+            "active":false,
+            "url":""
         },
         "mySQL":{
             "active":false
         },
+        "hbase":{
+            "active":false
+        },
+        "couchDB":{
+            "active":false
+        },
         "cassandra":{
+            "active":false
+        },
+        "postgres":{
             "active":false
         }
     },
