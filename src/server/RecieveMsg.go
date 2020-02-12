@@ -3,16 +3,16 @@ package server
 
 import(
 	"net"
-	"context"
 	"ChannelList"
 	"strconv"
+	"time"
 )
 
 func RecieveMessage(conn net.Conn, messageQueue chan string){
 
+	defer ChannelList.Handlepanic()
+	
 	var stopIterate = false
-
-	ctx := context.Background()
 
 	TCPTotalConnection += 1
 
@@ -24,6 +24,8 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 			break
 		}
 
+		time.Sleep(time.Millisecond)
+
 		select {
 			case val, ok := <-messageQueue:
 				if ok{
@@ -32,7 +34,7 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 						break
 					}
 
-					go ParseMsg(val, conn)
+					ParseMsg(val, conn)
 
 				}else{
 					ChannelList.WriteLog("Connection closed!")
@@ -43,9 +45,6 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 					break
 				
 				}
-			break
-			case <-ctx.Done():
-				go ChannelList.WriteLog("Channel closed...")
 		}
 	}
 }

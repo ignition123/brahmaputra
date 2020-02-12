@@ -11,6 +11,8 @@ import(
 
 func LoadTCPChannelsToMemory(){
 
+	defer ChannelList.Handlepanic()
+	
     files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
     if err != nil {

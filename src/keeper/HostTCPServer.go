@@ -4,9 +4,12 @@ import (
 	"net"
 	"fmt"
 	"os"
+	"ChannelList"
 )
 
 func HostTCPServer(tcpNode map [string]interface{}){
+
+	defer ChannelList.Handlepanic()
 
 	server, err := net.Listen("tcp", tcpNode["host"].(string) +":"+ tcpNode["port"].(string))
 

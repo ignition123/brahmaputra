@@ -25,6 +25,8 @@ var MongoDBLock = &sync.Mutex{}
 
 func ParseMsg(msg string, conn net.Conn){
 
+	defer ChannelList.Handlepanic()
+	
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(msg), &messageMap)
@@ -184,9 +186,6 @@ func ParseMsg(msg string, conn net.Conn){
 
 func SendAck(messageMap map[string]interface{}, conn net.Conn){
 
-	AckMutex.Lock()
-	defer AckMutex.Unlock()
-
 	var messageResp = make(map[string]interface{})
 
 	messageResp["producer_id"] = messageMap["producer_id"].(string)
@@ -202,6 +201,8 @@ func SendAck(messageMap map[string]interface{}, conn net.Conn){
 
 	buff := make([]byte, 4)
 
+	AckMutex.Lock()
+
 	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
 
 	packetBuffer.Write(buff)
@@ -212,9 +213,9 @@ func SendAck(messageMap map[string]interface{}, conn net.Conn){
 
 	RETRY: _, err = conn.Write(packetBuffer.Bytes())
 
-	if err != nil && counter <= 5{
+	AckMutex.Unlock()
 
-		time.Sleep(2 * time.Second)
+	if err != nil && counter <= 5{
 
 		counter += 1
 
@@ -225,8 +226,8 @@ func SendAck(messageMap map[string]interface{}, conn net.Conn){
 
 func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
 
-	MongoDBLock.Lock()
-	defer MongoDBLock.Unlock()
+	// MongoDBLock.Lock()
+	// defer MongoDBLock.Unlock()
 
 	var packetBuffer bytes.Buffer
 
@@ -267,12 +268,11 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 
 func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
 
-	FileWriteLock.Lock()
-	defer FileWriteLock.Unlock()
-
 	var packetBuffer bytes.Buffer
 
 	buff := make([]byte, 4)
+
+	// FileWriteLock.Lock()
 
 	binary.LittleEndian.PutUint32(buff, uint32(byteLen))
 
@@ -281,9 +281,11 @@ func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallba
 	packetBuffer.Write(jsonData)
 
 	var counter = 0
-
-	WRITEFILE: 
+ 
+ 	WRITEFILE:
 		_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
+
+		// FileWriteLock.Unlock()
 		
 		if (err != nil && err != io.EOF ) && counter <= 5{
 			go ChannelList.WriteLog(err.Error())
@@ -302,8 +304,8 @@ func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallba
 
 func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, writeCallback chan bool){
 
-	FileTableLock.Lock()
-	defer FileTableLock.Unlock()
+	// FileTableLock.Lock()
+	// defer FileTableLock.Unlock()
 
 	var byteSize = (byteLen + 4)
 

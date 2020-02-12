@@ -18,7 +18,7 @@ func allZero(s []byte) bool {
 
 func HandleRequest(conn net.Conn, messageQueue chan string) {
 
-	defer conn.Close()
+	defer ChannelList.Handlepanic()
 
 	sizeBuf := make([]byte, 4)
 
@@ -56,5 +56,7 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 		}
 	}
 
-	close(messageQueue)
+	defer conn.Close()
+	
+	defer close(messageQueue)
 }

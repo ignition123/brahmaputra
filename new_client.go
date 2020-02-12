@@ -60,7 +60,7 @@ func createWorker(wg *sync.WaitGroup){
 
 	go readConnection(conn)
 
-	for i:=0;i<1000;i++{
+	for i:=0;i<10000;i++{
 
 		currentTime := time.Now()
 
@@ -239,11 +239,11 @@ func readConnection(conn net.Conn) {
 
 	for {
 
+		mutex.Lock()
+
 		sizeBuf := make([]byte, 4)
 
 		conn.Read(sizeBuf)
-
-		mutex.Lock()
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 

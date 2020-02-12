@@ -11,10 +11,6 @@ var mutex = &sync.Mutex{}
 
 func WriteLog(logMessage string){
 
-	mutex.Lock()
-
-	defer mutex.Unlock()
-
 	ErrorFile, err := os.OpenFile("./storage/error.log", os.O_APPEND|os.O_WRONLY, 0600)
 
 	if err != nil {
@@ -24,11 +20,12 @@ func WriteLog(logMessage string){
 
 	defer ErrorFile.Close()
 
-	currentTime := time.Now()
-	var logMsg = "############################### \r\n"
-	logMsg += currentTime.String() + "\r\n"
-	logMsg += logMessage + "\r\n"
-
-	fmt.Println(logMsg)
-	ErrorFile.WriteString(logMsg)
+	mutex.Lock()
+		currentTime := time.Now()
+		var logMsg = "############################### \r\n"
+		logMsg += currentTime.String() + "\r\n"
+		logMsg += logMessage + "\r\n"
+		fmt.Println(logMsg)
+		ErrorFile.WriteString(logMsg)
+	mutex.Unlock()
 }
