@@ -26,7 +26,7 @@ var MongoDBLock = &sync.Mutex{}
 func ParseMsg(msg string, conn net.Conn){
 
 	defer ChannelList.Handlepanic()
-	
+
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(msg), &messageMap)
@@ -186,6 +186,8 @@ func ParseMsg(msg string, conn net.Conn){
 
 func SendAck(messageMap map[string]interface{}, conn net.Conn){
 
+	defer ChannelList.Handlepanic()
+
 	var messageResp = make(map[string]interface{})
 
 	messageResp["producer_id"] = messageMap["producer_id"].(string)
@@ -229,6 +231,8 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 	// MongoDBLock.Lock()
 	// defer MongoDBLock.Unlock()
 
+	defer ChannelList.Handlepanic()
+
 	var packetBuffer bytes.Buffer
 
 	buff := make([]byte, 4)
@@ -268,6 +272,8 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 
 func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
 
+	defer ChannelList.Handlepanic()
+
 	var packetBuffer bytes.Buffer
 
 	buff := make([]byte, 4)
@@ -306,7 +312,8 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, w
 
 	// FileTableLock.Lock()
 	// defer FileTableLock.Unlock()
-
+	defer ChannelList.Handlepanic()
+	
 	var byteSize = (byteLen + 4)
 
 	ChannelList.TCPStorage[channelName].Offset += int64(byteSize)

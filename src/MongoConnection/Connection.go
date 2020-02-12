@@ -16,6 +16,9 @@ import(
 var MongoDB *mongo.Database
 
 func Connect() bool{
+
+	defer ChannelList.Handlepanic()
+
 	/*
 		Setting URL for mongodb connections
 	*/
@@ -55,6 +58,8 @@ func Connect() bool{
 }
 
 func SetupCollection() bool{
+
+	defer ChannelList.Handlepanic()
 
 	files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
@@ -131,6 +136,8 @@ func SetupCollection() bool{
 
 func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,interface{}){
 
+	defer ChannelList.Handlepanic()
+
 	ctx, _ := context.WithTimeout(context.Background(), 15*time.Second)
 
 	col := MongoDB.Collection(collctionName)
@@ -150,5 +157,8 @@ func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,interf
 }
 
 func Database() *mongo.Database{
+
+	defer ChannelList.Handlepanic()
+	
 	return MongoDB
 }

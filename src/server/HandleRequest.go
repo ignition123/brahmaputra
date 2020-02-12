@@ -55,8 +55,4 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 			messageQueue <- message
 		}
 	}
-
-	defer conn.Close()
-	
-	defer close(messageQueue)
 }

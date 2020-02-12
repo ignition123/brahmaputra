@@ -31,20 +31,22 @@ func RecieveMessage(conn net.Conn, messageQueue chan string){
 				if ok{
 
 					if val == "BRAHMAPUTRA_DISCONNECT"{
+						ChannelList.WriteLog("Connection closed!")
+						ChannelList.WriteLog("Channel closed!")
+						TCPTotalConnection -= 1
+						ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
+						stopIterate = true
 						break
 					}
 
 					ParseMsg(val, conn)
 
-				}else{
-					ChannelList.WriteLog("Connection closed!")
-					ChannelList.WriteLog("Channel closed!")
-					TCPTotalConnection -= 1
-					ChannelList.WriteLog("Total connection now open: "+strconv.Itoa(TCPTotalConnection))
-					stopIterate = true
 					break
-				
+
 				}
 		}
 	}
+
+	close(messageQueue)
+	conn.Close()
 }

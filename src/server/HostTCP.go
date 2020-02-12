@@ -19,6 +19,8 @@ var TCPTotalConnection = 0
 
 func HostTCP(configObj pojo.Config){
 
+	defer ChannelList.Handlepanic()
+
 	ChannelList.ConfigTCPObj = configObj
 
 	if !ConnectStorage(){
@@ -36,6 +38,8 @@ func HostTCP(configObj pojo.Config){
 }
 
 func HostTCPServer(){
+
+	defer ChannelList.Handlepanic()
 
 	server, err := net.Listen("tcp", *ChannelList.ConfigTCPObj.Server.TCP.Host +":"+ *ChannelList.ConfigTCPObj.Server.TCP.Port)
 
@@ -67,9 +71,7 @@ func HostTCPServer(){
             continue
 		}
 
-		var messageQueue = make(chan string, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
-
-		defer close(messageQueue)
+		var messageQueue = make(chan string)
 		
 		go RecieveMessage(conn, messageQueue)
 
@@ -78,11 +80,16 @@ func HostTCPServer(){
 }
 
 func CloseTCPServers(){
+
+	defer ChannelList.Handlepanic()
+
 	fmt.Println("Closing tcp socket...")
 	closeTCP = true
 }
 
 func ConnectStorage() bool{
+
+	defer ChannelList.Handlepanic()
 
 	if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
 		
