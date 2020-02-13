@@ -5,11 +5,15 @@ import (
 	"net"
 	"time"
 	"ChannelList"
+	"Utilization"
 )
 
 var closeTCP = false
 
 func allZero(s []byte) bool {
+
+	defer ChannelList.Recover()
+	
 	for _, v := range s {
 		if v != 0 {
 			return false
@@ -18,8 +22,10 @@ func allZero(s []byte) bool {
 	return true
 }
 
-func HandleRequest(conn net.Conn, messageQueue chan string) {
+func HandleRequest(conn net.TCPConn) {
 	
+	defer ChannelList.Recover()
+
 	defer conn.Close()
 
 	sizeBuf := make([]byte, 4)
@@ -45,7 +51,7 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 		conn.Read(completePacket)
 
 		if allZero(completePacket) {
-			messageQueue <- "BRAHMAPUTRA_DISCONNECT"
+			go ChannelList.WriteLog("Connection closed...")
 			break
 		}
 
@@ -55,26 +61,29 @@ func HandleRequest(conn net.Conn, messageQueue chan string) {
 
 		if err != nil {
 			go ChannelList.WriteLog("Error in tcp connection: " + err.Error())
-			messageQueue <- "BRAHMAPUTRA_DISCONNECT"
 			break
 		}
 
-		if len(message) > 0 {
-			messageQueue <- message
-		}
+		go ParseMsg(message, conn)
 	}
+}
 
-	close(messageQueue)
+func ShowUtilization(){
+	for{
+
+		if !closeTCP{
+			time.Sleep(5 * time.Second)
+			Utilization.GetHardwareData()
+		}else{
+			break
+		}
+
+	}
 }
 
 func CloseTCPServers(){
 	
-	// defer func(){	
-	//        if err := recover(); err != nil {
-	//        ChannelList.WriteLog("RECOVER "+err.(string))
-	//        runtime.Goexit()
-	//    }	
-	// }()	
+	defer ChannelList.Recover()
 
 	ChannelList.WriteLog("Closing tcp socket...")
 

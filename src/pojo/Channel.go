@@ -15,6 +15,6 @@ type ChannelStruct struct{
 }
 
 type SocketDetails struct{
-	Conn net.Conn
+	Conn net.TCPConn
 	ContentMatcher map[string]interface{}
 }

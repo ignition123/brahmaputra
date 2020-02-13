@@ -12,12 +12,15 @@ import (
 	"os/signal"
 	"ChannelList"
 	"time"
+	"runtime"
 )
 
 
 var commandLineMap = make(map[string]interface{})
 
 func main(){
+
+	defer ChannelList.Recover()
 
 	sigs := make(chan os.Signal, 1)
 
@@ -31,6 +34,10 @@ func main(){
 	  os.Exit(0)
 
 	}()
+
+	fmt.Println("Starting server logs...")
+
+	// go server.ShowUtilization()
 
 	commandLineargs := os.Args
 	
@@ -68,6 +75,9 @@ func main(){
 }
 
 func cleanupAllTheThings(){
+
+	defer ChannelList.Recover()
+
 	for key := range ChannelList.TCPStorage{
 
 		time.Sleep(1 * time.Second)
@@ -82,6 +92,8 @@ func cleanupAllTheThings(){
 
 func runConfigFile(configPath string, channelType string){
 	
+	defer ChannelList.Recover()
+
 	data, err := ioutil.ReadFile(configPath)
 
 	if err != nil{
@@ -98,6 +110,8 @@ func runConfigFile(configPath string, channelType string){
 		return
 	}
 
+	runtime.GOMAXPROCS(*configObj.Worker)
+
 	if channelType == "tcp"{
 		if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
 			server.HostTCP(configObj)
@@ -112,6 +126,8 @@ func runConfigFile(configPath string, channelType string){
 }
 
 func createChannel(path string, channelName string, channelType string){
+
+	defer ChannelList.Recover()
 
 	if path == "default"{
 		fmt.Println("Please set a path for the channel storage...")
@@ -200,6 +216,8 @@ func createChannel(path string, channelName string, channelType string){
 
 func createChannelTable(path string, channelName string, channelType string){
 
+	defer ChannelList.Recover()
+	
 	if path == "default"{
 		fmt.Println("Please set a path for the channel storage...")
 		return

@@ -5,17 +5,17 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	"context"
 	"sync"
 	_"fmt"
 	"ChannelList"
+	"time"
 )
 
 var channelMutex = &sync.Mutex{}
 
-var parseMessageMutex = &sync.Mutex{}
-
 func GetChannelData(){
+
+	defer ChannelList.Recover()
 
 	for channelName := range ChannelList.TCPStorage {
 	    runChannel(channelName)
@@ -25,31 +25,35 @@ func GetChannelData(){
 
 func runChannel(channelName string){
 
+	defer ChannelList.Recover()
+
 	for index := range ChannelList.TCPStorage[channelName].BucketData{
+
+		time.Sleep(100)
+
 		go func(BucketData chan map[string]interface{}, channelName string){
 
-			defer close(BucketData)
+			defer ChannelList.Recover()
 
-			ctx := context.Background()
+			defer close(BucketData)
 
 			for{
 
 				select {
 
 					case message, ok := <-BucketData:	
+						if ok{
+							var subchannelName = message["channelName"].(string)
 
-					if ok{
-						var subchannelName = message["channelName"].(string)
+							if(channelName == subchannelName && len(ChannelList.TCPSocketDetails[channelName]) > 0){	
 
-						if(channelName == subchannelName && len(ChannelList.TCPSocketDetails[channelName]) > 0){	
-							go sendMessageToClient(message, channelName)
-						}
-					}		
-
-					break
-					case <-ctx.Done():
-						go ChannelList.WriteLog("Channel closed...")
-					break
+								go sendMessageToClient(message, channelName)
+							}
+						}		
+						break
+					default:
+						<-time.After(1 * time.Millisecond)
+						break
 				}		
 			}
 
@@ -59,15 +63,11 @@ func runChannel(channelName string){
 
 func sendMessageToClient(message map[string]interface{}, channelName string){
 
+	defer ChannelList.Recover()
+
 	for index := range ChannelList.TCPSocketDetails[channelName]{
 
-		parseMessageMutex.Lock()
-
-		defer parseMessageMutex.Unlock()
-
 		var packetBuffer bytes.Buffer
-
-		sizeBuff := make([]byte, 4)
 
 		if len(ChannelList.TCPSocketDetails[channelName]) <= index{
 			break
@@ -81,6 +81,8 @@ func sendMessageToClient(message map[string]interface{}, channelName string){
 				go ChannelList.WriteLog(err.Error())
 				break
 			}
+
+			sizeBuff := make([]byte, 4)
 
 			binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
 			packetBuffer.Write(sizeBuff)
@@ -114,6 +116,8 @@ func sendMessageToClient(message map[string]interface{}, channelName string){
 					break
 				}
 
+				sizeBuff := make([]byte, 4)
+
 				binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
@@ -129,7 +133,11 @@ func sendMessageToClient(message map[string]interface{}, channelName string){
 
 func send(channelName string, index int, packetBuffer bytes.Buffer){
 
+	defer ChannelList.Recover()
+	
 	channelMutex.Lock()
+
+	defer channelMutex.Unlock()
 	
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 		_, err := ChannelList.TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
@@ -146,6 +154,4 @@ func send(channelName string, index int, packetBuffer bytes.Buffer){
 
 		}
 	}
-
-	channelMutex.Unlock()
 }

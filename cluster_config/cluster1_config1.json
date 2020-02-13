@@ -16,7 +16,7 @@
         },
         "udp":{}
     },
-    "channelConfigFiles":"D:\\brahmaputra\\storage\\",
+    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra_alt_version\\storage\\",
     "storage":{
         "file":{
             "active":false
@@ -25,7 +25,7 @@
             "active":true,
             "url":"mongodb://127.0.0.1:27017/brahmaputra",
             "maxpoolSize":1000,
-            "minpoolSize":100
+            "minpoolSize":10
         },
         "mySQL":{
             "active":false

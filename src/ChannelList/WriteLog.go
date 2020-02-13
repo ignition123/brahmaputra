@@ -11,6 +11,8 @@ var mutex = &sync.Mutex{}
 
 func WriteLog(logMessage string){
 
+	defer Recover()
+	
 	mutex.Lock()
 
 	defer mutex.Unlock()

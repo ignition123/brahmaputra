@@ -15,16 +15,12 @@ import (
 	"MongoConnection"
 )
 
-var writeDataCallback = make(chan bool)
-var writeCallback = make(chan bool)
-
-var AckMutex = &sync.Mutex{}
+var WriteCallback = make(chan bool)
 var FileWriteLock = &sync.Mutex{}
-var FileTableLock = &sync.Mutex{}
-var MongoDBLock = &sync.Mutex{}
-var ParserDBLock = &sync.Mutex{}
 
-func ParseMsg(msg string, conn net.Conn){
+func ParseMsg(msg string, conn net.TCPConn){
+
+	defer ChannelList.Recover()
 
 	messageMap := make(map[string]interface{})
 
@@ -88,16 +84,39 @@ func ParseMsg(msg string, conn net.Conn){
 
 			var byteLen = len(jsonData)
 		
-			go WriteData(jsonData, channelName, byteLen, writeDataCallback)
+			go WriteData(jsonData, channelName, byteLen)
 
-			if !<- writeDataCallback{
-				return
+			select {
+
+				case message, ok := <-WriteCallback:	
+					if ok{
+						
+						if !message{
+							return
+						}
+					}		
+					break
+				default:
+					<-time.After(1 * time.Millisecond)
+					break
 			}
 
-			go WriteOffset(jsonData, channelName, byteLen, _id, writeCallback)
+			go WriteOffset(jsonData, channelName, byteLen, _id)
 
-			if !<- writeCallback{
-				return
+			select {
+
+				case message, ok := <-WriteCallback:	
+					if ok{
+						
+						if !message{
+							return
+						}
+					}		
+
+					break
+				default:
+					<-time.After(1 * time.Millisecond)
+					break
 			}
 		}
 
@@ -105,10 +124,21 @@ func ParseMsg(msg string, conn net.Conn){
 
 			var byteLen = len(jsonData)
  
-			go WriteMongodbData(nanoEpoch, jsonData, channelName, byteLen, writeDataCallback)
+			go WriteMongodbData(nanoEpoch, jsonData, channelName, byteLen)
 
-			if !<- writeDataCallback{
-				return
+			select {
+
+				case message, ok := <-WriteCallback:	
+					if ok{
+						
+						if !message{
+							return
+						}
+					}		
+					break
+				default:
+					<-time.After(1 * time.Millisecond)
+					break
 			}
 		} 
 
@@ -183,10 +213,12 @@ func ParseMsg(msg string, conn net.Conn){
 // 	}
 // }
 
-func SendAck(messageMap map[string]interface{}, conn net.Conn){
+func SendAck(messageMap map[string]interface{}, conn net.TCPConn){
 
-	AckMutex.Lock()
-	defer AckMutex.Unlock()
+	defer ChannelList.Recover()
+
+	FileWriteLock.Lock()
+	defer FileWriteLock.Unlock()
 
 	var messageResp = make(map[string]interface{})
 
@@ -224,10 +256,9 @@ func SendAck(messageMap map[string]interface{}, conn net.Conn){
 	}
 }
 
-func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
+func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int){
 
-	// MongoDBLock.Lock()
-	// defer MongoDBLock.Unlock()
+	defer ChannelList.Recover()
 
 	var packetBuffer bytes.Buffer
 
@@ -260,13 +291,15 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 		}
 
 	if counter >= 5{
-		writeDataCallback <- false
+		WriteCallback <- false
 	}else{
-		writeDataCallback <- true
+		WriteCallback <- true
 	}
 }
 
-func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallback chan bool){
+func WriteData(jsonData []byte, channelName string, byteLen int){
+
+	defer ChannelList.Recover()
 
 	FileWriteLock.Lock()
 	defer FileWriteLock.Unlock()
@@ -295,16 +328,18 @@ func WriteData(jsonData []byte, channelName string, byteLen int, writeDataCallba
 		}
 
 	if counter >= 5{
-		writeDataCallback <- false
+		WriteCallback <- false
 	}else{
-		writeDataCallback <- true
+		WriteCallback <- true
 	}	
 }
 
-func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, writeCallback chan bool){
+func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 
-	FileTableLock.Lock()
-	defer FileTableLock.Unlock()
+	defer ChannelList.Recover()
+	
+	FileWriteLock.Lock()
+	defer FileWriteLock.Unlock()
 
 	var byteSize = (byteLen + 4)
 
@@ -339,8 +374,8 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string, w
 		}
 
 	if counter >= 5{
-		writeCallback <- false
+		WriteCallback <- false
 	}else{
-		writeCallback <- true
+		WriteCallback <- true
 	}
 }

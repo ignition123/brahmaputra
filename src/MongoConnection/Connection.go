@@ -16,6 +16,9 @@ import(
 var MongoDB *mongo.Database
 
 func Connect() bool{
+
+	defer ChannelList.Recover()
+
 	/*
 		Setting URL for mongodb connections
 	*/
@@ -55,6 +58,8 @@ func Connect() bool{
 }
 
 func SetupCollection() bool{
+
+	defer ChannelList.Recover()
 
 	files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
@@ -131,8 +136,10 @@ func SetupCollection() bool{
 
 func InsertOne(collctionName string, oneDoc map[string]interface{}) (bool,interface{}){
 
-	ctx, _ := context.WithTimeout(context.Background(), 15*time.Second)
+	defer ChannelList.Recover()
 
+	ctx := context.Background()
+	
 	col := MongoDB.Collection(collctionName)
 
 	result, insertErr := col.InsertOne(ctx, oneDoc)
