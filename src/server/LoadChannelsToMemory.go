@@ -11,6 +11,8 @@ import(
 
 func LoadTCPChannelsToMemory(){
 
+	defer ChannelList.Recover()
+
     files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
     if err != nil {
@@ -47,7 +49,7 @@ func LoadTCPChannelsToMemory(){
 				var bucketData  = make([]chan map[string]interface{}, worker)
 
 				for i := range bucketData {
-				   bucketData[i] = make(chan map[string]interface{}, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
+				   bucketData[i] = make(chan map[string]interface{}) //*ChannelList.ConfigTCPObj.Server.TCP.BufferRead
 				}
 
 				var channelName = channelMap["channelName"].(string)
@@ -74,6 +76,8 @@ func LoadTCPChannelsToMemory(){
 
 func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
+	defer ChannelList.Recover()
+
 	if protocol == "tcp"{
 
 		f, err := os.OpenFile(channelMap["path"].(string),
@@ -96,6 +100,8 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 
 func openTableFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
+	defer ChannelList.Recover()
+	
 	if protocol == "tcp"{
 
 		f, err := os.OpenFile(channelMap["table"].(string),

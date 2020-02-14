@@ -16,6 +16,8 @@ type ServerTCPConnection struct{
 
 func HostTCP(configObj pojo.Config){
 
+	defer ChannelList.Recover()
+
 	ChannelList.ConfigTCPObj = configObj
 
 	if !ConnectStorage(){
@@ -25,7 +27,7 @@ func HostTCP(configObj pojo.Config){
 
 	LoadTCPChannelsToMemory()
 
-	GetChannelData()
+	go GetChannelData()
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
 		HostTCPServer()
@@ -33,6 +35,8 @@ func HostTCP(configObj pojo.Config){
 }
 
 func HostTCPServer(){
+
+	defer ChannelList.Recover()
 
 	server, err := net.Listen("tcp", *ChannelList.ConfigTCPObj.Server.TCP.Host +":"+ *ChannelList.ConfigTCPObj.Server.TCP.Port)
 
@@ -59,19 +63,19 @@ func HostTCPServer(){
             continue
 		}
 
-		var messageQueue = make(chan string) //*ChannelList.ConfigTCPObj.Server.TCP.BufferRead
+		tcp := conn.(*net.TCPConn)
 
-		defer close(messageQueue)
-		
-		go RecieveMessage(conn, messageQueue)
+        tcp.SetNoDelay(true)
 
-		go HandleRequest(conn, messageQueue)
+		go HandleRequest(*tcp)
 	}
 }
 
 
 func ConnectStorage() bool{
 
+	defer ChannelList.Recover()
+	
 	if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
 		
 		if(!MongoConnection.Connect()){

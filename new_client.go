@@ -33,9 +33,9 @@ func main() {
 		
 	var wg sync.WaitGroup
 
-	wg.Add(100)
+	wg.Add(1000)
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
         go createWorker(&wg)
     }	
 
@@ -65,7 +65,12 @@ func createWorker(wg *sync.WaitGroup){
 
 	go readConnection(conn)
 
-	for i:=0;i<10000;i++{
+	for i:=0;i<1000;i++{
+
+		select {
+			case <-time.After(1 * time.Millisecond):
+				break
+		}
 
 		currentTime := time.Now()
 
@@ -156,7 +161,11 @@ func createWorker(wg *sync.WaitGroup){
 
 		messageMap["data"] = bodyMap
 
-		sendMessage(messageMap, conn)
+		var doneMessage = make(chan bool)
+
+		go sendMessage(messageMap, conn, doneMessage)
+
+		<- doneMessage
 
 		//#############################################################
 
@@ -187,13 +196,20 @@ func createWorker(wg *sync.WaitGroup){
 
 		messageMap1["data"] = bodyMap1
 
-		sendMessage(messageMap1, conn)
+		go sendMessage(messageMap1, conn, doneMessage)
+
+		<- doneMessage
+
+		close(doneMessage)
 		
 	}
 	// wg.Done()
 }
 
-func sendMessage(messageMap map[string]interface{}, conn net.Conn){
+func sendMessage(messageMap map[string]interface{}, conn net.Conn, doneMessage chan bool){
+
+	RequestMutex.Lock()
+	defer RequestMutex.Unlock()
 
 	var packetBuffer bytes.Buffer
 
@@ -218,16 +234,13 @@ func sendMessage(messageMap map[string]interface{}, conn net.Conn){
 
 	fmt.Println(time.Now())
 
-
-	// RequestMutex.Lock()
-	
-	// RequestMutex.Unlock()
-
 	_, err = conn.Write(packetBuffer.Bytes())
 
 	counter += 1
 
 	fmt.Println(counter)
+
+	doneMessage <- true
 
 	// break
 
@@ -249,15 +262,19 @@ func allZero(s []byte) bool {
 
 func readConnection(conn net.Conn) {
 
-	defer conn.Close()
-
 	for {
+
+		select {
+			case <-time.After(1 * time.Millisecond):
+				break
+		}
+
+		mutex.Lock()
+		defer mutex.Unlock()
 
 		sizeBuf := make([]byte, 4)
 
 		conn.Read(sizeBuf)
-
-		mutex.Lock()
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 
@@ -277,7 +294,7 @@ func readConnection(conn net.Conn) {
 		var message = string(completePacket)
 
 		fmt.Println(message)
-
-		mutex.Unlock()
 	}
+
+	conn.Close()
 }
