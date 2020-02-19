@@ -61,6 +61,10 @@ func ParseMsg(msg string, conn net.TCPConn){
 
 		var channelName = messageMap["channelName"].(string)
 
+		if ChannelList.TCPStorage[channelName] == nil{
+			return
+		}
+
 		currentTime := time.Now()
 
 		epoch := currentTime.Unix()
@@ -161,6 +165,10 @@ func ParseMsg(msg string, conn net.TCPConn){
 		}
 
 		var channelName = messageMap["channelName"].(string)
+
+		if ChannelList.TCPStorage[channelName] == nil{
+			return
+		}
 
 		var socketDetails *pojo.SocketDetails
 

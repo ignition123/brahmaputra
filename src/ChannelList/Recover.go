@@ -2,11 +2,14 @@ package ChannelList
 
 import(
 	"runtime"
+	"fmt"
 )
 
 func Recover(){	
        if err := recover(); err != nil {
-       WriteLog("RECOVER "+err.(string))
-       runtime.Goexit()
+
+       	fmt.Println(err.(string))
+
+		runtime.Goexit()
    }	
 }
