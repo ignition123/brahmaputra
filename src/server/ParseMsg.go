@@ -98,7 +98,8 @@ func ParseMsg(msg string, conn net.TCPConn){
 						if !message{
 							return
 						}
-					}		
+					}
+
 					break
 				default:
 					<-time.After(1 * time.Millisecond)
@@ -146,7 +147,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 			}
 		} 
 
-		go SendAck(messageMap, conn)
+		messageMap["conn"] = conn
 
 		ChannelList.TCPStorage[channelName].BucketData[indexNo] <- messageMap
 
@@ -220,49 +221,6 @@ func ParseMsg(msg string, conn net.TCPConn){
 // 		return
 // 	}
 // }
-
-func SendAck(messageMap map[string]interface{}, conn net.TCPConn){
-
-	defer ChannelList.Recover()
-
-	FileWriteLock.Lock()
-	defer FileWriteLock.Unlock()
-
-	var messageResp = make(map[string]interface{})
-
-	messageResp["producer_id"] = messageMap["producer_id"].(string)
-
-	jsonData, err := json.Marshal(messageResp)
-
-	if err != nil{
-		go ChannelList.WriteLog(err.Error())
-		return
-	}
-
-	var packetBuffer bytes.Buffer
-
-	buff := make([]byte, 4)
-
-	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
-
-	packetBuffer.Write(buff)
-
-	packetBuffer.Write(jsonData)
-
-	var counter = 0
-
-	RETRY: _, err = conn.Write(packetBuffer.Bytes())
-
-	if err != nil && counter <= 5{
-
-		time.Sleep(2 * time.Second)
-
-		counter += 1
-
-		goto RETRY
-
-	}
-}
 
 func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int){
 

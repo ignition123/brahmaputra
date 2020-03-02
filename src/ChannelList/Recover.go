@@ -8,7 +8,7 @@ import(
 func Recover(){	
        if err := recover(); err != nil {
 
-       	fmt.Println(err.(string))
+       	fmt.Println(err)
 
 		runtime.Goexit()
    }	
