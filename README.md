@@ -1,4 +1,4 @@
-# brahmaputra
+# Brahmaputra
 Distributed Pub/Sub, with georeplication and log transactions connectivity with Mongodb, Cassandra and mySQL. It has client drivers in PHP, Nodejs, Golang, C++, Java, .net, swift, web, elixir and python. 
 
 
