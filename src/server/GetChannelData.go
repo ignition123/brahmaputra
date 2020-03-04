@@ -111,12 +111,18 @@ func sendMessageToClient(message map[string]interface{}, channelName string, mes
 
 			var messageData = message["data"].(map[string]interface{})
 
-			for key := range cm{
 
-				if cm[key] != messageData[key]{
-					matchFound = false
-					break
-				}
+			if _, found := cm["$and"]; found {
+			    
+			    matchFound = AndMatch(messageData, cm)
+
+			}else if _, found := cm["$or"]; found {
+
+				matchFound = OrMatch(messageData, cm)
+
+			}else{
+
+				matchFound = false
 
 			}
 

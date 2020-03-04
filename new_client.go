@@ -141,9 +141,9 @@ func createWorker(wg *sync.WaitGroup){
 
 		var bodyMap = make(map[string]interface{})
 			
-			bodyMap["Account"] = "T93992"
-			bodyMap["Exchange"] = "NSE"
-			bodyMap["Segment"] = "CM"
+		bodyMap["Account"] = "T93992"
+		bodyMap["Exchange"] = "NSE"
+		bodyMap["Segment"] = "CM"
 		bodyMap["AlgoEndTime"] = 0
 		bodyMap["AlgoSlices"] = 0
 		bodyMap["AlgoSliceSeconds"] = 0 
@@ -158,6 +158,7 @@ func createWorker(wg *sync.WaitGroup){
 		bodyMap["DisclosedQty"] = 0.0
 		bodyMap["DripPrice"] = 0.0
 		bodyMap["DripSize"] = 0.0
+		bodyMap["Number"] = 10
 
 		messageMap["data"] = bodyMap
 
@@ -193,6 +194,7 @@ func createWorker(wg *sync.WaitGroup){
 		bodyMap1["DisclosedQty"] = 0.0
 		bodyMap1["DripPrice"] = 0.0
 		bodyMap1["DripSize"] = 0.0
+		bodyMap1["Number"] = 10
 
 		messageMap1["data"] = bodyMap1
 

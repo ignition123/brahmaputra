@@ -64,11 +64,38 @@ func main() {
 
 	var messageMap = make(map[string]interface{})
 
-	var cm = make(map[string]interface{})
-	cm["Exchange"] = "NSE"
-	cm["Segment"] = "CM"
+	var cm = `
+		{
+			"$or":[
+				{
+					"$eq":{
+						"Exchange":"BSE"
+					}
+				},
+				{
+					"$eq":{
+						"Segment":"FO"
+					}
+				},
+				{
+					"$lte":{
+						"Number":9.2
+					}
+				}
+			]
+		}
+	`
 
-	messageMap["contentMatcher"] = cm
+	var jsonObject = make(map[string]interface{})
+
+	jsonErr := json.Unmarshal([]byte(cm), &jsonObject)
+
+	if jsonErr != nil{
+		fmt.Println(jsonErr)
+		return
+	}
+
+	messageMap["contentMatcher"] = jsonObject
 	messageMap["channelName"] = "Abhik"
 	messageMap["type"] = "subscribe"
 
