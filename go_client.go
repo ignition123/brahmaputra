@@ -2,16 +2,19 @@ package main
 
 import(
 	"brahmaputra"
+	"time"
+	_"fmt"
 )
 
 func main(){
 
-	var brahm = brahmaputra.CreateProperties{
+	var brahm = &brahmaputra.CreateProperties{
 		Host:"127.0.0.1",
 		Port:"8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
+		AppType:"producer",
 	}
 
 	brahm.Connect()
@@ -36,5 +39,13 @@ func main(){
 	bodyMap["DripPrice"] = 0.0
 	bodyMap["DripSize"] = 0.0
 	bodyMap["Number"] = 10
+
+	for i:=0;i<100000;i++{
+
+		time.Sleep(1 * time.Nanosecond)
+
+		go brahm.Publish(bodyMap)
+
+	}
 
 }

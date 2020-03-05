@@ -5,14 +5,12 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	"sync"
+	_"sync"
 	_"fmt"
 	"ChannelList"
 	"time"
 	"net"
 )
-
-var channelMutex = &sync.Mutex{}
 
 func GetChannelData(){
 
@@ -52,14 +50,14 @@ func runChannel(channelName string, messageChan chan bool){
 
 							var subchannelName = message["channelName"].(string)
 
-							if(channelName == subchannelName){	
+							if(channelName == subchannelName && channelName != "heart_beat"){	
 
 								go sendMessageToClient(message, channelName, messageChan)
 							}
 						}		
 						break
 					default:
-						<-time.After(1 * time.Millisecond)
+						<-time.After(1 * time.Nanosecond)
 						break
 				}		
 			}
@@ -160,7 +158,7 @@ func sendMessageToClient(message map[string]interface{}, channelName string, mes
 				}	
 				break
 			default:
-				<-time.After(1 * time.Millisecond)
+				<-time.After(1 * time.Nanosecond)
 				break
 		}
 
@@ -168,26 +166,25 @@ func sendMessageToClient(message map[string]interface{}, channelName string, mes
 
 	if len(ChannelList.TCPSocketDetails[channelName]) == 0{
 
-		go SendAck(message, conn)
+		go SendAck(message, conn, messageChan)
 
 	}else{
 
 		if subscriberSentCount == len(ChannelList.TCPSocketDetails[channelName]){
 
-			go SendAck(message, conn)
+			go SendAck(message, conn, messageChan)
 
 		}
 
 	}
+
+	<-messageChan
 }
 
 func send(channelName string, index int, packetBuffer bytes.Buffer, messageChan chan bool){
 
 	defer ChannelList.Recover()
-	
-	// channelMutex.Lock()
-	// defer channelMutex.Unlock()
-	
+		
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 
 		_, err := ChannelList.TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
@@ -209,12 +206,9 @@ func send(channelName string, index int, packetBuffer bytes.Buffer, messageChan 
 	messageChan <- true
 }
 
-func SendAck(messageMap map[string]interface{}, conn net.TCPConn){
+func SendAck(messageMap map[string]interface{}, conn net.TCPConn, messageChan chan bool){
 
 	defer ChannelList.Recover()
-
-	channelMutex.Lock()
-	defer channelMutex.Unlock()
 
 	var messageResp = make(map[string]interface{})
 
@@ -223,7 +217,11 @@ func SendAck(messageMap map[string]interface{}, conn net.TCPConn){
 	jsonData, err := json.Marshal(messageResp)
 
 	if err != nil{
+
+		messageChan <- false
+
 		go ChannelList.WriteLog(err.Error())
+
 		return
 	}
 
@@ -250,4 +248,6 @@ func SendAck(messageMap map[string]interface{}, conn net.TCPConn){
 		goto RETRY
 
 	}
+
+	messageChan <- true
 }

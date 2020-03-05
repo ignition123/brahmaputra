@@ -74,7 +74,7 @@ func main() {
 				},
 				{
 					"$eq":{
-						"Segment":"FO"
+						"Segment":"CM"
 					}
 				},
 				{

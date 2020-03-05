@@ -40,10 +40,10 @@ func ParseMsg(msg string, conn net.TCPConn){
 		}
 
 		fmt.Println("HEART BEAT RECEIVED...")
+
+		messageMap["conn"] = conn
 		
 		ChannelList.TCPStorage["heart_beat"].BucketData[0] <- messageMap
-
-		conn.Write([]byte(msg))
 
 	}else if messageMap["type"] == "publish"{
 
@@ -102,7 +102,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 
 					break
 				default:
-					<-time.After(1 * time.Millisecond)
+					<-time.After(1 * time.Nanosecond)
 					break
 			}
 
@@ -120,7 +120,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 
 					break
 				default:
-					<-time.After(1 * time.Millisecond)
+					<-time.After(1 * time.Nanosecond)
 					break
 			}
 		}
@@ -129,7 +129,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 
 			var byteLen = len(jsonData)
  
-			go WriteMongodbData(nanoEpoch, jsonData, channelName, byteLen)
+			go WriteMongodbData(nanoEpoch, messageMap["AgentName"].(string), jsonData, channelName, byteLen)
 
 			select {
 
@@ -142,7 +142,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 					}		
 					break
 				default:
-					<-time.After(1 * time.Millisecond)
+					<-time.After(1 * time.Nanosecond)
 					break
 			}
 		} 
@@ -222,7 +222,7 @@ func ParseMsg(msg string, conn net.TCPConn){
 // 	}
 // }
 
-func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen int){
+func WriteMongodbData(_id int64, agentName string, jsonData []byte, channelName string, byteLen int){
 
 	defer ChannelList.Recover()
 
@@ -239,6 +239,7 @@ func WriteMongodbData(_id int64, jsonData []byte, channelName string, byteLen in
 	var oneDoc = make(map[string]interface{})
 
 	oneDoc["offsetID"] = _id
+	oneDoc["AgentName"] = agentName
 	oneDoc["cluster"] = *ChannelList.ConfigTCPObj.Server.TCP.ClusterName
 	oneDoc["data"] = packetBuffer.Bytes()
 

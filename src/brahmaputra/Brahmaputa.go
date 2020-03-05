@@ -7,6 +7,9 @@ import(
 	"time"
 	"strconv"
 	"os"
+	"bytes"
+	"encoding/json"
+	"sync"
 )
 
 type CreateProperties struct{
@@ -19,10 +22,26 @@ type CreateProperties struct{
 	Conn net.Conn
 	ChannelName string
 	AgentName string
-	TransactionList map[string]interface{}
+	TransactionList map[int64]interface{}
+	sendMsg chan bool
+	AppType string
+	Persitence bool
+	LogPath string
 }	
 
-func (e CreateProperties) Connect() net.Conn{
+var RequestMutex = &sync.Mutex{}
+
+func (e *CreateProperties) Connect() net.Conn{
+
+	if e.AppType != "producer" && e.AppType != "consumer"{
+
+		fmt.Println("AppType must be producer or consumer...")
+
+		return nil
+
+	}
+
+	e.TransactionList = make(map[int64]interface{})
 
 	var agentErr error
 
@@ -61,44 +80,40 @@ func (e CreateProperties) Connect() net.Conn{
 		return nil
 	}
 
-	fmt.Println(e.Host)
-	fmt.Println(e.Port)
-	fmt.Println(e.AuthToken)
+	if e.AppType == "producer"{
 
-	defer e.Conn.Close()
+		fmt.Println("Application started as producer...")
 
-	go e.ReceiveMsg()
+		go e.ReceiveMsg()
+
+	}
+
+	if e.AppType == "consumer"{
+
+		fmt.Println("Application started as consumer...")
+
+		go e.Subscribe()
+
+	} 
+	
 
 	return e.Conn
-
-
-// publish code
-// this.realmProps = FTL.createProperties();
-//            this.realmProps.set(Realm.PROPERTY_STRING_USERNAME, TCP_CONFIG.FTL_USER_NAME);
-//            this.realmProps.set(Realm.PROPERTY_STRING_USERPASSWORD, TCP_CONFIG.FTL_PASSWORD);
-//            this.realmProps.set(Realm.PROPERTY_STRING_CLIENT_LABEL, TCP_CONFIG.FTL_LABEL);
-//            this.realm = FTL.connectToRealmServer(TCP_CONFIG.FTL_URL,TCP_CONFIG.PUB_APP_NAME, this.realmProps);
-//            this.pub = this.realm.createPublisher(TCP_CONFIG.PUB_Endpoint_Name);
-//            this.msg = this.realm.createMessage(null);	
-
-
-// subscribe code
-// this.props = FTL.createProperties();
-//            this.props.set(Realm.PROPERTY_STRING_USERNAME, TCP_CONFIG.FTL_USER_NAME);
-//            this.props.set(Realm.PROPERTY_STRING_USERPASSWORD, TCP_CONFIG.FTL_PASSWORD);
-//            this.realm = FTL.connectToRealmServer(TCP_CONFIG.FTL_URL, TCP_CONFIG.SUB_APP_NAME , this.props);
-//            this.cm = this.realm.createContentMatcher("{\"Exchange\":\"NSE\",\"ExchangeSegment\":\"CM\"}");
-//            this.sub = this.realm.createSubscriber(TCP_CONFIG.SUB_Endpoint_Name, this.cm, null);
-//            this.queue = this.realm.createEventQueue();
-//            this.queue.addSubscriber(this.sub, this);
-	
 }
 
-func (e CreateProperties) Publish(){
+// var count = 0
+
+func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
+
+	// count += 1
+
+	RequestMutex.Lock()
+	defer RequestMutex.Unlock()
 
 	currentTime := time.Now()
 
-	var _id = strconv.FormatInt(currentTime.UnixNano(), 10)
+	var nano = currentTime.UnixNano()
+
+	var _id = strconv.FormatInt(nano, 10)
 
 	var messageMap = make(map[string]interface{})
 
@@ -110,20 +125,53 @@ func (e CreateProperties) Publish(){
 
 	messageMap["AgentName"] = e.AgentName
 
-	e.TransactionList[_id] = currentTime
+	messageMap["data"] = bodyBB
 
+	e.TransactionList[nano] = messageMap
+
+	var packetBuffer bytes.Buffer
+ 
+	buff := make([]byte, 4)
+
+	jsonData, err := json.Marshal(messageMap)
+
+	if err != nil{
+
+		fmt.Println(err)
+
+		return
+
+	}
+
+	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+
+	packetBuffer.Write(buff)
+
+	packetBuffer.Write(jsonData)
+
+	// fmt.Println(string(jsonData))
+
+	_, err = e.Conn.Write(packetBuffer.Bytes())
+
+	// fmt.Println(count)
+
+	if err != nil {
+
+		fmt.Println(err)
+
+	}
 }
 
-func (e CreateProperties) Close(){
+func (e *CreateProperties) Close(){
 
 	e.Conn.Close()
 	fmt.Println("Socket closed...")
 
 }
 
-func (e CreateProperties) Subscribe(){
+func (e *CreateProperties) Subscribe(){
 
-	
+
 
 } 
 
@@ -142,9 +190,9 @@ func allZero(s []byte) bool {
 	return true
 }
 
-func (e CreateProperties) ReceiveMsg(){
+func (e *CreateProperties) ReceiveMsg(){
 
-	for {
+	for {	
 
 		sizeBuf := make([]byte, 4)
 
@@ -160,20 +208,48 @@ func (e CreateProperties) ReceiveMsg(){
 
 		e.Conn.Read(completePacket)
 
-		if allZero(completePacket){
+		if allZero(completePacket) {
 
 			fmt.Println("Socket disconnected...")
 
 			break
-
 		}
 
-		var message = string(completePacket)
+		go e.parseMsg(completePacket)
+	}
 
-		fmt.Println(message)
+	fmt.Println("Socket disconnected...")
+
+	e.Conn.Close()
+}
+
+func (e *CreateProperties) parseMsg(message []byte){
+
+	messageMap := make(map[string]interface{})
+
+	err := json.Unmarshal(message, &messageMap)
+
+	if err != nil{
+		
+		fmt.Println(err)
+
+		return
 
 	}
 
-	e.Conn.Close()
+	var producer_id = messageMap["producer_id"].(string)
 
+	nanoId, err := strconv.ParseInt(producer_id, 10, 64)
+
+	if err == nil {
+
+	    fmt.Println(err)
+
+	    return
+
+	}
+
+	delete(e.TransactionList, nanoId)
+
+	fmt.Println(e.TransactionList)
 }
