@@ -22,11 +22,12 @@ type CreateProperties struct{
 	Conn net.Conn
 	ChannelName string
 	AgentName string
-	TransactionList map[int64]interface{}
+	TransactionList map[string]interface{}
 	sendMsg chan bool
 	AppType string
 	Persitence bool
 	LogPath string
+	autoIncr int64
 }	
 
 var RequestMutex = &sync.Mutex{}
@@ -41,11 +42,13 @@ func (e *CreateProperties) Connect() net.Conn{
 
 	}
 
-	e.TransactionList = make(map[int64]interface{})
+	e.autoIncr = 0
+
+	e.TransactionList = make(map[string]interface{})
 
 	var agentErr error
 
-	e.AgentName , agentErr = os.Hostname()
+	e.AgentName, agentErr = os.Hostname()
 
 	if agentErr != nil{
 		
@@ -100,14 +103,12 @@ func (e *CreateProperties) Connect() net.Conn{
 	return e.Conn
 }
 
-// var count = 0
-
 func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
-
-	// count += 1
 
 	RequestMutex.Lock()
 	defer RequestMutex.Unlock()
+
+	e.autoIncr += 1
 
 	currentTime := time.Now()
 
@@ -115,19 +116,21 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	var _id = strconv.FormatInt(nano, 10)
 
+	var producer_id = _id+"_"+strconv.FormatInt(e.autoIncr, 10)
+
 	var messageMap = make(map[string]interface{})
 
 	messageMap["channelName"] = e.ChannelName
 
 	messageMap["type"] = "publish"
 
-	messageMap["producer_id"] = _id
+	messageMap["producer_id"] = producer_id
 
 	messageMap["AgentName"] = e.AgentName
 
 	messageMap["data"] = bodyBB
 
-	e.TransactionList[nano] = messageMap
+	e.TransactionList[producer_id] = messageMap
 
 	var packetBuffer bytes.Buffer
  
@@ -152,8 +155,6 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	// fmt.Println(string(jsonData))
 
 	_, err = e.Conn.Write(packetBuffer.Bytes())
-
-	// fmt.Println(count)
 
 	if err != nil {
 
@@ -239,17 +240,7 @@ func (e *CreateProperties) parseMsg(message []byte){
 
 	var producer_id = messageMap["producer_id"].(string)
 
-	nanoId, err := strconv.ParseInt(producer_id, 10, 64)
-
-	if err == nil {
-
-	    fmt.Println(err)
-
-	    return
-
-	}
-
-	delete(e.TransactionList, nanoId)
+	delete(e.TransactionList, producer_id)
 
 	fmt.Println(e.TransactionList)
 }
