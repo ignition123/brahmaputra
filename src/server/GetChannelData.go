@@ -52,7 +52,11 @@ func runChannel(channelName string, messageChan chan bool){
 
 							if(channelName == subchannelName && channelName != "heart_beat"){	
 
-								go sendMessageToClient(message, channelName, messageChan)
+								var conn = message["conn"].(net.TCPConn)
+
+								delete(message, "conn")
+
+								go sendMessageToClient(conn, message, channelName, messageChan)
 							}
 						}		
 						break
@@ -66,15 +70,11 @@ func runChannel(channelName string, messageChan chan bool){
 	}
 }
 
-func sendMessageToClient(message map[string]interface{}, channelName string, messageChan chan bool){
+func sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, messageChan chan bool){
 
 	defer ChannelList.Recover()
 
 	var subscriberSentCount = 0
-
-	var conn = message["conn"].(net.TCPConn)
-
-	delete(message, "conn")
 
 	for index := range ChannelList.TCPSocketDetails[channelName]{
 
@@ -117,6 +117,18 @@ func sendMessageToClient(message map[string]interface{}, channelName string, mes
 			}else if _, found := cm["$or"]; found {
 
 				matchFound = OrMatch(messageData, cm)
+
+			}else if _, found := cm["$eq"]; found {
+
+				if cm["$eq"] == "all"{
+
+					matchFound = true
+
+				}else{
+
+					matchFound = false
+
+				}
 
 			}else{
 

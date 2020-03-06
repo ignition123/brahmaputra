@@ -64,25 +64,31 @@ func main() {
 
 	var messageMap = make(map[string]interface{})
 
+	// var cm = `
+	// 	{
+	// 		"$or":[
+	// 			{
+	// 				"$eq":{
+	// 					"Exchange":"BSE"
+	// 				}
+	// 			},
+	// 			{
+	// 				"$eq":{
+	// 					"Segment":"CM"
+	// 				}
+	// 			},
+	// 			{
+	// 				"$lte":{
+	// 					"Number":9.2
+	// 				}
+	// 			}
+	// 		]
+	// 	}
+	// `
+
 	var cm = `
 		{
-			"$or":[
-				{
-					"$eq":{
-						"Exchange":"BSE"
-					}
-				},
-				{
-					"$eq":{
-						"Segment":"CM"
-					}
-				},
-				{
-					"$lte":{
-						"Number":9.2
-					}
-				}
-			]
+			"$eq":"all"
 		}
 	`
 
@@ -94,6 +100,7 @@ func main() {
 		fmt.Println(jsonErr)
 		return
 	}
+
 
 	messageMap["contentMatcher"] = jsonObject
 	messageMap["channelName"] = "Abhik"
