@@ -226,6 +226,9 @@ func (e *CreateProperties) ReceiveMsg(){
 
 func (e *CreateProperties) parseMsg(message []byte){
 
+	RequestMutex.Lock()
+	defer RequestMutex.Unlock()
+
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal(message, &messageMap)
@@ -241,6 +244,4 @@ func (e *CreateProperties) parseMsg(message []byte){
 	var producer_id = messageMap["producer_id"].(string)
 
 	delete(e.TransactionList, producer_id)
-
-	fmt.Println(e.TransactionList)
 }

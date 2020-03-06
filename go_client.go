@@ -40,11 +40,11 @@ func main(){
 	bodyMap["DripSize"] = 0.0
 	bodyMap["Number"] = 10
 
-	for i:=0;i<100000;i++{
-
-		time.Sleep(1 * time.Nanosecond)
+	for i:=0;i<100;i++{
 
 		go brahm.Publish(bodyMap)
+
+		time.Sleep(1 * time.Nanosecond)
 
 	}
 
