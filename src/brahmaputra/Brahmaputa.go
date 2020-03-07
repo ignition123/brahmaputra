@@ -10,7 +10,10 @@ import(
 	"bytes"
 	"encoding/json"
 	"sync"
+	_"context"
 )
+
+	// ctx, _ := context.WithTimeout(context.Background(), 15 * time.Second)
 
 type CreateProperties struct{
 	Host string
