@@ -4,6 +4,7 @@ import(
 	"brahmaputra"
 	"time"
 	"fmt"
+	_"sync"
 )
 
 func main(){
@@ -63,14 +64,15 @@ func main(){
 
 	go subscribe()
 
+	// var parseWait sync.WaitGroup
+
+	// var parseWait1 sync.WaitGroup
+
 	for i:=0;i<1000000;i++{
 
 		go brahm.Publish(bodyMap)
 
-		go brahm.Publish(bodyMap1)
-
 		time.Sleep(1 * time.Nanosecond)
-
 	}
 
 }
@@ -108,12 +110,12 @@ func subscribe(){
 			case chanCallback, ok := <-msgChan:	
 				if ok{
 					
-					fmt.Println(chanCallback["producer_id"])
+					fmt.Println(chanCallback)
 				}	
 				break
-			default:
-				<-time.After(1 * time.Nanosecond)
-				break
+			// default:
+			// 	<-time.After(1 * time.Nanosecond)
+			// 	break
 		}
 	}
 

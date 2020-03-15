@@ -25,9 +25,11 @@ func HostTCP(configObj pojo.Config){
 		return
 	}
 
+	var channelMethod = &ChannelMethods{}
+
 	LoadTCPChannelsToMemory()
 
-	go GetChannelData()
+	go channelMethod.GetChannelData()
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
 		HostTCPServer()

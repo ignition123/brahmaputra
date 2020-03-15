@@ -12,11 +12,11 @@
                 "username":"sudeep",
                 "password":"kaihiwatari"
             },
-            "bufferRead":100
+            "bufferRead":1
         },
         "udp":{}
     },
-    "channelConfigFiles":"D:\\brahmaputra\\storage",
+    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",
     "storage":{
         "file":{
             "active":false

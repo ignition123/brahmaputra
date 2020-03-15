@@ -18,9 +18,11 @@ import (
 var WriteCallback = make(chan bool)
 var FileWriteLock = &sync.Mutex{}
 
-func ParseMsg(msg string, conn net.TCPConn){
+func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 
 	defer ChannelList.Recover()
+
+	defer wg.Done()
 
 	messageMap := make(map[string]interface{})
 
@@ -101,9 +103,9 @@ func ParseMsg(msg string, conn net.TCPConn){
 					}
 
 					break
-				default:
-					<-time.After(1 * time.Nanosecond)
-					break
+				// default:
+				// 	<-time.After(1 * time.Nanosecond)
+				// 	break
 			}
 
 			go WriteOffset(jsonData, channelName, byteLen, _id)
@@ -119,9 +121,9 @@ func ParseMsg(msg string, conn net.TCPConn){
 					}		
 
 					break
-				default:
-					<-time.After(1 * time.Nanosecond)
-					break
+				// default:
+				// 	<-time.After(1 * time.Nanosecond)
+				// 	break
 			}
 		}
 
@@ -141,9 +143,9 @@ func ParseMsg(msg string, conn net.TCPConn){
 						}
 					}		
 					break
-				default:
-					<-time.After(1 * time.Nanosecond)
-					break
+				// default:
+				// 	<-time.After(1 * time.Nanosecond)
+				// 	break
 			}
 		} 
 
@@ -243,21 +245,9 @@ func WriteMongodbData(_id int64, agentName string, jsonData []byte, channelName 
 	oneDoc["cluster"] = *ChannelList.ConfigTCPObj.Server.TCP.ClusterName
 	oneDoc["data"] = packetBuffer.Bytes()
 
-	var counter = 0
+	var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
 
-	WRITEMONGODB:
-
-		var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
-
-		if !status && counter <= 5{
-			
-			counter += 1
-
-			goto WRITEMONGODB
-
-		}
-
-	if counter >= 5{
+	if !status{
 		WriteCallback <- false
 	}else{
 		WriteCallback <- true
@@ -280,25 +270,16 @@ func WriteData(jsonData []byte, channelName string, byteLen int){
 	packetBuffer.Write(buff)
 
 	packetBuffer.Write(jsonData)
-
-	var counter = 0
-
-	WRITEFILE: 
-		_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
-		
-		if (err != nil && err != io.EOF ) && counter <= 5{
-			go ChannelList.WriteLog(err.Error())
-
-			counter += 1
-
-			goto WRITEFILE
-		}
-
-	if counter >= 5{
+ 
+	_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
+	
+	if (err != nil && err != io.EOF ){
+		go ChannelList.WriteLog(err.Error())
 		WriteCallback <- false
-	}else{
-		WriteCallback <- true
-	}	
+		return
+	}
+
+	WriteCallback <- true	
 }
 
 func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
@@ -325,24 +306,15 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 	packetBuffer.Write(buff)
 	packetBuffer.Write([]byte(offsetString))
 
-	var counter = 0
+	_, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes())
 
-	WRITEOFFSET:
-		_, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes())
+	if (err != nil && err != io.EOF){
 
-		if (err != nil && err != io.EOF) && counter <= 5{
+		go ChannelList.WriteLog(err.Error())
 
-			go ChannelList.WriteLog(err.Error())
-
-			counter += 1
-
-			goto WRITEOFFSET
-
-		}
-
-	if counter >= 5{
 		WriteCallback <- false
-	}else{
-		WriteCallback <- true
+
 	}
+
+	WriteCallback <- true
 }

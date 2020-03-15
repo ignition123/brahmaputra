@@ -32,9 +32,9 @@ type CreateProperties struct{
 	LogPath string
 	autoIncr int64
 	SubscribeMsg chan map[string]interface{}
-}	
 
-var RequestMutex = &sync.Mutex{}
+	sync.Mutex
+}	
 
 func (e *CreateProperties) Connect() net.Conn{
 
@@ -127,17 +127,13 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	}
 
-	RequestMutex.Lock()
-	defer RequestMutex.Unlock()
+	e.Lock()
+	defer e.Unlock()
 
 	e.autoIncr += 1
-
 	currentTime := time.Now()
-
 	var nano = currentTime.UnixNano()
-
 	var _id = strconv.FormatInt(nano, 10)
-
 	var producer_id = _id+"_"+strconv.FormatInt(e.autoIncr, 10)
 
 	var messageMap = make(map[string]interface{})
@@ -153,7 +149,7 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	messageMap["data"] = bodyBB
 
 	e.TransactionList[producer_id] = messageMap
-
+	
 	var packetBuffer bytes.Buffer
  
 	buff := make([]byte, 4)
@@ -173,8 +169,6 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	packetBuffer.Write(buff)
 
 	packetBuffer.Write(jsonData)
-
-	// fmt.Println(string(jsonData))
 
 	_, err = e.Conn.Write(packetBuffer.Bytes())
 
@@ -284,7 +278,7 @@ func (e *CreateProperties) ReceiveSubMsg(){
 			break
 		}
 
-		e.parseMsg(completePacket, "sub")
+		go e.parseMsg(completePacket, "sub")
 	}
 
 	fmt.Println("Socket disconnected...")
@@ -320,7 +314,7 @@ func (e *CreateProperties) ReceiveMsg(){
 			break
 		}
 
-		e.parseMsg(completePacket, "pub")
+		go e.parseMsg(completePacket, "pub")
 	}
 
 	fmt.Println("Socket disconnected...")
@@ -330,8 +324,8 @@ func (e *CreateProperties) ReceiveMsg(){
 
 func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
-	RequestMutex.Lock()
-	defer RequestMutex.Unlock()
+	e.Lock()
+	defer e.Unlock()
 
 	messageMap := make(map[string]interface{})
 

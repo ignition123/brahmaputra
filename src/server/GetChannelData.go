@@ -5,28 +5,30 @@ import(
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
-	_"sync"
+	"sync"
 	_"fmt"
 	"ChannelList"
 	"time"
 	"net"
 )
 
-func GetChannelData(){
+type ChannelMethods struct{
+	sync.Mutex
+}
+
+func (e *ChannelMethods) GetChannelData(){
 
 	defer ChannelList.Recover()
 
 	for channelName := range ChannelList.TCPStorage {
 
-		var messageChan = make(chan bool)
-
-	    runChannel(channelName, messageChan)
+	    e.runChannel(channelName)
 
 	}
 
 }
 
-func runChannel(channelName string, messageChan chan bool){
+func (e *ChannelMethods) runChannel(channelName string){
 
 	defer ChannelList.Recover()
 
@@ -39,6 +41,8 @@ func runChannel(channelName string, messageChan chan bool){
 			defer ChannelList.Recover()
 
 			defer close(BucketData)
+
+			var waitgroup sync.WaitGroup
 
 			for{
 
@@ -56,13 +60,17 @@ func runChannel(channelName string, messageChan chan bool){
 
 								delete(message, "conn")
 
-								go sendMessageToClient(conn, message, channelName, messageChan)
+								waitgroup.Add(1)
+
+								go e.sendMessageToClient(conn, message, channelName, &waitgroup)
+
+								waitgroup.Wait()
 							}
 						}		
 						break
-					default:
-						<-time.After(1 * time.Nanosecond)
-						break
+					// default:
+					// 	<-time.After(1 * time.Nanosecond)
+					// 	break
 				}		
 			}
 
@@ -70,11 +78,17 @@ func runChannel(channelName string, messageChan chan bool){
 	}
 }
 
-func sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, messageChan chan bool){
+func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, wg *sync.WaitGroup){
 
 	defer ChannelList.Recover()
 
+	defer wg.Done()
+
 	var subscriberSentCount = 0
+
+	var waitgroup sync.WaitGroup
+
+	var waitAckgroup sync.WaitGroup
 
 	for index := range ChannelList.TCPSocketDetails[channelName]{
 
@@ -99,7 +113,11 @@ func sendMessageToClient(conn net.TCPConn, message map[string]interface{}, chann
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
-			go send(channelName, index, packetBuffer, messageChan)
+			waitgroup.Add(1)
+
+			go e.send(channelName, index, packetBuffer, &waitgroup)
+
+			waitgroup.Wait()
 
 		}else{
 
@@ -151,51 +169,51 @@ func sendMessageToClient(conn net.TCPConn, message map[string]interface{}, chann
 				packetBuffer.Write(sizeBuff)
 				packetBuffer.Write(jsonData)
 
-				go send(channelName, index, packetBuffer, messageChan)
+				waitgroup.Add(1)
+
+				go e.send(channelName, index, packetBuffer, &waitgroup)
+
+				waitgroup.Wait()
 
 			}
 
 		}
 
-		select {
-
-			case chanCallback, ok := <-messageChan:	
-				if ok{
-					
-					if chanCallback{
-
-						subscriberSentCount += 1
-
-					}
-				}	
-				break
-			default:
-				<-time.After(1 * time.Nanosecond)
-				break
-		}
+		subscriberSentCount += 1
 
 	}
 
 	if len(ChannelList.TCPSocketDetails[channelName]) == 0{
 
-		go SendAck(message, conn, messageChan)
+		waitAckgroup.Add(1)
+
+		go e.SendAck(message, conn, &waitAckgroup)
+
+		waitAckgroup.Wait()
 
 	}else{
 
-		if subscriberSentCount == len(ChannelList.TCPSocketDetails[channelName]){
+		if subscriberSentCount > 0{ //== len(ChannelList.TCPSocketDetails[channelName])
 
-			go SendAck(message, conn, messageChan)
+			waitAckgroup.Add(1)
+
+			go e.SendAck(message, conn, &waitAckgroup)
+
+			waitAckgroup.Wait()
 
 		}
 
 	}
-
-	<-messageChan
 }
 
-func send(channelName string, index int, packetBuffer bytes.Buffer, messageChan chan bool){
+func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.Buffer,  wg *sync.WaitGroup){
 
 	defer ChannelList.Recover()
+
+	defer wg.Done()
+
+	e.Lock()
+	defer e.Unlock()
 		
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 
@@ -214,13 +232,16 @@ func send(channelName string, index int, packetBuffer bytes.Buffer, messageChan 
 		}
 
 	}
-
-	messageChan <- true
 }
 
-func SendAck(messageMap map[string]interface{}, conn net.TCPConn, messageChan chan bool){
+func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCPConn, wg *sync.WaitGroup){
 
 	defer ChannelList.Recover()
+
+	defer wg.Done()
+
+	e.Lock()
+	defer e.Unlock()
 
 	var messageResp = make(map[string]interface{})
 
@@ -229,8 +250,6 @@ func SendAck(messageMap map[string]interface{}, conn net.TCPConn, messageChan ch
 	jsonData, err := json.Marshal(messageResp)
 
 	if err != nil{
-
-		messageChan <- false
 
 		go ChannelList.WriteLog(err.Error())
 
@@ -247,19 +266,11 @@ func SendAck(messageMap map[string]interface{}, conn net.TCPConn, messageChan ch
 
 	packetBuffer.Write(jsonData)
 
-	var counter = 0
+	_, err = conn.Write(packetBuffer.Bytes())
 
-	RETRY: _, err = conn.Write(packetBuffer.Bytes())
+	if err != nil{
 
-	if err != nil && counter <= 5{
-
-		time.Sleep(2 * time.Second)
-
-		counter += 1
-
-		goto RETRY
+		go ChannelList.WriteLog(err.Error())
 
 	}
-
-	messageChan <- true
 }

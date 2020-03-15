@@ -6,9 +6,12 @@ import (
 	"time"
 	"ChannelList"
 	"Utilization"
+	"sync"
 )
 
 var closeTCP = false
+
+var waitgroup sync.WaitGroup
 
 func allZero(s []byte) bool {
 
@@ -64,7 +67,11 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		go ParseMsg(message, conn)
+		waitgroup.Add(1)
+
+		go ParseMsg(message, conn, &waitgroup)
+
+		waitgroup.Wait()
 	}
 }
 
