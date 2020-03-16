@@ -5,6 +5,7 @@ import(
 	"time"
 	"fmt"
 	_"sync"
+	"log"
 )
 
 func main(){
