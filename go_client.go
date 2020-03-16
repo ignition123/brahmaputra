@@ -3,12 +3,15 @@ package main
 import(
 	"brahmaputra"
 	"time"
-	"fmt"
-	_"sync"
+	_"fmt"
+	"sync"
+	"runtime"
 	"log"
 )
 
 func main(){
+
+	
 
 	var brahm = &brahmaputra.CreateProperties{
 		Host:"127.0.0.1",
@@ -17,6 +20,8 @@ func main(){
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"producer",
+		Worker:runtime.NumCPU(),
+		PoolSize:10,
 	}
 
 	brahm.Connect()
@@ -63,24 +68,36 @@ func main(){
 	bodyMap1["DripSize"] = 0.0
 	bodyMap1["Number"] = 10
 
-	go subscribe()
+	// go subscribe()
 
-	// var parseWait sync.WaitGroup
+	var parseWait sync.WaitGroup
 
 	// var parseWait1 sync.WaitGroup
 
-	for i:=0;i<1000000;i++{
+	// var channel = make(chan int)
 
-		go brahm.Publish(bodyMap)
+	start := time.Now()
+	
+	for i := 0; i < 10000000; i++ {
 
-		time.Sleep(1 * time.Nanosecond)
+		parseWait.Add(1)
+
+		log.Println(i)
+
+		go brahm.Publish(bodyMap, &parseWait)
+
+		parseWait.Wait()
 	}
 
+	// Code to measure
+	duration := time.Since(start)
+    // Formatted string, such as "2h3m0.5s" or "4.503μs"
+	log.Println(duration)
 }
 
 func subscribe(){
 
-	fmt.Println("ok")
+	log.Println("ok")
 
 	var brahm = &brahmaputra.CreateProperties{
 		Host:"127.0.0.1",
@@ -111,12 +128,9 @@ func subscribe(){
 			case chanCallback, ok := <-msgChan:	
 				if ok{
 					
-					fmt.Println(chanCallback)
+					log.Println(chanCallback)
 				}	
 				break
-			// default:
-			// 	<-time.After(1 * time.Nanosecond)
-			// 	break
 		}
 	}
 

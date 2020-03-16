@@ -3,7 +3,7 @@ package server
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
+	"log"
 	"net"
 )
 
@@ -34,6 +34,6 @@ func WriteBytes(conn net.Conn, status int, message []byte) {
 	_, err := conn.Write(packetBuffer.Bytes())
 
 	if err != nil {
-		fmt.Println("Error writing to stream." + err.Error())
+		log.Println("Error writing to stream." + err.Error())
 	}
 }

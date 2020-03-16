@@ -3,7 +3,7 @@ package server
 import (
 	"pojo"
 	"net"
-	"fmt"
+	"log"
 	"os"
 	"time"
 	"MongoConnection"
@@ -49,7 +49,7 @@ func HostTCPServer(){
 	
 	defer server.Close()
 
-	fmt.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
+	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
 
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")
@@ -58,7 +58,7 @@ func HostTCPServer(){
 
 		conn, err := server.Accept()
 		
-		fmt.Println("connection accepted...")
+		log.Println("connection accepted...")
 		
         if err != nil {
            	go ChannelList.WriteLog("Error accepting: "+err.Error())
@@ -82,7 +82,7 @@ func ConnectStorage() bool{
 		
 		if(!MongoConnection.Connect()){
 			
-			fmt.Println("Failed to connect Mongodb")
+			log.Println("Failed to connect Mongodb")
 
 			return false
 		}

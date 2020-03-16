@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"io/ioutil"
 	"pojo"
@@ -29,20 +29,20 @@ func main(){
 	go func() {
 
 	  <- sigs
-	  fmt.Println("Closing process...")
+	  log.Println("Closing process...")
 	  cleanupAllTheThings()
 	  os.Exit(0)
 
 	}()
 
-	fmt.Println("Starting server logs...")
+	log.Println("Starting server logs...")
 
 	// go server.ShowUtilization()
 
 	commandLineargs := os.Args
 	
 	if len(commandLineargs) < 2{
-		fmt.Println("No enough argument to start server")
+		log.Println("No enough argument to start server")
 		return
 	}
 
@@ -62,7 +62,7 @@ func main(){
 		createChannel(*path, *channelName, *channelType)
 		createChannelTable(*path, *channelName, *channelType)
 	}else{
-		fmt.Println(`
+		log.Println(`
 			possible commands:
 			1) -config=d:\brahmaputra\config.json
 			2) -create-channel=TestChannel -path=d:\brahmaputra\storage\
@@ -82,10 +82,10 @@ func cleanupAllTheThings(){
 
 		time.Sleep(1 * time.Second)
 
-		fmt.Println("Closing storage files of the channel "+ key+"...")
+		log.Println("Closing storage files of the channel "+ key+"...")
 		ChannelList.TCPStorage[key].FD.Close()
 
-		fmt.Println("Closing table files of the channel "+ key+"...")
+		log.Println("Closing table files of the channel "+ key+"...")
 		ChannelList.TCPStorage[key].TableFD.Close()
 	}
 }
@@ -97,7 +97,7 @@ func runConfigFile(configPath string, channelType string){
 	data, err := ioutil.ReadFile(configPath)
 
 	if err != nil{
-		fmt.Println("Failed to open config file from the path given")
+		log.Println("Failed to open config file from the path given")
 		return
 	}
 
@@ -106,7 +106,7 @@ func runConfigFile(configPath string, channelType string){
 	pojoErr := json.Unmarshal(data, &configObj)
 
 	if pojoErr != nil{
-		fmt.Println("Invalid config file, json is not valid")
+		log.Println("Invalid config file, json is not valid")
 		return
 	}
 
@@ -121,7 +121,7 @@ func runConfigFile(configPath string, channelType string){
 			server.HostUDP(configObj)
 		}
 	}else{
-		fmt.Println("Invalid protocol, must be either tcp or udp...")
+		log.Println("Invalid protocol, must be either tcp or udp...")
 	}	
 }
 
@@ -130,7 +130,7 @@ func createChannel(path string, channelName string, channelType string){
 	defer ChannelList.Recover()
 
 	if path == "default"{
-		fmt.Println("Please set a path for the channel storage...")
+		log.Println("Please set a path for the channel storage...")
 		return
 	}
 
@@ -138,13 +138,13 @@ func createChannel(path string, channelName string, channelType string){
 
 	if _, err := os.Stat(filePath); err == nil{
 
-	  	fmt.Println("Channel already exists with name : "+channelName+"...")
+	  	log.Println("Channel already exists with name : "+channelName+"...")
 		return
 
 	}else if os.IsNotExist(err){
 
 		if channelType != "tcp" && channelType != "udp"{
-			fmt.Println("Channel must be either tcp or udp...")
+			log.Println("Channel must be either tcp or udp...")
 			return
 		}
 
@@ -152,7 +152,7 @@ func createChannel(path string, channelName string, channelType string){
 
 		if err != nil{
 
-			fmt.Println(err)
+			log.Println(err)
 			return
 
 		}
@@ -180,7 +180,7 @@ func createChannel(path string, channelName string, channelType string){
 			storage[channelName]["table"] = path+"\\"+channelName+".tbl"
 			storage[channelName]["channelType"] = channelType
 		}else{
-			fmt.Println("Invalid protocol, must be either tcp or udp...")
+			log.Println("Invalid protocol, must be either tcp or udp...")
 			return
 		}
 
@@ -188,7 +188,7 @@ func createChannel(path string, channelName string, channelType string){
 
 		if err != nil{
 
-			fmt.Println(err)
+			log.Println(err)
 			return
 
 		}
@@ -199,16 +199,16 @@ func createChannel(path string, channelName string, channelType string){
 
 		if err != nil{
 
-			fmt.Println(err)
+			log.Println(err)
 			return
 
 		}
 
-		fmt.Println("Channel created successfully...")
+		log.Println("Channel created successfully...")
 
 	}else{
 	  
-		fmt.Println("Error")
+		log.Println("Error")
 
 	}
 
@@ -219,7 +219,7 @@ func createChannelTable(path string, channelName string, channelType string){
 	defer ChannelList.Recover()
 	
 	if path == "default"{
-		fmt.Println("Please set a path for the channel storage...")
+		log.Println("Please set a path for the channel storage...")
 		return
 	}
 
@@ -227,13 +227,13 @@ func createChannelTable(path string, channelName string, channelType string){
 
 	if _, err := os.Stat(filePath); err == nil{
 
-	  	fmt.Println("Table already exists with name : "+channelName+"...")
+	  	log.Println("Table already exists with name : "+channelName+"...")
 		return
 
 	}else if os.IsNotExist(err){
 
 		if channelType != "tcp" && channelType != "udp"{
-			fmt.Println("Table must be either tcp or udp...")
+			log.Println("Table must be either tcp or udp...")
 			return
 		}
 
@@ -241,18 +241,18 @@ func createChannelTable(path string, channelName string, channelType string){
 
 		if err != nil{
 
-			fmt.Println(err)
+			log.Println(err)
 			return
 
 		}
 
 		defer fDes.Close()
 
-		fmt.Println("Table created successfully...")
+		log.Println("Table created successfully...")
 
 	}else{
 	  
-		fmt.Println("Error")
+		log.Println("Error")
 
 	}
 

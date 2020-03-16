@@ -1,7 +1,7 @@
 package brahmaputra
 
 import(
-	"fmt"
+	"log"
 	"net"
 	"encoding/binary"
 	"time"
@@ -11,6 +11,7 @@ import(
 	"encoding/json"
 	"sync"
 	_"context"
+	"runtime"
 )
 
 	// ctx, _ := context.WithTimeout(context.Background(), 15 * time.Second)
@@ -26,24 +27,38 @@ type CreateProperties struct{
 	ChannelName string
 	AgentName string
 	TransactionList map[string]interface{}
-	sendMsg chan bool
 	AppType string
 	Persitence bool
 	LogPath string
 	autoIncr int64
 	SubscribeMsg chan map[string]interface{}
+	Worker int
 
 	sync.Mutex
+
+	ConnPool []net.Conn
+
+	PoolSize int
+
+	roundRobin int
 }	
 
-func (e *CreateProperties) Connect() net.Conn{
+func (e *CreateProperties) Connect(){
 
 	if e.AppType != "producer" && e.AppType != "consumer"{
 
-		fmt.Println("AppType must be producer or consumer...")
+		log.Println("AppType must be producer or consumer...")
 
-		return nil
+		return
 
+	}
+
+	e.roundRobin = 0
+
+	e.SubscribeMsg = make(chan map[string]interface{}, 1)
+
+	if e.Worker > 0{
+		runtime.GOMAXPROCS(e.Worker)
 	}
 
 	e.autoIncr = 0
@@ -56,79 +71,152 @@ func (e *CreateProperties) Connect() net.Conn{
 
 	if agentErr != nil{
 		
-		fmt.Println(agentErr)
+		log.Println(agentErr)
 
-		return nil
+		return
 
 	}
 
-	dest := e.Host + ":" + e.Port
+	if e.PoolSize > 0{
+
+		for i := 0; i < e.PoolSize; i++ {
+
+			e.Conn = e.createConnection()
+
+			e.ConnPool = append(e.ConnPool, e.Conn)	
+
+		}
+
+	}else{
+
+		e.Conn = e.createConnection()
+
+		e.ConnPool = append(e.ConnPool, e.Conn)	
+
+	}
+
+	
+
+	if e.AppType == "producer"{
+
+		log.Println("Application started as producer...")
+
+		if e.PoolSize > 0{
+
+			for index := range e.ConnPool{
+
+				go e.ReceiveMsg(e.ConnPool[index])
+
+			}
+
+		}else{
+
+			go e.ReceiveMsg(e.ConnPool[0])
+
+		}
+	}
+
+	if e.AppType == "consumer"{
+
+		log.Println("Application started as consumer...")
+
+		if e.PoolSize > 0{
+
+			for index := range e.ConnPool{
+
+				go e.ReceiveSubMsg(e.ConnPool[index])
+
+			}
+
+		}else{
+
+			go e.ReceiveSubMsg(e.ConnPool[0])
+
+		}
+
+	} 
+}
+
+func (e *CreateProperties) createConnection() net.Conn{
+
+	var conn net.Conn
 
 	var err error
 
+	dest := e.Host + ":" + e.Port
+
 	if e.ConnectionType != "tcp" && e.ConnectionType != "udp"{
 
-		e.Conn, err = net.Dial("tcp", dest)
+		conn, err = net.Dial("tcp", dest)
 
 	}else if e.ConnectionType == "tcp"{
 
-		e.Conn, err = net.Dial("tcp", dest)
+		conn, err = net.Dial("tcp", dest)
 
 	}else if e.ConnectionType == "udp"{
 
-		e.Conn, err = net.Dial("udp", dest)
+		conn, err = net.Dial("udp", dest)
 
 	}
 
 	if err != nil{
 
-		fmt.Println(err)
+		log.Println(err)
 
 		return nil
 	}
 
-	e.Conn.(*net.TCPConn).SetKeepAlive(true)
-	e.Conn.(*net.TCPConn).SetKeepAlive(true)
-	e.Conn.(*net.TCPConn).SetLinger(1)
-	e.Conn.(*net.TCPConn).SetNoDelay(true)
-	e.Conn.(*net.TCPConn).SetReadBuffer(10000)
-	e.Conn.(*net.TCPConn).SetWriteBuffer(10000)
-	e.Conn.(*net.TCPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
-	e.Conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
-	e.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.TCPConn).SetKeepAlive(true)
+	conn.(*net.TCPConn).SetKeepAlive(true)
+	conn.(*net.TCPConn).SetLinger(1)
+	conn.(*net.TCPConn).SetNoDelay(true)
+	conn.(*net.TCPConn).SetReadBuffer(10000)
+	conn.(*net.TCPConn).SetWriteBuffer(10000)
+	conn.(*net.TCPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
 
-	if e.AppType == "producer"{
-
-		fmt.Println("Application started as producer...")
-
-		go e.ReceiveMsg()
-
-	}
-
-	if e.AppType == "consumer"{
-
-		fmt.Println("Application started as consumer...")
-
-		go e.ReceiveSubMsg()
-
-	} 
-	
-
-	return e.Conn
+	return conn
 }
 
-func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
+func (e *CreateProperties) Publish(bodyBB map[string]interface{}, wg *sync.WaitGroup){
 
-	if e.Conn == nil{
+	defer wg.Done()
 
-		fmt.Println("No connection is made...")
+	if e.PoolSize > 0{
+
+		e.Lock()
+
+		e.roundRobin += 1
+
+		if e.roundRobin == e.PoolSize{
+
+			e.roundRobin = 0
+
+		}
+
+		e.Unlock()
+
+		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
+
+	}else{
+
+		go e.publishMsg(bodyBB, e.ConnPool[0])
+
+	}
+}
+
+func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Conn){
+
+	if conn == nil{
+
+		log.Println("No connection is made...")
 
 		return
 
 	}
 
 	e.Lock()
-	defer e.Unlock()
 
 	e.autoIncr += 1
 	currentTime := time.Now()
@@ -149,6 +237,8 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	messageMap["data"] = bodyBB
 
 	e.TransactionList[producer_id] = messageMap
+
+	e.Unlock()
 	
 	var packetBuffer bytes.Buffer
  
@@ -158,7 +248,7 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	if err != nil{
 
-		fmt.Println(err)
+		log.Println(err)
 
 		return
 
@@ -170,21 +260,27 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	packetBuffer.Write(jsonData)
 
-	_, err = e.Conn.Write(packetBuffer.Bytes())
+	e.Lock()
+
+	_, err = conn.Write(packetBuffer.Bytes())
+
+	e.Unlock()
 
 	messageMap = nil
 
 	if err != nil {
 
-		fmt.Println(err)
+		log.Println(err)
 
 	}
+
 }
 
-func (e *CreateProperties) Close(){
+func (e *CreateProperties) Close(conn net.Conn){
 
-	e.Conn.Close()
-	fmt.Println("Socket closed...")
+	conn.Close()
+
+	log.Println("Socket closed...")
 
 }
 
@@ -196,7 +292,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 	if jsonErr != nil{
 
-		fmt.Println(jsonErr)
+		log.Println(jsonErr)
 		return
 
 	}	
@@ -210,7 +306,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 	if err != nil{
 
-		fmt.Println(err)
+		log.Println(err)
 
 		return
 
@@ -231,7 +327,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 	messageMap = nil
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 } 
@@ -251,13 +347,13 @@ func allZero(s []byte) bool {
 	return true
 }
 
-func (e *CreateProperties) ReceiveSubMsg(){
+func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 	for {	
 
 		sizeBuf := make([]byte, 4)
 
-		e.Conn.Read(sizeBuf)
+		conn.Read(sizeBuf)
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 
@@ -269,11 +365,11 @@ func (e *CreateProperties) ReceiveSubMsg(){
 
 		completePacket := make([]byte, packetSize)
 
-		e.Conn.Read(completePacket)
+		conn.Read(completePacket)
 
 		if allZero(completePacket) {
 
-			fmt.Println("Socket disconnected...")
+			log.Println("Socket disconnected...")
 
 			break
 		}
@@ -281,19 +377,19 @@ func (e *CreateProperties) ReceiveSubMsg(){
 		go e.parseMsg(completePacket, "sub")
 	}
 
-	fmt.Println("Socket disconnected...")
+	log.Println("Socket disconnected...")
 
-	e.Conn.Close()
+	conn.Close()
 
 }
 
-func (e *CreateProperties) ReceiveMsg(){
+func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 	for {	
 
 		sizeBuf := make([]byte, 4)
 
-		e.Conn.Read(sizeBuf)
+		conn.Read(sizeBuf)
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
 
@@ -305,11 +401,11 @@ func (e *CreateProperties) ReceiveMsg(){
 
 		completePacket := make([]byte, packetSize)
 
-		e.Conn.Read(completePacket)
+		conn.Read(completePacket)
 
 		if allZero(completePacket) {
 
-			fmt.Println("Socket disconnected...")
+			log.Println("Socket disconnected...")
 
 			break
 		}
@@ -317,15 +413,12 @@ func (e *CreateProperties) ReceiveMsg(){
 		go e.parseMsg(completePacket, "pub")
 	}
 
-	fmt.Println("Socket disconnected...")
+	log.Println("Socket disconnected...")
 
-	e.Conn.Close()
+	conn.Close()
 }
 
 func (e *CreateProperties) parseMsg(message []byte, msgType string){
-
-	e.Lock()
-	defer e.Unlock()
 
 	messageMap := make(map[string]interface{})
 
@@ -333,7 +426,7 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
 	if err != nil{
 		
-		fmt.Println(err)
+		log.Println(err)
 
 		return
 
@@ -343,7 +436,11 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
 		var producer_id = messageMap["producer_id"].(string)
 
+		e.Lock()
+
 		delete(e.TransactionList, producer_id)
+
+		e.Unlock()
 	}
 
 	if msgType == "sub"{

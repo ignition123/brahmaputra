@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"time"
 	"strconv"
-	"fmt"
+	"log"
 	"bytes"
 	"encoding/binary"
 	"io"
@@ -16,7 +16,7 @@ import (
 )
 
 var WriteCallback = make(chan bool)
-var FileWriteLock = &sync.Mutex{}
+var FileWriteLock = &sync.RWMutex{}
 
 func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 
@@ -41,7 +41,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 			return
 		}
 
-		fmt.Println("HEART BEAT RECEIVED...")
+		log.Println("HEART BEAT RECEIVED...")
 
 		messageMap["conn"] = conn
 		
@@ -103,9 +103,6 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 					}
 
 					break
-				// default:
-				// 	<-time.After(1 * time.Nanosecond)
-				// 	break
 			}
 
 			go WriteOffset(jsonData, channelName, byteLen, _id)
@@ -121,9 +118,6 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 					}		
 
 					break
-				// default:
-				// 	<-time.After(1 * time.Nanosecond)
-				// 	break
 			}
 		}
 
@@ -143,9 +137,6 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 						}
 					}		
 					break
-				// default:
-				// 	<-time.After(1 * time.Nanosecond)
-				// 	break
 			}
 		} 
 
@@ -206,7 +197,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 // 	_, err = ChannelList.TCPStorage[channelName].FD.ReadAt(readByte, ChannelList.TCPStorage[channelName].Offset)
 
 // 	if err != nil{
-// 		fmt.Println(err.Error())
+// 		log.Println(err.Error())
 // 		return
 // 	}
 
@@ -259,7 +250,6 @@ func WriteData(jsonData []byte, channelName string, byteLen int){
 	defer ChannelList.Recover()
 
 	FileWriteLock.Lock()
-	defer FileWriteLock.Unlock()
 
 	var packetBuffer bytes.Buffer
 
@@ -272,6 +262,8 @@ func WriteData(jsonData []byte, channelName string, byteLen int){
 	packetBuffer.Write(jsonData)
  
 	_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
+
+	FileWriteLock.Unlock()
 	
 	if (err != nil && err != io.EOF ){
 		go ChannelList.WriteLog(err.Error())
@@ -287,7 +279,6 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 	defer ChannelList.Recover()
 	
 	FileWriteLock.Lock()
-	defer FileWriteLock.Unlock()
 
 	var byteSize = (byteLen + 4)
 
@@ -307,6 +298,8 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 	packetBuffer.Write([]byte(offsetString))
 
 	_, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes())
+
+	FileWriteLock.Unlock()
 
 	if (err != nil && err != io.EOF){
 

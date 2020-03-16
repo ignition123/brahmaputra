@@ -11,8 +11,6 @@ import (
 
 var closeTCP = false
 
-var waitgroup sync.WaitGroup
-
 func allZero(s []byte) bool {
 
 	defer ChannelList.Recover()
@@ -32,6 +30,8 @@ func HandleRequest(conn net.TCPConn) {
 	defer conn.Close()
 
 	sizeBuf := make([]byte, 4)
+
+	var waitgroup sync.WaitGroup
 
 	for {
 
