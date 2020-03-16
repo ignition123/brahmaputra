@@ -5,9 +5,13 @@ import(
 	"time"
 	"fmt"
 	_"sync"
+	"runtime"
+	"log"
 )
 
 func main(){
+
+	
 
 	var brahm = &brahmaputra.CreateProperties{
 		Host:"127.0.0.1",
@@ -16,6 +20,7 @@ func main(){
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"producer",
+		Worker:runtime.NumCPU(),
 	}
 
 	brahm.Connect()
@@ -62,19 +67,41 @@ func main(){
 	bodyMap1["DripSize"] = 0.0
 	bodyMap1["Number"] = 10
 
-	go subscribe()
+	// go subscribe()
 
 	// var parseWait sync.WaitGroup
 
 	// var parseWait1 sync.WaitGroup
 
-	for i:=0;i<1000000;i++{
+	var channel = make(chan int)
 
-		go brahm.Publish(bodyMap)
+	start := time.Now()
+	
+	for i := 0; i < 10000000; i++ {
 
-		time.Sleep(1 * time.Nanosecond)
+		go func(i int, channel chan int){
+
+			channel <- i
+
+			brahm.Publish(bodyMap)
+
+		}(i, channel)
+				
+		select{
+			case message, ok := <-channel:	
+
+				if ok{
+					log.Println(message)
+				}
+				
+				break
+		}
 	}
 
+	// Code to measure
+	duration := time.Since(start)
+    // Formatted string, such as "2h3m0.5s" or "4.503μs"
+	fmt.Println(duration)
 }
 
 func subscribe(){

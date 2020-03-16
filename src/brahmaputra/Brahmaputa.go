@@ -11,6 +11,7 @@ import(
 	"encoding/json"
 	"sync"
 	_"context"
+	"runtime"
 )
 
 	// ctx, _ := context.WithTimeout(context.Background(), 15 * time.Second)
@@ -32,6 +33,7 @@ type CreateProperties struct{
 	LogPath string
 	autoIncr int64
 	SubscribeMsg chan map[string]interface{}
+	Worker int
 
 	sync.Mutex
 }	
@@ -44,6 +46,10 @@ func (e *CreateProperties) Connect() net.Conn{
 
 		return nil
 
+	}
+
+	if e.Worker > 0{
+		runtime.GOMAXPROCS(e.Worker)
 	}
 
 	e.autoIncr = 0
@@ -128,7 +134,6 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	}
 
 	e.Lock()
-	defer e.Unlock()
 
 	e.autoIncr += 1
 	currentTime := time.Now()
@@ -149,6 +154,8 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 	messageMap["data"] = bodyBB
 
 	e.TransactionList[producer_id] = messageMap
+
+	e.Unlock()
 	
 	var packetBuffer bytes.Buffer
  
@@ -170,7 +177,11 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	packetBuffer.Write(jsonData)
 
+	e.Lock()
+
 	_, err = e.Conn.Write(packetBuffer.Bytes())
+
+	e.Unlock()
 
 	messageMap = nil
 
@@ -324,9 +335,6 @@ func (e *CreateProperties) ReceiveMsg(){
 
 func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
-	e.Lock()
-	defer e.Unlock()
-
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal(message, &messageMap)
@@ -343,7 +351,11 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
 		var producer_id = messageMap["producer_id"].(string)
 
+		e.Lock()
+
 		delete(e.TransactionList, producer_id)
+
+		e.Unlock()
 	}
 
 	if msgType == "sub"{

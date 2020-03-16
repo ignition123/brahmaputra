@@ -13,7 +13,7 @@ import(
 )
 
 type ChannelMethods struct{
-	sync.Mutex
+	sync.RWMutex
 }
 
 func (e *ChannelMethods) GetChannelData(){
@@ -68,9 +68,6 @@ func (e *ChannelMethods) runChannel(channelName string){
 							}
 						}		
 						break
-					// default:
-					// 	<-time.After(1 * time.Nanosecond)
-					// 	break
 				}		
 			}
 
@@ -211,9 +208,6 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 	defer ChannelList.Recover()
 
 	defer wg.Done()
-
-	e.Lock()
-	defer e.Unlock()
 		
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 
@@ -223,12 +217,12 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 		
 			go ChannelList.WriteLog(err.Error())
 
+			e.Lock()
 			var channelArray = ChannelList.TCPSocketDetails[channelName]
-		
 			copy(channelArray[index:], channelArray[index+1:])
 			channelArray[len(channelArray)-1] = nil
 			ChannelList.TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
-
+			e.Unlock()
 		}
 
 	}
@@ -239,9 +233,6 @@ func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCP
 	defer ChannelList.Recover()
 
 	defer wg.Done()
-
-	e.Lock()
-	defer e.Unlock()
 
 	var messageResp = make(map[string]interface{})
 
@@ -266,7 +257,9 @@ func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCP
 
 	packetBuffer.Write(jsonData)
 
+	e.Lock()
 	_, err = conn.Write(packetBuffer.Bytes())
+	e.Unlock()
 
 	if err != nil{
 
