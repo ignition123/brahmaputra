@@ -188,10 +188,10 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 	defer ChannelList.Recover()
 
 	var totalRetry = 0
-		
-	if len(ChannelList.TCPSocketDetails[channelName]) > index{
+	
+	RETRY:
 
-		RETRY:
+	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 
 		totalRetry += 1
 
@@ -224,12 +224,10 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 
 			goto RETRY
 
-		}else{
-
-			wg.Done()
-
 		}
 	}
+
+	wg.Done()
 }
 
 func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCPConn, wg *sync.WaitGroup){
