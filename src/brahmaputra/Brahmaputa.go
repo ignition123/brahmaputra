@@ -10,11 +10,8 @@ import(
 	"bytes"
 	"encoding/json"
 	"sync"
-	_"context"
 	"runtime"
 )
-
-	// ctx, _ := context.WithTimeout(context.Background(), 15 * time.Second)
 
 type CreateProperties struct{
 	Host string
@@ -129,15 +126,9 @@ func (e *CreateProperties) Connect(){
 
 	if len(e.requestPull) > 0{
 
-		// var requestWg sync.WaitGroup
-
 		for _, bodyMap := range e.requestPull{
 
-			// requestWg.Add(1)
-
-			e.Publish(bodyMap) //&requestWg
-
-			// requestWg.Wait()
+			e.Publish(bodyMap)
 		}
 
 	}
