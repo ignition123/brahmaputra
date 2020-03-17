@@ -68,6 +68,14 @@ func HostTCPServer(){
 		tcp := conn.(*net.TCPConn)
 
         tcp.SetNoDelay(true)
+        tcp.SetKeepAlive(true)
+		tcp.SetKeepAlive(true)
+		tcp.SetLinger(1)
+		tcp.SetReadBuffer(10000)
+		tcp.SetWriteBuffer(10000)
+		tcp.SetDeadline(time.Now().Add(1000000 * time.Second))
+		tcp.SetReadDeadline(time.Now().Add(1000000 * time.Second))
+		tcp.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
 
 		go HandleRequest(*tcp)
 	}

@@ -21,15 +21,11 @@ type CreateProperties struct{
 	Port string
 	AuthToken string
 	ConnectionType string
-	AutoReconnect bool
-	RetryPeriod int // in minutes
 	Conn net.Conn
 	ChannelName string
 	AgentName string
 	TransactionList map[string]interface{}
 	AppType string
-	Persitence bool
-	LogPath string
 	autoIncr int64
 	SubscribeMsg chan map[string]interface{}
 	Worker int
@@ -41,6 +37,14 @@ type CreateProperties struct{
 	PoolSize int
 
 	roundRobin int
+
+	requestPull []map[string]interface{}
+
+	connectStatus bool
+
+	requestWg sync.WaitGroup
+
+	ReceiveSync sync.WaitGroup
 }	
 
 func (e *CreateProperties) Connect(){
@@ -55,7 +59,7 @@ func (e *CreateProperties) Connect(){
 
 	e.roundRobin = 0
 
-	e.SubscribeMsg = make(chan map[string]interface{}, 1)
+	e.SubscribeMsg = make(chan map[string]interface{}, 1)	
 
 	if e.Worker > 0{
 		runtime.GOMAXPROCS(e.Worker)
@@ -79,11 +83,29 @@ func (e *CreateProperties) Connect(){
 
 	if e.PoolSize > 0{
 
+		var connectStatus = true
+
 		for i := 0; i < e.PoolSize; i++ {
 
 			e.Conn = e.createConnection()
 
+			if e.Conn == nil{
+
+				connectStatus = false
+
+				break
+
+			}
+
 			e.ConnPool = append(e.ConnPool, e.Conn)	
+
+		}
+
+		if !connectStatus{
+
+			time.Sleep(2 * time.Second)
+
+			e.Connect()
 
 		}
 
@@ -91,11 +113,34 @@ func (e *CreateProperties) Connect(){
 
 		e.Conn = e.createConnection()
 
+		if e.Conn == nil{
+
+			time.Sleep(2 * time.Second)
+
+			e.Connect()
+
+			return
+
+		}
+
 		e.ConnPool = append(e.ConnPool, e.Conn)	
 
 	}
 
-	
+	if len(e.requestPull) > 0{
+
+		// var requestWg sync.WaitGroup
+
+		for _, bodyMap := range e.requestPull{
+
+			// requestWg.Add(1)
+
+			e.Publish(bodyMap) //&requestWg
+
+			// requestWg.Wait()
+		}
+
+	}
 
 	if e.AppType == "producer"{
 
@@ -133,8 +178,30 @@ func (e *CreateProperties) Connect(){
 			go e.ReceiveSubMsg(e.ConnPool[0])
 
 		}
-
 	} 
+
+	e.connectStatus = true
+
+	go e.checkConnectStatus()
+}
+
+func (e *CreateProperties) checkConnectStatus(){
+
+	for{
+
+		time.Sleep(2 * time.Second)
+
+		if e.connectStatus == false{
+
+			e.ConnPool = e.ConnPool[:0]
+
+			e.Connect()
+
+			break
+
+		}
+	}
+
 }
 
 func (e *CreateProperties) createConnection() net.Conn{
@@ -179,9 +246,17 @@ func (e *CreateProperties) createConnection() net.Conn{
 	return conn
 }
 
-func (e *CreateProperties) Publish(bodyBB map[string]interface{}, wg *sync.WaitGroup){
+func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
-	defer wg.Done()
+	if !e.connectStatus{
+
+		log.Println("Connection lost...")
+
+		e.requestPull = append(e.requestPull, bodyBB)
+
+		return
+
+	}
 
 	if e.PoolSize > 0{
 
@@ -197,13 +272,18 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}, wg *sync.WaitG
 
 		e.Unlock()
 
-		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
+		if e.roundRobin >= len(e.ConnPool){
+			return
+		}
+
+		e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
 
 	}else{
 
-		go e.publishMsg(bodyBB, e.ConnPool[0])
+	 	e.publishMsg(bodyBB, e.ConnPool[0])
 
 	}
+
 }
 
 func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Conn){
@@ -270,6 +350,10 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 	if err != nil {
 
+		e.connectStatus = false
+
+		e.requestPull = append(e.requestPull, bodyBB)
+
 		log.Println(err)
 
 	}
@@ -327,7 +411,11 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 	messageMap = nil
 
 	if err != nil {
+
+		e.connectStatus = false
+
 		log.Println(err)
+
 	}
 
 } 
@@ -361,8 +449,6 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 			continue
 		}
 
-		sizeBuf = nil
-
 		completePacket := make([]byte, packetSize)
 
 		conn.Read(completePacket)
@@ -374,14 +460,20 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 			break
 		}
 
+		e.ReceiveSync.Add(1)
+
 		go e.parseMsg(completePacket, "sub")
+
+		e.ReceiveSync.Wait()
 	}
 
 	log.Println("Socket disconnected...")
 
 	conn.Close()
 
+	e.connectStatus = false
 }
+
 
 func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
@@ -416,9 +508,15 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 	log.Println("Socket disconnected...")
 
 	conn.Close()
+
+	e.connectStatus = false
 }
 
 func (e *CreateProperties) parseMsg(message []byte, msgType string){
+
+	if msgType == "sub"{
+		defer e.ReceiveSync.Done()
+	}
 
 	messageMap := make(map[string]interface{})
 

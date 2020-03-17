@@ -6,7 +6,7 @@ import(
 	"bytes"
 	"encoding/binary"
 	"sync"
-	_"fmt"
+	_"log"
 	"ChannelList"
 	"time"
 	"net"
@@ -80,8 +80,6 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 	defer ChannelList.Recover()
 
 	defer wg.Done()
-
-	var subscriberSentCount = 0
 
 	var waitgroup sync.WaitGroup
 
@@ -176,55 +174,61 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 
 		}
 
-		subscriberSentCount += 1
-
 	}
 
-	if len(ChannelList.TCPSocketDetails[channelName]) == 0{
+	waitAckgroup.Add(1)
 
-		waitAckgroup.Add(1)
+	go e.SendAck(message, conn, &waitAckgroup)
 
-		go e.SendAck(message, conn, &waitAckgroup)
-
-		waitAckgroup.Wait()
-
-	}else{
-
-		if subscriberSentCount > 0{ //== len(ChannelList.TCPSocketDetails[channelName])
-
-			waitAckgroup.Add(1)
-
-			go e.SendAck(message, conn, &waitAckgroup)
-
-			waitAckgroup.Wait()
-
-		}
-
-	}
+	waitAckgroup.Wait()
 }
 
 func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.Buffer,  wg *sync.WaitGroup){
 
 	defer ChannelList.Recover()
 
-	defer wg.Done()
+	var totalRetry = 0
 		
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
 
+		RETRY:
+
+		totalRetry += 1
+
+		if totalRetry > 5{
+
+			wg.Done()
+
+			return
+
+		}
+
+		e.Lock()
+
 		_, err := ChannelList.TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
+		
+		e.Unlock()
 
 		if err != nil {
 		
 			go ChannelList.WriteLog(err.Error())
 
 			e.Lock()
+
 			var channelArray = ChannelList.TCPSocketDetails[channelName]
 			copy(channelArray[index:], channelArray[index+1:])
 			channelArray[len(channelArray)-1] = nil
 			ChannelList.TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
-			e.Unlock()
-		}
 
+			e.Unlock()
+
+			goto RETRY
+
+		}else{
+
+			wg.Done()
+
+		}
 	}
 }
 

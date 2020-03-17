@@ -2,7 +2,7 @@ package ChannelList
 
 import (
 	"time"
-	"fmt"
+	"log"
 	"os"
 	"sync"
 )
@@ -20,7 +20,7 @@ func WriteLog(logMessage string){
 	ErrorFile, err := os.OpenFile("./storage/error.log", os.O_APPEND|os.O_WRONLY, 0600)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -31,6 +31,6 @@ func WriteLog(logMessage string){
 	logMsg += currentTime.String() + "\r\n"
 	logMsg += logMessage + "\r\n"
 
-	fmt.Println(logMsg)
+	log.Println(logMsg)
 	ErrorFile.WriteString(logMsg)
 }

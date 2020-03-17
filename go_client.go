@@ -26,6 +26,8 @@ func main(){
 
 	brahm.Connect()
 
+	time.Sleep(2 * time.Second)
+
 	var bodyMap = make(map[string]interface{})
 			
 	bodyMap["Account"] = "T93992"
@@ -84,9 +86,28 @@ func main(){
 
 		log.Println(i)
 
-		go brahm.Publish(bodyMap, &parseWait)
+		go func(wg *sync.WaitGroup){
+
+			brahm.Publish(bodyMap)
+
+			wg.Done()
+
+		}(&parseWait)
 
 		parseWait.Wait()
+		
+	}
+
+	var total = 0
+
+	for{
+
+		total += 1
+
+		if(total == 10000){
+			break
+		}
+
 	}
 
 	// Code to measure

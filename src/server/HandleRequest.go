@@ -27,10 +27,6 @@ func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
 
-	defer conn.Close()
-
-	sizeBuf := make([]byte, 4)
-
 	var waitgroup sync.WaitGroup
 
 	for {
@@ -41,6 +37,8 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 		
+		sizeBuf := make([]byte, 4)
+
 		conn.Read(sizeBuf)
 
 		packetSize := binary.LittleEndian.Uint32(sizeBuf)
@@ -60,19 +58,14 @@ func HandleRequest(conn net.TCPConn) {
 
 		var message = string(completePacket)
 
-		err := conn.SetReadDeadline(time.Now().Add(10 * time.Hour))
-
-		if err != nil {
-			go ChannelList.WriteLog("Error in tcp connection: " + err.Error())
-			break
-		}
-
 		waitgroup.Add(1)
 
 		go ParseMsg(message, conn, &waitgroup)
 
 		waitgroup.Wait()
 	}
+
+	conn.Close()
 }
 
 func ShowUtilization(){
