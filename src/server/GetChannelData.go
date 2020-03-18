@@ -42,7 +42,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 			defer close(BucketData)
 
-			var waitgroup sync.WaitGroup
+			var waitChan = make(chan bool, 1)
 
 			for{
 
@@ -60,11 +60,18 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 								delete(message, "conn")
 
-								waitgroup.Add(1)
+								go e.sendMessageToClient(conn, message, channelName, waitChan)
 
-								go e.sendMessageToClient(conn, message, channelName, &waitgroup)
+								select {
 
-								waitgroup.Wait()
+									case _, ok := <-waitChan :	
+
+										if ok{
+
+										}
+									break
+								}
+
 							}
 						}		
 						break
@@ -75,9 +82,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
-func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, wg *sync.WaitGroup){
-
-	defer wg.Done()
+func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, waitChan chan bool){
 
 	defer ChannelList.Recover()
 
@@ -198,6 +203,7 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 		break
 	}
 
+	waitChan <- true
 }
 
 func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.Buffer, callback chan bool){ 

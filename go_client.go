@@ -4,7 +4,7 @@ import(
 	"brahmaputra"
 	"time"
 	_"fmt"
-	"sync"
+	_"sync"
 	"runtime"
 	"log"
 )
@@ -72,29 +72,41 @@ func main(){
 
 	// go subscribe()
 
-	var parseWait sync.WaitGroup
+	// var parseWait sync.WaitGroup
 
 	// var parseWait1 sync.WaitGroup
 
-	// var channel = make(chan int)
+	var channel = make(chan int)
 
 	start := time.Now()
 	
 	for i := 0; i < 10000000; i++ {
 
-		parseWait.Add(1)
+		// parseWait.Add(1)
 
-		go func(wg *sync.WaitGroup, i int){
+		go func(channel chan int, i int){
 
 			// log.Println(i)
 
 			brahm.Publish(bodyMap)
 
-			wg.Done()
+			channel <- i
 
-		}(&parseWait, i)
+			// wg.Done()
 
-		parseWait.Wait()
+		}(channel, i)
+
+		select {
+
+			case _, ok := <-channel :	
+
+				if ok{
+
+				}
+			break
+		}
+
+		// parseWait.Wait()
 		
 	}
 
