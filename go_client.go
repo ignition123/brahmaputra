@@ -84,15 +84,15 @@ func main(){
 
 		parseWait.Add(1)
 
-		log.Println(i)
+		go func(wg *sync.WaitGroup, i int){
 
-		go func(wg *sync.WaitGroup){
+			// log.Println(i)
 
 			brahm.Publish(bodyMap)
 
 			wg.Done()
 
-		}(&parseWait)
+		}(&parseWait, i)
 
 		parseWait.Wait()
 		

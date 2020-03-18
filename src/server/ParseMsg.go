@@ -18,17 +18,16 @@ import (
 var WriteCallback = make(chan bool)
 var FileWriteLock = &sync.RWMutex{}
 
-func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
+func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 
 	defer ChannelList.Recover()
-
-	defer wg.Done()
 
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(msg), &messageMap)
 
 	if err != nil{
+		parseChan <- false
 		go ChannelList.WriteLog(err.Error())
 		return
 	}
@@ -37,6 +36,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 
 		if messageMap["channelName"] == ""{
 			conn.Close()
+			parseChan <- false
 			go ChannelList.WriteLog("Invalid message received..." + msg)
 			return
 		}
@@ -51,12 +51,14 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 
 		if messageMap["channelName"] == ""{
 			conn.Close()
+			parseChan <- false
 			go ChannelList.WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["data"] == ""{
 			conn.Close()
+			parseChan <- false
 			go ChannelList.WriteLog("Data missing..." + msg)
 			return
 		}
@@ -64,6 +66,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 		var channelName = messageMap["channelName"].(string)
 
 		if ChannelList.TCPStorage[channelName] == nil{
+			parseChan <- false
 			return
 		}
 
@@ -82,6 +85,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 		jsonData, err := json.Marshal(messageMap)
 
 		if err != nil{
+			parseChan <- false
 			go ChannelList.WriteLog(err.Error())
 			return
 		}
@@ -98,6 +102,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 					if ok{
 						
 						if !message{
+							parseChan <- false
 							return
 						}
 					}
@@ -113,6 +118,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 					if ok{
 						
 						if !message{
+							parseChan <- false
 							return
 						}
 					}		
@@ -133,6 +139,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 					if ok{
 						
 						if !message{
+							parseChan <- false
 							return
 						}
 					}		
@@ -144,16 +151,20 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 
 		ChannelList.TCPStorage[channelName].BucketData[indexNo] <- messageMap
 
+		parseChan <- true
+
 	}else if messageMap["type"] == "subscribe"{
 
 		if messageMap["channelName"] == ""{
 			conn.Close()
+			parseChan <- false
 			go ChannelList.WriteLog("Invalid message received..." + msg)
 			return
 		}
 
 		if messageMap["contentMatcher"] == ""{
 			conn.Close()
+			parseChan <- false
 			go ChannelList.WriteLog("Content matcher cannot be empty..." + msg)
 			return
 		}
@@ -161,6 +172,7 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 		var channelName = messageMap["channelName"].(string)
 
 		if ChannelList.TCPStorage[channelName] == nil{
+			parseChan <- false
 			return
 		}
 
@@ -180,10 +192,13 @@ func ParseMsg(msg string, conn net.TCPConn, wg *sync.WaitGroup){
 			}
 		}
 		
-		ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], socketDetails)  
+		ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], socketDetails) 
+
+		parseChan <- true 
 
 	}else{
 		conn.Close()
+		parseChan <- false
 		go ChannelList.WriteLog("Invalid message type must be either publish or subscribe...")
 		return
 	}	

@@ -6,7 +6,7 @@ import (
 	"time"
 	"ChannelList"
 	"Utilization"
-	"sync"
+	_"sync"
 )
 
 var closeTCP = false
@@ -27,7 +27,7 @@ func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
 
-	var waitgroup sync.WaitGroup
+	parseChan := make(chan bool, 1)
 
 	for {
 
@@ -58,11 +58,17 @@ func HandleRequest(conn net.TCPConn) {
 
 		var message = string(completePacket)
 
-		waitgroup.Add(1)
+		go ParseMsg(message, conn, parseChan)
 
-		go ParseMsg(message, conn, &waitgroup)
+		select {
 
-		waitgroup.Wait()
+			case _, ok := <-parseChan:	
+
+				if ok{
+
+				}
+			break
+		}
 	}
 
 	conn.Close()

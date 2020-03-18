@@ -42,13 +42,15 @@ type CreateProperties struct{
 	requestWg sync.WaitGroup
 
 	ReceiveSync sync.WaitGroup
+
+	requestChan chan bool
 }	
 
 func (e *CreateProperties) Connect(){
 
 	if e.AppType != "producer" && e.AppType != "consumer"{
 
-		log.Println("AppType must be producer or consumer...")
+		go log.Println("AppType must be producer or consumer...")
 
 		return
 
@@ -70,9 +72,11 @@ func (e *CreateProperties) Connect(){
 
 	e.AgentName, agentErr = os.Hostname()
 
+	e.requestChan = make(chan bool, 1)
+
 	if agentErr != nil{
 		
-		log.Println(agentErr)
+		go log.Println(agentErr)
 
 		return
 
@@ -135,7 +139,7 @@ func (e *CreateProperties) Connect(){
 
 	if e.AppType == "producer"{
 
-		log.Println("Application started as producer...")
+		go log.Println("Application started as producer...")
 
 		if e.PoolSize > 0{
 
@@ -154,7 +158,7 @@ func (e *CreateProperties) Connect(){
 
 	if e.AppType == "consumer"{
 
-		log.Println("Application started as consumer...")
+		go log.Println("Application started as consumer...")
 
 		if e.PoolSize > 0{
 
@@ -219,7 +223,7 @@ func (e *CreateProperties) createConnection() net.Conn{
 
 	if err != nil{
 
-		log.Println(err)
+		go log.Println(err)
 
 		return nil
 	}
@@ -241,7 +245,7 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	if !e.connectStatus{
 
-		log.Println("Connection lost...")
+		go log.Println("Connection lost...")
 
 		e.requestPull = append(e.requestPull, bodyBB)
 
@@ -251,8 +255,6 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	if e.PoolSize > 0{
 
-		e.Lock()
-
 		e.roundRobin += 1
 
 		if e.roundRobin == e.PoolSize{
@@ -261,17 +263,35 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 		}
 
-		e.Unlock()
-
 		if e.roundRobin >= len(e.ConnPool){
 			return
 		}
+		
+		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
 
-		e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
+		select {
+
+			case _, ok := <-e.requestChan :	
+
+				if ok{
+
+				}
+			break
+		}
 
 	}else{
 
-	 	e.publishMsg(bodyBB, e.ConnPool[0])
+	 	go e.publishMsg(bodyBB, e.ConnPool[0])
+
+	 	select {
+
+			case _, ok := <-e.requestChan :	
+
+				if ok{
+
+				}
+			break
+		}
 
 	}
 
@@ -281,13 +301,13 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 	if conn == nil{
 
-		log.Println("No connection is made...")
+		go log.Println("No connection is made...")
+
+		e.requestChan <- false
 
 		return
 
 	}
-
-	e.Lock()
 
 	e.autoIncr += 1
 	currentTime := time.Now()
@@ -307,10 +327,10 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 	messageMap["data"] = bodyBB
 
+	e.Lock()
 	e.TransactionList[producer_id] = messageMap
-
 	e.Unlock()
-	
+
 	var packetBuffer bytes.Buffer
  
 	buff := make([]byte, 4)
@@ -319,7 +339,9 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 	if err != nil{
 
-		log.Println(err)
+		go log.Println(err)
+
+		e.requestChan <- false
 
 		return
 
@@ -331,11 +353,7 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 	packetBuffer.Write(jsonData)
 
-	e.Lock()
-
 	_, err = conn.Write(packetBuffer.Bytes())
-
-	e.Unlock()
 
 	messageMap = nil
 
@@ -345,17 +363,21 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 		e.requestPull = append(e.requestPull, bodyBB)
 
-		log.Println(err)
+		go log.Println(err)
 
+		e.requestChan <- false
+
+		return
 	}
 
+	e.requestChan <- true
 }
 
 func (e *CreateProperties) Close(conn net.Conn){
 
 	conn.Close()
 
-	log.Println("Socket closed...")
+	go log.Println("Socket closed...")
 
 }
 
@@ -367,7 +389,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 	if jsonErr != nil{
 
-		log.Println(jsonErr)
+		go log.Println(jsonErr)
 		return
 
 	}	
@@ -381,7 +403,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 	if err != nil{
 
-		log.Println(err)
+		go log.Println(err)
 
 		return
 
@@ -405,7 +427,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 		e.connectStatus = false
 
-		log.Println(err)
+		go log.Println(err)
 
 	}
 
@@ -428,6 +450,8 @@ func allZero(s []byte) bool {
 
 func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
+	var callbackChan = make(chan string, 1)
+
 	for {	
 
 		sizeBuf := make([]byte, 4)
@@ -446,19 +470,17 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 		if allZero(completePacket) {
 
-			log.Println("Socket disconnected...")
+			go log.Println("Socket disconnected...")
 
 			break
 		}
 
-		e.ReceiveSync.Add(1)
+		go e.parseMsg(completePacket, "sub", callbackChan)
 
-		go e.parseMsg(completePacket, "sub")
-
-		e.ReceiveSync.Wait()
+		<-callbackChan
 	}
 
-	log.Println("Socket disconnected...")
+	go log.Println("Socket disconnected...")
 
 	conn.Close()
 
@@ -467,6 +489,8 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 
 func (e *CreateProperties) ReceiveMsg(conn net.Conn){
+
+	var callbackChan = make(chan string, 1)
 
 	for {	
 
@@ -488,22 +512,39 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 		if allZero(completePacket) {
 
-			log.Println("Socket disconnected...")
+			go log.Println("Socket disconnected...")
 
 			break
 		}
 
-		go e.parseMsg(completePacket, "pub")
+		go e.parseMsg(completePacket, "pub", callbackChan)
+
+		select {
+
+			case message, ok := <-callbackChan:	
+
+				if ok{
+
+					if message != "REJECT" && message != "SUCCESS"{
+						e.Lock()
+						delete(e.TransactionList, message)
+						e.Unlock()
+					}
+
+				}
+			break
+		}
+		
 	}
 
-	log.Println("Socket disconnected...")
+	go log.Println("Socket disconnected...")
 
 	conn.Close()
 
 	e.connectStatus = false
 }
 
-func (e *CreateProperties) parseMsg(message []byte, msgType string){
+func (e *CreateProperties) parseMsg(message []byte, msgType string, callbackChan chan string){
 
 	if msgType == "sub"{
 		defer e.ReceiveSync.Done()
@@ -515,7 +556,9 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
 	if err != nil{
 		
-		log.Println(err)
+		go log.Println(err)
+
+		callbackChan <- "REJECT"
 
 		return
 
@@ -525,16 +568,15 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string){
 
 		var producer_id = messageMap["producer_id"].(string)
 
-		e.Lock()
+		callbackChan <- producer_id
 
-		delete(e.TransactionList, producer_id)
-
-		e.Unlock()
 	}
 
 	if msgType == "sub"{
 
 		e.SubscribeMsg <- messageMap
+
+		callbackChan <- "SUCCESS"
 
 	}
 
