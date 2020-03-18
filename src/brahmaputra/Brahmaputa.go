@@ -13,6 +13,8 @@ import(
 	"runtime"
 )
 
+var SubscriberChannel = make(chan map[string]interface{})
+
 type CreateProperties struct{
 	Host string
 	Port string
@@ -24,7 +26,6 @@ type CreateProperties struct{
 	TransactionList map[string]interface{}
 	AppType string
 	autoIncr int64
-	SubscribeMsg chan map[string]interface{}
 	Worker int
 
 	sync.Mutex
@@ -44,6 +45,8 @@ type CreateProperties struct{
 	ReceiveSync sync.WaitGroup
 
 	requestChan chan bool
+
+	contentMatcher string
 }	
 
 func (e *CreateProperties) Connect(){
@@ -56,9 +59,15 @@ func (e *CreateProperties) Connect(){
 
 	}
 
-	e.roundRobin = 0
+	var subReconnect = false
 
-	e.SubscribeMsg = make(chan map[string]interface{}, 1)	
+	if e.AgentName != ""{
+
+		subReconnect = true
+
+	}
+
+	e.roundRobin = 0
 
 	if e.Worker > 0{
 		runtime.GOMAXPROCS(e.Worker)
@@ -173,6 +182,20 @@ func (e *CreateProperties) Connect(){
 			go e.ReceiveSubMsg(e.ConnPool[0])
 
 		}
+
+		if subReconnect{
+
+			for{
+
+				time.Sleep(1 * time.Second)
+
+				if e.Conn != nil{
+					break
+				}
+			}
+
+			e.Subscribe(e.contentMatcher)
+		}
 	} 
 
 	e.connectStatus = true
@@ -255,15 +278,13 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	if e.PoolSize > 0{
 
-		e.roundRobin += 1
-
 		if e.roundRobin == e.PoolSize{
 
 			e.roundRobin = 0
 
 		}
 
-		if e.roundRobin >= len(e.ConnPool){
+		if e.roundRobin >= e.PoolSize{
 			return
 		}
 		
@@ -278,6 +299,8 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 				}
 			break
 		}
+
+		e.roundRobin += 1
 
 	}else{
 
@@ -383,6 +406,8 @@ func (e *CreateProperties) Close(conn net.Conn){
 
 func (e *CreateProperties) Subscribe(contentMatcher string){
 
+	e.contentMatcher = contentMatcher
+
 	var jsonObject = make(map[string]interface{})
 
 	jsonErr := json.Unmarshal([]byte(contentMatcher), &jsonObject)
@@ -477,7 +502,15 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 		go e.parseMsg(completePacket, "sub", callbackChan)
 
-		<-callbackChan
+		select {
+
+			case _, ok := <-callbackChan:	
+
+				if ok{
+
+				}
+			break
+		}
 	}
 
 	go log.Println("Socket disconnected...")
@@ -546,10 +579,6 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 func (e *CreateProperties) parseMsg(message []byte, msgType string, callbackChan chan string){
 
-	if msgType == "sub"{
-		defer e.ReceiveSync.Done()
-	}
-
 	messageMap := make(map[string]interface{})
 
 	err := json.Unmarshal(message, &messageMap)
@@ -574,16 +603,11 @@ func (e *CreateProperties) parseMsg(message []byte, msgType string, callbackChan
 
 	if msgType == "sub"{
 
-		e.SubscribeMsg <- messageMap
+		SubscriberChannel <- messageMap
 
 		callbackChan <- "SUCCESS"
 
 	}
 
 	messageMap = nil
-}
-
-func (e *CreateProperties) GetSubscribeMessage(chann chan map[string]interface{}){
-
-	e.SubscribeMsg = chann
 }

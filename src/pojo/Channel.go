@@ -3,6 +3,7 @@ package pojo
 import(
 	"net"
 	"os"
+	"sync"
 )
 
 type ChannelStruct struct{
@@ -10,8 +11,12 @@ type ChannelStruct struct{
 	TableFD *os.File
 	Path string
 	Offset int64
-	Worker int16
+	Worker int
 	BucketData [] chan map[string]interface{}
+	WriteCallback chan bool
+	WriteOffsetCallback chan bool
+	WriteMongoCallback chan bool
+	sync.Mutex
 }
 
 type SocketDetails struct{

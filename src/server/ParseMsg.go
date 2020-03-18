@@ -10,15 +10,12 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"sync"
 	"ChannelList"
 	"MongoConnection"
 )
 
-var WriteCallback = make(chan bool)
-var FileWriteLock = &sync.RWMutex{}
 
-func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
+func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool, counterRequest *int){
 
 	defer ChannelList.Recover()
 
@@ -72,15 +69,11 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 
 		currentTime := time.Now()
 
-		epoch := currentTime.Unix()
-
 		nanoEpoch := currentTime.UnixNano()
 
 		var _id = strconv.FormatInt(nanoEpoch, 10)
 
 		messageMap["_id"] = _id
-
-		var indexNo = epoch % int64(ChannelList.TCPStorage[channelName].Worker)
 		
 		jsonData, err := json.Marshal(messageMap)
 
@@ -96,9 +89,11 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 		
 			go WriteData(jsonData, channelName, byteLen)
 
+			go WriteOffset(jsonData, channelName, byteLen, _id)
+
 			select {
 
-				case message, ok := <-WriteCallback:	
+				case message, ok := <-ChannelList.TCPStorage[channelName].WriteCallback:	
 					if ok{
 						
 						if !message{
@@ -106,15 +101,8 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 							return
 						}
 					}
-
-					break
-			}
-
-			go WriteOffset(jsonData, channelName, byteLen, _id)
-
-			select {
-
-				case message, ok := <-WriteCallback:	
+					
+				case message, ok := <-ChannelList.TCPStorage[channelName].WriteOffsetCallback:	
 					if ok{
 						
 						if !message{
@@ -122,9 +110,8 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 							return
 						}
 					}		
-
-					break
 			}
+
 		}
 
 		if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
@@ -135,7 +122,7 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 
 			select {
 
-				case message, ok := <-WriteCallback:	
+				case message, ok := <-ChannelList.TCPStorage[channelName].WriteMongoCallback:	
 					if ok{
 						
 						if !message{
@@ -149,7 +136,14 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool){
 
 		messageMap["conn"] = conn
 
-		ChannelList.TCPStorage[channelName].BucketData[indexNo] <- messageMap
+		if *counterRequest == ChannelList.TCPStorage[channelName].Worker{
+
+			*counterRequest = 0
+		}
+
+		ChannelList.TCPStorage[channelName].BucketData[*counterRequest] <- messageMap
+
+		*counterRequest += 1
 
 		parseChan <- true
 
@@ -254,9 +248,9 @@ func WriteMongodbData(_id int64, agentName string, jsonData []byte, channelName 
 	var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
 
 	if !status{
-		WriteCallback <- false
+		ChannelList.TCPStorage[channelName].WriteMongoCallback <- false
 	}else{
-		WriteCallback <- true
+		ChannelList.TCPStorage[channelName].WriteMongoCallback <- true
 	}
 }
 
@@ -264,7 +258,7 @@ func WriteData(jsonData []byte, channelName string, byteLen int){
 
 	defer ChannelList.Recover()
 
-	FileWriteLock.Lock()
+	ChannelList.TCPStorage[channelName].Lock()
 
 	var packetBuffer bytes.Buffer
 
@@ -278,22 +272,22 @@ func WriteData(jsonData []byte, channelName string, byteLen int){
  
 	_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
 
-	FileWriteLock.Unlock()
+	ChannelList.TCPStorage[channelName].Unlock()
 	
 	if (err != nil && err != io.EOF ){
 		go ChannelList.WriteLog(err.Error())
-		WriteCallback <- false
+		ChannelList.TCPStorage[channelName].WriteCallback <- false
 		return
 	}
 
-	WriteCallback <- true	
+	ChannelList.TCPStorage[channelName].WriteCallback <- true	
 }
 
 func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 
 	defer ChannelList.Recover()
 	
-	FileWriteLock.Lock()
+	ChannelList.TCPStorage[channelName].Lock()
 
 	var byteSize = (byteLen + 4)
 
@@ -314,15 +308,15 @@ func WriteOffset(jsonData []byte, channelName string, byteLen int, _id string){
 
 	_, err := ChannelList.TCPStorage[channelName].TableFD.Write(packetBuffer.Bytes())
 
-	FileWriteLock.Unlock()
+	ChannelList.TCPStorage[channelName].Unlock()
 
 	if (err != nil && err != io.EOF){
 
 		go ChannelList.WriteLog(err.Error())
 
-		WriteCallback <- false
+		ChannelList.TCPStorage[channelName].WriteOffsetCallback <- false
 
 	}
 
-	WriteCallback <- true
+	ChannelList.TCPStorage[channelName].WriteOffsetCallback <- true
 }

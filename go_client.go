@@ -5,7 +5,7 @@ import(
 	"time"
 	_"fmt"
 	_"sync"
-	"runtime"
+	_"runtime"
 	"log"
 )
 
@@ -20,7 +20,7 @@ func main(){
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"producer",
-		Worker:runtime.NumCPU(),
+		Worker:0, //runtime.NumCPU()
 		PoolSize:10,
 	}
 
@@ -110,22 +110,14 @@ func main(){
 		
 	}
 
-	var total = 0
-
-	for{
-
-		total += 1
-
-		if(total == 10000){
-			break
-		}
-
-	}
-
 	// Code to measure
 	duration := time.Since(start)
     // Formatted string, such as "2h3m0.5s" or "4.503μs"
 	log.Println(duration)
+
+	for{
+
+	}
 }
 
 func subscribe(){
@@ -152,18 +144,20 @@ func subscribe(){
 
 	brahm.Subscribe(cm)
 
-	var msgChan = make(chan map[string]interface{})
-
-	go brahm.GetSubscribeMessage(msgChan)
+	// var count = 0
 
 	for{
 		select{
-			case chanCallback, ok := <-msgChan:	
+			case msg, ok := <-brahmaputra.SubscriberChannel:	
 				if ok{
-					
-					log.Println(chanCallback)
+						
+					// count += 1 
+						
+					log.Println(msg)
+
 				}	
-				break
+
+			break
 		}
 	}
 

@@ -44,7 +44,7 @@ func LoadTCPChannelsToMemory(){
 
 			if channelMap["type"] == "channel" && channelMap["channelType"] == "tcp"{
 
-				var worker = int16(channelMap["worker"].(float64))
+				var worker = int(channelMap["worker"].(float64))
 
 				var bucketData  = make([]chan map[string]interface{}, worker)
 
@@ -59,6 +59,9 @@ func LoadTCPChannelsToMemory(){
 					Offset:int64(0),
 					Worker: worker,
 					BucketData: bucketData,
+					WriteCallback:make(chan bool),
+					WriteOffsetCallback:make(chan bool),
+					WriteMongoCallback:make(chan bool),
 				}
 
 				if *ChannelList.ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{

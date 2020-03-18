@@ -34,15 +34,11 @@ func main() {
 
 	brahm.Subscribe(cm)
 
-	var msgChan = make(chan map[string]interface{})
-
-	brahm.GetSubscribeMessage(msgChan)
-
 	var count = 0
 
 	for{
 		select{
-			case _, ok := <-msgChan:	
+			case _, ok := <-brahmaputra.SubscriberChannel:	
 				if ok{
 						
 					count += 1 

@@ -29,6 +29,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	parseChan := make(chan bool, 1)
 
+	var counterRequest = 0
+
 	for {
 
 		if closeTCP{
@@ -58,7 +60,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		var message = string(completePacket)
 
-		go ParseMsg(message, conn, parseChan)
+		go ParseMsg(message, conn, parseChan, &counterRequest)
 
 		select {
 
@@ -67,7 +69,6 @@ func HandleRequest(conn net.TCPConn) {
 				if ok{
 
 				}
-			break
 		}
 	}
 

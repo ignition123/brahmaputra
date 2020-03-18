@@ -36,7 +36,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 		time.Sleep(100)
 
-		go func(BucketData chan map[string]interface{}, channelName string){
+		go func(index int, BucketData chan map[string]interface{}, channelName string){
 
 			defer ChannelList.Recover()
 
@@ -54,11 +54,11 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 							var subchannelName = message["channelName"].(string)
 
-							if(channelName == subchannelName && channelName != "heart_beat"){	
+							if(channelName == subchannelName && channelName != "heart_beat"){
 
 								var conn = message["conn"].(net.TCPConn)
 
-								delete(message, "conn")
+								delete(message, "conn")	
 
 								go e.sendMessageToClient(conn, message, channelName, waitChan)
 
@@ -78,7 +78,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 				}		
 			}
 
-		}(ChannelList.TCPStorage[channelName].BucketData[index], channelName)
+		}(index, ChannelList.TCPStorage[channelName].BucketData[index], channelName)
 	}
 }
 
@@ -89,6 +89,18 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 	ackChan := make(chan bool, 1)
 	subsChan := make(chan bool, 1)
 
+	go e.SendAck(message, conn, ackChan)
+
+	select {
+
+		case _, ok := <-ackChan:	
+
+			if ok{
+
+			}
+		break
+	}
+
 	for index := range ChannelList.TCPSocketDetails[channelName]{
 
 		var packetBuffer bytes.Buffer
@@ -97,7 +109,40 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 			break
 		} 
 
-		if ChannelList.TCPSocketDetails[channelName][index].ContentMatcher == nil{
+		var cm = ChannelList.TCPSocketDetails[channelName][index].ContentMatcher
+
+		var matchFound = true
+
+		var messageData = message["data"].(map[string]interface{})
+
+
+		if _, found := cm["$and"]; found {
+		    
+		    matchFound = AndMatch(messageData, cm)
+
+		}else if _, found := cm["$or"]; found {
+
+			matchFound = OrMatch(messageData, cm)
+
+		}else if _, found := cm["$eq"]; found {
+
+			if cm["$eq"] == "all"{
+
+				matchFound = true
+
+			}else{
+
+				matchFound = false
+
+			}
+
+		}else{
+
+			matchFound = false
+
+		}
+
+		if matchFound == true{
 
 			jsonData, err := json.Marshal(message)
 
@@ -123,84 +168,8 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 					}
 				break
 			}
-
-		}else{
-
-			var cm = ChannelList.TCPSocketDetails[channelName][index].ContentMatcher
-
-			var matchFound = true
-
-			var messageData = message["data"].(map[string]interface{})
-
-
-			if _, found := cm["$and"]; found {
-			    
-			    matchFound = AndMatch(messageData, cm)
-
-			}else if _, found := cm["$or"]; found {
-
-				matchFound = OrMatch(messageData, cm)
-
-			}else if _, found := cm["$eq"]; found {
-
-				if cm["$eq"] == "all"{
-
-					matchFound = true
-
-				}else{
-
-					matchFound = false
-
-				}
-
-			}else{
-
-				matchFound = false
-
-			}
-
-			if matchFound == true{
-
-				jsonData, err := json.Marshal(message)
-
-				if err != nil{
-					go ChannelList.WriteLog(err.Error())
-					break
-				}
-
-				sizeBuff := make([]byte, 4)
-
-				binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
-				packetBuffer.Write(sizeBuff)
-				packetBuffer.Write(jsonData)
-
-				go e.send(channelName, index, packetBuffer, subsChan)
-
-				select {
-
-					case _, ok := <-subsChan:	
-
-						if ok{
-
-						}
-					break
-				}
-			}
-
 		}
 
-	}
-
-	go e.SendAck(message, conn, ackChan)
-
-	select {
-
-		case _, ok := <-ackChan:	
-
-			if ok{
-
-			}
-		break
 	}
 
 	waitChan <- true
@@ -211,7 +180,7 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 	defer ChannelList.Recover()
 
 	var totalRetry = 0
-	
+
 	RETRY:
 
 	if len(ChannelList.TCPSocketDetails[channelName]) > index{
@@ -240,9 +209,14 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 			goto RETRY
 
 		}
-	}
 
-	callback <- true
+		callback <- true
+
+	}else{
+
+		callback <- false
+
+	}
 
 }
 
