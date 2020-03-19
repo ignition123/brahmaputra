@@ -76,7 +76,7 @@ func main(){
 
 	// var parseWait1 sync.WaitGroup
 
-	var channel = make(chan int)
+	var channel = make(chan bool, 1)
 
 	start := time.Now()
 	
@@ -84,17 +84,7 @@ func main(){
 
 		// parseWait.Add(1)
 
-		go func(channel chan int, i int){
-
-			// log.Println(i)
-
-			brahm.Publish(bodyMap)
-
-			channel <- i
-
-			// wg.Done()
-
-		}(channel, i)
+		go brahm.Publish(bodyMap, channel)
 
 		select {
 

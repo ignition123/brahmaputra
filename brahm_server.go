@@ -60,7 +60,6 @@ func main(){
 		runConfigFile(*serverRun, *channelType)
 	}else if *channelName != "default"{
 		createChannel(*path, *channelName, *channelType)
-		createChannelTable(*path, *channelName, *channelType)
 	}else{
 		log.Println(`
 			possible commands:
@@ -84,9 +83,6 @@ func cleanupAllTheThings(){
 
 		log.Println("Closing storage files of the channel "+ key+"...")
 		ChannelList.TCPStorage[key].FD.Close()
-
-		log.Println("Closing table files of the channel "+ key+"...")
-		ChannelList.TCPStorage[key].TableFD.Close()
 	}
 }
 
@@ -166,18 +162,17 @@ func createChannel(path string, channelName string, channelType string){
 
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
+			storage[channelName]["channelStorageType"] = "persistent"
 			storage[channelName]["path"] = filePath
 			storage[channelName]["worker"] = 1
-			storage[channelName]["table"] = path+"\\"+channelName+".tbl"
 			storage[channelName]["channelType"] = channelType
 		}else if channelType == "udp"{
 			storage[channelName] = make(map[string]interface{})
-
 			storage[channelName]["channelName"] = channelName
 			storage[channelName]["type"] = "channel"
+			storage[channelName]["channelStorageType"] = "inmemory"
 			storage[channelName]["path"] = filePath
 			storage[channelName]["worker"] = 1
-			storage[channelName]["table"] = path+"\\"+channelName+".tbl"
 			storage[channelName]["channelType"] = channelType
 		}else{
 			log.Println("Invalid protocol, must be either tcp or udp...")
@@ -205,50 +200,6 @@ func createChannel(path string, channelName string, channelType string){
 		}
 
 		log.Println("Channel created successfully...")
-
-	}else{
-	  
-		log.Println("Error")
-
-	}
-
-}
-
-func createChannelTable(path string, channelName string, channelType string){
-
-	defer ChannelList.Recover()
-	
-	if path == "default"{
-		log.Println("Please set a path for the channel storage...")
-		return
-	}
-
-	var filePath = path+"/"+channelName+".tbl";
-
-	if _, err := os.Stat(filePath); err == nil{
-
-	  	log.Println("Table already exists with name : "+channelName+"...")
-		return
-
-	}else if os.IsNotExist(err){
-
-		if channelType != "tcp" && channelType != "udp"{
-			log.Println("Table must be either tcp or udp...")
-			return
-		}
-
-		fDes, err := os.Create(filePath)
-
-		if err != nil{
-
-			log.Println(err)
-			return
-
-		}
-
-		defer fDes.Close()
-
-		log.Println("Table created successfully...")
 
 	}else{
 	  

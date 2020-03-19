@@ -27,6 +27,8 @@ func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
 
+	defer conn.Close()
+
 	parseChan := make(chan bool, 1)
 
 	var counterRequest = 0
@@ -71,8 +73,6 @@ func HandleRequest(conn net.TCPConn) {
 				}
 		}
 	}
-
-	conn.Close()
 }
 
 func ShowUtilization(){

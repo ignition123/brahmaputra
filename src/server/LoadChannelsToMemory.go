@@ -7,6 +7,7 @@ import(
 	"pojo"
 	"os"
 	"ChannelList"
+	_"log"
 )
 
 func LoadTCPChannelsToMemory(){
@@ -55,18 +56,19 @@ func LoadTCPChannelsToMemory(){
 				var channelName = channelMap["channelName"].(string)
 
 				var channelObject = &pojo.ChannelStruct{
-					Path: channelMap["path"].(string),
 					Offset:int64(0),
 					Worker: worker,
 					BucketData: bucketData,
 					WriteCallback:make(chan bool),
-					WriteOffsetCallback:make(chan bool),
 					WriteMongoCallback:make(chan bool),
+					ChannelStorageType: channelMap["channelStorageType"].(string),
 				}
 
 				if *ChannelList.ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{
-					channelObject = openDataFile("tcp", channelObject, channelMap)
-					channelObject = openTableFile("tcp", channelObject, channelMap)
+
+					if channelObject.ChannelStorageType == "persistent"{
+						channelObject = openDataFile("tcp", channelObject, channelMap)
+					}
 				}
 
 				ChannelList.TCPStorage[channelName] = channelObject
@@ -84,7 +86,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 	if protocol == "tcp"{
 
 		f, err := os.OpenFile(channelMap["path"].(string),
-			os.O_APPEND|os.O_RDWR, 0700)
+			os.O_APPEND|os.O_WRONLY, 0700)
 
 		if err != nil {
 			ChannelList.WriteLog(err.Error())
@@ -92,31 +94,8 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 		}
 
 		channelObject.FD = f
-
-	}else if protocol == "udp"{
-
-
-	}
-
-	return channelObject
-}
-
-func openTableFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
-
-	defer ChannelList.Recover()
-	
-	if protocol == "tcp"{
-
-		f, err := os.OpenFile(channelMap["table"].(string),
-			os.O_APPEND|os.O_RDWR, 0700)
-
-		if err != nil {
-			ChannelList.WriteLog(err.Error())
-			return channelObject
-		}
-
-		channelObject.TableFD = f
-
+		channelObject.Path = channelMap["path"].(string)
+		
 	}else if protocol == "udp"{
 
 

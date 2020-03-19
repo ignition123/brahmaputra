@@ -139,9 +139,21 @@ func (e *CreateProperties) Connect(){
 
 	if len(e.requestPull) > 0{
 
+		var chancb = make(chan bool, 1)
+
 		for _, bodyMap := range e.requestPull{
 
-			e.Publish(bodyMap)
+			go e.Publish(bodyMap, chancb)
+
+			select {
+
+				case _, ok := <-chancb :	
+
+					if ok{
+
+					}
+				break
+			}
 		}
 
 	}
@@ -264,13 +276,15 @@ func (e *CreateProperties) createConnection() net.Conn{
 	return conn
 }
 
-func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
+func (e *CreateProperties) Publish(bodyBB map[string]interface{}, channcb chan bool){
 
 	if !e.connectStatus{
 
 		go log.Println("Connection lost...")
 
 		e.requestPull = append(e.requestPull, bodyBB)
+
+		channcb <- false
 
 		return
 
@@ -285,7 +299,11 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 		}
 
 		if e.roundRobin >= e.PoolSize{
+
+			channcb <- false
+
 			return
+
 		}
 		
 		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
@@ -318,6 +336,7 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}){
 
 	}
 
+	channcb <- true
 }
 
 func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Conn){

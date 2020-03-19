@@ -1,7 +1,6 @@
 package server
 
 import(
-	_"pojo"
 	"encoding/json"
 	"bytes"
 	"encoding/binary"
@@ -10,6 +9,7 @@ import(
 	"ChannelList"
 	"time"
 	"net"
+	"os"
 )
 
 type ChannelMethods struct{
@@ -42,7 +42,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 			defer close(BucketData)
 
-			var waitChan = make(chan bool, 1)
+			var cbChan = make(chan bool, 1)
 
 			for{
 
@@ -60,21 +60,22 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 								delete(message, "conn")	
 
-								go e.sendMessageToClient(conn, message, channelName, waitChan)
+								if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-								select {
+									go e.SendAck(message, conn, cbChan)
 
-									case _, ok := <-waitChan :	
+									<-cbChan
 
-										if ok{
+								}else{
 
-										}
-									break
+									go e.sendMessageToClient(conn, message, channelName, cbChan)
+
+									<-cbChan
+
 								}
-
 							}
 						}		
-						break
+					break
 				}		
 			}
 
@@ -82,7 +83,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
-func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, waitChan chan bool){
+func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, cbChan chan bool){
 
 	defer ChannelList.Recover()
 
@@ -157,7 +158,7 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 			packetBuffer.Write(sizeBuff)
 			packetBuffer.Write(jsonData)
 
-			go e.send(channelName, index, packetBuffer, subsChan)
+			go e.sendInMemory(channelName, index, packetBuffer, subsChan)
 
 			select {
 
@@ -172,10 +173,10 @@ func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[strin
 
 	}
 
-	waitChan <- true
+	cbChan <- true
 }
 
-func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.Buffer, callback chan bool){ 
+func (e *ChannelMethods) sendInMemory(channelName string, index int, packetBuffer bytes.Buffer, callback chan bool){ 
 
 	defer ChannelList.Recover()
 
@@ -220,7 +221,197 @@ func (e *ChannelMethods) send(channelName string, index int, packetBuffer bytes.
 
 }
 
-func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCPConn, callback chan bool){
+func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int64, channelName string, cursor int64){
+
+	file, err := os.Open(ChannelList.TCPStorage[channelName].Path)
+
+	defer file.Close()
+
+	if err != nil {
+		go ChannelList.WriteLog(err.Error())
+		return
+	}
+
+	var sentMsg = make(chan bool)
+
+	var exitLoop = false
+
+	RETRY:
+
+	for{
+
+		if exitLoop{
+
+			break
+		}
+
+		fileStat, err := os.Stat(ChannelList.TCPStorage[channelName].Path)
+ 
+		if err != nil {
+			go ChannelList.WriteLog(err.Error())
+			break
+		}
+
+		if cursor < fileStat.Size(){
+
+			data := make([]byte, 4)
+
+			count, err := file.ReadAt(data, cursor)
+
+			if err != nil {
+
+				continue
+
+			}
+
+			if count > 0{
+
+				cursor += 4
+
+				var packetSize = binary.LittleEndian.Uint32(data)
+
+				restPacket := make([]byte, packetSize)
+
+				packetCount, errPacket := file.ReadAt(restPacket, cursor)
+
+				if errPacket != nil{
+
+					continue
+
+				}
+
+				if packetCount > 0{
+
+					cursor += int64(packetSize)
+
+					message := make(map[string]interface{})
+
+					errJson := json.Unmarshal(restPacket, &message)
+
+					if errJson != nil{
+						
+						continue
+
+					}
+
+					var matchFound = true
+
+					var messageData = message["data"].(map[string]interface{})
+
+
+					if _, found := cm["$and"]; found {
+					    
+					    matchFound = AndMatch(messageData, cm)
+
+					}else if _, found := cm["$or"]; found {
+
+						matchFound = OrMatch(messageData, cm)
+
+					}else if _, found := cm["$eq"]; found {
+
+						if cm["$eq"] == "all"{
+
+							matchFound = true
+
+						}else{
+
+							matchFound = false
+
+						}
+
+					}else{
+
+						matchFound = false
+
+					}
+
+					if matchFound == true{
+
+						sizeBuff := make([]byte, 4)
+
+						var packetBuffer bytes.Buffer
+
+						binary.LittleEndian.PutUint32(sizeBuff, uint32(len(restPacket)))
+						packetBuffer.Write(sizeBuff)
+						packetBuffer.Write(restPacket)
+
+						go send(conn, channelName, packetBuffer, sentMsg)
+
+						select{
+							case message, ok := <-sentMsg:	
+								if ok{
+
+									if !message{
+										exitLoop = true
+									}else{
+										exitLoop = false
+									}
+
+								}
+
+								break
+						}
+					}
+
+				}else{
+
+					time.Sleep(1 * time.Second)
+
+				}
+
+			}else{
+
+				time.Sleep(1 * time.Second)
+			}
+
+		}else{
+
+			time.Sleep(1 * time.Second)
+		}
+	}
+		
+
+	time.Sleep(5 * time.Second)
+
+	goto RETRY
+
+}
+
+func send(conn net.TCPConn, channelName string, packetBuffer bytes.Buffer, sentMsg chan bool){ 
+
+	defer ChannelList.Recover()
+
+	var totalRetry = 0
+
+	RETRY:
+
+	totalRetry += 1
+
+	if totalRetry > 5{
+
+		sentMsg <- false
+
+		return
+
+	}
+
+	_, err := conn.Write(packetBuffer.Bytes())
+	
+	if err != nil {
+	
+		go ChannelList.WriteLog(err.Error())
+
+		time.Sleep(1 * time.Second)
+
+		goto RETRY
+
+	}
+
+	sentMsg <- true
+
+}
+
+func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCPConn, ackChan chan bool){
 
 	defer ChannelList.Recover()
 
@@ -232,9 +423,9 @@ func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCP
 
 	if err != nil{
 
-		callback <- false
-
 		go ChannelList.WriteLog(err.Error())
+
+		ackChan <- false
 
 		return
 	}
@@ -253,12 +444,13 @@ func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCP
 
 	if err != nil{
 
-		callback <- false
-
 		go ChannelList.WriteLog(err.Error())
+
+		ackChan <- false
 
 		return
 	}
 
-	callback <- true
+	ackChan <- true
+
 }
