@@ -33,6 +33,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	var counterRequest = 0
 
+	var quitChannel = false
+
 	for {
 
 		if closeTCP{
@@ -41,11 +43,11 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 		
-		sizeBuf := make([]byte, 4)
+		sizeBuf := make([]byte, 8)
 
 		conn.Read(sizeBuf)
 
-		packetSize := binary.LittleEndian.Uint32(sizeBuf)
+		packetSize := binary.BigEndian.Uint64(sizeBuf)
 
 		if packetSize < 0 {
 			continue
@@ -60,19 +62,12 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		var message = string(completePacket)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, quitChannel)
 
-		go ParseMsg(message, conn, parseChan, &counterRequest)
-
-		select {
-
-			case _, ok := <-parseChan:	
-
-				if ok{
-
-				}
-		}
+		<-parseChan
 	}
+
+	quitChannel = true
 }
 
 func ShowUtilization(){

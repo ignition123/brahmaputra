@@ -1,15 +1,9 @@
-/*
-A very simple TCP client written in Go.
-This is a toy project that I used to learn the fundamentals of writing
-Go code and doing some really basic network stuff.
-Maybe it will be fun for you to read. It's not meant to be
-particularly idiomatic, or well-written for that matter.
-*/
 package main
 
 import (
 	"brahmaputra"
 	"log"
+	"time"
 )
 
 
@@ -22,6 +16,8 @@ func main() {
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"consumer",
+		OffsetPath:"D:\\pounze_go_project\\brahmaputra\\subscriber_offset.offset", //writes last offset received
+		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
 	}
 
 	brahm.Connect()
@@ -34,16 +30,18 @@ func main() {
 
 	brahm.Subscribe(cm)
 
-	var count = 0
+	time.Sleep(2 * time.Second)
+
+	// var count = 0
 
 	for{
 		select{
-			case _, ok := <-brahmaputra.SubscriberChannel:	
+			case message, ok := <-brahmaputra.SubscriberChannel:	
 				if ok{
 						
-					count += 1 
+					// count += 1 
 						
-					log.Println(count)
+					log.Println(message)
 
 				}	
 

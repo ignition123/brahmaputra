@@ -20,7 +20,7 @@ var commandLineMap = make(map[string]interface{})
 
 func main(){
 
-	defer ChannelList.Recover()
+	// defer ChannelList.Recover()
 
 	sigs := make(chan os.Signal, 1)
 
@@ -75,7 +75,7 @@ func main(){
 
 func cleanupAllTheThings(){
 
-	defer ChannelList.Recover()
+	// defer ChannelList.Recover()
 
 	for key := range ChannelList.TCPStorage{
 
@@ -88,7 +88,7 @@ func cleanupAllTheThings(){
 
 func runConfigFile(configPath string, channelType string){
 	
-	defer ChannelList.Recover()
+	// defer ChannelList.Recover()
 
 	data, err := ioutil.ReadFile(configPath)
 
@@ -123,7 +123,7 @@ func runConfigFile(configPath string, channelType string){
 
 func createChannel(path string, channelName string, channelType string){
 
-	defer ChannelList.Recover()
+	// defer ChannelList.Recover()
 
 	if path == "default"{
 		log.Println("Please set a path for the channel storage...")

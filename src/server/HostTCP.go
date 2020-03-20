@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"time"
-	"MongoConnection"
 	"ChannelList"
 )
 
@@ -19,11 +18,6 @@ func HostTCP(configObj pojo.Config){
 	defer ChannelList.Recover()
 
 	ChannelList.ConfigTCPObj = configObj
-
-	if !ConnectStorage(){
-		ChannelList.WriteLog("Unable to connect to storage...")
-		return
-	}
 
 	var channelMethod = &ChannelMethods{}
 
@@ -79,28 +73,4 @@ func HostTCPServer(){
 
 		go HandleRequest(*tcp)
 	}
-}
-
-
-func ConnectStorage() bool{
-
-	defer ChannelList.Recover()
-	
-	if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
-		
-		if(!MongoConnection.Connect()){
-			
-			log.Println("Failed to connect Mongodb")
-
-			return false
-		}
-
-		if !MongoConnection.SetupCollection(){
-			return false
-		}
-
-	}
-	
-	return true
-
 }

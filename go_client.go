@@ -7,11 +7,10 @@ import(
 	_"sync"
 	_"runtime"
 	"log"
+	"encoding/json"
 )
 
 func main(){
-
-	
 
 	var brahm = &brahmaputra.CreateProperties{
 		Host:"127.0.0.1",
@@ -21,7 +20,7 @@ func main(){
 		ChannelName:"Abhik",
 		AppType:"producer",
 		Worker:0, //runtime.NumCPU()
-		PoolSize:10,
+		PoolSize:1,
 	}
 
 	brahm.Connect()
@@ -70,6 +69,18 @@ func main(){
 	bodyMap1["DripSize"] = 0.0
 	bodyMap1["Number"] = 10
 
+	jsonByte, err := json.Marshal(bodyMap)
+
+	// log.Println(len(jsonByte))
+
+	if err != nil{
+
+		log.Println(err)
+
+		return
+	}
+	
+
 	// go subscribe()
 
 	// var parseWait sync.WaitGroup
@@ -84,7 +95,7 @@ func main(){
 
 		// parseWait.Add(1)
 
-		go brahm.Publish(bodyMap, channel)
+		go brahm.Publish(jsonByte, channel)
 
 		select {
 

@@ -11,9 +11,8 @@ type ChannelStruct struct{
 	Path string
 	Offset int64
 	Worker int
-	BucketData [] chan map[string]interface{}
+	BucketData [] chan *PacketStruct
 	WriteCallback chan bool
-	WriteMongoCallback chan bool
 	ChannelLock sync.RWMutex
 	ChannelStorageType string
 }

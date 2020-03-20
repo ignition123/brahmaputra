@@ -1,8 +1,6 @@
 package server
 
 import(
-	"encoding/json"
-	"bytes"
 	"encoding/binary"
 	"sync"
 	_"log"
@@ -10,10 +8,12 @@ import(
 	"time"
 	"net"
 	"os"
+	"ByteBuffer"
+	"pojo"
 )
 
 type ChannelMethods struct{
-	sync.RWMutex
+	sync.Mutex
 }
 
 func (e *ChannelMethods) GetChannelData(){
@@ -36,7 +36,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 		time.Sleep(100)
 
-		go func(index int, BucketData chan map[string]interface{}, channelName string){
+		go func(index int, BucketData chan *pojo.PacketStruct, channelName string){
 
 			defer ChannelList.Recover()
 
@@ -52,23 +52,19 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 						if ok{
 
-							var subchannelName = message["channelName"].(string)
+							var subchannelName = message.ChannelName
 
 							if(channelName == subchannelName && channelName != "heart_beat"){
 
-								var conn = message["conn"].(net.TCPConn)
-
-								delete(message, "conn")	
-
 								if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-									go e.SendAck(message, conn, cbChan)
+									go e.SendAck(*message, cbChan)
 
 									<-cbChan
 
 								}else{
 
-									go e.sendMessageToClient(conn, message, channelName, cbChan)
+									go e.sendMessageToClient(*message, cbChan)
 
 									<-cbChan
 
@@ -83,108 +79,75 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
-func (e *ChannelMethods) sendMessageToClient(conn net.TCPConn, message map[string]interface{}, channelName string, cbChan chan bool){
+func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, cbChan chan bool){
 
 	defer ChannelList.Recover()
 
 	ackChan := make(chan bool, 1)
 	subsChan := make(chan bool, 1)
 
-	go e.SendAck(message, conn, ackChan)
+	go e.SendAck(message, ackChan)
 
-	select {
+	<-ackChan
 
-		case _, ok := <-ackChan:	
+	for index := range ChannelList.TCPSocketDetails[message.ChannelName]{
 
-			if ok{
-
-			}
-		break
-	}
-
-	for index := range ChannelList.TCPSocketDetails[channelName]{
-
-		var packetBuffer bytes.Buffer
-
-		if len(ChannelList.TCPSocketDetails[channelName]) <= index{
+		if len(ChannelList.TCPSocketDetails[message.ChannelName]) <= index{
 			break
 		} 
 
-		var cm = ChannelList.TCPSocketDetails[channelName][index].ContentMatcher
-
-		var matchFound = true
-
-		var messageData = message["data"].(map[string]interface{})
-
-
-		if _, found := cm["$and"]; found {
-		    
-		    matchFound = AndMatch(messageData, cm)
-
-		}else if _, found := cm["$or"]; found {
-
-			matchFound = OrMatch(messageData, cm)
-
-		}else if _, found := cm["$eq"]; found {
-
-			if cm["$eq"] == "all"{
-
-				matchFound = true
-
-			}else{
-
-				matchFound = false
-
-			}
-
-		}else{
-
-			matchFound = false
-
+		var byteBuffer = ByteBuffer.Buffer{
+			Endian:"big",
 		}
 
-		if matchFound == true{
+		var totalByteLen = 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
 
-			jsonData, err := json.Marshal(message)
+		byteBuffer.PutLong(totalByteLen) // total packet length
 
-			if err != nil{
-				go ChannelList.WriteLog(err.Error())
-				break
-			}
+		byteBuffer.PutShort(message.MessageTypeLen) // total message type length
 
-			sizeBuff := make([]byte, 4)
+		byteBuffer.Put([]byte(message.MessageType)) // message type value
 
-			binary.LittleEndian.PutUint32(sizeBuff, uint32(len(jsonData)))
-			packetBuffer.Write(sizeBuff)
-			packetBuffer.Write(jsonData)
+		byteBuffer.PutShort(message.ChannelNameLen) // total channel name length
 
-			go e.sendInMemory(channelName, index, packetBuffer, subsChan)
+		byteBuffer.Put([]byte(message.ChannelName)) // channel name value
 
-			select {
+		byteBuffer.PutShort(message.Producer_idLen) // producerid length
 
-				case _, ok := <-subsChan:	
+		byteBuffer.Put([]byte(message.Producer_id)) // producerid value
 
-					if ok{
+		byteBuffer.PutShort(message.AgentNameLen) // agentName length
 
-					}
-				break
-			}
-		}
+		byteBuffer.Put([]byte(message.AgentName)) // agentName value
+
+		byteBuffer.PutLong(int(message.Id)) // backend offset
+
+		byteBuffer.PutLong(0) // total bytes subscriber packet received
+
+		byteBuffer.Put(message.BodyBB) // actual body
+
+		go e.sendInMemory(message, index, byteBuffer, subsChan)
+
+		<-subsChan
 
 	}
 
 	cbChan <- true
 }
 
-func (e *ChannelMethods) sendInMemory(channelName string, index int, packetBuffer bytes.Buffer, callback chan bool){ 
+func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, packetBuffer ByteBuffer.Buffer, callback chan bool){ 
 
 	defer ChannelList.Recover()
+
+	e.Lock()
+
+	defer e.Unlock()
 
 	var totalRetry = 0
 
 	RETRY:
 
-	if len(ChannelList.TCPSocketDetails[channelName]) > index{
+	if len(ChannelList.TCPSocketDetails[message.ChannelName]) > index{
 
 		totalRetry += 1
 
@@ -196,16 +159,16 @@ func (e *ChannelMethods) sendInMemory(channelName string, index int, packetBuffe
 
 		}
 
-		_, err := ChannelList.TCPSocketDetails[channelName][index].Conn.Write(packetBuffer.Bytes())
+		_, err := ChannelList.TCPSocketDetails[message.ChannelName][index].Conn.Write(packetBuffer.Array())
 		
 		if err != nil {
 		
 			go ChannelList.WriteLog(err.Error())
 
-			var channelArray = ChannelList.TCPSocketDetails[channelName]
+			var channelArray = ChannelList.TCPSocketDetails[message.ChannelName]
 			copy(channelArray[index:], channelArray[index+1:])
 			channelArray[len(channelArray)-1] = nil
-			ChannelList.TCPSocketDetails[channelName] = channelArray[:len(channelArray)-1]
+			ChannelList.TCPSocketDetails[message.ChannelName] = channelArray[:len(channelArray)-1]
 
 			goto RETRY
 
@@ -221,7 +184,10 @@ func (e *ChannelMethods) sendInMemory(channelName string, index int, packetBuffe
 
 }
 
-func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int64, channelName string, cursor int64){
+
+func SubscribeChannel(conn net.TCPConn, channelName string, cursor int64, quitChannel bool){
+
+	defer ChannelList.Recover()
 
 	file, err := os.Open(ChannelList.TCPStorage[channelName].Path)
 
@@ -232,15 +198,15 @@ func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int6
 		return
 	}
 
-	var sentMsg = make(chan bool)
+	var sentMsg = make(chan bool, 1)
+
+	defer close(sentMsg)
 
 	var exitLoop = false
 
-	RETRY:
-
 	for{
 
-		if exitLoop{
+		if exitLoop || quitChannel{
 
 			break
 		}
@@ -252,9 +218,15 @@ func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int6
 			break
 		}
 
+		if cursor == -1{
+
+			cursor = fileStat.Size()
+
+		}
+
 		if cursor < fileStat.Size(){
 
-			data := make([]byte, 4)
+			data := make([]byte, 8)
 
 			count, err := file.ReadAt(data, cursor)
 
@@ -266,13 +238,13 @@ func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int6
 
 			if count > 0{
 
-				cursor += 4
+				cursor += 8
 
-				var packetSize = binary.LittleEndian.Uint32(data)
+				var packetSize = binary.BigEndian.Uint64(data)
 
 				restPacket := make([]byte, packetSize)
 
-				packetCount, errPacket := file.ReadAt(restPacket, cursor)
+				totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
 
 				if errPacket != nil{
 
@@ -280,77 +252,89 @@ func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int6
 
 				}
 
-				if packetCount > 0{
+				if totalByteLen > 0{
 
 					cursor += int64(packetSize)
 
-					message := make(map[string]interface{})
-
-					errJson := json.Unmarshal(restPacket, &message)
-
-					if errJson != nil{
-						
-						continue
-
+					var byteFileBuffer = ByteBuffer.Buffer{
+						Endian:"big",
 					}
 
-					var matchFound = true
+					byteFileBuffer.Wrap(restPacket)
 
-					var messageData = message["data"].(map[string]interface{})
+					var messageTypeByte = byteFileBuffer.GetShort()
+					var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+					var messageType = byteFileBuffer.Get(messageTypeLen)
 
+					var channelNameByte = byteFileBuffer.GetShort()
+					var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+					var channelName = byteFileBuffer.Get(channelNameLen)
 
-					if _, found := cm["$and"]; found {
-					    
-					    matchFound = AndMatch(messageData, cm)
+					var producer_idByte = byteFileBuffer.GetShort()
+					var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+					var producer_id = byteFileBuffer.Get(producer_idLen)
 
-					}else if _, found := cm["$or"]; found {
+					var agentNameByte  = byteFileBuffer.GetShort()
+					var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+					var agentName = byteFileBuffer.Get(agentNameLen)
 
-						matchFound = OrMatch(messageData, cm)
+					var idByte = byteFileBuffer.GetLong()
+					var id = binary.BigEndian.Uint64(idByte)
 
-					}else if _, found := cm["$eq"]; found {
+					var bodyPacketSize = int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
 
-						if cm["$eq"] == "all"{
+					var bodyBB = byteFileBuffer.Get(int(bodyPacketSize))
 
-							matchFound = true
+					var newTotalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 8 + len(bodyBB)
 
-						}else{
-
-							matchFound = false
-
-						}
-
-					}else{
-
-						matchFound = false
-
+					var byteSendBuffer = ByteBuffer.Buffer{
+						Endian:"big",
 					}
 
-					if matchFound == true{
+					byteSendBuffer.PutLong(newTotalByteLen) // total packet length
 
-						sizeBuff := make([]byte, 4)
+					byteSendBuffer.PutShort(messageTypeLen) // total message type length
 
-						var packetBuffer bytes.Buffer
+					byteSendBuffer.Put([]byte(messageType)) // message type value
 
-						binary.LittleEndian.PutUint32(sizeBuff, uint32(len(restPacket)))
-						packetBuffer.Write(sizeBuff)
-						packetBuffer.Write(restPacket)
+					byteSendBuffer.PutShort(channelNameLen) // total channel name length
 
-						go send(conn, channelName, packetBuffer, sentMsg)
+					byteSendBuffer.Put([]byte(channelName)) // channel name value
 
-						select{
-							case message, ok := <-sentMsg:	
-								if ok{
+					byteSendBuffer.PutShort(producer_idLen) // producerid length
 
-									if !message{
-										exitLoop = true
-									}else{
-										exitLoop = false
-									}
+					byteSendBuffer.Put([]byte(producer_id)) // producerid value
+
+					byteSendBuffer.PutShort(agentNameLen) // agentName length
+
+					byteSendBuffer.Put([]byte(agentName)) // agentName value
+
+					byteSendBuffer.PutLong(int(id)) // backend offset
+
+					byteSendBuffer.PutLong(int(cursor)) // total bytes subscriber packet received
+
+					byteSendBuffer.Put(bodyBB) // actual body
+
+					go send(conn, byteSendBuffer, sentMsg)
+
+					select{
+						case message, ok := <-sentMsg:
+
+							if ok{
+
+								if !message{
+
+									exitLoop = true
+
+								}else{
+
+									exitLoop = false
 
 								}
 
-								break
-						}
+							}
+
+							break
 					}
 
 				}else{
@@ -366,18 +350,15 @@ func SubscribeChannel(conn net.TCPConn, cm map[string]interface{}, lastTime int6
 
 		}else{
 
+			cursor = fileStat.Size()
+
 			time.Sleep(1 * time.Second)
 		}
 	}
-		
-
-	time.Sleep(5 * time.Second)
-
-	goto RETRY
-
+	
 }
 
-func send(conn net.TCPConn, channelName string, packetBuffer bytes.Buffer, sentMsg chan bool){ 
+func send(conn net.TCPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
 
 	defer ChannelList.Recover()
 
@@ -395,7 +376,7 @@ func send(conn net.TCPConn, channelName string, packetBuffer bytes.Buffer, sentM
 
 	}
 
-	_, err := conn.Write(packetBuffer.Bytes())
+	_, err := conn.Write(packetBuffer.Array())
 	
 	if err != nil {
 	
@@ -411,36 +392,19 @@ func send(conn net.TCPConn, channelName string, packetBuffer bytes.Buffer, sentM
 
 }
 
-func (e *ChannelMethods) SendAck(messageMap map[string]interface{}, conn net.TCPConn, ackChan chan bool){
+func (e *ChannelMethods) SendAck(messageMap pojo.PacketStruct, ackChan chan bool){
 
 	defer ChannelList.Recover()
 
-	var messageResp = make(map[string]interface{})
-
-	messageResp["producer_id"] = messageMap["producer_id"].(string)
-
-	jsonData, err := json.Marshal(messageResp)
-
-	if err != nil{
-
-		go ChannelList.WriteLog(err.Error())
-
-		ackChan <- false
-
-		return
+	var byteBuffer = ByteBuffer.Buffer{
+		Endian:"big",
 	}
 
-	var packetBuffer bytes.Buffer
+	byteBuffer.PutLong(len(messageMap.Producer_id))
 
-	buff := make([]byte, 4)
+	byteBuffer.Put([]byte(messageMap.Producer_id))
 
-	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
-
-	packetBuffer.Write(buff)
-
-	packetBuffer.Write(jsonData)
-
-	_, err = conn.Write(packetBuffer.Bytes())
+	_, err := messageMap.Conn.Write(byteBuffer.Array())
 
 	if err != nil{
 

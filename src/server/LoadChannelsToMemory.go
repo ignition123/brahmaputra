@@ -47,10 +47,10 @@ func LoadTCPChannelsToMemory(){
 
 				var worker = int(channelMap["worker"].(float64))
 
-				var bucketData  = make([]chan map[string]interface{}, worker)
+				var bucketData  = make([]chan *pojo.PacketStruct, worker)
 
 				for i := range bucketData {
-				   bucketData[i] = make(chan map[string]interface{}, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
+				   bucketData[i] = make(chan *pojo.PacketStruct, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
 				}
 
 				var channelName = channelMap["channelName"].(string)
@@ -60,7 +60,6 @@ func LoadTCPChannelsToMemory(){
 					Worker: worker,
 					BucketData: bucketData,
 					WriteCallback:make(chan bool),
-					WriteMongoCallback:make(chan bool),
 					ChannelStorageType: channelMap["channelStorageType"].(string),
 				}
 

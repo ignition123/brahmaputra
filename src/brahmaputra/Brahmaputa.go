@@ -7,13 +7,15 @@ import(
 	"time"
 	"strconv"
 	"os"
-	"bytes"
-	"encoding/json"
 	"sync"
 	"runtime"
+	"io"
+	"io/ioutil"
+	"ByteBuffer"
+	"encoding/json"
 )
 
-var SubscriberChannel = make(chan map[string]interface{})
+var SubscriberChannel = make(chan interface{})
 
 type CreateProperties struct{
 	Host string
@@ -23,33 +25,37 @@ type CreateProperties struct{
 	Conn net.Conn
 	ChannelName string
 	AgentName string
-	TransactionList map[string]interface{}
+	TransactionList map[string][]byte
 	AppType string
 	autoIncr int64
 	Worker int
-
 	sync.Mutex
-
 	ConnPool []net.Conn
-
 	PoolSize int
-
 	roundRobin int
-
-	requestPull []map[string]interface{}
-
+	requestPull [][]byte
 	connectStatus bool
-
 	requestWg sync.WaitGroup
-
 	ReceiveSync sync.WaitGroup
-
 	requestChan chan bool
-
 	contentMatcher string
+	contentMatcherMap map[string]interface{}
+	OffsetPath string
+	AlwaysStartFrom string
+	lastReceivedOffset int64
+	subscribeFD *os.File
 }	
 
+func handlepanic() { 
+  
+    if a := recover(); a != nil { 
+        log.Println(a)
+    } 
+} 
+
 func (e *CreateProperties) Connect(){
+
+	defer handlepanic()
 
 	if e.AppType != "producer" && e.AppType != "consumer"{
 
@@ -60,6 +66,68 @@ func (e *CreateProperties) Connect(){
 	}
 
 	var subReconnect = false
+
+	e.lastReceivedOffset = 0
+
+	e.TransactionList = make(map[string][]byte)
+
+	e.contentMatcherMap = make(map[string]interface{})
+
+	if e.OffsetPath != ""{
+
+		var fileErr error
+
+		e.subscribeFD, fileErr = os.OpenFile(
+	        e.OffsetPath,
+	        os.O_RDWR|os.O_CREATE,
+	        0666,
+	    )
+
+	    if fileErr != nil {
+
+	        go log.Println(fileErr)
+
+	        return
+	    }
+
+	}
+
+	if e.AlwaysStartFrom == ""{
+
+		e.AlwaysStartFrom = "BEGINNING"
+
+	}
+
+	if e.AlwaysStartFrom == "LASTRECEIVED"{
+
+		if e.OffsetPath == ""{
+
+			go log.Println("Last received flag needs to persistent, please add offset log path...")
+
+	        return
+
+		}
+
+		dat, readErr := ioutil.ReadFile(e.OffsetPath)
+
+		if readErr != nil{
+
+			go log.Println(readErr)
+
+	        return
+
+		}
+
+		if len(dat) == 0{
+
+			e.lastReceivedOffset = 0
+
+		}else{
+
+			e.lastReceivedOffset = int64(binary.BigEndian.Uint64(dat))
+
+		}
+	}
 
 	if e.AgentName != ""{
 
@@ -74,8 +142,6 @@ func (e *CreateProperties) Connect(){
 	}
 
 	e.autoIncr = 0
-
-	e.TransactionList = make(map[string]interface{})
 
 	var agentErr error
 
@@ -145,15 +211,7 @@ func (e *CreateProperties) Connect(){
 
 			go e.Publish(bodyMap, chancb)
 
-			select {
-
-				case _, ok := <-chancb :	
-
-					if ok{
-
-					}
-				break
-			}
+			<-chancb
 		}
 
 	}
@@ -217,6 +275,8 @@ func (e *CreateProperties) Connect(){
 
 func (e *CreateProperties) checkConnectStatus(){
 
+	defer handlepanic()
+
 	for{
 
 		time.Sleep(2 * time.Second)
@@ -224,6 +284,8 @@ func (e *CreateProperties) checkConnectStatus(){
 		if e.connectStatus == false{
 
 			e.ConnPool = e.ConnPool[:0]
+
+			e.subscribeFD.Close()
 
 			e.Connect()
 
@@ -235,6 +297,8 @@ func (e *CreateProperties) checkConnectStatus(){
 }
 
 func (e *CreateProperties) createConnection() net.Conn{
+
+	defer handlepanic()
 
 	var conn net.Conn
 
@@ -276,11 +340,11 @@ func (e *CreateProperties) createConnection() net.Conn{
 	return conn
 }
 
-func (e *CreateProperties) Publish(bodyBB map[string]interface{}, channcb chan bool){
+func (e *CreateProperties) Publish(bodyBB []byte, channcb chan bool){
+
+	defer handlepanic()
 
 	if !e.connectStatus{
-
-		go log.Println("Connection lost...")
 
 		e.requestPull = append(e.requestPull, bodyBB)
 
@@ -308,15 +372,7 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}, channcb chan b
 		
 		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
 
-		select {
-
-			case _, ok := <-e.requestChan :	
-
-				if ok{
-
-				}
-			break
-		}
+		<-e.requestChan
 
 		e.roundRobin += 1
 
@@ -324,22 +380,20 @@ func (e *CreateProperties) Publish(bodyBB map[string]interface{}, channcb chan b
 
 	 	go e.publishMsg(bodyBB, e.ConnPool[0])
 
-	 	select {
-
-			case _, ok := <-e.requestChan :	
-
-				if ok{
-
-				}
-			break
-		}
+	 	<-e.requestChan
 
 	}
 
 	channcb <- true
 }
 
-func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Conn){
+func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
+
+	defer handlepanic()
+
+	e.Lock()
+
+	defer e.Unlock()
 
 	if conn == nil{
 
@@ -357,47 +411,48 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 	var _id = strconv.FormatInt(nano, 10)
 	var producer_id = _id+"_"+strconv.FormatInt(e.autoIncr, 10)
 
-	var messageMap = make(map[string]interface{})
-
-	messageMap["channelName"] = e.ChannelName
-
-	messageMap["type"] = "publish"
-
-	messageMap["producer_id"] = producer_id
-
-	messageMap["AgentName"] = e.AgentName
-
-	messageMap["data"] = bodyBB
-
-	e.Lock()
-	e.TransactionList[producer_id] = messageMap
-	e.Unlock()
-
-	var packetBuffer bytes.Buffer
- 
-	buff := make([]byte, 4)
-
-	jsonData, err := json.Marshal(messageMap)
-
-	if err != nil{
-
-		go log.Println(err)
-
-		e.requestChan <- false
-
-		return
-
+	var byteBuffer = ByteBuffer.Buffer{
+		Endian:"big",
 	}
 
-	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+	var messageType = "publish"
 
-	packetBuffer.Write(buff)
+	var messageTypeLen = len(messageType)
 
-	packetBuffer.Write(jsonData)
+	var channelNameLen = len(e.ChannelName)
 
-	_, err = conn.Write(packetBuffer.Bytes())
+	var producer_idLen = len(producer_id)
 
-	messageMap = nil
+	var agentNameLen = len(e.AgentName)
+
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + totalBytePacket
+	var totalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + len(bodyBB)
+	 
+	byteBuffer.PutLong(totalByteLen)
+
+	byteBuffer.PutShort(messageTypeLen)
+
+	byteBuffer.Put([]byte(messageType))
+
+	byteBuffer.PutShort(channelNameLen)
+
+	byteBuffer.Put([]byte(e.ChannelName))
+
+	byteBuffer.PutShort(producer_idLen)
+
+	byteBuffer.Put([]byte(producer_id))
+
+	byteBuffer.PutShort(agentNameLen)
+
+	byteBuffer.Put([]byte(e.AgentName))
+
+	byteBuffer.Put(bodyBB)
+
+	var byteArrayResp = byteBuffer.Array()
+ 
+	e.TransactionList[producer_id] = byteArrayResp
+
+	_, err := conn.Write(byteArrayResp)
 
 	if err != nil {
 
@@ -417,55 +472,67 @@ func (e *CreateProperties) publishMsg(bodyBB map[string]interface{}, conn net.Co
 
 func (e *CreateProperties) Close(conn net.Conn){
 
+	defer handlepanic()
+
 	conn.Close()
 
 	go log.Println("Socket closed...")
 
 }
 
-func (e *CreateProperties) Subscribe(contentMatcher string){
+func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
-	e.contentMatcher = contentMatcher
+	defer handlepanic()
 
-	var jsonObject = make(map[string]interface{})
+	if contentMatcher != ""{
 
-	jsonErr := json.Unmarshal([]byte(contentMatcher), &jsonObject)
+		e.contentMatcher = contentMatcher
 
-	if jsonErr != nil{
+		e.contentMatcherMap = make(map[string]interface{})
 
-		go log.Println(jsonErr)
-		return
+		errJson := json.Unmarshal([]byte(e.contentMatcher), &e.contentMatcherMap)
 
-	}	
+		if errJson != nil{
+			
+			go log.Println(errJson)
+			
+			return false
 
-	var messageMap = make(map[string]interface{})
-	messageMap["contentMatcher"] = jsonObject
-	messageMap["channelName"] = e.ChannelName
-	messageMap["type"] = "subscribe"
-
-	jsonData, err := json.Marshal(messageMap)
-
-	if err != nil{
-
-		go log.Println(err)
-
-		return
-
+		}
 	}
 
-	var packetBuffer bytes.Buffer
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + lastReceivedOffset + startFromLen + startFrom
 
-	buff := make([]byte, 4)
+	var messageType = "subscribe"
+	var messageTypeLen = len(messageType)
 
-	binary.LittleEndian.PutUint32(buff, uint32(len(jsonData)))
+	var channelNameLen = len(e.ChannelName)
 
-	packetBuffer.Write(buff)
+	var startFromLen = len(e.AlwaysStartFrom)
 
-	packetBuffer.Write(jsonData)
+	var byteBuffer = ByteBuffer.Buffer{
+		Endian:"big",
+	}
 
-	_, err = e.Conn.Write(packetBuffer.Bytes())
+	var totalLen = 2 + messageTypeLen + 2 + channelNameLen + 8 + 2 + startFromLen
 
-	messageMap = nil
+	byteBuffer.PutLong(totalLen) // 8
+
+	byteBuffer.PutShort(messageTypeLen) // 2
+
+	byteBuffer.Put([]byte(messageType)) // messageTypeLen
+
+	byteBuffer.PutShort(channelNameLen) // 2
+
+	byteBuffer.Put([]byte(e.ChannelName)) // channelNameLen
+
+	byteBuffer.PutLong(int(e.lastReceivedOffset)) // 8
+
+	byteBuffer.PutShort(startFromLen) // 2
+
+	byteBuffer.Put([]byte(e.AlwaysStartFrom)) // startFromLen
+
+	_, err := e.Conn.Write(byteBuffer.Array())
 
 	if err != nil {
 
@@ -473,11 +540,16 @@ func (e *CreateProperties) Subscribe(contentMatcher string){
 
 		go log.Println(err)
 
+		return false
+
 	}
 
+	return true
 } 
 
 func allZero(s []byte) bool {
+
+	defer handlepanic()
 
 	for _, v := range s {
 
@@ -494,15 +566,17 @@ func allZero(s []byte) bool {
 
 func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
+	defer handlepanic()
+
 	var callbackChan = make(chan string, 1)
 
 	for {	
 
-		sizeBuf := make([]byte, 4)
+		sizeBuf := make([]byte, 8)
 
 		conn.Read(sizeBuf)
 
-		packetSize := binary.LittleEndian.Uint32(sizeBuf)
+		packetSize := binary.BigEndian.Uint64(sizeBuf)
 
 		if packetSize < 0 {
 			continue
@@ -519,17 +593,10 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 			break
 		}
 
-		go e.parseMsg(completePacket, "sub", callbackChan)
+		go e.parseMsg(int64(packetSize), completePacket, "sub", callbackChan)
 
-		select {
+		<-callbackChan
 
-			case _, ok := <-callbackChan:	
-
-				if ok{
-
-				}
-			break
-		}
 	}
 
 	go log.Println("Socket disconnected...")
@@ -539,20 +606,19 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 	e.connectStatus = false
 }
 
-
 func (e *CreateProperties) ReceiveMsg(conn net.Conn){
+
+	defer handlepanic()
 
 	var callbackChan = make(chan string, 1)
 
 	for {	
 
-		sizeBuf := make([]byte, 4)
+		sizeBuf := make([]byte, 8)
 
 		conn.Read(sizeBuf)
 
-		packetSize := binary.LittleEndian.Uint32(sizeBuf)
-
-		sizeBuf = nil
+		packetSize := binary.BigEndian.Uint64(sizeBuf)
 
 		if packetSize < 0 {
 			continue
@@ -569,7 +635,7 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 			break
 		}
 
-		go e.parseMsg(completePacket, "pub", callbackChan)
+		go e.parseMsg(int64(packetSize), completePacket, "pub", callbackChan)
 
 		select {
 
@@ -596,37 +662,136 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 	e.connectStatus = false
 }
 
-func (e *CreateProperties) parseMsg(message []byte, msgType string, callbackChan chan string){
+func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType string, callbackChan chan string){
 
-	messageMap := make(map[string]interface{})
-
-	err := json.Unmarshal(message, &messageMap)
-
-	if err != nil{
-		
-		go log.Println(err)
-
-		callbackChan <- "REJECT"
-
-		return
-
-	}
+	defer handlepanic()
 
 	if msgType == "pub"{
 
-		var producer_id = messageMap["producer_id"].(string)
+		var producer_id = string(message)
 
-		callbackChan <- producer_id
-
-	}
-
-	if msgType == "sub"{
-
-		SubscriberChannel <- messageMap
-
-		callbackChan <- "SUCCESS"
+		callbackChan <- string(producer_id)
 
 	}
 
-	messageMap = nil
+	if msgType == "sub"{	
+
+		var byteBuffer = ByteBuffer.Buffer{
+			Endian:"big",
+		}
+
+		byteBuffer.Wrap(message)
+
+		var messageTypeByte = byteBuffer.GetShort()
+		var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+		byteBuffer.Get(messageTypeLen)
+
+		var channelNameByte = byteBuffer.GetShort()
+		var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+		byteBuffer.Get(channelNameLen)
+
+		var producer_idByte = byteBuffer.GetShort()
+		var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+		byteBuffer.Get(producer_idLen)
+
+		var agentNameByte = byteBuffer.GetShort()
+		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+		byteBuffer.Get(agentNameLen)
+
+		byteBuffer.GetLong() //id
+
+		var subscriberOffset = byteBuffer.GetLong() //offset
+
+		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 8)
+
+		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
+
+		if e.OffsetPath != ""{
+
+			e.lastReceivedOffset = int64(binary.BigEndian.Uint64(subscriberOffset))
+
+			var filebyteBuffer = ByteBuffer.Buffer{
+				Endian:"big",
+			}
+
+			filebyteBuffer.PutLong(int(e.lastReceivedOffset))
+
+			_, err := e.subscribeFD.WriteAt(filebyteBuffer.Array(), 0)
+
+			if (err != nil && err != io.EOF ){
+
+				go log.Println(err)
+
+				callbackChan <- "REJECT"
+
+			}else{
+
+				if len(e.contentMatcherMap) != 0{
+
+					var messageData = make(map[string]interface{})
+
+					errJson := json.Unmarshal(bodyPacket, &messageData)
+
+					if errJson != nil{
+						
+						go log.Println(errJson)
+							
+						callbackChan <- "REJECT"
+
+						return
+
+					}
+
+					var matchFound = true
+
+					if _, found := e.contentMatcherMap["$and"]; found {
+    
+					    matchFound = AndMatch(messageData, e.contentMatcherMap)
+
+					}else if _, found := e.contentMatcherMap["$or"]; found {
+
+						matchFound = OrMatch(messageData, e.contentMatcherMap)
+
+					}else if _, found := e.contentMatcherMap["$eq"]; found {
+
+						if e.contentMatcherMap["$eq"] == "all"{
+
+							matchFound = true
+
+						}else{
+
+							matchFound = false
+
+							log.Println("okok")
+
+						}
+
+					}else{
+
+						matchFound = false
+
+					}
+
+					if matchFound{
+
+						SubscriberChannel <- messageData
+
+					}
+
+				}else{
+
+					SubscriberChannel <- bodyPacket
+
+				}	
+
+				callbackChan <- "SUCCESS"
+			}
+
+		}else{
+
+			SubscriberChannel <- bodyPacket
+
+			callbackChan <- "SUCCESS"
+		}	
+	}
 }

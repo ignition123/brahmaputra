@@ -2,65 +2,86 @@ package server
 
 import (
 	"net"
-	"encoding/json"
 	"time"
-	"strconv"
 	"log"
-	"bytes"
-	"encoding/binary"
 	"io"
 	"ChannelList"
-	"MongoConnection"
 	"pojo"
+	"ByteBuffer"
+	"encoding/binary"
 )
 
 
-func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool, counterRequest *int){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, counterRequest *int, quitChannel bool){
 
 	defer ChannelList.Recover()
 
-	messageMap := make(map[string]interface{})
-
-	err := json.Unmarshal([]byte(msg), &messageMap)
-
-	if err != nil{
-		parseChan <- false
-		go ChannelList.WriteLog(err.Error())
-		return
+	var byteBuffer = ByteBuffer.Buffer{
+		Endian:"big",
 	}
 
-	if messageMap["type"] == "heart_beat"{
+	byteBuffer.Wrap(completePacket)
 
-		if messageMap["channelName"] == ""{
+	var messageTypeByte = byteBuffer.GetShort() // 2
+	var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+	var messageType = string(byteBuffer.Get(messageTypeLen)) // messageTypeLen
+
+	var channelNameByte = byteBuffer.GetShort() // 2
+	var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+	var channelName = string(byteBuffer.Get(channelNameLen)) // channelNameLen
+
+	var packetObject = &pojo.PacketStruct{
+		MessageTypeLen: messageTypeLen,
+		MessageType: messageType,
+		ChannelNameLen: channelNameLen,
+		ChannelName: channelName,
+	}
+
+	if messageType == "heart_beat"{
+
+		if channelName == ""{
 			conn.Close()
 			parseChan <- false
-			go ChannelList.WriteLog("Invalid message received..." + msg)
+			go ChannelList.WriteLog("Invalid message received...")
 			return
 		}
 
 		go log.Println("HEART BEAT RECEIVED...")
 
-		messageMap["conn"] = conn
+		packetObject.Conn = conn
 		
-		ChannelList.TCPStorage["heart_beat"].BucketData[0] <- messageMap
+		ChannelList.TCPStorage["heart_beat"].BucketData[0] <- packetObject
 
-	}else if messageMap["type"] == "publish"{
+	}else if messageType == "publish"{
 
-		if messageMap["channelName"] == ""{
+		var producer_idByte = byteBuffer.GetShort()
+		var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+		var producer_id = string(byteBuffer.Get(producer_idLen))
+
+		var agentNameByte = byteBuffer.GetShort()
+		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+		var agentName = string(byteBuffer.Get(agentNameLen))
+
+		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen)
+
+		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
+
+		packetObject.Producer_idLen = producer_idLen
+
+		packetObject.Producer_id = producer_id
+
+		packetObject.AgentNameLen = agentNameLen
+
+		packetObject.AgentName = agentName
+
+		packetObject.BodyBB = bodyPacket
+
+		if channelName == ""{
 			conn.Close()
 			parseChan <- false
-			go ChannelList.WriteLog("Invalid message received..." + msg)
+			go ChannelList.WriteLog("Invalid message received...")
 			return
 		}
-
-		if messageMap["data"] == ""{
-			conn.Close()
-			parseChan <- false
-			go ChannelList.WriteLog("Data missing..." + msg)
-			return
-		}
-
-		var channelName = messageMap["channelName"].(string)
 
 		if ChannelList.TCPStorage[channelName] == nil{
 			parseChan <- false
@@ -71,26 +92,13 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool, counterRequest 
 
 		nanoEpoch := currentTime.UnixNano()
 
-		var _id = strconv.FormatInt(nanoEpoch, 10)
-
-		messageMap["_id"] = _id
+		packetObject.Id = nanoEpoch
 		
-		jsonData, err := json.Marshal(messageMap)
-
-		if err != nil{
-			parseChan <- false
-			go ChannelList.WriteLog(err.Error())
-			return
-		}
-
-
 		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 			if *ChannelList.ConfigTCPObj.Storage.File.Active{
-
-				var byteLen = len(jsonData)
 			
-				go WriteData(jsonData, channelName, byteLen, _id)
+				go WriteData(*packetObject)
 
 				select {
 
@@ -103,110 +111,101 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool, counterRequest 
 							}
 						}		
 				}
-			}
+			}else{
 
-			
-			if *ChannelList.ConfigTCPObj.Storage.Mongodb.Active{
+				conn.Close()
 
-				var byteLen = len(jsonData)
-	 
-				go WriteMongodbData(nanoEpoch, messageMap["AgentName"].(string), jsonData, channelName, byteLen)
+				parseChan <- false
+				
+				return
 
-				select {
-
-					case message, ok := <-ChannelList.TCPStorage[channelName].WriteMongoCallback:	
-						if ok{
-							
-							if !message{
-								parseChan <- false
-								return
-							}
-						}		
-						break
-				}
-			} 	
+			}	
 		}
 
-		
-		messageMap["conn"] = conn
+		packetObject.Conn = conn
 
 		if *counterRequest == ChannelList.TCPStorage[channelName].Worker{
 
 			*counterRequest = 0
 		}
 
-		ChannelList.TCPStorage[channelName].BucketData[*counterRequest] <- messageMap
+		ChannelList.TCPStorage[channelName].BucketData[*counterRequest] <- packetObject
 
 		*counterRequest += 1
 
 		parseChan <- true
 
-	}else if messageMap["type"] == "subscribe"{
+	}else if messageType == "subscribe"{
 
-		if messageMap["channelName"] == ""{
+		if channelName == ""{
 			conn.Close()
 			parseChan <- false
-			go ChannelList.WriteLog("Invalid message received..." + msg)
+			go ChannelList.WriteLog("Invalid message received...")
 			return
 		}
-
-		if messageMap["contentMatcher"] == ""{
-			conn.Close()
-			parseChan <- false
-			go ChannelList.WriteLog("Content matcher cannot be empty..." + msg)
-			return
-		}
-
-		var channelName = messageMap["channelName"].(string)
 
 		if ChannelList.TCPStorage[channelName] == nil{
 			parseChan <- false
 			return
 		}
 
-		log.Println(ChannelList.TCPStorage[channelName].ChannelStorageType)
+		var subscriber_offsetByte = byteBuffer.GetLong() // 8
+		var subscriber_offset = binary.BigEndian.Uint64(subscriber_offsetByte)
 
+		var startFromByte = byteBuffer.GetShort() //2
+		var startFromLen = binary.BigEndian.Uint16(startFromByte)
+		var start_from = string(byteBuffer.Get(int(startFromLen))) // startFromLen
+
+		packetObject.SubscriberOffset = int64(subscriber_offset)
+
+		packetObject.StartFromLen = int(startFromLen)
+
+		packetObject.Start_from = start_from
+
+		packetObject.Conn = conn
+		
 		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-			var ContentMatcher = make(map[string]interface{})
+			if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
-			if messageMap["contentMatcher"] == "all"{
+				conn.Close()
 
-				ContentMatcher = nil
-
-			}else{
-
-				ContentMatcher = messageMap["contentMatcher"].(map[string]interface{})
+				parseChan <- false
+				
+				return
 
 			}
 
-			now := time.Now()
+	    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
-	    	nanos := now.UnixNano()
+	    		conn.Close()
 
-	    	var cursor = int64(0)
+				parseChan <- false
 
-			go SubscribeChannel(conn, ContentMatcher, nanos, channelName, cursor)
+				return
+	    	}
+
+	    	var cursor int64
+
+	    	if start_from == "BEGINNING"{
+
+	    		cursor = int64(0)
+
+	    	}else if start_from == "NOPULL"{
+
+	    		cursor = int64(-1)
+
+	    	}else if start_from == "LASTRECEIVED"{
+
+	    		cursor = int64(subscriber_offset)
+
+	    	}
+
+			go SubscribeChannel(conn, channelName, cursor, quitChannel)
 
 		}else{
 
-			var socketDetails *pojo.SocketDetails
-
-			if messageMap["contentMatcher"] == "all"{
-
-				socketDetails = &pojo.SocketDetails{
-					Conn:conn,
-					ContentMatcher: nil,
-				}
-
-			}else{
-				socketDetails = &pojo.SocketDetails{
-					Conn:conn,
-					ContentMatcher: messageMap["contentMatcher"].(map[string]interface{}),
-				}
-			}
-			
-			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], socketDetails) 
+			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
 		}
 		
 		parseChan <- true 
@@ -219,61 +218,51 @@ func ParseMsg(msg string, conn net.TCPConn, parseChan chan bool, counterRequest 
 	}	
 }
 
-func WriteMongodbData(_id int64, agentName string, jsonData []byte, channelName string, byteLen int){
+func WriteData(packet pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
-	var packetBuffer bytes.Buffer
+	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Lock()
 
-	buff := make([]byte, 4)
-
-	binary.LittleEndian.PutUint32(buff, uint32(byteLen))
-
-	packetBuffer.Write(buff)
-
-	packetBuffer.Write(jsonData)
-
-	var oneDoc = make(map[string]interface{})
-
-	oneDoc["offsetID"] = _id
-	oneDoc["AgentName"] = agentName
-	oneDoc["cluster"] = *ChannelList.ConfigTCPObj.Server.TCP.ClusterName
-	oneDoc["data"] = packetBuffer.Bytes()
-
-	var status, _ = MongoConnection.InsertOne(channelName, oneDoc)
-
-	if !status{
-		ChannelList.TCPStorage[channelName].WriteMongoCallback <- false
-	}else{
-		ChannelList.TCPStorage[channelName].WriteMongoCallback <- true
+	var byteBuffer = ByteBuffer.Buffer{
+		Endian:"big",
 	}
-}
 
-func WriteData(jsonData []byte, channelName string, byteLen int, _id string){
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + _id + totalBytePacket
 
-	defer ChannelList.Recover()
+	var totalByteLen = 2 + packet.MessageTypeLen + 2 + packet.ChannelNameLen + 2 + packet.Producer_idLen + 2 + packet.AgentNameLen + 8 + len(packet.BodyBB)
 
-	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	byteBuffer.PutLong(totalByteLen)
 
-	var packetBuffer bytes.Buffer
+	byteBuffer.PutShort(packet.MessageTypeLen)
 
-	buff := make([]byte, 4)
+	byteBuffer.Put([]byte(packet.MessageType))
 
-	binary.LittleEndian.PutUint32(buff, uint32(byteLen))
+	byteBuffer.PutShort(packet.ChannelNameLen)
 
-	packetBuffer.Write(buff)
+	byteBuffer.Put([]byte(packet.ChannelName))
 
-	packetBuffer.Write(jsonData)
+	byteBuffer.PutShort(packet.Producer_idLen)
+
+	byteBuffer.Put([]byte(packet.Producer_id))
+
+	byteBuffer.PutShort(packet.AgentNameLen)
+
+	byteBuffer.Put([]byte(packet.AgentName))
+
+	byteBuffer.PutLong(int(packet.Id))
+
+	byteBuffer.Put(packet.BodyBB)
  
-	_, err := ChannelList.TCPStorage[channelName].FD.Write(packetBuffer.Bytes())
+	_, err := ChannelList.TCPStorage[packet.ChannelName].FD.Write(byteBuffer.Array())
 
-	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
 	
 	if (err != nil && err != io.EOF ){
 		go ChannelList.WriteLog(err.Error())
-		ChannelList.TCPStorage[channelName].WriteCallback <- false
+		ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- false
 		return
 	}
 
-	ChannelList.TCPStorage[channelName].WriteCallback <- true
+	ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- true
 }

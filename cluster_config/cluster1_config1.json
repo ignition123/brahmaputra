@@ -19,7 +19,7 @@
     "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",
     "storage":{
         "file":{
-            "active":false
+            "active":true
         },
         "mongodb":{
             "active":false,
