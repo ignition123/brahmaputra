@@ -12,7 +12,7 @@ import (
 )
 
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, counterRequest *int, quitChannel bool){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, counterRequest *int, subscriberCount int, quitChannel bool){
 
 	defer ChannelList.Recover()
 
@@ -205,7 +205,11 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		}else{
 
-			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+			var subChannel = make(chan *pojo.PacketStruct, 100)
+
+			ChannelList.TCPSocketDetails[channelName][subscriberCount] = subChannel
+
+			go SubscribeInmemoryChannel(conn, channelName, subChannel, quitChannel, subscriberCount)
 		}
 		
 		parseChan <- true 

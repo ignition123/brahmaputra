@@ -48,6 +48,8 @@ func HostTCPServer(){
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")
 
+	var subscriberCount = 0
+
     for {
 
 		conn, err := server.Accept()
@@ -71,6 +73,8 @@ func HostTCPServer(){
 		tcp.SetReadDeadline(time.Now().Add(1000000 * time.Second))
 		tcp.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
 
-		go HandleRequest(*tcp)
+		go HandleRequest(*tcp, subscriberCount)
+
+		subscriberCount += 1
 	}
 }

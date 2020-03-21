@@ -55,11 +55,13 @@ func LoadTCPChannelsToMemory(){
 
 				var channelName = channelMap["channelName"].(string)
 
+				ChannelList.TCPSocketDetails[channelName] = make(map[int]chan *pojo.PacketStruct, 1)
+
 				var channelObject = &pojo.ChannelStruct{
 					Offset:int64(0),
 					Worker: worker,
 					BucketData: bucketData,
-					WriteCallback:make(chan bool),
+					WriteCallback:make(chan bool, 1),
 					ChannelStorageType: channelMap["channelStorageType"].(string),
 				}
 

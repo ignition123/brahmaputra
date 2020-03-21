@@ -5,7 +5,7 @@ import(
 	"time"
 	_"fmt"
 	_"sync"
-	_"runtime"
+	"runtime"
 	"log"
 	"encoding/json"
 )
@@ -19,8 +19,9 @@ func main(){
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"producer",
-		Worker:0, //runtime.NumCPU()
-		PoolSize:1,
+		Worker:runtime.NumCPU(), //runtime.NumCPU()
+		PoolSize:10,
+		WriteDelay:0, // nano second
 	}
 
 	brahm.Connect()
@@ -94,6 +95,10 @@ func main(){
 	for i := 0; i < 10000000; i++ {
 
 		// parseWait.Add(1)
+
+		// log.Println("message fired")
+
+		// time.Sleep(1 * time.Nanosecond)
 
 		go brahm.Publish(jsonByte, channel)
 

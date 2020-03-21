@@ -23,7 +23,7 @@ func allZero(s []byte) bool {
 	return true
 }
 
-func HandleRequest(conn net.TCPConn) {
+func HandleRequest(conn net.TCPConn, subscriberCount int) {
 	
 	defer ChannelList.Recover()
 
@@ -62,7 +62,7 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, quitChannel)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, subscriberCount, quitChannel)
 
 		<-parseChan
 	}

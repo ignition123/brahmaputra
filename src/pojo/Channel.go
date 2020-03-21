@@ -7,7 +7,7 @@ import(
 )
 
 type ChannelStruct struct{
-	FD *os.File
+	FD *os.File 
 	Path string
 	Offset int64
 	Worker int

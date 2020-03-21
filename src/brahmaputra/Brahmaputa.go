@@ -15,7 +15,7 @@ import(
 	"encoding/json"
 )
 
-var SubscriberChannel = make(chan interface{})
+var SubscriberChannel = make(chan interface{}, 100)
 
 type CreateProperties struct{
 	Host string
@@ -44,6 +44,8 @@ type CreateProperties struct{
 	AlwaysStartFrom string
 	lastReceivedOffset int64
 	subscribeFD *os.File
+	WriteDelay int32
+	ReadDelay int32
 }	
 
 func handlepanic() { 
@@ -354,6 +356,11 @@ func (e *CreateProperties) Publish(bodyBB []byte, channcb chan bool){
 
 	}
 
+	if e.WriteDelay > 0{
+		time.Sleep(time.Duration(e.WriteDelay) * time.Nanosecond)
+	}
+	
+
 	if e.PoolSize > 0{
 
 		if e.roundRobin == e.PoolSize{
@@ -568,7 +575,7 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 	defer handlepanic()
 
-	var callbackChan = make(chan string, 1)
+	var callbackChan = make(chan string, 100)
 
 	for {	
 
@@ -593,6 +600,10 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 			break
 		}
 
+		if e.ReadDelay > 0{
+			time.Sleep(time.Duration(e.ReadDelay) * time.Nanosecond)
+		}
+
 		go e.parseMsg(int64(packetSize), completePacket, "sub", callbackChan)
 
 		<-callbackChan
@@ -610,7 +621,7 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 	defer handlepanic()
 
-	var callbackChan = make(chan string, 1)
+	var callbackChan = make(chan string, 100)
 
 	for {	
 

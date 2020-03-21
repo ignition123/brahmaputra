@@ -18,6 +18,7 @@ func main() {
 		AppType:"consumer",
 		OffsetPath:"D:\\pounze_go_project\\brahmaputra\\subscriber_offset.offset", //writes last offset received
 		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
+		ReadDelay:0, // nano second
 	}
 
 	brahm.Connect()
@@ -32,16 +33,16 @@ func main() {
 
 	time.Sleep(2 * time.Second)
 
-	// var count = 0
+	var count = 0
 
 	for{
 		select{
-			case message, ok := <-brahmaputra.SubscriberChannel:	
+			case _, ok := <-brahmaputra.SubscriberChannel:	
 				if ok{
 						
-					// count += 1 
+					count += 1 
 						
-					log.Println(message)
+					log.Println(count)
 
 				}	
 
