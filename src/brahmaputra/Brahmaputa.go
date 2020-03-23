@@ -753,41 +753,7 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 					}
 
-					var matchFound = true
-
-					if _, found := e.contentMatcherMap["$and"]; found {
-    
-					    matchFound = AndMatch(messageData, e.contentMatcherMap)
-
-					}else if _, found := e.contentMatcherMap["$or"]; found {
-
-						matchFound = OrMatch(messageData, e.contentMatcherMap)
-
-					}else if _, found := e.contentMatcherMap["$eq"]; found {
-
-						if e.contentMatcherMap["$eq"] == "all"{
-
-							matchFound = true
-
-						}else{
-
-							matchFound = false
-
-							log.Println("okok")
-
-						}
-
-					}else{
-
-						matchFound = false
-
-					}
-
-					if matchFound{
-
-						SubscriberChannel <- messageData
-
-					}
+					go e.contentMatch(messageData)
 
 				}else{
 
@@ -800,9 +766,69 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 		}else{
 
-			SubscriberChannel <- bodyPacket
+			if len(e.contentMatcherMap) != 0{
+
+				var messageData = make(map[string]interface{})
+
+				errJson := json.Unmarshal(bodyPacket, &messageData)
+
+				if errJson != nil{
+					
+					go log.Println(errJson)
+						
+					callbackChan <- "REJECT"
+
+					return
+
+				}
+
+				go e.contentMatch(messageData)
+
+			}else{
+
+				SubscriberChannel <- bodyPacket
+
+			}
 
 			callbackChan <- "SUCCESS"
 		}	
 	}
+}
+
+func (e *CreateProperties) contentMatch(messageData map[string]interface{}){
+
+	var matchFound = true
+
+	if _, found := e.contentMatcherMap["$and"]; found {
+
+	    matchFound = AndMatch(messageData, e.contentMatcherMap)
+
+	}else if _, found := e.contentMatcherMap["$or"]; found {
+
+		matchFound = OrMatch(messageData, e.contentMatcherMap)
+
+	}else if _, found := e.contentMatcherMap["$eq"]; found {
+
+		if e.contentMatcherMap["$eq"] == "all"{
+
+			matchFound = true
+
+		}else{
+
+			matchFound = false
+
+		}
+
+	}else{
+
+		matchFound = false
+
+	}
+
+	if matchFound{
+
+		SubscriberChannel <- messageData
+
+	}
+
 }

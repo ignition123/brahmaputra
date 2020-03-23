@@ -12,6 +12,10 @@ var mutex = &sync.Mutex{}
 func WriteLog(logMessage string){
 
 	defer Recover()
+
+	if !ConfigTCPObj.LogWrite{ 
+		return
+	}
 	
 	mutex.Lock()
 

@@ -1,5 +1,6 @@
 {
     "worker":4,
+    "logWrite":true,
     "server":{
         "tcp":{
             "host":"127.0.0.1",

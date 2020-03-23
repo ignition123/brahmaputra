@@ -3,9 +3,8 @@ package server
 import (
 	"encoding/binary"
 	"net"
-	"time"
+	_"time"
 	"ChannelList"
-	"Utilization"
 	_"sync"
 )
 
@@ -23,7 +22,7 @@ func allZero(s []byte) bool {
 	return true
 }
 
-func HandleRequest(conn net.TCPConn, subscriberCount int) {
+func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
 
@@ -62,7 +61,7 @@ func HandleRequest(conn net.TCPConn, subscriberCount int) {
 			break
 		}
 
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, subscriberCount, quitChannel)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, quitChannel)
 
 		<-parseChan
 	}
@@ -70,18 +69,6 @@ func HandleRequest(conn net.TCPConn, subscriberCount int) {
 	quitChannel = true
 }
 
-func ShowUtilization(){
-	for{
-
-		if !closeTCP{
-			time.Sleep(5 * time.Second)
-			Utilization.GetHardwareData()
-		}else{
-			break
-		}
-
-	}
-}
 
 func CloseTCPServers(){
 	

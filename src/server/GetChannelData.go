@@ -16,6 +16,8 @@ type ChannelMethods struct{
 	sync.Mutex
 }
 
+var inmemoryMutex sync.Mutex
+
 func (e *ChannelMethods) GetChannelData(){
 
 	defer ChannelList.Recover()
@@ -44,8 +46,6 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 			var cbChan = make(chan bool, 1)
 
-			var inmemoryChan = make(chan bool, 1)
-
 			for{
 
 				select {
@@ -58,15 +58,17 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 							if(channelName == subchannelName && channelName != "heart_beat"){
 
-								go e.SendAck(*message, cbChan)
+								if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-								<-cbChan
+									go e.SendAck(*message, cbChan)
 
-								if ChannelList.TCPStorage[channelName].ChannelStorageType == "inmemory"{
+									<-cbChan
 
-									go e.SendToChannels(message, channelName, inmemoryChan)
+								}else{
 
-									<-inmemoryChan
+									go e.sendMessageToClient(*message, cbChan)
+
+									<-cbChan
 
 								}
 							}
@@ -79,48 +81,22 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
-
-func (e *ChannelMethods) SendToChannels(messageMap *pojo.PacketStruct, channelName string, inmemoryChan chan bool){
-
-	defer ChannelList.Recover()
-
-	inmemoryChan <- true
-	
-	for _, clientObject := range ChannelList.TCPSocketDetails[channelName] {
-
-		clientObject <- messageMap
-
-    }
-}
-
-func SubscribeInmemoryChannel(conn net.TCPConn, channelName string, messageChan chan *pojo.PacketStruct ,quitChannel bool, subscriberCount int){
+func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, cbChan chan bool){
 
 	defer ChannelList.Recover()
 
-	var exitLoop = false
+	ackChan := make(chan bool, 1)
+	subsChan := make(chan bool, 1)
 
-	defer close(messageChan)
+	go e.SendAck(message, ackChan)
 
-	var sentMsg = make(chan bool, 1)
+	<-ackChan
 
-	defer close(sentMsg)
+	for index := range ChannelList.TCPSocketDetails[message.ChannelName]{
 
-	for{
-
-		if exitLoop || quitChannel{
-
-			messageChan = nil
+		if len(ChannelList.TCPSocketDetails[message.ChannelName]) <= index{
 			break
-
-		}
-
-		var message, ok = <-messageChan
-
-		if !ok{
-
-			break
-
-		}
+		} 
 
 		var byteBuffer = ByteBuffer.Buffer{
 			Endian:"big",
@@ -152,41 +128,28 @@ func SubscribeInmemoryChannel(conn net.TCPConn, channelName string, messageChan 
 
 		byteBuffer.Put(message.BodyBB) // actual body
 
-		go sendInMemory(conn, byteBuffer, sentMsg)
+		go e.sendInMemory(message, index, byteBuffer, subsChan)
 
-		select{
-			case message, ok := <-sentMsg:
-
-				if ok{
-
-					if !message{
-
-						messageChan = nil
-						exitLoop = true
-
-					}else{
-
-						exitLoop = false
-
-					}
-
-				}
-
-				break
-		}
+		<-subsChan
 
 	}
 
-	delete(ChannelList.TCPSocketDetails[channelName], subscriberCount)
+	cbChan <- true
 }
 
-func sendInMemory(conn net.TCPConn, packetBuffer ByteBuffer.Buffer, callback chan bool){ 
+func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, packetBuffer ByteBuffer.Buffer, callback chan bool){ 
 
 	defer ChannelList.Recover()
+
+	e.Lock()
+
+	defer e.Unlock()
 
 	var totalRetry = 0
 
 	RETRY:
+
+	if len(ChannelList.TCPSocketDetails[message.ChannelName]) > index{
 
 		totalRetry += 1
 
@@ -198,17 +161,29 @@ func sendInMemory(conn net.TCPConn, packetBuffer ByteBuffer.Buffer, callback cha
 
 		}
 
-		_, err := conn.Write(packetBuffer.Array())
+		_, err := ChannelList.TCPSocketDetails[message.ChannelName][index].Conn.Write(packetBuffer.Array())
 		
 		if err != nil {
 		
 			go ChannelList.WriteLog(err.Error())
 
+			var channelArray = ChannelList.TCPSocketDetails[message.ChannelName]
+			copy(channelArray[index:], channelArray[index+1:])
+			channelArray[len(channelArray)-1] = nil
+			ChannelList.TCPSocketDetails[message.ChannelName] = channelArray[:len(channelArray)-1]
+
 			goto RETRY
 
 		}
 
-	callback <- true
+		callback <- true
+
+	}else{
+
+		callback <- false
+
+	}
+
 }
 
 func SubscribeChannel(conn net.TCPConn, channelName string, cursor int64, quitChannel bool){
