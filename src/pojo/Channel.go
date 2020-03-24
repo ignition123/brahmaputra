@@ -7,7 +7,7 @@ import(
 )
 
 type ChannelStruct struct{
-	FD *os.File 
+	FD []*os.File 
 	Path string
 	Offset int64
 	Worker int
@@ -15,6 +15,8 @@ type ChannelStruct struct{
 	WriteCallback chan bool
 	ChannelLock sync.RWMutex
 	ChannelStorageType string
+	SubscriberChannel chan *PacketStruct
+	PartitionCount int
 }
 
 type SocketDetails struct{

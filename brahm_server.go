@@ -13,6 +13,7 @@ import (
 	"ChannelList"
 	"time"
 	"runtime"
+	"strconv"
 )
 
 
@@ -20,7 +21,7 @@ var commandLineMap = make(map[string]interface{})
 
 func main(){
 
-	// defer ChannelList.Recover()
+	defer ChannelList.Recover()
 
 	sigs := make(chan os.Signal, 1)
 
@@ -53,13 +54,15 @@ func main(){
 	path := flag.String("path", "default", "a string")
 
 	channelType := flag.String("channelType", "tcp", "a string")
+
+	partionCount := flag.Int("partionCount", 5, "an int")
 	
 	flag.Parse()
 
 	if *serverRun != "default"{
 		runConfigFile(*serverRun, *channelType)
 	}else if *channelName != "default"{
-		createChannel(*path, *channelName, *channelType)
+		createChannel(*path, *channelName, *channelType, *partionCount)
 	}else{
 		log.Println(`
 			possible commands:
@@ -75,20 +78,26 @@ func main(){
 
 func cleanupAllTheThings(){
 
-	// defer ChannelList.Recover()
+	defer ChannelList.Recover()
 
 	for key := range ChannelList.TCPStorage{
 
 		time.Sleep(1 * time.Second)
 
 		log.Println("Closing storage files of the channel "+ key+"...")
-		ChannelList.TCPStorage[key].FD.Close()
+
+		for index :=  range ChannelList.TCPStorage[key].FD{
+
+			ChannelList.TCPStorage[key].FD[index].Close()
+
+		}
+		
 	}
 }
 
 func runConfigFile(configPath string, channelType string){
 	
-	// defer ChannelList.Recover()
+	defer ChannelList.Recover()
 
 	data, err := ioutil.ReadFile(configPath)
 
@@ -121,90 +130,131 @@ func runConfigFile(configPath string, channelType string){
 	}	
 }
 
-func createChannel(path string, channelName string, channelType string){
+func createChannel(path string, channelName string, channelType string, partionCount int){
 
-	// defer ChannelList.Recover()
+	defer ChannelList.Recover()
 
 	if path == "default"{
 		log.Println("Please set a path for the channel storage...")
 		return
 	}
 
-	var filePath = path+"\\"+channelName+".br";
+	var directoryPath = path+"\\"+channelName
 
-	if _, err := os.Stat(filePath); err == nil{
+	if _, err := os.Stat(directoryPath); err == nil{
 
-	  	log.Println("Channel already exists with name : "+channelName+"...")
+		log.Println("Channel already exists with name : "+channelName+"...")
 		return
 
 	}else if os.IsNotExist(err){
 
-		if channelType != "tcp" && channelType != "udp"{
-			log.Println("Channel must be either tcp or udp...")
-			return
-		}
+		errDir := os.MkdirAll(directoryPath, 0755)
 
-		fDes, err := os.Create(filePath)
-
-		if err != nil{
-
-			log.Println(err)
+		if errDir != nil {
+				
+			log.Println("Failed to create channel directory : "+channelName+"...")
 			return
 
 		}
 
-		defer fDes.Close()
 
-		var storage = make(map[string]map[string]interface{})
-
-		if channelType == "tcp"{
-			storage[channelName] = make(map[string]interface{})
-
-			storage[channelName]["channelName"] = channelName
-			storage[channelName]["type"] = "channel"
-			storage[channelName]["channelStorageType"] = "persistent"
-			storage[channelName]["path"] = filePath
-			storage[channelName]["worker"] = 1
-			storage[channelName]["channelType"] = channelType
-		}else if channelType == "udp"{
-			storage[channelName] = make(map[string]interface{})
-			storage[channelName]["channelName"] = channelName
-			storage[channelName]["type"] = "channel"
-			storage[channelName]["channelStorageType"] = "inmemory"
-			storage[channelName]["path"] = filePath
-			storage[channelName]["worker"] = 1
-			storage[channelName]["channelType"] = channelType
-		}else{
-			log.Println("Invalid protocol, must be either tcp or udp...")
-			return
-		}
-
-		jsonData, err := json.Marshal(storage[channelName])
-
-		if err != nil{
-
-			log.Println(err)
-			return
-
-		}
-
-		d1 := []byte(jsonData)
-
-		err = ioutil.WriteFile(path+"\\"+channelName+"_channel_details.json", d1, 0644)
-
-		if err != nil{
-
-			log.Println(err)
-			return
-
-		}
-
-		log.Println("Channel created successfully...")
-
+		log.Println("Channel directory : "+channelName+" created successfully...")
 	}else{
-	  
+		  
 		log.Println("Error")
 
 	}
 
+	for i:=0;i<partionCount;i++{
+
+		var filePath = directoryPath+"\\"+channelName+"_partition_"+strconv.Itoa(i)+".br"
+
+		if _, err := os.Stat(filePath); err == nil{
+
+		  	log.Println("Failed to create partion name : "+channelName+"...")
+
+			return
+
+		}else if os.IsNotExist(err){
+
+			if channelType != "tcp" && channelType != "udp"{
+				log.Println("Channel must be either tcp or udp...")
+				return
+			}
+
+			fDes, err := os.Create(filePath)
+
+			if err != nil{
+
+				log.Println(err)
+
+				return
+
+			}
+
+			defer fDes.Close()
+
+		}else{
+		  
+			log.Println("Error")
+
+		}
+
+	}
+
+	
+	var storage = make(map[string]map[string]interface{})
+
+	if channelType == "tcp"{
+		
+		storage[channelName] = make(map[string]interface{})
+
+		storage[channelName]["channelName"] = channelName
+		storage[channelName]["type"] = "channel"
+		storage[channelName]["channelStorageType"] = "persistent"
+		storage[channelName]["path"] = directoryPath
+		storage[channelName]["worker"] = 1
+		storage[channelName]["channelType"] = channelType
+		storage[channelName]["partitions"] = partionCount
+
+	}else if channelType == "udp"{
+
+		storage[channelName] = make(map[string]interface{})
+
+		storage[channelName]["channelName"] = channelName
+		storage[channelName]["type"] = "channel"
+		storage[channelName]["channelStorageType"] = "inmemory"
+		storage[channelName]["path"] = directoryPath
+		storage[channelName]["worker"] = 1
+		storage[channelName]["channelType"] = channelType
+
+	}else{
+
+		log.Println("Invalid protocol, must be either tcp or udp...")
+		return
+
+	}
+
+	jsonData, err := json.Marshal(storage[channelName])
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	d1 := []byte(jsonData)
+
+	err = ioutil.WriteFile(directoryPath+"\\"+channelName+"_channel_details.json", d1, 0644)
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	log.Println("Channel created successfully...")
+	
 }

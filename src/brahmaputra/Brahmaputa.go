@@ -15,7 +15,7 @@ import(
 	"encoding/json"
 )
 
-var SubscriberChannel = make(chan interface{}, 100)
+var SubscriberChannel = make(chan interface{}, 1)
 
 type CreateProperties struct{
 	Host string
@@ -46,6 +46,8 @@ type CreateProperties struct{
 	subscribeFD *os.File
 	WriteDelay int32
 	ReadDelay int32
+	GroupName string
+	SubscriberName string
 }	
 
 func handlepanic() { 
@@ -508,20 +510,27 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 		}
 	}
 
-	// totalLen + messageTypelen + messageType + channelNameLen + channelName + lastReceivedOffset + startFromLen + startFrom
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + lastReceivedOffset + startFromLen + startFrom + subscriberTypeLen + subscriberType
+
+	// subscriberType = "Group | Individual"
 
 	var messageType = "subscribe"
+
 	var messageTypeLen = len(messageType)
 
 	var channelNameLen = len(e.ChannelName)
 
 	var startFromLen = len(e.AlwaysStartFrom)
 
+	var subscriberTypeLen = len(e.GroupName)
+
+	var SubscriberNameLen = len(e.SubscriberName)
+
 	var byteBuffer = ByteBuffer.Buffer{
 		Endian:"big",
 	}
 
-	var totalLen = 2 + messageTypeLen + 2 + channelNameLen + 8 + 2 + startFromLen
+	var totalLen = 2 + messageTypeLen + 2 + channelNameLen + 8 + 2 + startFromLen + 2 + SubscriberNameLen + 2 + subscriberTypeLen
 
 	byteBuffer.PutLong(totalLen) // 8
 
@@ -538,6 +547,18 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 	byteBuffer.PutShort(startFromLen) // 2
 
 	byteBuffer.Put([]byte(e.AlwaysStartFrom)) // startFromLen
+
+	byteBuffer.PutShort(SubscriberNameLen) // 2
+
+	byteBuffer.Put([]byte(e.SubscriberName)) // SubscriberNameLen
+
+	byteBuffer.PutShort(subscriberTypeLen) // subscriberTypeLen
+
+	// if subscriber type = Group Then add bytes
+
+	if e.GroupName != ""{
+		byteBuffer.Put([]byte(e.GroupName))
+	}
 
 	_, err := e.Conn.Write(byteBuffer.Array())
 
@@ -575,7 +596,7 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 	defer handlepanic()
 
-	var callbackChan = make(chan string, 100)
+	var callbackChan = make(chan string, 1)
 
 	for {	
 
@@ -621,7 +642,7 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 	defer handlepanic()
 
-	var callbackChan = make(chan string, 100)
+	var callbackChan = make(chan string, 1)
 
 	for {	
 
@@ -753,7 +774,7 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 					}
 
-					go e.contentMatch(messageData)
+					e.contentMatch(messageData)
 
 				}else{
 
@@ -782,7 +803,7 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 				}
 
-				go e.contentMatch(messageData)
+				e.contentMatch(messageData)
 
 			}else{
 

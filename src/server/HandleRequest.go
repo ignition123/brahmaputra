@@ -32,6 +32,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	var counterRequest = 0
 
+	var writeCount = 0
+
 	var quitChannel = false
 
 	for {
@@ -61,7 +63,7 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &counterRequest, quitChannel)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &writeCount, &counterRequest, quitChannel)
 
 		<-parseChan
 	}

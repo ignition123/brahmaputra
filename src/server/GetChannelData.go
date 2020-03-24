@@ -24,7 +24,38 @@ func (e *ChannelMethods) GetChannelData(){
 
 	for channelName := range ChannelList.TCPStorage {
 
-	    e.runChannel(channelName)
+	    go e.runChannel(channelName)
+
+	    go e.subscriberChannel(channelName)
+
+	}
+
+}
+
+func (e *ChannelMethods) subscriberChannel(channelName string){
+
+	defer ChannelList.Recover()
+
+	defer close(ChannelList.TCPStorage[channelName].SubscriberChannel)
+
+	var cbChan = make(chan bool, 1) 
+
+	for{
+
+		select {
+
+			case message, ok := <-ChannelList.TCPStorage[channelName].SubscriberChannel:	
+
+				if ok{
+
+					go e.sendMessageToClient(*message, cbChan)
+
+					<-cbChan
+
+				}
+
+				break
+		}
 
 	}
 
@@ -58,17 +89,13 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 							if(channelName == subchannelName && channelName != "heart_beat"){
 
-								if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
+								go e.SendAck(*message, cbChan)
 
-									go e.SendAck(*message, cbChan)
+								<-cbChan
 
-									<-cbChan
+								if ChannelList.TCPStorage[channelName].ChannelStorageType == "inmemory"{
 
-								}else{
-
-									go e.sendMessageToClient(*message, cbChan)
-
-									<-cbChan
+									ChannelList.TCPStorage[channelName].SubscriberChannel <- message
 
 								}
 							}

@@ -16,9 +16,10 @@ func main() {
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",
 		AppType:"consumer",
-		// OffsetPath:"D:\\pounze_go_project\\brahmaputra\\subscriber_offset.offset", //writes last offset received
-		// AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
+		//OffsetPath:"D:\\pounze_go_project\\brahmaputra\\subscriber_offset.offset", //writes last offset received
+		//AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
+		SubscriberName:"sudeep_subscriber",
 	}
 
 	brahm.Connect()

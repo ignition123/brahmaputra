@@ -36922,3 +36922,2328 @@ Connection closed...
 ############################### 
 2020-03-23 23:10:43.3693784 +0530 IST m=+24.058242201
 Connection closed...
+############################### 
+2020-03-25 00:22:14.9284256 +0530 IST m=+0.009002101
+Loading log files...
+############################### 
+2020-03-25 00:22:14.9293973 +0530 IST m=+0.009973801
+Starting TCP server...
+############################### 
+2020-03-25 00:22:44.6090709 +0530 IST m=+29.689647401
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6100679 +0530 IST m=+29.690644401
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6110658 +0530 IST m=+29.691642301
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6110658 +0530 IST m=+29.691642301
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6120631 +0530 IST m=+29.692639601
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6120631 +0530 IST m=+29.692639601
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6130613 +0530 IST m=+29.693637801
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6140591 +0530 IST m=+29.694635601
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6140591 +0530 IST m=+29.694635601
+Connection closed...
+############################### 
+2020-03-25 00:22:44.6150548 +0530 IST m=+29.695631301
+Connection closed...
+############################### 
+2020-03-25 00:22:45.4847463 +0530 IST m=+30.565322801
+Connection closed...
+############################### 
+2020-03-25 00:23:08.2380418 +0530 IST m=+0.005984601
+Loading log files...
+############################### 
+2020-03-25 00:23:08.2380418 +0530 IST m=+0.005984601
+Starting TCP server...
+############################### 
+2020-03-25 00:24:52.0372053 +0530 IST m=+0.006015901
+Loading log files...
+############################### 
+2020-03-25 00:24:52.0381695 +0530 IST m=+0.006980101
+Starting TCP server...
+############################### 
+2020-03-25 00:25:05.8400427 +0530 IST m=+13.808853301
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8430347 +0530 IST m=+13.811845301
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8440335 +0530 IST m=+13.812844101
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8440335 +0530 IST m=+13.812844101
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8450309 +0530 IST m=+13.813841501
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8450309 +0530 IST m=+13.813841501
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8460275 +0530 IST m=+13.814838101
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8460275 +0530 IST m=+13.814838101
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8460275 +0530 IST m=+13.814838101
+Connection closed...
+############################### 
+2020-03-25 00:25:05.8470246 +0530 IST m=+13.815835201
+Connection closed...
+############################### 
+2020-03-25 00:25:06.4424335 +0530 IST m=+14.411244101
+Connection closed...
+############################### 
+2020-03-25 00:25:50.5225454 +0530 IST m=+0.005984401
+Loading log files...
+############################### 
+2020-03-25 00:25:50.5235425 +0530 IST m=+0.006981501
+Starting TCP server...
+############################### 
+2020-03-25 00:26:01.2648097 +0530 IST m=+10.748248701
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3435982 +0530 IST m=+10.827037201
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3445972 +0530 IST m=+10.828036201
+write tcp 127.0.0.1:8100->127.0.0.1:51393: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3465913 +0530 IST m=+10.830030301
+Connection closed...
+############################### 
+2020-03-25 00:26:01.3465913 +0530 IST m=+10.830030301
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3485862 +0530 IST m=+10.832025201
+write tcp 127.0.0.1:8100->127.0.0.1:51393: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3485862 +0530 IST m=+10.832025201
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.35058 +0530 IST m=+10.834019001
+write tcp 127.0.0.1:8100->127.0.0.1:51393: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3515775 +0530 IST m=+10.835016501
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3525751 +0530 IST m=+10.836014101
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3525751 +0530 IST m=+10.836014101
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3535728 +0530 IST m=+10.837011801
+write tcp 127.0.0.1:8100->127.0.0.1:51393: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3565641 +0530 IST m=+10.840003101
+Connection closed...
+############################### 
+2020-03-25 00:26:01.3575616 +0530 IST m=+10.841000601
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3585586 +0530 IST m=+10.841997601
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3595562 +0530 IST m=+10.842995201
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3595562 +0530 IST m=+10.842995201
+Connection closed...
+############################### 
+2020-03-25 00:26:01.360554 +0530 IST m=+10.843993001
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3615508 +0530 IST m=+10.844989801
+write tcp 127.0.0.1:8100->127.0.0.1:51391: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.362549 +0530 IST m=+10.845988001
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3635464 +0530 IST m=+10.846985401
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3645425 +0530 IST m=+10.847981501
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3675355 +0530 IST m=+10.850974501
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3675355 +0530 IST m=+10.850974501
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3685329 +0530 IST m=+10.851971901
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3695305 +0530 IST m=+10.852969501
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3695305 +0530 IST m=+10.852969501
+write tcp 127.0.0.1:8100->127.0.0.1:51399: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3705274 +0530 IST m=+10.853966401
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3715242 +0530 IST m=+10.854963201
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3725212 +0530 IST m=+10.855960201
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3735205 +0530 IST m=+10.856959501
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3745163 +0530 IST m=+10.857955301
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3755134 +0530 IST m=+10.858952401
+write tcp 127.0.0.1:8100->127.0.0.1:51391: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3785061 +0530 IST m=+10.861945101
+Connection closed...
+############################### 
+2020-03-25 00:26:01.3785061 +0530 IST m=+10.861945101
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3795041 +0530 IST m=+10.862943101
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3804997 +0530 IST m=+10.863938701
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3814978 +0530 IST m=+10.864936801
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3824943 +0530 IST m=+10.865933301
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3844898 +0530 IST m=+10.867928801
+write tcp 127.0.0.1:8100->127.0.0.1:51392: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3854882 +0530 IST m=+10.868927201
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3854882 +0530 IST m=+10.868927201
+write tcp 127.0.0.1:8100->127.0.0.1:51397: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3894772 +0530 IST m=+10.872916201
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3914713 +0530 IST m=+10.874910301
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3924687 +0530 IST m=+10.875907701
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3934655 +0530 IST m=+10.876904501
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3944627 +0530 IST m=+10.877901701
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3944627 +0530 IST m=+10.877901701
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3954611 +0530 IST m=+10.878900101
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.3964584 +0530 IST m=+10.879897401
+Connection closed...
+############################### 
+2020-03-25 00:26:01.3964584 +0530 IST m=+10.879897401
+write tcp 127.0.0.1:8100->127.0.0.1:51396: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.3974554 +0530 IST m=+10.880894401
+Connection closed...
+############################### 
+2020-03-25 00:26:01.4034385 +0530 IST m=+10.886877501
+write tcp 127.0.0.1:8100->127.0.0.1:51395: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.4044358 +0530 IST m=+10.887874801
+Connection closed...
+############################### 
+2020-03-25 00:26:01.4054335 +0530 IST m=+10.888872501
+write tcp 127.0.0.1:8100->127.0.0.1:51398: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4064306 +0530 IST m=+10.889869601
+write tcp 127.0.0.1:8100->127.0.0.1:51396: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.4064306 +0530 IST m=+10.889869601
+write tcp 127.0.0.1:8100->127.0.0.1:51395: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4075286 +0530 IST m=+10.890967601
+write tcp 127.0.0.1:8100->127.0.0.1:51398: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4084263 +0530 IST m=+10.891865301
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4084263 +0530 IST m=+10.891865301
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4094227 +0530 IST m=+10.892861701
+Connection closed...
+############################### 
+2020-03-25 00:26:01.4124157 +0530 IST m=+10.895854701
+write tcp 127.0.0.1:8100->127.0.0.1:51400: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4134117 +0530 IST m=+10.896850701
+write tcp 127.0.0.1:8100->127.0.0.1:51394: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:26:01.4144109 +0530 IST m=+10.897849901
+Connection closed...
+############################### 
+2020-03-25 00:26:01.415407 +0530 IST m=+10.898846001
+write tcp 127.0.0.1:8100->127.0.0.1:51397: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4164051 +0530 IST m=+10.899844101
+write tcp 127.0.0.1:8100->127.0.0.1:51400: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4174018 +0530 IST m=+10.900840801
+write tcp 127.0.0.1:8100->127.0.0.1:51394: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4174018 +0530 IST m=+10.900840801
+write tcp 127.0.0.1:8100->127.0.0.1:51397: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4183997 +0530 IST m=+10.901838701
+write tcp 127.0.0.1:8100->127.0.0.1:51396: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4193962 +0530 IST m=+10.902835201
+write tcp 127.0.0.1:8100->127.0.0.1:51396: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4203934 +0530 IST m=+10.903832401
+write tcp 127.0.0.1:8100->127.0.0.1:51399: use of closed network connection
+############################### 
+2020-03-25 00:26:01.4233852 +0530 IST m=+10.906824201
+Connection closed...
+############################### 
+2020-03-25 00:26:07.9366042 +0530 IST m=+17.420043201
+Connection closed...
+############################### 
+2020-03-25 00:26:16.5360557 +0530 IST m=+26.019494701
+write tcp 127.0.0.1:8100->127.0.0.1:51390: use of closed network connection
+############################### 
+2020-03-25 00:27:15.6118635 +0530 IST m=+85.095302501
+write tcp 127.0.0.1:8100->127.0.0.1:51403: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:27:15.6328075 +0530 IST m=+85.116246501
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2316653 +0530 IST m=+95.715104301
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2316653 +0530 IST m=+95.715104301
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2326634 +0530 IST m=+95.716102401
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2336599 +0530 IST m=+95.717098901
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2336599 +0530 IST m=+95.717098901
+Connection closed...
+############################### 
+2020-03-25 00:27:26.234697 +0530 IST m=+95.718136001
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2356543 +0530 IST m=+95.719093301
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2356543 +0530 IST m=+95.719093301
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2366524 +0530 IST m=+95.720091401
+Connection closed...
+############################### 
+2020-03-25 00:27:26.2366524 +0530 IST m=+95.720091401
+Connection closed...
+############################### 
+2020-03-25 00:31:23.0044003 +0530 IST m=+332.487839301
+Connection closed...
+############################### 
+2020-03-25 00:31:23.0053989 +0530 IST m=+332.488837901
+write tcp 127.0.0.1:8100->127.0.0.1:51447: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8631046 +0530 IST m=+333.346543601
+Connection closed...
+############################### 
+2020-03-25 00:31:23.8641022 +0530 IST m=+333.347541201
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8660975 +0530 IST m=+333.349536501
+write tcp 127.0.0.1:8100->127.0.0.1:51448: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8670942 +0530 IST m=+333.350533201
+write tcp 127.0.0.1:8100->127.0.0.1:51448: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8670942 +0530 IST m=+333.350533201
+Connection closed...
+############################### 
+2020-03-25 00:31:23.8680919 +0530 IST m=+333.351530901
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8690895 +0530 IST m=+333.352528501
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8690895 +0530 IST m=+333.352528501
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8700872 +0530 IST m=+333.353526201
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8710837 +0530 IST m=+333.354522701
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8720811 +0530 IST m=+333.355520101
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8720811 +0530 IST m=+333.355520101
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8760709 +0530 IST m=+333.359509901
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8770674 +0530 IST m=+333.360506401
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8780655 +0530 IST m=+333.361504501
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8790619 +0530 IST m=+333.362500901
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8800597 +0530 IST m=+333.363498701
+write tcp 127.0.0.1:8100->127.0.0.1:51449: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8800597 +0530 IST m=+333.363498701
+write tcp 127.0.0.1:8100->127.0.0.1:51454: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8810573 +0530 IST m=+333.364496301
+write tcp 127.0.0.1:8100->127.0.0.1:51454: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8820552 +0530 IST m=+333.365494201
+Connection closed...
+############################### 
+2020-03-25 00:31:23.8830513 +0530 IST m=+333.366490301
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8840503 +0530 IST m=+333.367489301
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8870406 +0530 IST m=+333.370479601
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8880382 +0530 IST m=+333.371477201
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8880382 +0530 IST m=+333.371477201
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8890364 +0530 IST m=+333.372475401
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8900332 +0530 IST m=+333.373472201
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8910304 +0530 IST m=+333.374469401
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8920281 +0530 IST m=+333.375467101
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8920281 +0530 IST m=+333.375467101
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.893025 +0530 IST m=+333.376464001
+write tcp 127.0.0.1:8100->127.0.0.1:51450: use of closed network connection
+############################### 
+2020-03-25 00:31:23.8940233 +0530 IST m=+333.377462301
+Connection closed...
+############################### 
+2020-03-25 00:31:23.8950202 +0530 IST m=+333.378459201
+write tcp 127.0.0.1:8100->127.0.0.1:51451: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.8980124 +0530 IST m=+333.381451401
+write tcp 127.0.0.1:8100->127.0.0.1:51451: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.8980124 +0530 IST m=+333.381451401
+write tcp 127.0.0.1:8100->127.0.0.1:51451: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.8990094 +0530 IST m=+333.382448401
+Connection closed...
+############################### 
+2020-03-25 00:31:23.9000069 +0530 IST m=+333.383445901
+write tcp 127.0.0.1:8100->127.0.0.1:51451: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9010045 +0530 IST m=+333.384443501
+write tcp 127.0.0.1:8100->127.0.0.1:51452: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9010045 +0530 IST m=+333.384443501
+write tcp 127.0.0.1:8100->127.0.0.1:51451: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9020012 +0530 IST m=+333.385440201
+write tcp 127.0.0.1:8100->127.0.0.1:51452: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9029984 +0530 IST m=+333.386437401
+write tcp 127.0.0.1:8100->127.0.0.1:51453: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9029984 +0530 IST m=+333.386437401
+Connection closed...
+############################### 
+2020-03-25 00:31:23.9039973 +0530 IST m=+333.387436301
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9049924 +0530 IST m=+333.388431401
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9059899 +0530 IST m=+333.389428901
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9099803 +0530 IST m=+333.393419301
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9099803 +0530 IST m=+333.393419301
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9109775 +0530 IST m=+333.394416501
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9109775 +0530 IST m=+333.394416501
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9119742 +0530 IST m=+333.395413201
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9129711 +0530 IST m=+333.396410101
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9129711 +0530 IST m=+333.396410101
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9139698 +0530 IST m=+333.397408801
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9139698 +0530 IST m=+333.397408801
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9149662 +0530 IST m=+333.398405201
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9149662 +0530 IST m=+333.398405201
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9159634 +0530 IST m=+333.399402401
+write tcp 127.0.0.1:8100->127.0.0.1:51453: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9159634 +0530 IST m=+333.399402401
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9169602 +0530 IST m=+333.400399201
+write tcp 127.0.0.1:8100->127.0.0.1:51453: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9169602 +0530 IST m=+333.400399201
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9179594 +0530 IST m=+333.401398401
+write tcp 127.0.0.1:8100->127.0.0.1:51455: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9199532 +0530 IST m=+333.403392201
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9209511 +0530 IST m=+333.404390101
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9209511 +0530 IST m=+333.404390101
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9219483 +0530 IST m=+333.405387301
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9219483 +0530 IST m=+333.405387301
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9229453 +0530 IST m=+333.406384301
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9229453 +0530 IST m=+333.406384301
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9239433 +0530 IST m=+333.407382301
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9239433 +0530 IST m=+333.407382301
+Connection closed...
+############################### 
+2020-03-25 00:31:23.9249402 +0530 IST m=+333.408379201
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9249402 +0530 IST m=+333.408379201
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9259375 +0530 IST m=+333.409376501
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9259375 +0530 IST m=+333.409376501
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9269346 +0530 IST m=+333.410373601
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9269346 +0530 IST m=+333.410373601
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9279327 +0530 IST m=+333.411371701
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9279327 +0530 IST m=+333.411371701
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9289291 +0530 IST m=+333.412368101
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.930923 +0530 IST m=+333.414362001
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9319215 +0530 IST m=+333.415360501
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9319215 +0530 IST m=+333.415360501
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.933027 +0530 IST m=+333.416466001
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.933027 +0530 IST m=+333.416466001
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.933916 +0530 IST m=+333.417355001
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.933916 +0530 IST m=+333.417355001
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9349133 +0530 IST m=+333.418352301
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9349133 +0530 IST m=+333.418352301
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9359105 +0530 IST m=+333.419349501
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9359105 +0530 IST m=+333.419349501
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9369076 +0530 IST m=+333.420346601
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9369076 +0530 IST m=+333.420346601
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9379048 +0530 IST m=+333.421343801
+Connection closed...
+############################### 
+2020-03-25 00:31:23.9379048 +0530 IST m=+333.421343801
+write tcp 127.0.0.1:8100->127.0.0.1:51455: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9389022 +0530 IST m=+333.422341201
+Connection closed...
+############################### 
+2020-03-25 00:31:23.9389022 +0530 IST m=+333.422341201
+write tcp 127.0.0.1:8100->127.0.0.1:51456: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9398995 +0530 IST m=+333.423338501
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9418938 +0530 IST m=+333.425332801
+write tcp 127.0.0.1:8100->127.0.0.1:51455: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9428921 +0530 IST m=+333.426331101
+write tcp 127.0.0.1:8100->127.0.0.1:51456: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9428921 +0530 IST m=+333.426331101
+write tcp 127.0.0.1:8100->127.0.0.1:51457: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:23.9438882 +0530 IST m=+333.427327201
+write tcp 127.0.0.1:8100->127.0.0.1:51457: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9448869 +0530 IST m=+333.428325901
+write tcp 127.0.0.1:8100->127.0.0.1:51457: use of closed network connection
+############################### 
+2020-03-25 00:31:23.9448869 +0530 IST m=+333.428325901
+Connection closed...
+############################### 
+2020-03-25 00:31:55.6904554 +0530 IST m=+365.173894401
+write tcp 127.0.0.1:8100->127.0.0.1:51490: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6914531 +0530 IST m=+365.174892101
+write tcp 127.0.0.1:8100->127.0.0.1:51490: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6944449 +0530 IST m=+365.177883901
+write tcp 127.0.0.1:8100->127.0.0.1:51490: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6954421 +0530 IST m=+365.178881101
+write tcp 127.0.0.1:8100->127.0.0.1:51491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6964402 +0530 IST m=+365.179879201
+write tcp 127.0.0.1:8100->127.0.0.1:51490: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6974372 +0530 IST m=+365.180876201
+write tcp 127.0.0.1:8100->127.0.0.1:51493: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6984337 +0530 IST m=+365.181872701
+write tcp 127.0.0.1:8100->127.0.0.1:51492: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.6994326 +0530 IST m=+365.182871601
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7004293 +0530 IST m=+365.183868301
+write tcp 127.0.0.1:8100->127.0.0.1:51491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7044173 +0530 IST m=+365.187856301
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7054157 +0530 IST m=+365.188854701
+write tcp 127.0.0.1:8100->127.0.0.1:51490: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7064132 +0530 IST m=+365.189852201
+write tcp 127.0.0.1:8100->127.0.0.1:51491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7074105 +0530 IST m=+365.190849501
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7084078 +0530 IST m=+365.191846801
+write tcp 127.0.0.1:8100->127.0.0.1:51491: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7104018 +0530 IST m=+365.193840801
+Connection closed...
+############################### 
+2020-03-25 00:31:55.711401 +0530 IST m=+365.194840001
+write tcp 127.0.0.1:8100->127.0.0.1:51492: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7123961 +0530 IST m=+365.195835101
+write tcp 127.0.0.1:8100->127.0.0.1:51490: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7153883 +0530 IST m=+365.198827301
+write tcp 127.0.0.1:8100->127.0.0.1:51491: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7173834 +0530 IST m=+365.200822401
+write tcp 127.0.0.1:8100->127.0.0.1:51493: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7183823 +0530 IST m=+365.201821301
+write tcp 127.0.0.1:8100->127.0.0.1:51492: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7193777 +0530 IST m=+365.202816701
+write tcp 127.0.0.1:8100->127.0.0.1:51490: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7203777 +0530 IST m=+365.203816701
+write tcp 127.0.0.1:8100->127.0.0.1:51491: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7213722 +0530 IST m=+365.204811201
+write tcp 127.0.0.1:8100->127.0.0.1:51493: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7223697 +0530 IST m=+365.205808701
+write tcp 127.0.0.1:8100->127.0.0.1:51494: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7233672 +0530 IST m=+365.206806201
+write tcp 127.0.0.1:8100->127.0.0.1:51494: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7273567 +0530 IST m=+365.210795701
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7283539 +0530 IST m=+365.211792901
+write tcp 127.0.0.1:8100->127.0.0.1:51494: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7293512 +0530 IST m=+365.212790201
+write tcp 127.0.0.1:8100->127.0.0.1:51494: use of closed network connection
+############################### 
+2020-03-25 00:31:55.730349 +0530 IST m=+365.213788001
+write tcp 127.0.0.1:8100->127.0.0.1:51495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7313457 +0530 IST m=+365.214784701
+write tcp 127.0.0.1:8100->127.0.0.1:51495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7323442 +0530 IST m=+365.215783201
+write tcp 127.0.0.1:8100->127.0.0.1:51495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7333405 +0530 IST m=+365.216779501
+write tcp 127.0.0.1:8100->127.0.0.1:51495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7343378 +0530 IST m=+365.217776801
+write tcp 127.0.0.1:8100->127.0.0.1:51495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7393244 +0530 IST m=+365.222763401
+write tcp 127.0.0.1:8100->127.0.0.1:51495: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7403221 +0530 IST m=+365.223761101
+write tcp 127.0.0.1:8100->127.0.0.1:51495: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7413197 +0530 IST m=+365.224758701
+write tcp 127.0.0.1:8100->127.0.0.1:51495: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7423168 +0530 IST m=+365.225755801
+write tcp 127.0.0.1:8100->127.0.0.1:51496: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7433134 +0530 IST m=+365.226752401
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7443119 +0530 IST m=+365.227750901
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7453086 +0530 IST m=+365.228747601
+write tcp 127.0.0.1:8100->127.0.0.1:51495: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7463059 +0530 IST m=+365.229744901
+write tcp 127.0.0.1:8100->127.0.0.1:51497: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7473031 +0530 IST m=+365.230742101
+write tcp 127.0.0.1:8100->127.0.0.1:51498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7512924 +0530 IST m=+365.234731401
+write tcp 127.0.0.1:8100->127.0.0.1:51497: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7512924 +0530 IST m=+365.234731401
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7522907 +0530 IST m=+365.235729701
+write tcp 127.0.0.1:8100->127.0.0.1:51497: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7532878 +0530 IST m=+365.236726801
+write tcp 127.0.0.1:8100->127.0.0.1:51498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7542848 +0530 IST m=+365.237723801
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7552824 +0530 IST m=+365.238721401
+write tcp 127.0.0.1:8100->127.0.0.1:51498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7552824 +0530 IST m=+365.238721401
+write tcp 127.0.0.1:8100->127.0.0.1:51497: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.756279 +0530 IST m=+365.239718001
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7572764 +0530 IST m=+365.240715401
+write tcp 127.0.0.1:8100->127.0.0.1:51496: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7582746 +0530 IST m=+365.241713601
+Connection closed...
+############################### 
+2020-03-25 00:31:55.7592717 +0530 IST m=+365.242710701
+write tcp 127.0.0.1:8100->127.0.0.1:51497: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7632598 +0530 IST m=+365.246698801
+write tcp 127.0.0.1:8100->127.0.0.1:51496: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7642575 +0530 IST m=+365.247696501
+write tcp 127.0.0.1:8100->127.0.0.1:51497: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7652549 +0530 IST m=+365.248693901
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7662526 +0530 IST m=+365.249691601
+write tcp 127.0.0.1:8100->127.0.0.1:51498: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7672532 +0530 IST m=+365.250692201
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7673964 +0530 IST m=+365.250835401
+write tcp 127.0.0.1:8100->127.0.0.1:51498: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7682477 +0530 IST m=+365.251686701
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7692451 +0530 IST m=+365.252684101
+write tcp 127.0.0.1:8100->127.0.0.1:51499: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7702412 +0530 IST m=+365.253680201
+write tcp 127.0.0.1:8100->127.0.0.1:51499: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7712399 +0530 IST m=+365.254678901
+write tcp 127.0.0.1:8100->127.0.0.1:51498: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7712399 +0530 IST m=+365.254678901
+write tcp 127.0.0.1:8100->127.0.0.1:51498: use of closed network connection
+############################### 
+2020-03-25 00:31:55.7762267 +0530 IST m=+365.259665701
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7772243 +0530 IST m=+365.260663301
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7782212 +0530 IST m=+365.261660201
+write tcp 127.0.0.1:8100->127.0.0.1:51498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7792179 +0530 IST m=+365.262656901
+write tcp 127.0.0.1:8100->127.0.0.1:51498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7802157 +0530 IST m=+365.263654701
+write tcp 127.0.0.1:8100->127.0.0.1:51499: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:31:55.7812133 +0530 IST m=+365.264652301
+Connection closed...
+############################### 
+2020-03-25 00:32:49.130754 +0530 IST m=+418.614193001
+Connection closed...
+############################### 
+2020-03-25 00:32:57.6372296 +0530 IST m=+427.120668601
+write tcp 127.0.0.1:8100->127.0.0.1:51487: use of closed network connection
+############################### 
+2020-03-25 00:33:14.765054 +0530 IST m=+444.248493001
+Connection closed...
+############################### 
+2020-03-25 00:33:14.7660521 +0530 IST m=+444.249491101
+write tcp 127.0.0.1:8100->127.0.0.1:51510: use of closed network connection
+############################### 
+2020-03-25 00:33:16.1034758 +0530 IST m=+445.586914801
+Connection closed...
+############################### 
+2020-03-25 00:33:16.104474 +0530 IST m=+445.587913001
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1064676 +0530 IST m=+445.589906601
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1064676 +0530 IST m=+445.589906601
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1074655 +0530 IST m=+445.590904501
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1084623 +0530 IST m=+445.591901301
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1084623 +0530 IST m=+445.591901301
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1094598 +0530 IST m=+445.592898801
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1104577 +0530 IST m=+445.593896701
+Connection closed...
+############################### 
+2020-03-25 00:33:16.1104577 +0530 IST m=+445.593896701
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1203022 +0530 IST m=+521.603741201
+write tcp 127.0.0.1:8100->127.0.0.1:51531: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1222986 +0530 IST m=+521.605737601
+write tcp 127.0.0.1:8100->127.0.0.1:51531: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1232943 +0530 IST m=+521.606733301
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1242924 +0530 IST m=+521.607731401
+write tcp 127.0.0.1:8100->127.0.0.1:51533: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.127283 +0530 IST m=+521.610722001
+write tcp 127.0.0.1:8100->127.0.0.1:51531: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1282811 +0530 IST m=+521.611720101
+write tcp 127.0.0.1:8100->127.0.0.1:51531: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1292776 +0530 IST m=+521.612716601
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1302753 +0530 IST m=+521.613714301
+write tcp 127.0.0.1:8100->127.0.0.1:51537: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1332681 +0530 IST m=+521.616707101
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1372568 +0530 IST m=+521.620695801
+write tcp 127.0.0.1:8100->127.0.0.1:51537: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1382542 +0530 IST m=+521.621693201
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1392513 +0530 IST m=+521.622690301
+write tcp 127.0.0.1:8100->127.0.0.1:51532: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1402491 +0530 IST m=+521.623688101
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1412465 +0530 IST m=+521.624685501
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1422432 +0530 IST m=+521.625682201
+write tcp 127.0.0.1:8100->127.0.0.1:51534: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1422432 +0530 IST m=+521.625682201
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1432409 +0530 IST m=+521.626679901
+write tcp 127.0.0.1:8100->127.0.0.1:51539: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1442385 +0530 IST m=+521.627677501
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1482271 +0530 IST m=+521.631666101
+write tcp 127.0.0.1:8100->127.0.0.1:51538: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1492251 +0530 IST m=+521.632664101
+write tcp 127.0.0.1:8100->127.0.0.1:51536: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1502215 +0530 IST m=+521.633660501
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1512197 +0530 IST m=+521.634658701
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.152218 +0530 IST m=+521.635657001
+write tcp 127.0.0.1:8100->127.0.0.1:51532: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1532138 +0530 IST m=+521.636652801
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1542112 +0530 IST m=+521.637650201
+write tcp 127.0.0.1:8100->127.0.0.1:51536: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.156206 +0530 IST m=+521.639645001
+write tcp 127.0.0.1:8100->127.0.0.1:51536: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1611928 +0530 IST m=+521.644631801
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1621917 +0530 IST m=+521.645630701
+write tcp 127.0.0.1:8100->127.0.0.1:51534: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.163187 +0530 IST m=+521.646626001
+write tcp 127.0.0.1:8100->127.0.0.1:51534: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.163187 +0530 IST m=+521.646626001
+write tcp 127.0.0.1:8100->127.0.0.1:51533: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1651825 +0530 IST m=+521.648621501
+write tcp 127.0.0.1:8100->127.0.0.1:51540: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1651825 +0530 IST m=+521.648621501
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1661794 +0530 IST m=+521.649618401
+write tcp 127.0.0.1:8100->127.0.0.1:51536: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1671768 +0530 IST m=+521.650615801
+write tcp 127.0.0.1:8100->127.0.0.1:51536: use of closed network connection
+############################### 
+2020-03-25 00:34:32.171166 +0530 IST m=+521.654605001
+write tcp 127.0.0.1:8100->127.0.0.1:51539: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:34:32.1731605 +0530 IST m=+521.656599501
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1741575 +0530 IST m=+521.657596501
+write tcp 127.0.0.1:8100->127.0.0.1:51533: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1751549 +0530 IST m=+521.658593901
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1761523 +0530 IST m=+521.659591301
+write tcp 127.0.0.1:8100->127.0.0.1:51537: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1771509 +0530 IST m=+521.660589901
+write tcp 127.0.0.1:8100->127.0.0.1:51534: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1771509 +0530 IST m=+521.660589901
+write tcp 127.0.0.1:8100->127.0.0.1:51535: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1791449 +0530 IST m=+521.662583901
+write tcp 127.0.0.1:8100->127.0.0.1:51534: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1801426 +0530 IST m=+521.663581601
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1801426 +0530 IST m=+521.663581601
+write tcp 127.0.0.1:8100->127.0.0.1:51536: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1811394 +0530 IST m=+521.664578401
+write tcp 127.0.0.1:8100->127.0.0.1:51534: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1841314 +0530 IST m=+521.667570401
+write tcp 127.0.0.1:8100->127.0.0.1:51537: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1851282 +0530 IST m=+521.668567201
+write tcp 127.0.0.1:8100->127.0.0.1:51540: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1861278 +0530 IST m=+521.669566801
+write tcp 127.0.0.1:8100->127.0.0.1:51538: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1861278 +0530 IST m=+521.669566801
+write tcp 127.0.0.1:8100->127.0.0.1:51535: use of closed network connection
+############################### 
+2020-03-25 00:34:32.187123 +0530 IST m=+521.670562001
+Connection closed...
+############################### 
+2020-03-25 00:34:32.1881214 +0530 IST m=+521.671560401
+write tcp 127.0.0.1:8100->127.0.0.1:51534: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1891184 +0530 IST m=+521.672557401
+write tcp 127.0.0.1:8100->127.0.0.1:51540: use of closed network connection
+############################### 
+2020-03-25 00:34:32.190115 +0530 IST m=+521.673554001
+write tcp 127.0.0.1:8100->127.0.0.1:51538: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1911129 +0530 IST m=+521.674551901
+write tcp 127.0.0.1:8100->127.0.0.1:51539: use of closed network connection
+############################### 
+2020-03-25 00:34:32.1911129 +0530 IST m=+521.674551901
+write tcp 127.0.0.1:8100->127.0.0.1:51539: use of closed network connection
+############################### 
+2020-03-25 00:35:43.5815913 +0530 IST m=+593.065030301
+Connection closed...
+############################### 
+2020-03-25 00:35:51.1164464 +0530 IST m=+600.599885401
+write tcp 127.0.0.1:8100->127.0.0.1:51530: use of closed network connection
+############################### 
+2020-03-25 00:36:04.2295124 +0530 IST m=+613.712951401
+Connection closed...
+############################### 
+2020-03-25 00:36:04.2315057 +0530 IST m=+613.714944701
+write tcp 127.0.0.1:8100->127.0.0.1:51555: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:36:04.8135617 +0530 IST m=+614.297000701
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8145588 +0530 IST m=+614.297997801
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8155564 +0530 IST m=+614.298995401
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8165534 +0530 IST m=+614.299992401
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8175508 +0530 IST m=+614.300989801
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8185492 +0530 IST m=+614.301988201
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8185492 +0530 IST m=+614.301988201
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8195462 +0530 IST m=+614.302985201
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8205443 +0530 IST m=+614.303983301
+Connection closed...
+############################### 
+2020-03-25 00:36:04.8205443 +0530 IST m=+614.303983301
+Connection closed...
+############################### 
+2020-03-25 00:39:34.0804052 +0530 IST m=+823.563844201
+write tcp 127.0.0.1:8100->127.0.0.1:51623: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:39:34.081404 +0530 IST m=+823.564843001
+Connection closed...
+############################### 
+2020-03-25 00:39:49.1062649 +0530 IST m=+838.589703901
+Connection closed...
+############################### 
+2020-03-25 00:39:49.1970232 +0530 IST m=+838.680462201
+write tcp 127.0.0.1:8100->127.0.0.1:51574: use of closed network connection
+############################### 
+2020-03-25 00:40:16.0385729 +0530 IST m=+865.522011901
+write tcp 127.0.0.1:8100->127.0.0.1:51627: wsasend: An established connection was aborted by the software in your host machine.
+############################### 
+2020-03-25 00:40:16.0405675 +0530 IST m=+865.524006501
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4406102 +0530 IST m=+1132.924049201
+write tcp 127.0.0.1:8100->127.0.0.1:51576: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4416054 +0530 IST m=+1132.925044401
+write tcp 127.0.0.1:8100->127.0.0.1:51584: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.443609 +0530 IST m=+1132.927048001
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4445992 +0530 IST m=+1132.928038201
+write tcp 127.0.0.1:8100->127.0.0.1:51577: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4455964 +0530 IST m=+1132.929035401
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4465924 +0530 IST m=+1132.930031401
+write tcp 127.0.0.1:8100->127.0.0.1:51579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4465924 +0530 IST m=+1132.930031401
+write tcp 127.0.0.1:8100->127.0.0.1:51577: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.447591 +0530 IST m=+1132.931030001
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.447591 +0530 IST m=+1132.931030001
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4485877 +0530 IST m=+1132.932026701
+write tcp 127.0.0.1:8100->127.0.0.1:51576: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4495841 +0530 IST m=+1132.933023101
+write tcp 127.0.0.1:8100->127.0.0.1:51577: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4495841 +0530 IST m=+1132.933023101
+write tcp 127.0.0.1:8100->127.0.0.1:51578: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4505817 +0530 IST m=+1132.934020701
+write tcp 127.0.0.1:8100->127.0.0.1:51583: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4535736 +0530 IST m=+1132.937012601
+write tcp 127.0.0.1:8100->127.0.0.1:51577: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4545722 +0530 IST m=+1132.938011201
+write tcp 127.0.0.1:8100->127.0.0.1:51578: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.45557 +0530 IST m=+1132.939009001
+write tcp 127.0.0.1:8100->127.0.0.1:51576: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4565669 +0530 IST m=+1132.940005901
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4575637 +0530 IST m=+1132.941002701
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4575637 +0530 IST m=+1132.941002701
+write tcp 127.0.0.1:8100->127.0.0.1:51584: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4585646 +0530 IST m=+1132.942003601
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4595674 +0530 IST m=+1132.943006401
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4605572 +0530 IST m=+1132.943996201
+write tcp 127.0.0.1:8100->127.0.0.1:51583: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4615525 +0530 IST m=+1132.944991501
+write tcp 127.0.0.1:8100->127.0.0.1:51578: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4655414 +0530 IST m=+1132.948980401
+write tcp 127.0.0.1:8100->127.0.0.1:51577: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4655414 +0530 IST m=+1132.948980401
+write tcp 127.0.0.1:8100->127.0.0.1:51576: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4665384 +0530 IST m=+1132.949977401
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4675376 +0530 IST m=+1132.950976601
+write tcp 127.0.0.1:8100->127.0.0.1:51577: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4675376 +0530 IST m=+1132.950976601
+write tcp 127.0.0.1:8100->127.0.0.1:51585: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4685348 +0530 IST m=+1132.951973801
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4685348 +0530 IST m=+1132.951973801
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4695306 +0530 IST m=+1132.952969601
+write tcp 127.0.0.1:8100->127.0.0.1:51578: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4705296 +0530 IST m=+1132.953968601
+write tcp 127.0.0.1:8100->127.0.0.1:51577: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4705296 +0530 IST m=+1132.953968601
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.471527 +0530 IST m=+1132.954966001
+write tcp 127.0.0.1:8100->127.0.0.1:51584: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4725245 +0530 IST m=+1132.955963501
+write tcp 127.0.0.1:8100->127.0.0.1:51576: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4725245 +0530 IST m=+1132.955963501
+write tcp 127.0.0.1:8100->127.0.0.1:51579: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4735209 +0530 IST m=+1132.956959901
+write tcp 127.0.0.1:8100->127.0.0.1:51584: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4775104 +0530 IST m=+1132.960949401
+write tcp 127.0.0.1:8100->127.0.0.1:51578: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 00:44:43.4785082 +0530 IST m=+1132.961947201
+write tcp 127.0.0.1:8100->127.0.0.1:51585: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4785082 +0530 IST m=+1132.961947201
+write tcp 127.0.0.1:8100->127.0.0.1:51580: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4795043 +0530 IST m=+1132.962943301
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4805035 +0530 IST m=+1132.963942501
+write tcp 127.0.0.1:8100->127.0.0.1:51577: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4805035 +0530 IST m=+1132.963942501
+write tcp 127.0.0.1:8100->127.0.0.1:51576: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4815008 +0530 IST m=+1132.964939801
+write tcp 127.0.0.1:8100->127.0.0.1:51584: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4815008 +0530 IST m=+1132.964939801
+write tcp 127.0.0.1:8100->127.0.0.1:51581: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4824963 +0530 IST m=+1132.965935301
+write tcp 127.0.0.1:8100->127.0.0.1:51580: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4834947 +0530 IST m=+1132.966933701
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4834947 +0530 IST m=+1132.966933701
+write tcp 127.0.0.1:8100->127.0.0.1:51582: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4844924 +0530 IST m=+1132.967931401
+write tcp 127.0.0.1:8100->127.0.0.1:51581: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4844924 +0530 IST m=+1132.967931401
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4854888 +0530 IST m=+1132.968927801
+write tcp 127.0.0.1:8100->127.0.0.1:51582: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4884808 +0530 IST m=+1132.971919801
+write tcp 127.0.0.1:8100->127.0.0.1:51583: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4894782 +0530 IST m=+1132.972917201
+Connection closed...
+############################### 
+2020-03-25 00:44:43.4904751 +0530 IST m=+1132.973914101
+write tcp 127.0.0.1:8100->127.0.0.1:51578: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4904751 +0530 IST m=+1132.973914101
+write tcp 127.0.0.1:8100->127.0.0.1:51583: use of closed network connection
+############################### 
+2020-03-25 00:44:43.4914729 +0530 IST m=+1132.974911901
+write tcp 127.0.0.1:8100->127.0.0.1:51578: use of closed network connection
+############################### 
+2020-03-25 01:21:49.2899341 +0530 IST m=+3358.773373101
+Connection closed...
+############################### 
+2020-03-25 02:01:36.3165921 +0530 IST m=+0.005983601
+Loading log files...
+############################### 
+2020-03-25 02:01:36.3175893 +0530 IST m=+0.006980801
+Starting TCP server...
+############################### 
+2020-03-25 02:01:49.4195577 +0530 IST m=+13.108949201
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4205547 +0530 IST m=+13.109946201
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4205547 +0530 IST m=+13.109946201
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4215529 +0530 IST m=+13.110944401
+Connection closed...
+############################### 
+2020-03-25 02:01:49.422549 +0530 IST m=+13.111940501
+Connection closed...
+############################### 
+2020-03-25 02:01:49.422549 +0530 IST m=+13.111940501
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4235465 +0530 IST m=+13.112938001
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4235465 +0530 IST m=+13.112938001
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4245439 +0530 IST m=+13.113935401
+Connection closed...
+############################### 
+2020-03-25 02:01:49.4245439 +0530 IST m=+13.113935401
+Connection closed...
+############################### 
+2020-03-25 02:02:38.6541868 +0530 IST m=+0.005985501
+Loading log files...
+############################### 
+2020-03-25 02:02:38.6561798 +0530 IST m=+0.007978501
+Starting TCP server...
+############################### 
+2020-03-25 02:02:49.7924074 +0530 IST m=+0.004987501
+Loading log files...
+############################### 
+2020-03-25 02:02:49.7934044 +0530 IST m=+0.005984501
+Starting TCP server...
+############################### 
+2020-03-25 02:03:01.8721079 +0530 IST m=+12.084688001
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8731054 +0530 IST m=+12.085685501
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8731054 +0530 IST m=+12.085685501
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8741026 +0530 IST m=+12.086682701
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8751005 +0530 IST m=+12.087680601
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8760985 +0530 IST m=+12.088678601
+Connection closed...
+############################### 
+2020-03-25 02:03:01.877095 +0530 IST m=+12.089675101
+Connection closed...
+############################### 
+2020-03-25 02:03:01.878094 +0530 IST m=+12.090674101
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8790896 +0530 IST m=+12.091669701
+Connection closed...
+############################### 
+2020-03-25 02:03:01.8800867 +0530 IST m=+12.092666801
+Connection closed...
+############################### 
+2020-03-25 02:03:46.3555643 +0530 IST m=+0.006972501
+Loading log files...
+############################### 
+2020-03-25 02:03:46.3565609 +0530 IST m=+0.007969101
+Starting TCP server...
+############################### 
+2020-03-25 02:03:55.6427328 +0530 IST m=+9.294141001
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6437302 +0530 IST m=+9.295138401
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6437302 +0530 IST m=+9.295138401
+Connection closed...
+############################### 
+2020-03-25 02:03:55.644728 +0530 IST m=+9.296136201
+Connection closed...
+############################### 
+2020-03-25 02:03:55.644728 +0530 IST m=+9.296136201
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6457247 +0530 IST m=+9.297132901
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6467229 +0530 IST m=+9.298131101
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6467229 +0530 IST m=+9.298131101
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6477207 +0530 IST m=+9.299128901
+Connection closed...
+############################### 
+2020-03-25 02:03:55.6477207 +0530 IST m=+9.299128901
+Connection closed...
+############################### 
+2020-03-25 02:04:24.941397 +0530 IST m=+0.006981301
+Loading log files...
+############################### 
+2020-03-25 02:04:24.9423936 +0530 IST m=+0.007977901
+Starting TCP server...
+############################### 
+2020-03-25 02:04:30.4985376 +0530 IST m=+5.564121901
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5025277 +0530 IST m=+5.568112001
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5035438 +0530 IST m=+5.569128101
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5045224 +0530 IST m=+5.570106701
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5045224 +0530 IST m=+5.570106701
+Connection closed...
+############################### 
+2020-03-25 02:04:30.50552 +0530 IST m=+5.571104301
+Connection closed...
+############################### 
+2020-03-25 02:04:30.50552 +0530 IST m=+5.571104301
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5065174 +0530 IST m=+5.572101701
+Connection closed...
+############################### 
+2020-03-25 02:04:30.5075148 +0530 IST m=+5.573099101
+Connection closed...
+############################### 
+2020-03-25 02:04:30.509543 +0530 IST m=+5.575127301
+Connection closed...
+############################### 
+2020-03-25 02:04:47.8481517 +0530 IST m=+0.005984401
+Loading log files...
+############################### 
+2020-03-25 02:04:47.8491495 +0530 IST m=+0.006982201
+Starting TCP server...
+############################### 
+2020-03-25 02:04:52.6712928 +0530 IST m=+4.829125501
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6782378 +0530 IST m=+4.836070501
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6792354 +0530 IST m=+4.837068101
+Connection closed...
+############################### 
+2020-03-25 02:04:52.680234 +0530 IST m=+4.838066701
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6822262 +0530 IST m=+4.840058901
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6822262 +0530 IST m=+4.840058901
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6832237 +0530 IST m=+4.841056401
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6842346 +0530 IST m=+4.842067301
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6852179 +0530 IST m=+4.843050601
+Connection closed...
+############################### 
+2020-03-25 02:04:52.6862149 +0530 IST m=+4.844047601
+Connection closed...
+############################### 
+2020-03-25 02:06:58.8663031 +0530 IST m=+0.006981901
+Loading log files...
+############################### 
+2020-03-25 02:06:58.8673111 +0530 IST m=+0.007989901
+Starting TCP server...
+############################### 
+2020-03-25 02:14:46.7838994 +0530 IST m=+0.004022001
+open D:\pounze_go_project\brahmaputra\storage/brahm/brahm_channel_details.json/brahm_channel_details.json: The system cannot find the path specified.
+############################### 
+2020-03-25 02:14:46.7858563 +0530 IST m=+0.005978901
+Loading log files...
+############################### 
+2020-03-25 02:14:46.786886 +0530 IST m=+0.007008601
+Starting TCP server...
+############################### 
+2020-03-25 02:14:56.5078647 +0530 IST m=+9.727987301
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5148474 +0530 IST m=+9.734970001
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5158414 +0530 IST m=+9.735964001
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5168389 +0530 IST m=+9.736961501
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5168389 +0530 IST m=+9.736961501
+Connection closed...
+############################### 
+2020-03-25 02:14:56.517836 +0530 IST m=+9.737958601
+Connection closed...
+############################### 
+2020-03-25 02:14:56.517836 +0530 IST m=+9.737958601
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5188377 +0530 IST m=+9.738960301
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5198304 +0530 IST m=+9.739953001
+Connection closed...
+############################### 
+2020-03-25 02:14:56.5208278 +0530 IST m=+9.740950401
+Connection closed...
+############################### 
+2020-03-25 02:15:51.907209 +0530 IST m=+0.004002001
+open D:\pounze_go_project\brahmaputra\storage/brahm/brahm_channel_details.json/brahm_channel_details.json: The system cannot find the path specified.
+############################### 
+2020-03-25 02:15:51.9101884 +0530 IST m=+0.006981401
+Loading log files...
+############################### 
+2020-03-25 02:15:51.9111862 +0530 IST m=+0.007979201
+Starting TCP server...
+############################### 
+2020-03-25 02:16:12.0563312 +0530 IST m=+0.003997301
+open D:\pounze_go_project\brahmaputra\storage/brahm/brahm_channel_details.json/brahm_channel_details.json: The system cannot find the path specified.
+############################### 
+2020-03-25 02:16:12.0603841 +0530 IST m=+0.008050201
+Loading log files...
+############################### 
+2020-03-25 02:16:12.0613117 +0530 IST m=+0.008977801
+Starting TCP server...
+############################### 
+2020-03-25 02:17:52.9466306 +0530 IST m=+0.003989501
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:18:13.8666949 +0530 IST m=+0.003989001
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:18:13.8696927 +0530 IST m=+0.006986801
+Loading log files...
+############################### 
+2020-03-25 02:18:13.8706842 +0530 IST m=+0.007978301
+Starting TCP server...
+############################### 
+2020-03-25 02:18:25.3669487 +0530 IST m=+11.504242801
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3679459 +0530 IST m=+11.505240001
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3689414 +0530 IST m=+11.506235501
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3689414 +0530 IST m=+11.506235501
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3699391 +0530 IST m=+11.507233201
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3709365 +0530 IST m=+11.508230601
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3709365 +0530 IST m=+11.508230601
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3719338 +0530 IST m=+11.509227901
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3719338 +0530 IST m=+11.509227901
+Connection closed...
+############################### 
+2020-03-25 02:18:25.3729322 +0530 IST m=+11.510226301
+Connection closed...
+############################### 
+2020-03-25 02:18:34.9193757 +0530 IST m=+0.003989701
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:18:34.9233656 +0530 IST m=+0.007979601
+Loading log files...
+############################### 
+2020-03-25 02:18:34.924362 +0530 IST m=+0.008976001
+Starting TCP server...
+############################### 
+2020-03-25 02:19:27.8390235 +0530 IST m=+52.923637501
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8400214 +0530 IST m=+52.924635401
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8410183 +0530 IST m=+52.925632301
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8410183 +0530 IST m=+52.925632301
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8420159 +0530 IST m=+52.926629901
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8420159 +0530 IST m=+52.926629901
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8430129 +0530 IST m=+52.927626901
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8440107 +0530 IST m=+52.928624701
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8440107 +0530 IST m=+52.928624701
+Connection closed...
+############################### 
+2020-03-25 02:19:27.8450077 +0530 IST m=+52.929621701
+Connection closed...
+############################### 
+2020-03-25 02:19:40.3714355 +0530 IST m=+0.003989201
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:19:40.374428 +0530 IST m=+0.006981701
+Loading log files...
+############################### 
+2020-03-25 02:19:40.3754251 +0530 IST m=+0.007978801
+Starting TCP server...
+############################### 
+2020-03-25 02:19:49.8949718 +0530 IST m=+9.527525501
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8959689 +0530 IST m=+9.528522601
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8969666 +0530 IST m=+9.529520301
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8979632 +0530 IST m=+9.530516901
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8979632 +0530 IST m=+9.530516901
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8989609 +0530 IST m=+9.531514601
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8999583 +0530 IST m=+9.532512001
+Connection closed...
+############################### 
+2020-03-25 02:19:49.8999583 +0530 IST m=+9.532512001
+Connection closed...
+############################### 
+2020-03-25 02:19:49.9010086 +0530 IST m=+9.533562301
+Connection closed...
+############################### 
+2020-03-25 02:19:49.9019531 +0530 IST m=+9.534506801
+Connection closed...
+############################### 
+2020-03-25 02:20:05.1820999 +0530 IST m=+0.003976901
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:20:05.1860895 +0530 IST m=+0.007966501
+Loading log files...
+############################### 
+2020-03-25 02:20:05.1870851 +0530 IST m=+0.008962101
+Starting TCP server...
+############################### 
+2020-03-25 02:20:13.0001959 +0530 IST m=+7.822072901
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0071759 +0530 IST m=+7.829052901
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0081748 +0530 IST m=+7.830051801
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0091721 +0530 IST m=+7.831049101
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0101695 +0530 IST m=+7.832046501
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0101695 +0530 IST m=+7.832046501
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0111669 +0530 IST m=+7.833043901
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0121629 +0530 IST m=+7.834039901
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0121629 +0530 IST m=+7.834039901
+Connection closed...
+############################### 
+2020-03-25 02:20:13.0151558 +0530 IST m=+7.837032801
+Connection closed...
+############################### 
+2020-03-25 02:20:21.935376 +0530 IST m=+0.005006301
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:20:21.9423388 +0530 IST m=+0.011969101
+Loading log files...
+############################### 
+2020-03-25 02:20:21.9433367 +0530 IST m=+0.012967001
+Starting TCP server...
+############################### 
+2020-03-25 02:20:27.6104905 +0530 IST m=+5.680120801
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6144401 +0530 IST m=+5.684070401
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6154382 +0530 IST m=+5.685068501
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6164357 +0530 IST m=+5.686066001
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6164357 +0530 IST m=+5.686066001
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6174332 +0530 IST m=+5.687063501
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6174332 +0530 IST m=+5.687063501
+Connection closed...
+############################### 
+2020-03-25 02:20:27.6184301 +0530 IST m=+5.688060401
+Connection closed...
+############################### 
+2020-03-25 02:20:27.621423 +0530 IST m=+5.691053301
+Connection closed...
+############################### 
+2020-03-25 02:20:27.621423 +0530 IST m=+5.691053301
+Connection closed...
+############################### 
+2020-03-25 02:20:42.7829118 +0530 IST m=+0.005014201
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:20:42.7858767 +0530 IST m=+0.007979101
+Loading log files...
+############################### 
+2020-03-25 02:20:42.7868792 +0530 IST m=+0.008981601
+Starting TCP server...
+############################### 
+2020-03-25 02:20:47.7875038 +0530 IST m=+5.009606201
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7934879 +0530 IST m=+5.015590301
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7934879 +0530 IST m=+5.015590301
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7944867 +0530 IST m=+5.016589101
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7954843 +0530 IST m=+5.017586701
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7964841 +0530 IST m=+5.018586501
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7974878 +0530 IST m=+5.019590201
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7974878 +0530 IST m=+5.019590201
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7984743 +0530 IST m=+5.020576701
+Connection closed...
+############################### 
+2020-03-25 02:20:47.7994721 +0530 IST m=+5.021574501
+Connection closed...
+############################### 
+2020-03-25 02:20:55.8100541 +0530 IST m=+0.003979001
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:20:55.8150406 +0530 IST m=+0.008965501
+Loading log files...
+############################### 
+2020-03-25 02:20:55.8173696 +0530 IST m=+0.011294501
+Starting TCP server...
+############################### 
+2020-03-25 02:21:02.7963749 +0530 IST m=+6.990299801
+Connection closed...
+############################### 
+2020-03-25 02:21:02.7973774 +0530 IST m=+6.991302301
+Connection closed...
+############################### 
+2020-03-25 02:21:02.7994214 +0530 IST m=+6.993346301
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8003718 +0530 IST m=+6.994296701
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8003718 +0530 IST m=+6.994296701
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8013644 +0530 IST m=+6.995289301
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8023595 +0530 IST m=+6.996284401
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8023595 +0530 IST m=+6.996284401
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8043547 +0530 IST m=+6.998279601
+Connection closed...
+############################### 
+2020-03-25 02:21:02.8053516 +0530 IST m=+6.999276501
+Connection closed...
+############################### 
+2020-03-25 02:21:14.9967564 +0530 IST m=+0.003989201
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:21:15.0007459 +0530 IST m=+0.007978701
+Loading log files...
+############################### 
+2020-03-25 02:21:15.0007459 +0530 IST m=+0.007978701
+Starting TCP server...
+############################### 
+2020-03-25 02:21:22.1994981 +0530 IST m=+7.206730901
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2044826 +0530 IST m=+7.211715401
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2054804 +0530 IST m=+7.212713201
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2064776 +0530 IST m=+7.213710401
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2064776 +0530 IST m=+7.213710401
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2074761 +0530 IST m=+7.214708901
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2084724 +0530 IST m=+7.215705201
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2084724 +0530 IST m=+7.215705201
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2084724 +0530 IST m=+7.215705201
+Connection closed...
+############################### 
+2020-03-25 02:21:22.2094708 +0530 IST m=+7.216703601
+Connection closed...
+############################### 
+2020-03-25 02:21:36.7376271 +0530 IST m=+0.003989101
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:21:36.7426224 +0530 IST m=+0.008984401
+Loading log files...
+############################### 
+2020-03-25 02:21:36.7436112 +0530 IST m=+0.009973201
+Starting TCP server...
+############################### 
+2020-03-25 02:22:10.2846385 +0530 IST m=+0.004026601
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:22:10.2885907 +0530 IST m=+0.007978801
+Loading log files...
+############################### 
+2020-03-25 02:22:10.2885907 +0530 IST m=+0.007978801
+Starting TCP server...
+############################### 
+2020-03-25 02:22:49.1736255 +0530 IST m=+0.003988701
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:22:49.1756203 +0530 IST m=+0.005983501
+Loading log files...
+############################### 
+2020-03-25 02:22:49.1766164 +0530 IST m=+0.006979601
+Starting TCP server...
+############################### 
+2020-03-25 02:23:54.9154469 +0530 IST m=+0.003988001
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:23:54.9194362 +0530 IST m=+0.007977301
+Loading log files...
+############################### 
+2020-03-25 02:23:54.9204334 +0530 IST m=+0.008974501
+Starting TCP server...
+############################### 
+2020-03-25 02:25:29.832789 +0530 IST m=+0.002990601
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:25:29.8357824 +0530 IST m=+0.005984001
+Loading log files...
+############################### 
+2020-03-25 02:25:29.8367802 +0530 IST m=+0.006981801
+Starting TCP server...
+############################### 
+2020-03-25 02:25:30.8610411 +0530 IST m=+1.031242701
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8620397 +0530 IST m=+1.032241301
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8630347 +0530 IST m=+1.033236301
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8640322 +0530 IST m=+1.034233801
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8650293 +0530 IST m=+1.035230901
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8660266 +0530 IST m=+1.036228201
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8670396 +0530 IST m=+1.037241201
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8670396 +0530 IST m=+1.037241201
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8680237 +0530 IST m=+1.038225301
+Connection closed...
+############################### 
+2020-03-25 02:25:30.8690199 +0530 IST m=+1.039221501
+Connection closed...
+############################### 
+2020-03-25 02:25:55.7844034 +0530 IST m=+0.003963301
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:25:55.7883938 +0530 IST m=+0.007953701
+Loading log files...
+############################### 
+2020-03-25 02:25:55.7883938 +0530 IST m=+0.007953701
+Starting TCP server...
+############################### 
+2020-03-25 02:27:15.7415234 +0530 IST m=+0.005984901
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:27:15.7445158 +0530 IST m=+0.008977301
+Loading log files...
+############################### 
+2020-03-25 02:27:15.7455114 +0530 IST m=+0.009972901
+Starting TCP server...
+############################### 
+2020-03-25 02:28:23.9940363 +0530 IST m=+0.003991301
+open D:\pounze_go_project\brahmaputra\storage\brahm: is a directory
+############################### 
+2020-03-25 02:28:23.9970295 +0530 IST m=+0.006984501
+Loading log files...
+############################### 
+2020-03-25 02:28:23.9980258 +0530 IST m=+0.007980801
+Starting TCP server...
+############################### 
+2020-03-25 02:29:54.7963985 +0530 IST m=+0.005985901
+Loading log files...
+############################### 
+2020-03-25 02:29:54.7974112 +0530 IST m=+0.006998601
+Starting TCP server...
+############################### 
+2020-03-25 02:30:12.6666156 +0530 IST m=+17.876203001
+Connection closed...
+############################### 
+2020-03-25 02:30:12.667614 +0530 IST m=+17.877201401
+write tcp 127.0.0.1:8100->127.0.0.1:58128: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6696095 +0530 IST m=+17.879196901
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6745941 +0530 IST m=+17.884181501
+write tcp 127.0.0.1:8100->127.0.0.1:58125: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6756117 +0530 IST m=+17.885199101
+write tcp 127.0.0.1:8100->127.0.0.1:58126: use of closed network connection
+############################### 
+2020-03-25 02:30:12.6775871 +0530 IST m=+17.887174501
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6785834 +0530 IST m=+17.888170801
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6795809 +0530 IST m=+17.889168301
+write tcp 127.0.0.1:8100->127.0.0.1:58132: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6805788 +0530 IST m=+17.890166201
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6825724 +0530 IST m=+17.892159801
+write tcp 127.0.0.1:8100->127.0.0.1:58127: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6835701 +0530 IST m=+17.893157501
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6845885 +0530 IST m=+17.894175901
+write tcp 127.0.0.1:8100->127.0.0.1:58130: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6845885 +0530 IST m=+17.894175901
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6855655 +0530 IST m=+17.895152901
+write tcp 127.0.0.1:8100->127.0.0.1:58133: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.6865625 +0530 IST m=+17.896149901
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6865625 +0530 IST m=+17.896149901
+write tcp 127.0.0.1:8100->127.0.0.1:58129: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:30:12.687561 +0530 IST m=+17.897148401
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6885571 +0530 IST m=+17.898144501
+write tcp 127.0.0.1:8100->127.0.0.1:58134: use of closed network connection
+############################### 
+2020-03-25 02:30:12.6885571 +0530 IST m=+17.898144501
+Connection closed...
+############################### 
+2020-03-25 02:30:12.6895552 +0530 IST m=+17.899142601
+write tcp 127.0.0.1:8100->127.0.0.1:58131: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:33:50.2040392 +0530 IST m=+0.003989101
+open D:\pounze_go_project\brahmaputra\storage\brahm/_partition_0.br: The system cannot find the file specified.
+############################### 
+2020-03-25 02:33:50.2070314 +0530 IST m=+0.006981301
+Loading log files...
+############################### 
+2020-03-25 02:33:50.2080284 +0530 IST m=+0.007978301
+Starting TCP server...
+############################### 
+2020-03-25 02:34:07.4140694 +0530 IST m=+0.005030501
+open D:\pounze_go_project\brahmaputra\storage\brahm/_partition_0.br: The system cannot find the file specified.
+############################### 
+2020-03-25 02:34:07.4180159 +0530 IST m=+0.008977001
+Loading log files...
+############################### 
+2020-03-25 02:34:07.4200097 +0530 IST m=+0.010970801
+Starting TCP server...
+############################### 
+2020-03-25 02:34:27.4434989 +0530 IST m=+0.003989701
+open D:\pounze_go_project\brahmaputra\storage\brahm/_partition_0.br: The system cannot find the file specified.
+############################### 
+2020-03-25 02:34:27.4464926 +0530 IST m=+0.006983401
+Loading log files...
+############################### 
+2020-03-25 02:34:27.4464926 +0530 IST m=+0.006983401
+Starting TCP server...
+############################### 
+2020-03-25 02:35:23.370062 +0530 IST m=+0.004004501
+open D:\pounze_go_project\brahmaputra\storage\brahm/brahm_partition_0.br: The system cannot find the file specified.
+############################### 
+2020-03-25 02:35:23.3730413 +0530 IST m=+0.006983801
+Loading log files...
+############################### 
+2020-03-25 02:35:23.3730413 +0530 IST m=+0.006983801
+Starting TCP server...
+############################### 
+2020-03-25 02:36:47.3036359 +0530 IST m=+0.006981801
+Loading log files...
+############################### 
+2020-03-25 02:36:47.3036359 +0530 IST m=+0.006981801
+Starting TCP server...
+############################### 
+2020-03-25 02:36:56.2886127 +0530 IST m=+8.991958601
+Connection closed...
+############################### 
+2020-03-25 02:36:56.2896093 +0530 IST m=+8.992955201
+write tcp 127.0.0.1:8100->127.0.0.1:58201: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.2906054 +0530 IST m=+8.993951301
+Connection closed...
+############################### 
+2020-03-25 02:36:56.2935974 +0530 IST m=+8.996943301
+write tcp 127.0.0.1:8100->127.0.0.1:58203: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.2945945 +0530 IST m=+8.997940401
+Connection closed...
+############################### 
+2020-03-25 02:36:56.2965895 +0530 IST m=+8.999935401
+write tcp 127.0.0.1:8100->127.0.0.1:58202: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.2975873 +0530 IST m=+9.000933201
+Connection closed...
+############################### 
+2020-03-25 02:36:56.2985844 +0530 IST m=+9.001930301
+write tcp 127.0.0.1:8100->127.0.0.1:58209: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.2995816 +0530 IST m=+9.002927501
+Connection closed...
+############################### 
+2020-03-25 02:36:56.3005788 +0530 IST m=+9.003924701
+write tcp 127.0.0.1:8100->127.0.0.1:58207: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.3005788 +0530 IST m=+9.003924701
+write tcp 127.0.0.1:8100->127.0.0.1:58208: use of closed network connection
+############################### 
+2020-03-25 02:36:56.3015925 +0530 IST m=+9.004938401
+Connection closed...
+############################### 
+2020-03-25 02:36:56.3045729 +0530 IST m=+9.007918801
+Connection closed...
+############################### 
+2020-03-25 02:36:56.3045729 +0530 IST m=+9.007918801
+write tcp 127.0.0.1:8100->127.0.0.1:58206: use of closed network connection
+############################### 
+2020-03-25 02:36:56.3065649 +0530 IST m=+9.009910801
+Connection closed...
+############################### 
+2020-03-25 02:36:56.3065649 +0530 IST m=+9.009910801
+write tcp 127.0.0.1:8100->127.0.0.1:58204: use of closed network connection
+############################### 
+2020-03-25 02:36:56.3075613 +0530 IST m=+9.010907201
+Connection closed...
+############################### 
+2020-03-25 02:36:56.3085572 +0530 IST m=+9.011903101
+write tcp 127.0.0.1:8100->127.0.0.1:58205: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:36:56.3095569 +0530 IST m=+9.012902801
+Connection closed...
+############################### 
+2020-03-25 02:36:56.310554 +0530 IST m=+9.013899901
+write tcp 127.0.0.1:8100->127.0.0.1:58210: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:41.3793929 +0530 IST m=+0.006837601
+Loading log files...
+############################### 
+2020-03-25 02:37:41.3803602 +0530 IST m=+0.007804901
+Starting TCP server...
+############################### 
+2020-03-25 02:37:47.2636313 +0530 IST m=+5.891076001
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2656247 +0530 IST m=+5.893069401
+write tcp 127.0.0.1:8100->127.0.0.1:58232: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2666215 +0530 IST m=+5.894066201
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2676198 +0530 IST m=+5.895064501
+write tcp 127.0.0.1:8100->127.0.0.1:58230: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2716076 +0530 IST m=+5.899052301
+Connection closed...
+############################### 
+2020-03-25 02:37:47.272606 +0530 IST m=+5.900050701
+write tcp 127.0.0.1:8100->127.0.0.1:58227: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2736033 +0530 IST m=+5.901048001
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2746002 +0530 IST m=+5.902044901
+write tcp 127.0.0.1:8100->127.0.0.1:58231: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2765947 +0530 IST m=+5.904039401
+write tcp 127.0.0.1:8100->127.0.0.1:58226: use of closed network connection
+############################### 
+2020-03-25 02:37:47.277601 +0530 IST m=+5.905045701
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2785891 +0530 IST m=+5.906033801
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2795877 +0530 IST m=+5.907032401
+write tcp 127.0.0.1:8100->127.0.0.1:58229: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2815812 +0530 IST m=+5.909025901
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2825794 +0530 IST m=+5.910024101
+write tcp 127.0.0.1:8100->127.0.0.1:58228: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2835767 +0530 IST m=+5.911021401
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2845751 +0530 IST m=+5.912019801
+write tcp 127.0.0.1:8100->127.0.0.1:58235: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2855724 +0530 IST m=+5.913017101
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2855724 +0530 IST m=+5.913017101
+write tcp 127.0.0.1:8100->127.0.0.1:58234: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:37:47.2865702 +0530 IST m=+5.914014901
+Connection closed...
+############################### 
+2020-03-25 02:37:47.2885629 +0530 IST m=+5.916007601
+write tcp 127.0.0.1:8100->127.0.0.1:58233: use of closed network connection
+############################### 
+2020-03-25 02:38:24.8232081 +0530 IST m=+0.005984201
+Loading log files...
+############################### 
+2020-03-25 02:38:24.8242046 +0530 IST m=+0.006980701
+Starting TCP server...
+############################### 
+2020-03-25 02:38:31.1951707 +0530 IST m=+6.377946801
+Connection closed...
+############################### 
+2020-03-25 02:38:31.1961665 +0530 IST m=+6.378942601
+write tcp 127.0.0.1:8100->127.0.0.1:58247: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.198162 +0530 IST m=+6.380938101
+Connection closed...
+############################### 
+2020-03-25 02:38:31.1991607 +0530 IST m=+6.381936801
+write tcp 127.0.0.1:8100->127.0.0.1:58253: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2011555 +0530 IST m=+6.383931601
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2021517 +0530 IST m=+6.384927801
+write tcp 127.0.0.1:8100->127.0.0.1:58246: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2061416 +0530 IST m=+6.388917701
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2071398 +0530 IST m=+6.389915901
+write tcp 127.0.0.1:8100->127.0.0.1:58245: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2081371 +0530 IST m=+6.390913201
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2091342 +0530 IST m=+6.391910301
+write tcp 127.0.0.1:8100->127.0.0.1:58249: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2101296 +0530 IST m=+6.392905701
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2121267 +0530 IST m=+6.394902801
+write tcp 127.0.0.1:8100->127.0.0.1:58248: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2131223 +0530 IST m=+6.395898401
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2151223 +0530 IST m=+6.397898401
+write tcp 127.0.0.1:8100->127.0.0.1:58251: use of closed network connection
+############################### 
+2020-03-25 02:38:31.2161134 +0530 IST m=+6.398889501
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2171108 +0530 IST m=+6.399886901
+write tcp 127.0.0.1:8100->127.0.0.1:58252: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:31.2181082 +0530 IST m=+6.400884301
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2181082 +0530 IST m=+6.400884301
+write tcp 127.0.0.1:8100->127.0.0.1:58250: use of closed network connection
+############################### 
+2020-03-25 02:38:31.2191067 +0530 IST m=+6.401882801
+Connection closed...
+############################### 
+2020-03-25 02:38:31.2201028 +0530 IST m=+6.402878901
+write tcp 127.0.0.1:8100->127.0.0.1:58254: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-03-25 02:38:50.3124684 +0530 IST m=+0.005983701
+Loading log files...
+############################### 
+2020-03-25 02:38:50.3134656 +0530 IST m=+0.006980901
+Starting TCP server...
+############################### 
+2020-03-25 02:39:28.3896943 +0530 IST m=+0.007014001
+Loading log files...
+############################### 
+2020-03-25 02:39:28.3906589 +0530 IST m=+0.007978601
+Starting TCP server...
+############################### 
+2020-03-25 02:40:22.35492 +0530 IST m=+0.004987101
+Loading log files...
+############################### 
+2020-03-25 02:40:22.35492 +0530 IST m=+0.004987101
+Starting TCP server...
+############################### 
+2020-03-25 02:44:57.4314652 +0530 IST m=+275.081532301
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4324613 +0530 IST m=+275.082528401
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4344561 +0530 IST m=+275.084523201
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4344561 +0530 IST m=+275.084523201
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4354666 +0530 IST m=+275.085533701
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4364516 +0530 IST m=+275.086518701
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4374482 +0530 IST m=+275.087515301
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4384453 +0530 IST m=+275.088512401
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4384453 +0530 IST m=+275.088512401
+Connection closed...
+############################### 
+2020-03-25 02:44:57.4394648 +0530 IST m=+275.089531901
+Connection closed...

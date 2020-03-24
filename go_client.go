@@ -17,7 +17,7 @@ func main(){
 		Port:"8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
-		ChannelName:"Abhik",
+		ChannelName:"brahm",
 		AppType:"producer",
 		Worker:runtime.NumCPU(), //runtime.NumCPU()
 		PoolSize:10,

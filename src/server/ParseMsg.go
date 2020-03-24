@@ -12,7 +12,7 @@ import (
 )
 
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, counterRequest *int, quitChannel bool){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount *int, counterRequest *int, quitChannel bool){
 
 	defer ChannelList.Recover()
 
@@ -97,8 +97,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 			if *ChannelList.ConfigTCPObj.Storage.File.Active{
-			
-				go WriteData(*packetObject)
+
+				go WriteData(*packetObject, writeCount)
 
 				select {
 
@@ -156,6 +156,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		var startFromLen = binary.BigEndian.Uint16(startFromByte)
 		var start_from = string(byteBuffer.Get(int(startFromLen))) // startFromLen
 
+		var subscriberTypeByte = byteBuffer.GetShort() //2
+		var subscriberTypeLen = binary.BigEndian.Uint16(subscriberTypeByte)
+
 		packetObject.SubscriberOffset = int64(subscriber_offset)
 
 		packetObject.StartFromLen = int(startFromLen)
@@ -163,49 +166,70 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		packetObject.Start_from = start_from
 
 		packetObject.Conn = conn
-		
-		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-			if !*ChannelList.ConfigTCPObj.Storage.File.Active{
+		if subscriberTypeLen > 0{
 
-				conn.Close()
+			// var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
 
-				parseChan <- false
-				
-				return
+			// if len(ChannelList.TCPSubscriberGroup[channelName][groupName]) <= 0{
 
-			}
+			// 	if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-	    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
+			// 		go SubscribeGroupChannel(channelName, groupName)
 
-	    		conn.Close()
+			// 	}
 
-				parseChan <- false
+			// }
 
-				return
-	    	}
-
-	    	var cursor int64
-
-	    	if start_from == "BEGINNING"{
-
-	    		cursor = int64(0)
-
-	    	}else if start_from == "NOPULL"{
-
-	    		cursor = int64(-1)
-
-	    	}else if start_from == "LASTRECEIVED"{
-
-	    		cursor = int64(subscriber_offset)
-
-	    	}
-
-			go SubscribeChannel(conn, channelName, cursor, quitChannel)
+			// ChannelList.TCPSubscriberGroup[channelName][groupName] = append(ChannelList.TCPSubscriberGroup[channelName][groupName], packetObject)
 
 		}else{
 
-			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+			if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
+
+				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
+
+					conn.Close()
+
+					parseChan <- false
+					
+					return
+
+				}
+
+		    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
+
+		    		conn.Close()
+
+					parseChan <- false
+
+					return
+		    	}
+
+		    	var cursor int64
+
+		    	if start_from == "BEGINNING"{
+
+		    		cursor = int64(0)
+
+		    	}else if start_from == "NOPULL"{
+
+		    		cursor = int64(-1)
+
+		    	}else if start_from == "LASTRECEIVED"{
+
+		    		cursor = int64(subscriber_offset)
+
+		    	}
+
+				go SubscribeChannel(conn, channelName, cursor, quitChannel)
+
+			}else{
+
+				ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+
+			}
+
 		}
 		
 		parseChan <- true 
@@ -218,11 +242,17 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 	}	
 }
 
-func WriteData(packet pojo.PacketStruct){
+func WriteData(packet pojo.PacketStruct, writeCount *int){
 
 	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Lock()
+
+	if *writeCount == ChannelList.TCPStorage[packet.ChannelName].PartitionCount{
+
+		*writeCount = 0
+
+	}
 
 	var byteBuffer = ByteBuffer.Buffer{
 		Endian:"big",
@@ -254,7 +284,9 @@ func WriteData(packet pojo.PacketStruct){
 
 	byteBuffer.Put(packet.BodyBB)
  
-	_, err := ChannelList.TCPStorage[packet.ChannelName].FD.Write(byteBuffer.Array())
+	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[*writeCount].Write(byteBuffer.Array())
+
+	*writeCount += 1
 
 	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
 	
