@@ -9,17 +9,15 @@ import(
 	"os"
 	"sync"
 	"runtime"
-	"io"
-	"io/ioutil"
 	"ByteBuffer"
 	"encoding/json"
+	"net/url"
 )
 
 var SubscriberChannel = make(chan interface{}, 1)
 
 type CreateProperties struct{
-	Host string
-	Port string
+	Url string
 	AuthToken string
 	ConnectionType string
 	Conn net.Conn
@@ -40,9 +38,7 @@ type CreateProperties struct{
 	requestChan chan bool
 	contentMatcher string
 	contentMatcherMap map[string]interface{}
-	OffsetPath string
 	AlwaysStartFrom string
-	lastReceivedOffset int64
 	subscribeFD *os.File
 	WriteDelay int32
 	ReadDelay int32
@@ -71,66 +67,14 @@ func (e *CreateProperties) Connect(){
 
 	var subReconnect = false
 
-	e.lastReceivedOffset = 0
-
 	e.TransactionList = make(map[string][]byte)
 
 	e.contentMatcherMap = make(map[string]interface{})
-
-	if e.OffsetPath != ""{
-
-		var fileErr error
-
-		e.subscribeFD, fileErr = os.OpenFile(
-	        e.OffsetPath,
-	        os.O_RDWR|os.O_CREATE,
-	        0666,
-	    )
-
-	    if fileErr != nil {
-
-	        go log.Println(fileErr)
-
-	        return
-	    }
-
-	}
 
 	if e.AlwaysStartFrom == ""{
 
 		e.AlwaysStartFrom = "BEGINNING"
 
-	}
-
-	if e.AlwaysStartFrom == "LASTRECEIVED"{
-
-		if e.OffsetPath == ""{
-
-			go log.Println("Last received flag needs to persistent, please add offset log path...")
-
-	        return
-
-		}
-
-		dat, readErr := ioutil.ReadFile(e.OffsetPath)
-
-		if readErr != nil{
-
-			go log.Println(readErr)
-
-	        return
-
-		}
-
-		if len(dat) == 0{
-
-			e.lastReceivedOffset = 0
-
-		}else{
-
-			e.lastReceivedOffset = int64(binary.BigEndian.Uint64(dat))
-
-		}
 	}
 
 	if e.AgentName != ""{
@@ -308,7 +252,16 @@ func (e *CreateProperties) createConnection() net.Conn{
 
 	var err error
 
-	dest := e.Host + ":" + e.Port
+	url, err := url.Parse(e.Url)
+
+    if err != nil {
+        go log.Println(err)
+        return nil
+    }
+
+	host, port, _ := net.SplitHostPort(url.Host)
+
+	dest := host + ":" + port
 
 	if e.ConnectionType != "tcp" && e.ConnectionType != "udp"{
 
@@ -510,7 +463,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 		}
 	}
 
-	// totalLen + messageTypelen + messageType + channelNameLen + channelName + lastReceivedOffset + startFromLen + startFrom + subscriberTypeLen + subscriberType
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + startFromLen + startFrom + subscriberTypeLen + subscriberType
 
 	// subscriberType = "Group | Individual"
 
@@ -522,15 +475,15 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	var startFromLen = len(e.AlwaysStartFrom)
 
-	var subscriberTypeLen = len(e.GroupName)
-
 	var SubscriberNameLen = len(e.SubscriberName)
+
+	var subscriberTypeLen = len(e.GroupName)
 
 	var byteBuffer = ByteBuffer.Buffer{
 		Endian:"big",
 	}
 
-	var totalLen = 2 + messageTypeLen + 2 + channelNameLen + 8 + 2 + startFromLen + 2 + SubscriberNameLen + 2 + subscriberTypeLen
+	var totalLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + startFromLen + 2 + SubscriberNameLen + 2 + subscriberTypeLen
 
 	byteBuffer.PutLong(totalLen) // 8
 
@@ -542,8 +495,6 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	byteBuffer.Put([]byte(e.ChannelName)) // channelNameLen
 
-	byteBuffer.PutLong(int(e.lastReceivedOffset)) // 8
-
 	byteBuffer.PutShort(startFromLen) // 2
 
 	byteBuffer.Put([]byte(e.AlwaysStartFrom)) // startFromLen
@@ -554,11 +505,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	byteBuffer.PutShort(subscriberTypeLen) // subscriberTypeLen
 
-	// if subscriber type = Group Then add bytes
-
-	if e.GroupName != ""{
-		byteBuffer.Put([]byte(e.GroupName))
-	}
+	byteBuffer.Put([]byte(e.GroupName))
 
 	_, err := e.Conn.Write(byteBuffer.Array())
 
@@ -616,8 +563,6 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 		if allZero(completePacket) {
 
-			go log.Println("Socket disconnected...")
-
 			break
 		}
 
@@ -661,8 +606,6 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 		conn.Read(completePacket)
 
 		if allZero(completePacket) {
-
-			go log.Println("Socket disconnected...")
 
 			break
 		}
@@ -732,87 +675,35 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 		byteBuffer.GetLong() //id
 
-		var subscriberOffset = byteBuffer.GetLong() //offset
-
-		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 8)
+		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
 
 		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
 
-		if e.OffsetPath != ""{
+		if len(e.contentMatcherMap) != 0{
 
-			e.lastReceivedOffset = int64(binary.BigEndian.Uint64(subscriberOffset))
+			var messageData = make(map[string]interface{})
 
-			var filebyteBuffer = ByteBuffer.Buffer{
-				Endian:"big",
-			}
+			errJson := json.Unmarshal(bodyPacket, &messageData)
 
-			filebyteBuffer.PutLong(int(e.lastReceivedOffset))
-
-			_, err := e.subscribeFD.WriteAt(filebyteBuffer.Array(), 0)
-
-			if (err != nil && err != io.EOF ){
-
-				go log.Println(err)
-
+			if errJson != nil{
+				
+				go log.Println(errJson)
+					
 				callbackChan <- "REJECT"
 
-			}else{
+				return
 
-				if len(e.contentMatcherMap) != 0{
-
-					var messageData = make(map[string]interface{})
-
-					errJson := json.Unmarshal(bodyPacket, &messageData)
-
-					if errJson != nil{
-						
-						go log.Println(errJson)
-							
-						callbackChan <- "REJECT"
-
-						return
-
-					}
-
-					e.contentMatch(messageData)
-
-				}else{
-
-					SubscriberChannel <- bodyPacket
-
-				}	
-
-				callbackChan <- "SUCCESS"
 			}
+
+			e.contentMatch(messageData)
 
 		}else{
 
-			if len(e.contentMatcherMap) != 0{
+			SubscriberChannel <- bodyPacket
 
-				var messageData = make(map[string]interface{})
+		}
 
-				errJson := json.Unmarshal(bodyPacket, &messageData)
-
-				if errJson != nil{
-					
-					go log.Println(errJson)
-						
-					callbackChan <- "REJECT"
-
-					return
-
-				}
-
-				e.contentMatch(messageData)
-
-			}else{
-
-				SubscriberChannel <- bodyPacket
-
-			}
-
-			callbackChan <- "SUCCESS"
-		}	
+		callbackChan <- "SUCCESS"	
 	}
 }
 

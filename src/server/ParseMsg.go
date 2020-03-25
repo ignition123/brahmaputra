@@ -4,15 +4,16 @@ import (
 	"net"
 	"time"
 	"log"
-	"io"
 	"ChannelList"
 	"pojo"
 	"ByteBuffer"
 	"encoding/binary"
+	"sync"
 )
 
+var SubscriberHashMapMtx sync.Mutex
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount *int, counterRequest *int, quitChannel bool){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount *int, counterRequest *int, subscriberMapName *string){
 
 	defer ChannelList.Recover()
 
@@ -100,17 +101,20 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				go WriteData(*packetObject, writeCount)
 
-				select {
+				message, ok := <-ChannelList.TCPStorage[channelName].WriteCallback
 
-					case message, ok := <-ChannelList.TCPStorage[channelName].WriteCallback:	
-						if ok{
+				if ok{
 							
-							if !message{
-								parseChan <- false
-								return
-							}
-						}		
+					if !message{
+
+						conn.Close()
+
+						parseChan <- false
+
+						return
+					}
 				}
+
 			}else{
 
 				conn.Close()
@@ -149,27 +153,51 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 			return
 		}
 
-		var subscriber_offsetByte = byteBuffer.GetLong() // 8
-		var subscriber_offset = binary.BigEndian.Uint64(subscriber_offsetByte)
-
 		var startFromByte = byteBuffer.GetShort() //2
 		var startFromLen = binary.BigEndian.Uint16(startFromByte)
 		var start_from = string(byteBuffer.Get(int(startFromLen))) // startFromLen
 
+		var subscriberNameByte = byteBuffer.GetShort() //2
+		var subscriberNameLen = binary.BigEndian.Uint16(subscriberNameByte)
+		var subscriberName = string(byteBuffer.Get(int(subscriberNameLen)))
+
+		 _, keyFound := ChannelList.TCPChannelSubscriberList[channelName+subscriberName]
+
+		if keyFound{
+
+			conn.Close()
+			parseChan <- false
+			go ChannelList.WriteLog("Same subscriber already connected...")
+			return
+		   
+		}
+
+		*subscriberMapName = channelName+subscriberName
+
+		SubscriberHashMapMtx.Lock()
+		ChannelList.TCPChannelSubscriberList[channelName+subscriberName] = true
+		SubscriberHashMapMtx.Unlock()
+
 		var subscriberTypeByte = byteBuffer.GetShort() //2
 		var subscriberTypeLen = binary.BigEndian.Uint16(subscriberTypeByte)
-
-		packetObject.SubscriberOffset = int64(subscriber_offset)
 
 		packetObject.StartFromLen = int(startFromLen)
 
 		packetObject.Start_from = start_from
+
+		packetObject.SubscriberNameLen = int(subscriberNameLen)
+
+		packetObject.SubscriberName = subscriberName
+
+		packetObject.SubscriberTypeLen = int(subscriberTypeLen)
 
 		packetObject.Conn = conn
 
 		if subscriberTypeLen > 0{
 
 			// var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
+
+			// packetObject.GroupName = groupName
 
 			// if len(ChannelList.TCPSubscriberGroup[channelName][groupName]) <= 0{
 
@@ -206,23 +234,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					return
 		    	}
 
-		    	var cursor int64
-
-		    	if start_from == "BEGINNING"{
-
-		    		cursor = int64(0)
-
-		    	}else if start_from == "NOPULL"{
-
-		    		cursor = int64(-1)
-
-		    	}else if start_from == "LASTRECEIVED"{
-
-		    		cursor = int64(subscriber_offset)
-
-		    	}
-
-				go SubscribeChannel(conn, channelName, cursor, quitChannel)
+				go SubscribeChannel(conn, *packetObject, start_from)
 
 			}else{
 
@@ -290,7 +302,7 @@ func WriteData(packet pojo.PacketStruct, writeCount *int){
 
 	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
 	
-	if (err != nil && err != io.EOF ){
+	if (err != nil){
 		go ChannelList.WriteLog(err.Error())
 		ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- false
 		return

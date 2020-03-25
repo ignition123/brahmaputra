@@ -2,6 +2,7 @@ package pojo
 
 import(
 	"net"
+	"os"
 )
 
 type PacketStruct struct{
@@ -17,8 +18,10 @@ type PacketStruct struct{
 	AgentName string
 	BodyBB []byte
 	Id int64
-	SubscriberOffset int64
 	StartFromLen int
 	Start_from string
-
+	SubscriberNameLen int
+	SubscriberName string
+	SubscriberTypeLen int
+	SubscriberFD []*os.File 
 }

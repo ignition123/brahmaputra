@@ -5,7 +5,7 @@ import(
 	"time"
 	_"fmt"
 	_"sync"
-	"runtime"
+	_"runtime"
 	"log"
 	"encoding/json"
 )
@@ -13,13 +13,12 @@ import(
 func main(){
 
 	var brahm = &brahmaputra.CreateProperties{
-		Host:"127.0.0.1",
-		Port:"8100",
+		Url:"brahm://127.0.0.1:8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
 		ChannelName:"brahm",
 		AppType:"producer",
-		Worker:runtime.NumCPU(), //runtime.NumCPU()
+		Worker:1, //runtime.NumCPU() runtime.NumCPU()
 		PoolSize:10,
 		WriteDelay:0, // nano second
 	}
@@ -71,6 +70,8 @@ func main(){
 	bodyMap1["Number"] = 10
 
 	jsonByte, err := json.Marshal(bodyMap)
+
+	log.Println(string(jsonByte))
 
 	// log.Println(len(jsonByte))
 
@@ -131,8 +132,7 @@ func subscribe(){
 	log.Println("ok")
 
 	var brahm = &brahmaputra.CreateProperties{
-		Host:"127.0.0.1",
-		Port:"8100",
+		Url:"brahm://127.0.0.1:8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
 		ChannelName:"Abhik",

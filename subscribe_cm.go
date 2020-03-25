@@ -10,16 +10,15 @@ import (
 func main() {
 	
 	var brahm = &brahmaputra.CreateProperties{
-		Host:"127.0.0.1",
-		Port:"8100",
+		Url:"brahm://127.0.0.1:8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
-		ChannelName:"Abhik",
+		ChannelName:"brahm",
 		AppType:"consumer",
-		//OffsetPath:"D:\\pounze_go_project\\brahmaputra\\subscriber_offset.offset", //writes last offset received
-		//AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
+		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber",
+		Worker:1,
 	}
 
 	brahm.Connect()

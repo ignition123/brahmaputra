@@ -152,7 +152,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 			var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
 			f, err := os.OpenFile(filePath,
-				os.O_APPEND|os.O_WRONLY, 0700)
+				os.O_WRONLY, os.ModeAppend)
 
 			if err != nil {
 				ChannelList.WriteLog(err.Error())

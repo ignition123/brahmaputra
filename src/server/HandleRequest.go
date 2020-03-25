@@ -6,6 +6,7 @@ import (
 	_"time"
 	"ChannelList"
 	_"sync"
+	_"log"
 )
 
 var closeTCP = false
@@ -22,6 +23,10 @@ func allZero(s []byte) bool {
 	return true
 }
 
+type ChannelStatus struct{
+	Status bool
+}
+
 func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
@@ -34,7 +39,7 @@ func HandleRequest(conn net.TCPConn) {
 
 	var writeCount = 0
 
-	var quitChannel = false
+	var subscriberMapName string
 
 	for {
 
@@ -43,7 +48,7 @@ func HandleRequest(conn net.TCPConn) {
 			conn.Close()
 			break
 		}
-		
+
 		sizeBuf := make([]byte, 8)
 
 		conn.Read(sizeBuf)
@@ -59,16 +64,19 @@ func HandleRequest(conn net.TCPConn) {
 		conn.Read(completePacket)
 
 		if allZero(completePacket) {
+
 			go ChannelList.WriteLog("Connection closed...")
 			break
 		}
 
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &writeCount, &counterRequest, quitChannel)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &writeCount, &counterRequest, &subscriberMapName)
 
 		<-parseChan
 	}
 
-	quitChannel = true
+	SubscriberHashMapMtx.Lock()
+	delete(ChannelList.TCPChannelSubscriberList, subscriberMapName)
+	SubscriberHashMapMtx.Unlock()
 }
 
 

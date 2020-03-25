@@ -1,5 +1,5 @@
 {
-    "worker":4,
+    "worker":1,
     "logWrite":true,
     "server":{
         "tcp":{
