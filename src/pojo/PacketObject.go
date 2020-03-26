@@ -23,5 +23,7 @@ type PacketStruct struct{
 	SubscriberNameLen int
 	SubscriberName string
 	SubscriberTypeLen int
+	GroupName string
 	SubscriberFD []*os.File 
+	ActiveMode bool
 }

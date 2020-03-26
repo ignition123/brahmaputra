@@ -557,6 +557,10 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 			continue
 		}
 
+		statusBuf := make([]byte, 1)
+
+		conn.Read(statusBuf)
+
 		completePacket := make([]byte, packetSize)
 
 		conn.Read(completePacket)
@@ -564,6 +568,14 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 		if allZero(completePacket) {
 
 			break
+		}
+
+		if statusBuf[0] == 1{
+
+			panic(string(completePacket))
+
+			break
+
 		}
 
 		if e.ReadDelay > 0{
@@ -601,6 +613,10 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 			continue
 		}
 
+		statusBuf := make([]byte, 1)
+
+		conn.Read(statusBuf)
+
 		completePacket := make([]byte, packetSize)
 
 		conn.Read(completePacket)
@@ -608,6 +624,14 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 		if allZero(completePacket) {
 
 			break
+		}
+
+		if statusBuf[0] == 1{
+
+			panic(string(completePacket))
+
+			break
+
 		}
 
 		go e.parseMsg(int64(packetSize), completePacket, "pub", callbackChan)

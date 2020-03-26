@@ -93,7 +93,7 @@ func main(){
 
 	start := time.Now()
 	
-	for i := 0; i < 10000000; i++ {
+	for i := 0; i < 1000000; i++ {
 
 		// parseWait.Add(1)
 

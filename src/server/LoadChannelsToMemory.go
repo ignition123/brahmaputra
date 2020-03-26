@@ -79,8 +79,6 @@ func ReadFile(path string, file os.FileInfo){
 
 			var channelName = channelMap["channelName"].(string)
 
-			ChannelList.TCPSubscriberGroup[channelName] = make(map[string][]*pojo.PacketStruct)
-
 			var channelObject = &pojo.ChannelStruct{
 				Offset:int64(0),
 				Worker: worker,
