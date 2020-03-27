@@ -245,7 +245,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 						return
 			    	}
 
-    				ChannelList.TCPSubscriberGroup[channelName] = make(map[string][]*pojo.PacketStruct)
+    				ChannelList.TCPSubscriberGroup[channelName][groupName] = make(map[int]*pojo.PacketStruct)
 
 		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from)
 
@@ -253,8 +253,17 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			}
 
-			
-			ChannelList.TCPSubscriberGroup[channelName][groupName] = append(ChannelList.TCPSubscriberGroup[channelName][groupName], packetObject)
+			var groupLen = len(ChannelList.TCPSubscriberGroup[channelName][groupName])
+
+			if groupLen <= 0{
+
+				ChannelList.TCPSubscriberGroup[channelName][groupName][0] = packetObject
+
+			}else{
+
+				ChannelList.TCPSubscriberGroup[channelName][groupName][groupLen] = packetObject
+
+			}
 
 		}else{
 
@@ -421,9 +430,9 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	byteSendBuffer.Put([]byte(message)) // actual body
 
-	for groupIndex := range ChannelList.TCPSubscriberGroup[channelName][groupName]{
+	for groupKey, _ := range ChannelList.TCPSubscriberGroup[channelName][groupName]{
 
-		_, err := ChannelList.TCPSubscriberGroup[channelName][groupName][groupIndex].Conn.Write(byteSendBuffer.Array())
+		_, err := ChannelList.TCPSubscriberGroup[channelName][groupName][groupKey].Conn.Write(byteSendBuffer.Array())
 
 		if (err != nil){
 
@@ -431,11 +440,11 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 		}
 
-		ChannelList.TCPSubscriberGroup[channelName][groupName][groupIndex].Conn.Close()
+		ChannelList.TCPSubscriberGroup[channelName][groupName][groupKey].Conn.Close()
 
 	}
 
-	ChannelList.TCPSubscriberGroup[channelName] = make(map[string][]*pojo.PacketStruct)
+	ChannelList.TCPSubscriberGroup[channelName] = make(map[string]map[int]*pojo.PacketStruct)
 
 	go ChannelList.WriteLog(message)
 

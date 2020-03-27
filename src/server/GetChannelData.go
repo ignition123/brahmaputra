@@ -3,7 +3,7 @@ package server
 import(
 	"encoding/binary"
 	"sync"
-	"log"
+	_"log"
 	"ChannelList"
 	"time"
 	"net"
@@ -444,8 +444,6 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 	if _, err := os.Stat(consumerOffsetPath); err == nil{
 
-		log.Println(start_from)
-
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- 0
@@ -599,8 +597,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	}
 
-	var groupId int
-
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
 		go func(index int, cursor int64, packetObject pojo.PacketStruct){
@@ -629,8 +625,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 			for{
 
 				if exitLoop{
-
-					log.Println("all killed")
 
 					if len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]) <= 0{
 
@@ -755,9 +749,9 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 								break
 							}
 
-							groupId = index % groupLen
+							var groupId = index % groupLen
 
-							go sendGroup(index, &groupId, groupLen, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg)
+							go sendGroup(index, groupId, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg)
 
 							select{
 								case message, ok := <-sentMsg:
@@ -1048,7 +1042,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 }
 
-func sendGroup(index int, groupId *int, groupLen int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
+func sendGroup(index int, groupId int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
 
 	defer ChannelList.Recover()
 
@@ -1058,28 +1052,48 @@ func sendGroup(index int, groupId *int, groupLen int, groupMtx sync.Mutex, curso
 
 	RETRY:
 
-	if *groupId < 0{
+	if groupId < 0{
 
 		sentMsg <- false
 
 		return
+
 	}
 
-	var group = ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][*groupId]
+	var group = ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][groupId]
 
-	log.Println(index)
+	if group == nil{
+
+		for key , _ := range ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]{
+
+			groupId = key
+
+		}
+
+		goto RETRY
+	}
 
 	_, err := group.Conn.Write(packetBuffer.Array())
 	
 	if err != nil {
 
-		log.Println("killed")
+		delete(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName], groupId)
 
-		ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][*groupId] = ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])-1]
-		ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])-1] = nil
-		ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName] = ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][:len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])-1] 
+		var groupLen = len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])
 
-		*groupId  = groupLen - 1
+		if groupLen == 0{
+
+			sentMsg <- false
+
+			return
+
+		}
+
+		for key , _ := range ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]{
+
+			groupId = key
+
+		}
 
 		goto RETRY
 	}
