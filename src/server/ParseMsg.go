@@ -66,9 +66,21 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
 		var agentName = string(byteBuffer.Get(agentNameLen))
 
-		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen)
+		var ackStatusByte = byteBuffer.GetByte()
+
+		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1)
 
 		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
+
+		if ackStatusByte[0] == 1{
+
+			packetObject.ProducerAck = true
+
+		}else{
+
+			packetObject.ProducerAck = false
+			
+		}
 
 		packetObject.Producer_idLen = producer_idLen
 
@@ -198,31 +210,43 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		packetObject.Conn = conn
 
+		_, keyFound := ChannelList.TCPChannelSubscriberList[channelName+subscriberName]
+
+		if keyFound{
+
+			ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
+
+			parseChan <- false
+
+			return
+		   
+		}
+
 		// checking for group name existence
 
-		if subscriberTypeLen > 0{
+		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-			var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
+			if subscriberTypeLen > 0{
 
-			packetObject.GroupName = groupName
+				var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
 
-			groupKey, groupFound := ChannelList.TCPSubscriberGroup[channelName][groupName]
+				packetObject.GroupName = groupName
 
-			if groupFound{
+				groupKey, groupFound := ChannelList.TCPSubscriberGroup[channelName][groupName]
 
-				if len(groupKey) == ChannelList.TCPStorage[channelName].PartitionCount{
+				if groupFound{
 
-					ThroughClientError(conn, SUBSCRIBER_FULL)
+					if len(groupKey) == ChannelList.TCPStorage[channelName].PartitionCount{
 
-					parseChan <- false
+						ThroughClientError(conn, SUBSCRIBER_FULL)
 
-					return
+						parseChan <- false
+
+						return
+
+					}
 
 				}
-
-			}
-
-			if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
@@ -233,6 +257,12 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					return
 
 				}
+
+				*subscriberMapName = channelName+subscriberName+groupName
+    			
+				SubscriberHashMapMtx.Lock()
+				ChannelList.TCPChannelSubscriberList[channelName+subscriberName+groupName] = true
+				SubscriberHashMapMtx.Unlock()
 
 		    	if len(ChannelList.TCPSubscriberGroup[channelName][groupName]) <= 0{
 
@@ -251,41 +281,30 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		    	}
 
-			}
+		    	var groupLen = len(ChannelList.TCPSubscriberGroup[channelName][groupName])
 
-			var groupLen = len(ChannelList.TCPSubscriberGroup[channelName][groupName])
+				if groupLen <= 0{
 
-			if groupLen <= 0{
+					ChannelList.TCPSubscriberGroup[channelName][groupName][0] = packetObject
+					
+				}else{
 
-				ChannelList.TCPSubscriberGroup[channelName][groupName][0] = packetObject
+					for i:=0;i<ChannelList.TCPStorage[channelName].PartitionCount;i++{
+
+						_, keyFound := ChannelList.TCPSubscriberGroup[channelName][groupName][i]
+
+						if !keyFound{
+
+							ChannelList.TCPSubscriberGroup[channelName][groupName][i] = packetObject
+
+							break
+						}
+
+					}
+
+				}
 
 			}else{
-
-				ChannelList.TCPSubscriberGroup[channelName][groupName][groupLen] = packetObject
-
-			}
-
-		}else{
-
-			_, keyFound := ChannelList.TCPChannelSubscriberList[channelName+subscriberName]
-
-			if keyFound{
-
-				ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-				parseChan <- false
-
-				return
-			   
-			}
-
-			*subscriberMapName = channelName+subscriberName
-
-			SubscriberHashMapMtx.Lock()
-			ChannelList.TCPChannelSubscriberList[channelName+subscriberName] = true
-			SubscriberHashMapMtx.Unlock()
-
-			if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
@@ -306,13 +325,19 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					return
 		    	}
 
+    			*subscriberMapName = channelName+subscriberName
+
+				SubscriberHashMapMtx.Lock()
+				ChannelList.TCPChannelSubscriberList[channelName+subscriberName] = true
+				SubscriberHashMapMtx.Unlock()
+
 				go SubscribeChannel(conn, *packetObject, start_from)
 
-			}else{
-
-				ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
-
 			}
+
+		}else{
+
+			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
 
 		}
 		
@@ -331,14 +356,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 func WriteData(packet pojo.PacketStruct, writeCount *int){
 
 	defer ChannelList.Recover()
-
-	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Lock()
-
-	if *writeCount == ChannelList.TCPStorage[packet.ChannelName].PartitionCount{
-
-		*writeCount = 0
-
-	}
 
 	var byteBuffer = ByteBuffer.Buffer{
 		Endian:"big",
@@ -369,12 +386,22 @@ func WriteData(packet pojo.PacketStruct, writeCount *int){
 	byteBuffer.PutLong(int(packet.Id))
 
 	byteBuffer.Put(packet.BodyBB)
- 
+
+	
+
+	if *writeCount >= ChannelList.TCPStorage[packet.ChannelName].PartitionCount{
+
+		*writeCount = 0
+
+	}
+
 	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[*writeCount].Write(byteBuffer.Array())
+
+	// ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Lock()
 
 	*writeCount += 1
 
-	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
+	// ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
 	
 	if (err != nil){
 		go ChannelList.WriteLog(err.Error())

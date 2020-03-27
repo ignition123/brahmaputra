@@ -20,7 +20,7 @@ func main() {
 		AppType:"consumer",
 		AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
-		SubscriberName:"sudeep_subscriber2",
+		SubscriberName:"sudeep_subscriber_fo1",
 		GroupName:"brahm_group",
 		Worker:1,
 		AuthReconnect:false,
@@ -43,7 +43,6 @@ func main() {
 	  os.Exit(0)
 
 	}()
-
 
 	brahm.Connect()
 
