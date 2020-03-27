@@ -21,7 +21,7 @@ func main(){
 		Worker:1, //runtime.NumCPU() runtime.NumCPU()
 		PoolSize:10,
 		WriteDelay:0, // nano second
-		Acknowledge:false,
+		// Acknowledge:false,
 	}
 
 	brahm.Connect()

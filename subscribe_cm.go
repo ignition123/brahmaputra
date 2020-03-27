@@ -4,9 +4,9 @@ import (
 	"brahmaputra"
 	"log"
 	"time"
-	"syscall"
-	"os/signal"
-	"os"
+	// "syscall"
+	// "os/signal"
+	// "os"
 )
 
 
@@ -20,29 +20,29 @@ func main() {
 		AppType:"consumer",
 		AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
-		SubscriberName:"sudeep_subscriber2",
-		GroupName:"brahm_group",
+		SubscriberName:"sudeep_subscriber",
+		// GroupName:"brahm_group",
 		Worker:1,
-		AuthReconnect:false,
+		// AuthReconnect:false,
 	}
 
-	sigs := make(chan os.Signal, 1)
+	// sigs := make(chan os.Signal, 1)
 
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGQUIT)
+	// signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGQUIT)
 
-	go func() {
+	// go func() {
 
-	  <- sigs
+	//   <- sigs
 
-	  brahm.Close()
+	//   brahm.Close()
 
-	  log.Println("Closing process...")
+	//   log.Println("Closing process...")
 
-	  time.Sleep(5 * time.Second)
+	//   time.Sleep(5 * time.Second)
 
-	  os.Exit(0)
+	//   os.Exit(0)
 
-	}()
+	// }()
 
 
 	brahm.Connect()

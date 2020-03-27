@@ -44,8 +44,6 @@ type CreateProperties struct{
 	ReadDelay int32
 	GroupName string
 	SubscriberName string
-	AuthReconnect bool
-	Acknowledge bool
 }	
 
 func handlepanic() { 
@@ -69,11 +67,7 @@ func (e *CreateProperties) Connect(){
 
 	var subReconnect = false
 
-	if e.Acknowledge{
-
-		e.TransactionList = make(map[string][]byte)
-		
-	}
+	e.TransactionList = make(map[string][]byte)
 
 	e.contentMatcherMap = make(map[string]interface{})
 
@@ -87,7 +81,7 @@ func (e *CreateProperties) Connect(){
 
 		subReconnect = true
 
-	} 
+	}
 
 	e.roundRobin = 0
 
@@ -174,21 +168,17 @@ func (e *CreateProperties) Connect(){
 
 		go log.Println("Application started as producer...")
 
-		if e.Acknowledge{
+		if e.PoolSize > 0{
 
-			if e.PoolSize > 0{
+			for index := range e.ConnPool{
 
-				for index := range e.ConnPool{
-
-					go e.ReceiveMsg(e.ConnPool[index])
-
-				}
-
-			}else{
-
-				go e.ReceiveMsg(e.ConnPool[0])
+				go e.ReceiveMsg(e.ConnPool[index])
 
 			}
+
+		}else{
+
+			go e.ReceiveMsg(e.ConnPool[0])
 
 		}
 	}
@@ -228,11 +218,7 @@ func (e *CreateProperties) Connect(){
 
 	e.connectStatus = true
 
-	if e.AuthReconnect{
-
-		go e.checkConnectStatus()
-		
-	}
+	go e.checkConnectStatus()
 }
 
 func (e *CreateProperties) checkConnectStatus(){
@@ -402,7 +388,7 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 	var agentNameLen = len(e.AgentName)
 
 	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + totalBytePacket
-	var totalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1 + len(bodyBB)
+	var totalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + len(bodyBB)
 	 
 	byteBuffer.PutLong(totalByteLen)
 
@@ -422,24 +408,11 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 	byteBuffer.Put([]byte(e.AgentName))
 
-	if e.Acknowledge{
-
-		byteBuffer.PutByte(byte(1))
-		
-	}else{
-
-		byteBuffer.PutByte(byte(0))
-	}
-
 	byteBuffer.Put(bodyBB)
 
 	var byteArrayResp = byteBuffer.Array()
  
-	if e.Acknowledge{
-
-		e.TransactionList[producer_id] = byteArrayResp	
-
-	}
+	e.TransactionList[producer_id] = byteArrayResp
 
 	_, err := conn.Write(byteArrayResp)
 
@@ -459,14 +432,11 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 	e.requestChan <- true
 }
 
-func (e *CreateProperties) Close(){
+func (e *CreateProperties) Close(conn net.Conn){
 
 	defer handlepanic()
 
-	for index := range e.ConnPool{
-
-		e.ConnPool[index].Close()
-	}
+	conn.Close()
 
 	go log.Println("Socket closed...")
 
