@@ -9,11 +9,13 @@ import (
 	"ByteBuffer"
 	"encoding/binary"
 	"sync"
+	"os"
 )
 
-var SubscriberHashMapMtx sync.Mutex
+var SubscriberHashMapMtx sync.RWMutex
+var SubscriberGroupMtx sync.RWMutex
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount *int, counterRequest *int, subscriberMapName *string){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount int, counterRequest *int, subscriberMapName *string, channelMapName *string, messageMapType *string){
 
 	defer ChannelList.Recover()
 
@@ -30,6 +32,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 	var channelNameByte = byteBuffer.GetShort() // 2
 	var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
 	var channelName = string(byteBuffer.Get(channelNameLen)) // channelNameLen
+
+	*channelMapName = channelName
 
 	var packetObject = &pojo.PacketStruct{
 		MessageTypeLen: messageTypeLen,
@@ -67,7 +71,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		var agentName = string(byteBuffer.Get(agentNameLen))
 
 		var ackStatusByte = byteBuffer.GetByte()
-		
+
 		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1)
 
 		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
@@ -210,31 +214,29 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		packetObject.Conn = conn
 
+		packetObject.ActiveMode = true
+
 		// checking for group name existence
 
-		if subscriberTypeLen > 0{
+		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
-			var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
+			if subscriberTypeLen > 0{
 
-			packetObject.GroupName = groupName
+				var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
 
-			groupKey, groupFound := ChannelList.TCPSubscriberGroup[channelName][groupName]
+				packetObject.GroupName = groupName
 
-			if groupFound{
+				keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName)
 
-				if len(groupKey) == ChannelList.TCPStorage[channelName].PartitionCount{
+				if keyFound{
 
-					ThroughClientError(conn, SUBSCRIBER_FULL)
+					ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
 
 					parseChan <- false
 
 					return
-
+				   
 				}
-
-			}
-
-			if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
@@ -246,9 +248,34 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				}
 
-		    	if len(ChannelList.TCPSubscriberGroup[channelName][groupName]) <= 0{
+				*subscriberMapName = channelName+subscriberName+groupName
+				*messageMapType = messageType
+    				
+    			StoreTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName, true)
 
-		    		if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
+				// checking for key already in the hashmap
+
+				groupLen := GetChannelGrpMapLen(channelName, groupName)
+
+				if groupLen > 0{
+
+					if groupLen == ChannelList.TCPStorage[channelName].PartitionCount{
+
+						ThroughClientError(conn, SUBSCRIBER_FULL)
+
+						parseChan <- false
+
+						return
+
+					}
+
+					// SetNewClientToGrp(channelName, groupName, *packetObject)
+
+					AddNewClientToGrp(channelName, groupName, *packetObject)
+
+				}else{
+
+					if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
 			    		ThroughClientError(conn, INVALID_PULL_FLAG)
 
@@ -257,47 +284,18 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 						return
 			    	}
 
-    				ChannelList.TCPSubscriberGroup[channelName][groupName] = make(map[int]*pojo.PacketStruct)
+    				// ResetChannelGrpMap(channelName, groupName)
+
+    				RenewSub(channelName, groupName)
+
+    				AddNewClientToGrp(channelName, groupName, *packetObject)
+
+    				// SetGroupMap(channelName, groupName, 0, *packetObject)
 
 		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from)
-
-		    	}
-
-			}
-
-			var groupLen = len(ChannelList.TCPSubscriberGroup[channelName][groupName])
-
-			if groupLen <= 0{
-
-				ChannelList.TCPSubscriberGroup[channelName][groupName][0] = packetObject
+				}
 
 			}else{
-
-				ChannelList.TCPSubscriberGroup[channelName][groupName][groupLen] = packetObject
-
-			}
-
-		}else{
-
-			_, keyFound := ChannelList.TCPChannelSubscriberList[channelName+subscriberName]
-
-			if keyFound{
-
-				ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-				parseChan <- false
-
-				return
-			   
-			}
-
-			*subscriberMapName = channelName+subscriberName
-
-			SubscriberHashMapMtx.Lock()
-			ChannelList.TCPChannelSubscriberList[channelName+subscriberName] = true
-			SubscriberHashMapMtx.Unlock()
-
-			if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
@@ -318,14 +316,30 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					return
 		    	}
 
+		    	keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName)
+
+				if keyFound{
+
+					ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
+
+					parseChan <- false
+
+					return
+				   
+				}
+
+    			*subscriberMapName = channelName+subscriberName
+    			*messageMapType = messageType
+
+    			StoreTCPChannelSubscriberList(channelName, channelName+subscriberName, true)
+
 				go SubscribeChannel(conn, *packetObject, start_from)
-
-			}else{
-
-				ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
 
 			}
 
+		}else{
+
+			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
 		}
 		
 		parseChan <- true 
@@ -340,17 +354,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 	}	
 }
 
-func WriteData(packet pojo.PacketStruct, writeCount *int){
+func WriteData(packet pojo.PacketStruct, writeCount int){
 
 	defer ChannelList.Recover()
-
-	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Lock()
-
-	if *writeCount == ChannelList.TCPStorage[packet.ChannelName].PartitionCount{
-
-		*writeCount = 0
-
-	}
 
 	var byteBuffer = ByteBuffer.Buffer{
 		Endian:"big",
@@ -381,13 +387,10 @@ func WriteData(packet pojo.PacketStruct, writeCount *int){
 	byteBuffer.PutLong(int(packet.Id))
 
 	byteBuffer.Put(packet.BodyBB)
- 
-	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[*writeCount].Write(byteBuffer.Array())
 
-	*writeCount += 1
+	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[writeCount].Write(byteBuffer.Array())
 
-	ChannelList.TCPStorage[packet.ChannelName].ChannelLock.Unlock()
-	
+
 	if (err != nil){
 		go ChannelList.WriteLog(err.Error())
 		ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- false
@@ -442,22 +445,209 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	byteSendBuffer.Put([]byte(message)) // actual body
 
-	for groupKey, _ := range ChannelList.TCPSubscriberGroup[channelName][groupName]{
+	var groupLen = len(TCPGroupStruct.TCPSubGroup[channelName][groupName])
 
-		_, err := ChannelList.TCPSubscriberGroup[channelName][groupName][groupKey].Conn.Write(byteSendBuffer.Array())
+	for i:=0;i<groupLen;i++{
 
+		var groupObj = TCPGroupStruct.TCPSubGroup[channelName][groupName][i]
+
+		_, err := groupObj.Conn.Write(byteSendBuffer.Array())
+		
 		if (err != nil){
 
 			go ChannelList.WriteLog(err.Error())
 
 		}
 
-		ChannelList.TCPSubscriberGroup[channelName][groupName][groupKey].Conn.Close()
+		groupObj.Conn.Close()
 
 	}
 
-	ChannelList.TCPSubscriberGroup[channelName] = make(map[string]map[int]*pojo.PacketStruct)
+	RenewSub(channelName, groupName)
 
 	go ChannelList.WriteLog(message)
 
+}
+
+type SubscriberGroup struct{
+
+	Index int
+	Packet pojo.PacketStruct
+
+}
+
+func WriteSubscriberGrpOffset(index int, packetObject pojo.PacketStruct, byteArrayCursor []byte) bool{
+
+	ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Lock()
+	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
+	ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Unlock()
+
+	if (err != nil){
+
+		go ChannelList.WriteLog(err.Error())
+
+		return false
+	}
+
+	return true
+}
+
+func CloseSubscriberGrpFD(packetObject pojo.PacketStruct){
+
+	ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Lock()
+	defer ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Unlock()
+
+	for fileIndex := range packetObject.SubscriberFD{
+
+		packetObject.SubscriberFD[fileIndex].Close()
+
+	}
+}
+
+func CreateSubscriberGrpFD(ChannelName string) []*os.File{
+
+	ChannelList.TCPStorage[ChannelName].ChannelLock.Lock()
+	var fileFDArray = make([]*os.File, ChannelList.TCPStorage[ChannelName].PartitionCount)
+	ChannelList.TCPStorage[ChannelName].ChannelLock.Unlock()
+
+	return fileFDArray
+
+}
+
+func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
+
+	ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Lock()
+	packetObject.SubscriberFD[index] = fDes
+	ChannelList.TCPStorage[packetObject.ChannelName].ChannelLock.Unlock()
+
+}
+
+func LoadTCPChannelSubscriberList(channelName string, subscriberName string) bool{
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	var status = TCPGroupStruct.TCPChannelSubscriberList[subscriberName]
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	return status
+}	
+
+func StoreTCPChannelSubscriberList(channelName string, subscriberName string, status bool){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	TCPGroupStruct.TCPChannelSubscriberList[subscriberName] = status
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+}
+
+func DeleteTCPChannelSubscriberList(channelName string, subscriberName string){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	delete(TCPGroupStruct.TCPChannelSubscriberList, subscriberName)	
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+}
+
+
+
+func RenewSub(channelName string, groupName string){
+
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	if TCPGroupStruct.TCPSubGroup[channelName] == nil{
+
+		TCPGroupStruct.TCPSubGroup[channelName] = make(map[string][]*pojo.PacketStruct)
+	}
+
+	var newList []*pojo.PacketStruct
+
+	TCPGroupStruct.TCPSubGroup[channelName][groupName] = newList
+
+}
+
+func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.PacketStruct){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	TCPGroupStruct.TCPSubGroup[channelName][groupName] = append(TCPGroupStruct.TCPSubGroup[channelName][groupName], &packetObject)
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+	
+}
+
+func RemoveGroupMember(channelName string , groupName string, consumerName string){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	for index := range TCPGroupStruct.TCPSubGroup[channelName][groupName]{
+
+		var groupMap = TCPGroupStruct.TCPSubGroup[channelName][groupName][index]
+
+		var groupConsumerName = groupMap.ChannelName + groupMap.SubscriberName + groupMap.GroupName
+
+		if groupConsumerName == consumerName{
+
+			TCPGroupStruct.TCPSubGroup[channelName][groupName] = append(TCPGroupStruct.TCPSubGroup[channelName][groupName][:index], TCPGroupStruct.TCPSubGroup[channelName][groupName][index+1:]...)
+
+			break
+		}
+	}
+
+}
+
+func RemoveGroupMap(channelName string , groupName string, groupId *int){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	if len(TCPGroupStruct.TCPSubGroup[channelName][groupName]) > 0{
+
+		TCPGroupStruct.TCPSubGroup[channelName][groupName] = append(TCPGroupStruct.TCPSubGroup[channelName][groupName][:*groupId], TCPGroupStruct.TCPSubGroup[channelName][groupName][*groupId+1:]...)
+	}
+
+}
+
+func GetValue(channelName string , groupName string, groupId *int, index int) (*pojo.PacketStruct, int){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	var groupLen = len(TCPGroupStruct.TCPSubGroup[channelName][groupName])
+
+	if groupLen <= 0{
+
+		return nil, -1
+
+	}
+
+	*groupId = index % groupLen
+
+	if *groupId >= groupLen{
+
+		if groupLen == 0{
+
+			return nil, -1
+
+		}else{
+
+			return TCPGroupStruct.TCPSubGroup[channelName][groupName][0], 0
+
+		}
+
+	}else{
+
+		return TCPGroupStruct.TCPSubGroup[channelName][groupName][*groupId], *groupId
+		
+	}
+
+	return nil, -1
+}
+
+func GetChannelGrpMapLen(channelName string, groupName string) int{
+
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	var groupLen = len(TCPGroupStruct.TCPSubGroup[channelName][groupName])
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
+	return groupLen
 }

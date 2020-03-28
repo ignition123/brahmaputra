@@ -21,7 +21,7 @@ func main(){
 		Worker:1, //runtime.NumCPU() runtime.NumCPU()
 		PoolSize:10,
 		WriteDelay:0, // nano second
-		// Acknowledge:false,
+		Acknowledge:true,
 	}
 
 	brahm.Connect()
@@ -94,7 +94,7 @@ func main(){
 
 	start := time.Now()
 	
-	for i := 0; i < 10000000; i++ {
+	for i := 0; i < 1000000; i++ {
 
 		// parseWait.Add(1)
 
@@ -102,7 +102,7 @@ func main(){
 
 		// time.Sleep(1 * time.Nanosecond)
 
-		go brahm.Publish([]byte("s"), channel)
+		go brahm.Publish(jsonByte, channel)
 
 		select {
 

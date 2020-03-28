@@ -11,6 +11,8 @@ import(
 	"strconv"
 )
 
+var TCPGroupStruct ChannelList.TCPGrp
+
 func ReadDirectory(dirPath string, file os.FileInfo){
 
 	files, err := ioutil.ReadDir(dirPath)
@@ -79,7 +81,15 @@ func ReadFile(path string, file os.FileInfo){
 
 			var channelName = channelMap["channelName"].(string)
 
-			ChannelList.TCPSubscriberGroup[channelName] = make(map[string]map[int]*pojo.PacketStruct)
+			TCPGroupStruct = ChannelList.TCPGrp{}
+
+			TCPGroupStruct.TCPChannelSubscriberList = make(map[string] bool)
+
+			// array design
+
+			TCPGroupStruct.TCPSubGroup = make(map[string] map[string][]*pojo.PacketStruct)
+
+			TCPGroupStruct.TCPSubGroup[channelName] = make(map[string][]*pojo.PacketStruct)
 
 			var channelObject = &pojo.ChannelStruct{
 				Offset:int64(0),
@@ -152,7 +162,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 			var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
 			f, err := os.OpenFile(filePath,
-				os.O_WRONLY, os.ModeAppend)
+				os.O_APPEND, os.ModeAppend)
 
 			if err != nil {
 				ChannelList.WriteLog(err.Error())

@@ -175,7 +175,6 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, pack
 	defer ChannelList.Recover()
 
 	e.Lock()
-
 	defer e.Unlock()
 
 	var totalRetry = 0
@@ -219,15 +218,6 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, pack
 
 }
 
-func deleteKeyHashMap(consumerName string){
-
-	SubscriberHashMapMtx.Lock()
-
-	delete(ChannelList.TCPChannelSubscriberList, consumerName)
-
-	SubscriberHashMapMtx.Unlock()
-
-}
 
 func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, checkDirectoryChan chan bool){
 
@@ -249,7 +239,7 @@ func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, chec
 			
 			ThroughClientError(conn, err.Error())
 
-			deleteKeyHashMap(consumerName)
+			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			checkDirectoryChan <- false
 
@@ -296,7 +286,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 				ThroughClientError(conn, err.Error())
 
-				deleteKeyHashMap(consumerName)
+				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				partitionOffsetSubscriber <- 0
 
@@ -327,14 +317,14 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 			ThroughClientError(conn, err.Error())
 
-			deleteKeyHashMap(consumerName)
+			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			partitionOffsetSubscriber <- 0
 
 			return
 		}
 
-		packetObject.SubscriberFD[index] = fDes
+		AddSubscriberFD(index, packetObject, fDes)
 
 	}else if os.IsNotExist(err){
 
@@ -344,7 +334,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 			ThroughClientError(conn, err.Error())
 
-			deleteKeyHashMap(consumerName)
+			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			partitionOffsetSubscriber <- 0
 
@@ -352,7 +342,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		}
 
-		packetObject.SubscriberFD[index] = fDes
+		AddSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
@@ -374,7 +364,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 				ThroughClientError(conn, err.Error())
 
-				deleteKeyHashMap(consumerName)
+				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				partitionOffsetSubscriber <- 0
 
@@ -487,7 +477,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 		}
 
 		fDes, err := os.OpenFile(consumerOffsetPath,
-			os.O_WRONLY, os.ModeAppend)
+			os.O_WRONLY, os.ModeAppend) //race
 
 		if err != nil {
 
@@ -498,7 +488,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 			return
 		}
 
-		packetObject.SubscriberFD[index] = fDes
+		AddSubscriberFD(index, packetObject, fDes) // race
 
 	}else if os.IsNotExist(err){
 
@@ -514,7 +504,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		}
 
-		packetObject.SubscriberFD[index] = fDes
+		AddSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
@@ -562,18 +552,17 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 }
 
-
 func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
 
-	var groupMtx sync.Mutex
+	var consumerName = packetObject.ChannelName + packetObject.SubscriberName + packetObject.GroupName
 
-	var checkDirectoryChan = make(chan bool)
+	var checkDirectoryChan = make(chan bool, 1)
 
 	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
-	var partitionOffsetSubscriber = make(chan int64)
+	var partitionOffsetSubscriber = make(chan int64, 1)
 
 	go checkCreateGroupDirectory(channelName, groupName, checkDirectoryChan)
 
@@ -583,11 +572,11 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	}
 
-	packetObject.SubscriberFD = make([]*os.File, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
+	packetObject.SubscriberFD = CreateSubscriberGrpFD(packetObject.ChannelName)
 
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
-		go createSubscriberGroupOffsetFile(i, channelName, groupName, packetObject, partitionOffsetSubscriber, start_from)
+		go createSubscriberGroupOffsetFile(i, channelName, groupName, packetObject, partitionOffsetSubscriber, start_from) // race
 
 		offsetByteSize[i] = <-partitionOffsetSubscriber
 
@@ -607,13 +596,15 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 			defer ChannelList.Recover()
 
+			var groupMtx sync.Mutex
+
 			var filePath = ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
 
 			file, err := os.Open(filePath)
 
-			defer file.Close()
-
 			if err != nil {
+
+				file.Close()
 
 				ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
@@ -628,9 +619,39 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 			for{
 
-				if exitLoop{
+				keyFound := LoadTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
-					if len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]) <= 0{
+				if exitLoop || !keyFound{
+
+					// delete consumer
+
+					DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+
+					// checking for subscriber Group Length
+
+					var consumerGroupLen = GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+
+					if consumerGroupLen > 0{
+
+						// Delete Group Member
+
+						RemoveGroupMember(packetObject.ChannelName, packetObject.GroupName, consumerName)
+					}
+
+				
+					if consumerGroupLen <= 0{
+
+						// Closing File Descriptor
+
+						CloseSubscriberGrpFD(packetObject)
+
+						// Reset Group
+
+						RenewSub(packetObject.ChannelName, packetObject.GroupName)
+
+						file.Close()
+
+						time.Sleep(1 * time.Second)
 
 						break
 
@@ -644,7 +665,9 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 					ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
-					break
+					exitLoop = true
+					
+					continue
 					
 				}
 
@@ -654,7 +677,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
-
 				if cursor < fileStat.Size(){
 
 					data := make([]byte, 8)
@@ -663,21 +685,29 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 					if err != nil {
 
+						ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
+
+						exitLoop = true
+
 						continue
 
 					}
 
-					if count > 0{
+					if int64(count) > 0 && int64(count) < fileStat.Size(){
 
 						cursor += 8
 
 						var packetSize = binary.BigEndian.Uint64(data)
 
-						restPacket := make([]byte, packetSize)
+						restPacket := make([]byte, int64(packetSize))
 
 						totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
 
 						if errPacket != nil{
+
+							ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, errPacket.Error())
+
+							exitLoop = true
 
 							continue
 
@@ -746,35 +776,23 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 							byteSendBuffer.Put(bodyBB) // actual body
 
-							var groupLen  = len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])
+							// log.Println(TCPGroupStruct.TCPSubGroup[packetObject.ChannelName][packetObject.GroupName])
 
-							if groupLen <= 0{
+							go sendGroup(index, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg) // race
 
-								break
-							}
+							message, ok := <-sentMsg
 
-							var groupId = index % groupLen
+							if ok{
 
-							go sendGroup(index, groupId, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg)
+								if !message{
 
-							select{
-								case message, ok := <-sentMsg:
+									exitLoop = true
 
-									if ok{
+								}else{
 
-										if !message{
+									exitLoop = false
 
-											exitLoop = true
-
-										}else{
-
-											exitLoop = false
-
-										}
-
-									}
-
-									break
+								}
 							}
 
 						}else{
@@ -809,11 +827,11 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 	var consumerName = packetObject.ChannelName + packetObject.SubscriberName
 
-	var checkDirectoryChan = make(chan bool)
+	var checkDirectoryChan = make(chan bool, 1)
 
 	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
-	var partitionOffsetSubscriber = make(chan int64)
+	var partitionOffsetSubscriber = make(chan int64, 1)
 
 	go checkCreateDirectory(conn, packetObject, checkDirectoryChan)
 
@@ -837,11 +855,13 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 		ThroughClientError(conn, INVALID_SUBSCRIBER_OFFSET)
 
-		deleteKeyHashMap(consumerName)
+		DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 		return
 
 	}
+
+	var subscriberMtx sync.Mutex
 
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
@@ -859,7 +879,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 				
 				ThroughClientError(conn, err.Error())
 
-				deleteKeyHashMap(consumerName)
+				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				return
 			}
@@ -872,7 +892,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 			for{
 
-				_, keyFound := ChannelList.TCPChannelSubscriberList[consumerName]
+				keyFound := LoadTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				if exitLoop || !keyFound{
 
@@ -884,7 +904,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 					}
 
-					deleteKeyHashMap(consumerName)
+					DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 					break
 				}
@@ -895,7 +915,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 					ThroughClientError(conn, err.Error())
 
-					deleteKeyHashMap(consumerName)
+					DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 					break
 					
@@ -998,26 +1018,22 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 							byteSendBuffer.Put(bodyBB) // actual body
 
-							go send(index, int(cursor), packetObject, conn, byteSendBuffer, sentMsg)
+							go send(index, int(cursor), subscriberMtx, packetObject, conn, byteSendBuffer, sentMsg)
 
-							select{
-								case message, ok := <-sentMsg:
+							message, ok := <-sentMsg
 
-									if ok{
+							if ok{
 
-										if !message{
+								if !message{
 
-											exitLoop = true
+									exitLoop = true
 
-										}else{
+								}else{
 
-											exitLoop = false
+									exitLoop = false
 
-										}
+								}
 
-									}
-
-									break
 							}
 
 						}else{
@@ -1046,7 +1062,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 }
 
-func sendGroup(index int, groupId int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
+func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
 
 	defer ChannelList.Recover()
 
@@ -1054,74 +1070,52 @@ func sendGroup(index int, groupId int, groupMtx sync.Mutex, cursor int, packetOb
 
 	defer groupMtx.Unlock()
 
+	var groupId = 0
+
+	var group *pojo.PacketStruct
+
 	RETRY:
 
-	if groupId < 0{
+	group, groupId = GetValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
+
+	if group == nil{
 
 		sentMsg <- false
 
 		return
-
 	}
-
-	var group = ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName][groupId]
-
-	if group == nil{
-
-		for key , _ := range ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]{
-
-			groupId = key
-
-		}
-
-		goto RETRY
-	}
-
+	
 	_, err := group.Conn.Write(packetBuffer.Array())
 	
 	if err != nil {
 
-		delete(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName], groupId)
+		RemoveGroupMap(packetObject.ChannelName, packetObject.GroupName, &groupId)
 
-		var groupLen = len(ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName])
+		group, groupId = GetValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
 
-		if groupLen == 0{
+		if group == nil{
 
 			sentMsg <- false
 
 			return
-
-		}
-
-		for key , _ := range ChannelList.TCPSubscriberGroup[packetObject.ChannelName][packetObject.GroupName]{
-
-			groupId = key
-
 		}
 
 		goto RETRY
+
 	}
 
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-	_, err = packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
-
-	if (err != nil){
-
-		go ChannelList.WriteLog(err.Error())
-
-		sentMsg <- false
-
-		return
-	}
-
-	sentMsg <- true
+	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 }
 
-func send(index int, cursor int, packetObject pojo.PacketStruct, conn net.TCPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
+func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.PacketStruct, conn net.TCPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
 
 	defer ChannelList.Recover()
+
+	subscriberMtx.Lock()
+	defer subscriberMtx.Unlock()
 
 	_, err := conn.Write(packetBuffer.Array())
 	
@@ -1137,18 +1131,7 @@ func send(index int, cursor int, packetObject pojo.PacketStruct, conn net.TCPCon
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-	_, err = packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
-
-	if (err != nil){
-
-		go ChannelList.WriteLog(err.Error())
-
-		sentMsg <- false
-
-		return
-	}
-
-	sentMsg <- true
+	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 
 }
 

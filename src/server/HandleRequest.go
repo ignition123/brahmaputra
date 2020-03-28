@@ -41,6 +41,10 @@ func HandleRequest(conn net.TCPConn) {
 
 	var subscriberMapName string
 
+	var channelMapName string
+
+	var messageMapType string
+
 	for {
 
 		if closeTCP{
@@ -69,14 +73,30 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, &writeCount, &counterRequest, &subscriberMapName)
+		if TCPGroupStruct.TCPStorage[channelMapName] != nil{
+
+			if writeCount >= TCPGroupStruct.TCPStorage[channelMapName].PartitionCount{
+
+				writeCount = 0
+
+			}
+
+		}else{
+
+			writeCount = 0
+		}
+		
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType)
+
+		writeCount += 1
 
 		<-parseChan
 	}
 
-	SubscriberHashMapMtx.Lock()
-	delete(ChannelList.TCPChannelSubscriberList, subscriberMapName)
-	SubscriberHashMapMtx.Unlock()
+	if messageMapType == "subscribe"{
+		DeleteTCPChannelSubscriberList(channelMapName, subscriberMapName)
+	}
+
 }
 
 
