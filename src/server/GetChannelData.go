@@ -116,7 +116,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 								go func(message *pojo.PacketStruct){
 
 									ChannelList.TCPStorage[channelName].SubscriberChannel[index] <- message
-									
+
 								}(message)
 							}
 						}		
@@ -215,10 +215,7 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, pack
 		
 			go ChannelList.WriteLog(err.Error())
 
-			var channelArray = ChannelList.TCPSocketDetails[message.ChannelName]
-			copy(channelArray[index:], channelArray[index+1:])
-			channelArray[len(channelArray)-1] = nil
-			ChannelList.TCPSocketDetails[message.ChannelName] = channelArray[:len(channelArray)-1]
+			ChannelList.TCPSocketDetails[message.ChannelName] = append(ChannelList.TCPSocketDetails[message.ChannelName][:index], ChannelList.TCPSocketDetails[message.ChannelName][index+1:]...)
 
 			goto RETRY
 

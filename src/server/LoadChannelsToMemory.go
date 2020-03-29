@@ -13,6 +13,8 @@ import(
 
 func ReadDirectory(dirPath string, file os.FileInfo){
 
+	defer ChannelList.Recover()
+
 	files, err := ioutil.ReadDir(dirPath)
 
     if err != nil {
