@@ -13,17 +13,17 @@ type ServerTCPConnection struct{
 	connections map[net.Conn] time.Time
 }
 
+var ChannelMethod = &ChannelMethods{}
+
 func HostTCP(configObj pojo.Config){
 
 	defer ChannelList.Recover()
 
 	ChannelList.ConfigTCPObj = configObj
 
-	var channelMethod = &ChannelMethods{}
-
 	LoadTCPChannelsToMemory()
 
-	go channelMethod.GetChannelData()
+	go ChannelMethod.GetChannelData()
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
 		HostTCPServer()
@@ -64,11 +64,11 @@ func HostTCPServer(){
         tcp.SetNoDelay(true)
         tcp.SetKeepAlive(true)
 		tcp.SetLinger(1)
-		// tcp.SetReadBuffer(10000)
-		// tcp.SetWriteBuffer(10000)
-		// tcp.SetDeadline(time.Now().Add(1000000 * time.Second))
-		// tcp.SetReadDeadline(time.Now().Add(1000000 * time.Second))
-		// tcp.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
+		tcp.SetReadBuffer(10000)
+		tcp.SetWriteBuffer(10000)
+		tcp.SetDeadline(time.Now().Add(1000000 * time.Second))
+		tcp.SetReadDeadline(time.Now().Add(1000000 * time.Second))
+		tcp.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
 
 		go HandleRequest(*tcp)
 	}

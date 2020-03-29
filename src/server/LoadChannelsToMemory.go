@@ -11,8 +11,6 @@ import(
 	"strconv"
 )
 
-var TCPGroupStruct ChannelList.TCPGrp
-
 func ReadDirectory(dirPath string, file os.FileInfo){
 
 	files, err := ioutil.ReadDir(dirPath)
@@ -81,16 +79,6 @@ func ReadFile(path string, file os.FileInfo){
 
 			var channelName = channelMap["channelName"].(string)
 
-			TCPGroupStruct = ChannelList.TCPGrp{}
-
-			TCPGroupStruct.TCPChannelSubscriberList = make(map[string] bool)
-
-			// array design
-
-			TCPGroupStruct.TCPSubGroup = make(map[string] map[string][]*pojo.PacketStruct)
-
-			TCPGroupStruct.TCPSubGroup[channelName] = make(map[string][]*pojo.PacketStruct)
-
 			var channelObject = &pojo.ChannelStruct{
 				Offset:int64(0),
 				Worker: worker,
@@ -98,6 +86,8 @@ func ReadFile(path string, file os.FileInfo){
 				WriteCallback:make(chan bool, 1),
 				ChannelStorageType: channelMap["channelStorageType"].(string),
 				SubscriberChannel: make(chan *pojo.PacketStruct),
+				Group: make(map[string][]*pojo.PacketStruct),
+				SubscriberList: make(map[string]bool),
 			}
 
 			if *ChannelList.ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{

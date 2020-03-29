@@ -45,6 +45,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	var messageMapType string
 
+	var groupMapName = ""
+
 	for {
 
 		if closeTCP{
@@ -73,9 +75,9 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		if TCPGroupStruct.TCPStorage[channelMapName] != nil{
+		if ChannelList.TCPStorage[channelMapName] != nil{
 
-			if writeCount >= TCPGroupStruct.TCPStorage[channelMapName].PartitionCount{
+			if writeCount >= ChannelList.TCPStorage[channelMapName].PartitionCount{
 
 				writeCount = 0
 
@@ -86,7 +88,7 @@ func HandleRequest(conn net.TCPConn) {
 			writeCount = 0
 		}
 		
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName)
 
 		writeCount += 1
 
@@ -94,7 +96,23 @@ func HandleRequest(conn net.TCPConn) {
 	}
 
 	if messageMapType == "subscribe"{
+
 		DeleteTCPChannelSubscriberList(channelMapName, subscriberMapName)
+
+		if groupMapName != ""{
+
+			//get consumer group Length
+
+			var consumerGroupLen = GetChannelGrpMapLen(channelMapName, groupMapName)
+
+			if consumerGroupLen > 0{
+
+				// Delete Group Member
+
+				RemoveGroupMember(channelMapName, groupMapName, subscriberMapName)
+
+			}
+		}
 	}
 
 }

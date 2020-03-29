@@ -14,9 +14,13 @@ type ChannelStruct struct{
 	BucketData [] chan *PacketStruct
 	WriteCallback chan bool
 	ChannelLock sync.RWMutex
+	SubscriberChannelLock sync.RWMutex
+	SubscriberFileChannelLock sync.RWMutex
 	ChannelStorageType string
 	SubscriberChannel chan *PacketStruct
 	PartitionCount int
+	Group map[string][]*PacketStruct
+	SubscriberList map[string]bool
 }
 
 type SocketDetails struct{
