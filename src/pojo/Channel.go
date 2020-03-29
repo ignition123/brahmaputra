@@ -17,7 +17,7 @@ type ChannelStruct struct{
 	SubscriberChannelLock sync.RWMutex
 	SubscriberFileChannelLock sync.RWMutex
 	ChannelStorageType string
-	SubscriberChannel chan *PacketStruct
+	SubscriberChannel []chan *PacketStruct
 	PartitionCount int
 	Group map[string][]*PacketStruct
 	SubscriberList map[string]bool

@@ -36,27 +36,39 @@ func (e *ChannelMethods) subscriberChannel(channelName string){
 
 	defer ChannelList.Recover()
 
-	defer close(ChannelList.TCPStorage[channelName].SubscriberChannel)
+	for index := range ChannelList.TCPStorage[channelName].SubscriberChannel{
 
-	var cbChan = make(chan bool, 1) 
+		time.Sleep(100)
 
-	for{
+		go func(index int, SubChannel chan *pojo.PacketStruct, channelName string){
 
-		select {
+			defer ChannelList.Recover()
 
-			case message, ok := <-ChannelList.TCPStorage[channelName].SubscriberChannel:	
+			defer close(SubChannel)
 
-				if ok{
+			var cbChan = make(chan bool, 1) 
 
-					go e.sendMessageToClient(*message, cbChan)
+			for{
 
-					<-cbChan
+				select {
 
+					case message, ok := <-SubChannel:	
+
+						if ok{
+
+							go e.sendMessageToClient(*message, cbChan)
+
+							<-cbChan
+
+						}
+
+						break
 				}
 
-				break
-		}
+			}
 
+
+		}(index, ChannelList.TCPStorage[channelName].SubscriberChannel[index], channelName)
 	}
 
 }
@@ -91,13 +103,21 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 								if message.ProducerAck{
 
-									go e.SendAck(*message, cbChan)
+									go func(cbChan chan bool){
 
-									<-cbChan
+										go e.SendAck(*message, cbChan)
+
+										<-cbChan
+
+									}(cbChan)
 
 								}
 
-								ChannelList.TCPStorage[channelName].SubscriberChannel <- message
+								go func(message *pojo.PacketStruct){
+
+									ChannelList.TCPStorage[channelName].SubscriberChannel[index] <- message
+									
+								}(message)
 							}
 						}		
 					break

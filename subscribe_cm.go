@@ -21,7 +21,7 @@ func main() {
 		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber",
-		GroupName:"brahm_group",
+		// GroupName:"brahm_group",
 		Worker:1,
 		AuthReconnect:false,
 	}
