@@ -14,7 +14,7 @@ type ServerUDPConnection struct{
 
 func HostUDP(configObj pojo.Config){
 
-	LoadUDPChannelsToMemory()
+	// LoadUDPChannelsToMemory()
 
 	if *configObj.Server.UDP.Host != "" && *configObj.Server.UDP.Port != ""{
 		HostUDPServer(configObj)

@@ -1,4 +1,4 @@
-package server
+package tcp
 
 import(
 	"encoding/binary"
@@ -13,6 +13,8 @@ import(
 	"strconv"
 	"io/ioutil"
 )
+
+var ChannelMethod = &ChannelMethods{}
 
 type ChannelMethods struct{
 	sync.Mutex

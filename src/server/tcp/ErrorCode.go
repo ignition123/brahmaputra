@@ -1,4 +1,4 @@
-package server
+package tcp
 
 const (
     INVALID_MESSAGE = "Invalid message received..."
