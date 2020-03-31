@@ -10,18 +10,11 @@ import (
 	"server/tcp"
 )
 
-type ServerTCPConnection struct{
-	connections map[net.Conn] time.Time
-}
-
-
 func HostTCP(configObj pojo.Config){
 
 	defer ChannelList.Recover()
 
 	ChannelList.ConfigTCPObj = configObj
-
-	tcp.LoadTCPChannelsToMemory()
 
 	go tcp.ChannelMethod.GetChannelData()
 
@@ -44,6 +37,8 @@ func HostTCPServer(){
 	defer serverObject.Close()
 
 	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
+
+	tcp.LoadTCPChannelsToMemory()
 
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")

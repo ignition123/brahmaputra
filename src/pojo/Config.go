@@ -8,6 +8,8 @@ type AuthStruct struct{
 type ServerStruct struct{
 	TCP TCPStruct
 	UDP UDPStruct
+	ClusterName *string
+	HostName *string
 }
 
 type TCPStruct struct{
@@ -16,8 +18,6 @@ type TCPStruct struct{
 	MaxSockets *int
 	SocketTimeout *int
 	BufferRead *int
-	ClusterName *string
-	HostName *string
 	TotalConnection *int64
 }
 
@@ -26,6 +26,8 @@ type UDPStruct struct{
 	Port *string 
 	MaxSockets *int
 	SocketTimeout *int
+	BufferRead *int
+	TotalConnection *int64
 }
 
 type Config struct{
@@ -42,27 +44,9 @@ type Config struct{
 
 type StorageStruct struct{
 	File FileStruct
-	Mongodb MongodbStruct
-	MySQL MySQStruct
-	Cassandra CassandraStruct
 }
 
 type FileStruct struct{
-	Active *bool
-}
-
-type MongodbStruct struct{
-	Active *bool
-	Url *string
-	MinPoolSize *uint64
-	MaxPoolSize *uint64
-}
-
-type MySQStruct struct{
-	Active *bool
-}
-
-type CassandraStruct struct{
 	Active *bool
 }
 

@@ -5,10 +5,11 @@ import(
 )
 
 var ConfigTCPObj pojo.Config
+var ConfigUDPObj pojo.Config
 
 var TCPStorage = make(map[string] *pojo.ChannelStruct)
-var UDPStorage = make(map[string] *pojo.ChannelStruct)
+var UDPStorage = make(map[string] *pojo.UDPChannelStruct)
 
 var TCPSocketDetails = make(map[string] []*pojo.PacketStruct)
-var UDPSocketDetails = make(map[string] []*pojo.SocketDetails)
+var UDPSocketDetails = make(map[string] []*pojo.UDPPacketStruct)
 

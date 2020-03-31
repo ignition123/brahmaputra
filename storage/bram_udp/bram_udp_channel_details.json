@@ -1,0 +1,1 @@
+{"channelName":"bram_udp","channelStorageType":"persistent","channelType":"udp","partitions":5,"path":"D:\\pounze_go_project\\brahmaputra\\storage\\bram_udp","type":"channel","udpType":"pub_sub"}

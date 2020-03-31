@@ -14,6 +14,7 @@ import (
 	"time"
 	"runtime"
 	"strconv"
+	"fmt"
 )
 
 
@@ -36,8 +37,6 @@ func main(){
 
 	}()
 
-	log.Println("Starting server logs...")
-
 	// go server.ShowUtilization()
 
 	commandLineargs := os.Args
@@ -53,16 +52,18 @@ func main(){
 
 	path := flag.String("path", "default", "a string")
 
-	channelType := flag.String("channelType", "tcp", "a string")
+	channelType := flag.String("channeltype", "tcp", "a string")
 
 	partionCount := flag.Int("partionCount", 5, "an int")
+
+	udpChannelType := flag.String("udpchanneltype", "pub_sub", "a string")
 	
 	flag.Parse()
 
 	if *serverRun != "default"{
-		runConfigFile(*serverRun, *channelType)
+		runConfigFile(*serverRun)
 	}else if *channelName != "default"{
-		createChannel(*path, *channelName, *channelType, *partionCount)
+		createChannel(*path, *channelName, *channelType, *partionCount, *udpChannelType)
 	}else{
 		log.Println(`
 			possible commands:
@@ -93,9 +94,23 @@ func cleanupAllTheThings(){
 		}
 		
 	}
+
+	for key := range ChannelList.UDPStorage{
+
+		time.Sleep(1 * time.Second)
+
+		log.Println("Closing storage files of the channel "+ key+"...")
+
+		for index :=  range ChannelList.UDPStorage[key].FD{
+
+			ChannelList.UDPStorage[key].FD[index].Close()
+
+		}
+		
+	}
 }
 
-func runConfigFile(configPath string, channelType string){
+func runConfigFile(configPath string){
 	
 	defer ChannelList.Recover()
 
@@ -117,25 +132,80 @@ func runConfigFile(configPath string, channelType string){
 
 	runtime.GOMAXPROCS(*configObj.Worker)
 
-	if channelType == "tcp"{
-		if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
+	printLogo()
+
+	log.Println("Starting server logs...")
+
+	if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
+		go func(){
+
+			time.Sleep(1 * time.Second)
+
 			server.HostTCP(configObj)
-		}
-	}else if channelType == "udp"{
-		if *configObj.Server.UDP.Host != "" && *configObj.Server.UDP.Port != ""{
+
+		}()
+	}
+
+	if *configObj.Server.UDP.Host != "" && *configObj.Server.UDP.Port != ""{
+		go func(){
+
+			time.Sleep(1 * time.Second)
+			
 			server.HostUDP(configObj)
-		}
-	}else{
-		log.Println("Invalid protocol, must be either tcp or udp...")
-	}	
+
+		}()
+	}
+
+	for{
+
+		log.Println("Brahmaputra server started...")
+		time.Sleep(1 * time.Hour)
+
+	}
 }
 
-func createChannel(path string, channelName string, channelType string, partionCount int){
+func printLogo(){
+
+	year, _, _ := time.Now().Date()
+
+	fmt.Println(`Open Source Project, by 79 Labs `+strconv.Itoa(year))
+
+	fmt.Println(`Support this community to create best enterprise level applications`)
+
+	var LOGO = `
+		*****  ***** ***** *   * *** *** ***** ***** *   * ***** ***** *****
+		*   *  *   * *   * *   * * * * * *   * *   * *   *   *   *   * *   *
+		*   *  *   * *   * *   * * * * * *   * *   * *   *   *   *   * *   *
+		*****  ***** ***** ***** * *** * ***** ***** *   *   *   ***** *****  
+		*   *  *     *   * *   * *     * *   * *     *   *   *   *     *   *
+		*   *  * *   *   * *   * *     * *   * *     *   *   *   * *   *   *
+		*****  *   * *   * *   * *     * *   * *     *****   *   *   * *   *
+	`
+
+	fmt.Println(LOGO)  
+}
+
+func createChannel(path string, channelName string, channelType string, partionCount int, udpChannelType string){
 
 	defer ChannelList.Recover()
 
 	if path == "default"{
 		log.Println("Please set a path for the channel storage...")
+		return
+	}
+
+	if channelType != "tcp" && channelType != "udp"{
+		log.Println("Invalid protocol, must be either tcp or udp...")
+		return
+	}	
+
+	if partionCount <= 0{
+		log.Println("Patition count must be greater than 0...")
+		return
+	}
+
+	if udpChannelType != "pub_sub" && udpChannelType != "udp_broadcast" && udpChannelType != "udp_multicast"{
+		log.Println("UDP channel type must be pub_sub, udp_broadcast or udp_multicast...")
 		return
 	}
 
@@ -201,7 +271,6 @@ func createChannel(path string, channelName string, channelType string, partionC
 		}
 
 	}
-
 	
 	var storage = make(map[string]map[string]interface{})
 
@@ -223,10 +292,11 @@ func createChannel(path string, channelName string, channelType string, partionC
 
 		storage[channelName]["channelName"] = channelName
 		storage[channelName]["type"] = "channel"
-		storage[channelName]["channelStorageType"] = "inmemory"
+		storage[channelName]["channelStorageType"] = "persistent"
 		storage[channelName]["path"] = directoryPath
-		storage[channelName]["worker"] = 1
+		storage[channelName]["udpType"] = udpChannelType
 		storage[channelName]["channelType"] = channelType
+		storage[channelName]["partitions"] = partionCount
 
 	}else{
 

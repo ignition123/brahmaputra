@@ -151,33 +151,26 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 
 	defer ChannelList.Recover()
 
-	if protocol == "tcp"{
+	var partitions = int(channelMap["partitions"].(float64))
 
-		var partitions = int(channelMap["partitions"].(float64))
+	for i:=0;i<partitions;i++{
 
-		for i:=0;i<partitions;i++{
+		var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
-			var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
+		f, err := os.OpenFile(filePath,
+			os.O_APPEND, os.ModeAppend)
 
-			f, err := os.OpenFile(filePath,
-				os.O_APPEND, os.ModeAppend)
-
-			if err != nil {
-				ChannelList.WriteLog(err.Error())
-				break
-			}
-
-			channelObject.FD = append(channelObject.FD, f)
-
+		if err != nil {
+			ChannelList.WriteLog(err.Error())
+			break
 		}
 
-		channelObject.PartitionCount = int(channelMap["partitions"].(float64))
-		channelObject.Path = channelMap["path"].(string)
-		
-	}else if protocol == "udp"{
-
+		channelObject.FD = append(channelObject.FD, f)
 
 	}
+
+	channelObject.PartitionCount = int(channelMap["partitions"].(float64))
+	channelObject.Path = channelMap["path"].(string)
 
 	return channelObject
 }

@@ -23,10 +23,6 @@ func allZero(s []byte) bool {
 	return true
 }
 
-type ChannelStatus struct{
-	Status bool
-}
-
 func HandleRequest(conn net.TCPConn) {
 	
 	defer ChannelList.Recover()
