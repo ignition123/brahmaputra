@@ -73,11 +73,11 @@ func ReadFile(path string, file os.FileInfo){
 
 			var channelName = channelMap["channelName"].(string)
 
-			var channelObject = &pojo.UDPChannelStruct{
+			var channelObject = &pojo.ChannelStruct{
 				Offset:int64(0),
 				WriteCallback:make(chan bool, 1),
 				ChannelStorageType: channelMap["channelStorageType"].(string),
-				Group: make(map[string][]*pojo.UDPPacketStruct),
+				Group: make(map[string][]*pojo.PacketStruct),
 				SubscriberList: make(map[string]bool),
 			}
 
@@ -130,7 +130,7 @@ func LoadUDPChannelsToMemory(){
     }
 }
 
-func openDataFile(protocol string, channelObject *pojo.UDPChannelStruct, channelMap map[string]interface{}) *pojo.UDPChannelStruct{
+func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
 	defer ChannelList.Recover()
 

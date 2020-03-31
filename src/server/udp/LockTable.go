@@ -9,12 +9,12 @@ import(
 type SubscriberGroup struct{
 
 	Index int
-	Packet pojo.UDPPacketStruct
+	Packet pojo.PacketStruct
 
 }
 
 
-func WriteSubscriberGrpOffset(index int, packetObject pojo.UDPPacketStruct, byteArrayCursor []byte) bool{
+func WriteSubscriberGrpOffset(index int, packetObject pojo.PacketStruct, byteArrayCursor []byte) bool{
 
 	defer ChannelList.Recover()
 
@@ -32,7 +32,7 @@ func WriteSubscriberGrpOffset(index int, packetObject pojo.UDPPacketStruct, byte
 	return true
 }
 
-func CloseSubscriberGrpFD(packetObject pojo.UDPPacketStruct){
+func CloseSubscriberGrpFD(packetObject pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
@@ -58,7 +58,7 @@ func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 
 }
 
-func AddSubscriberFD(index int, packetObject pojo.UDPPacketStruct, fDes *os.File){
+func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
 
 	defer ChannelList.Recover()
 
@@ -106,13 +106,13 @@ func RenewSub(channelName string, groupName string){
 	ChannelList.UDPStorage[channelName].ChannelLock.Lock()
 	defer ChannelList.UDPStorage[channelName].ChannelLock.Unlock()
 
-	var newList []*pojo.UDPPacketStruct
+	var newList []*pojo.PacketStruct
 
 	ChannelList.UDPStorage[channelName].Group[groupName] = newList
 
 }
 
-func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.UDPPacketStruct){
+func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
@@ -159,7 +159,7 @@ func RemoveGroupMap(channelName string , groupName string, groupId *int){
 
 }
 
-func GetValue(channelName string , groupName string, groupId *int, index int) (*pojo.UDPPacketStruct, int){
+func GetValue(channelName string , groupName string, groupId *int, index int) (*pojo.PacketStruct, int){
 
 	defer ChannelList.Recover()
 

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"net"
 	"ChannelList"
-	_"log"
+	"log"
 )
 
 var closeUDP = false
@@ -45,25 +45,30 @@ func HandleRequest(conn *net.UDPConn){
 			break
 		}
 
-		sizeBuf := make([]byte, 8)
+		sizeBuf := make([]byte, 1024)
 
-		conn.Read(sizeBuf)
+		_, addr, err := conn.ReadFromUDP(sizeBuf)
 
-		packetSize := binary.BigEndian.Uint64(sizeBuf)
+		if err != nil{
+
+			log.Println(err)
+
+			continue
+		}
+
+		packetSize := binary.BigEndian.Uint64(sizeBuf[:8])
 
 		if packetSize < 0 {
 			continue
 		}
 
-		completePacket := make([]byte, packetSize)
-
-		conn.Read(completePacket)
-
-		if allZero(completePacket) {
+		if allZero(sizeBuf) {
 
 			go ChannelList.WriteLog("Connection closed...")
 			break
 		}
+
+		sizeBuf = sizeBuf[8:(packetSize + 8)]
 
 		if ChannelList.UDPStorage[channelMapName] != nil{
 
@@ -77,8 +82,8 @@ func HandleRequest(conn *net.UDPConn){
 
 			writeCount = 0
 		}
-		
-		go ParseMsg(int64(packetSize), completePacket, *conn, parseChan, writeCount, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName)
+
+		go ParseMsg(int64(packetSize), sizeBuf, *conn, addr, parseChan, writeCount, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName)
 
 		writeCount += 1
 

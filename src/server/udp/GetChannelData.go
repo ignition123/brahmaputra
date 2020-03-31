@@ -22,7 +22,7 @@ type ChannelMethods struct{
 }
 
 
-func checkCreateDirectory(conn net.UDPConn, packetObject pojo.UDPPacketStruct, checkDirectoryChan chan bool){
+func checkCreateDirectory(conn net.UDPConn, packetObject pojo.PacketStruct, checkDirectoryChan chan bool){
 
 	defer ChannelList.Recover()
 
@@ -40,7 +40,7 @@ func checkCreateDirectory(conn net.UDPConn, packetObject pojo.UDPPacketStruct, c
 
 		if errDir != nil {
 			
-			ThroughUDPClientError(conn, err.Error())
+			ThroughUDPClientError(conn, packetObject, err.Error())
 
 			DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -61,7 +61,7 @@ func checkCreateDirectory(conn net.UDPConn, packetObject pojo.UDPPacketStruct, c
 	}
 }
 
-func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.UDPPacketStruct, start_from string, partitionOffsetSubscriber chan int64){
+func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
 
 	defer ChannelList.Recover()
 
@@ -87,7 +87,7 @@ func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.U
 
 			if err != nil{
 
-				ThroughUDPClientError(conn, err.Error())
+				ThroughUDPClientError(conn, packetObject, err.Error())
 
 				DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -118,7 +118,7 @@ func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.U
 
 		if err != nil {
 
-			ThroughUDPClientError(conn, err.Error())
+			ThroughUDPClientError(conn, packetObject, err.Error())
 
 			DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -135,7 +135,7 @@ func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.U
 
 		if err != nil{
 
-			ThroughUDPClientError(conn, err.Error())
+			ThroughUDPClientError(conn, packetObject, err.Error())
 
 			DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -165,7 +165,7 @@ func createSubscriberOffsetFile(index int, conn net.UDPConn, packetObject pojo.U
 
 			if err != nil{
 
-				ThroughUDPClientError(conn, err.Error())
+				ThroughUDPClientError(conn, packetObject, err.Error())
 
 				DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -231,7 +231,7 @@ func checkCreateGroupDirectory(channelName string, groupName string, checkDirect
 
 }
 
-func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject pojo.UDPPacketStruct, partitionOffsetSubscriber chan int64, start_from string){
+func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject pojo.PacketStruct, partitionOffsetSubscriber chan int64, start_from string){
 
 	defer ChannelList.Recover()
 
@@ -355,7 +355,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 }
 
-func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.UDPPacketStruct, start_from string){
+func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
 
@@ -393,7 +393,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	for i:=0;i<ChannelList.UDPStorage[packetObject.ChannelName].PartitionCount;i++{
 
-		go func(index int, cursor int64, packetObject pojo.UDPPacketStruct){
+		go func(index int, cursor int64, packetObject pojo.PacketStruct){
 
 			defer ChannelList.Recover()
 
@@ -589,7 +589,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 }
 
-func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start_from string){
+func SubscribeChannel(conn net.UDPConn, packetObject pojo.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
 
@@ -621,7 +621,7 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start
 
 	if len(packetObject.SubscriberFD) == 0{
 
-		ThroughUDPClientError(conn, INVALID_SUBSCRIBER_OFFSET)
+		ThroughUDPClientError(conn, packetObject, INVALID_SUBSCRIBER_OFFSET)
 
 		DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -633,7 +633,7 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start
 
 	for i:=0;i<ChannelList.UDPStorage[packetObject.ChannelName].PartitionCount;i++{
 
-		go func(index int, cursor int64, conn net.UDPConn, packetObject pojo.UDPPacketStruct){
+		go func(index int, cursor int64, conn net.UDPConn, packetObject pojo.PacketStruct){
 
 			defer ChannelList.Recover()
 
@@ -645,7 +645,7 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start
 
 			if err != nil {
 				
-				ThroughUDPClientError(conn, err.Error())
+				ThroughUDPClientError(conn, packetObject, err.Error())
 
 				DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -676,7 +676,7 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start
 		 
 				if err != nil {
 
-					ThroughUDPClientError(conn, err.Error())
+					ThroughUDPClientError(conn, packetObject, err.Error())
 
 					DeleteUDPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -825,7 +825,7 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.UDPPacketStruct, start
 
 }
 
-func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.UDPPacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
+func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
 
 	defer ChannelList.Recover()
 
@@ -835,7 +835,7 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.UDP
 
 	var groupId = 0
 
-	var group *pojo.UDPPacketStruct
+	var group *pojo.PacketStruct
 
 	RETRY:
 
@@ -848,7 +848,7 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.UDP
 		return
 	}
 	
-	_, err := group.Conn.Write(packetBuffer.Array())
+	_, err := group.UDPConn.WriteToUDP(packetBuffer.Array(), packetObject.UDPAddr)
 	
 	if err != nil {
 
@@ -871,14 +871,14 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.UDP
 	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 }
 
-func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.UDPPacketStruct, conn net.UDPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
+func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.PacketStruct, conn net.UDPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
 
 	defer ChannelList.Recover()
 
 	subscriberMtx.Lock()
 	defer subscriberMtx.Unlock()
 
-	_, err := conn.Write(packetBuffer.Array())
+	_, err := packetObject.UDPConn.WriteToUDP(packetBuffer.Array(), packetObject.UDPAddr)
 	
 	if err != nil {
 	
@@ -893,34 +893,5 @@ func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.UDP
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
 	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
-
-}
-
-func (e *ChannelMethods) SendAck(messageMap pojo.UDPPacketStruct, ackChan chan bool){
-
-	defer ChannelList.Recover()
-
-	var byteBuffer = ByteBuffer.Buffer{
-		Endian:"big",
-	}
-
-	byteBuffer.PutLong(len(messageMap.Producer_id))
-
-	byteBuffer.PutByte(byte(0)) // status code
-
-	byteBuffer.Put([]byte(messageMap.Producer_id))
-
-	_, err := messageMap.Conn.Write(byteBuffer.Array())
-
-	if err != nil{
-
-		go ChannelList.WriteLog(err.Error())
-
-		ackChan <- false
-
-		return
-	}
-
-	ackChan <- true
 
 }

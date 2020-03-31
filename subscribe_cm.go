@@ -13,15 +13,15 @@ import (
 func main() {
 	
 	var brahm = &brahmaputra.CreateProperties{
-		Url:"brahm://127.0.0.1:8100",
+		Url:"brahm://127.0.0.1:8200",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
-		ConnectionType:"tcp",
-		ChannelName:"brahm",
+		ConnectionType:"udp",
+		ChannelName:"bram_udp",
 		AppType:"consumer",
 		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber",
-		GroupName:"brahm_group",
+		// GroupName:"brahm_group",
 		Worker:1,
 		AuthReconnect:false,
 	}

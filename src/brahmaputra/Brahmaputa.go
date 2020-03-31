@@ -46,6 +46,7 @@ type CreateProperties struct{
 	SubscriberName string
 	AuthReconnect bool
 	Acknowledge bool
+	subReconnect bool
 }	
 
 func handlepanic() { 
@@ -55,19 +56,42 @@ func handlepanic() {
     } 
 } 
 
-func (e *CreateProperties) Connect(){
+func (e *CreateProperties) validateFields() bool {
 
-	defer handlepanic()
+	if e.ConnectionType != "tcp" && e.ConnectionType != "udp" && e.ConnectionType != "ws" && e.ConnectionType != "rtmp"{
+
+		go log.Println("ConnectionType must be tcp, udp, ws or rtmp...")
+
+		return false
+
+	}
 
 	if e.AppType != "producer" && e.AppType != "consumer"{
 
 		go log.Println("AppType must be producer or consumer...")
 
-		return
+		return false
 
 	}
 
-	var subReconnect = false
+	return true
+}
+
+func (e *CreateProperties) Connect(){
+
+	defer handlepanic()
+
+	if !e.validateFields(){
+		return
+	}
+
+	e.subReconnect = false
+
+	if e.ConnectionType == "udp" {
+
+		e.Acknowledge = false
+
+	}
 
 	if e.Acknowledge{
 
@@ -85,7 +109,7 @@ func (e *CreateProperties) Connect(){
 
 	if e.AgentName != ""{
 
-		subReconnect = true
+		e.subReconnect = true
 
 	} 
 
@@ -111,13 +135,29 @@ func (e *CreateProperties) Connect(){
 
 	}
 
+	if e.ConnectionType == "tcp"{
+
+		e.connectTCP()
+
+	}else if e.ConnectionType == "udp"{
+
+		e.connectUDP()
+
+	}
+
+}
+
+func (e *CreateProperties) connectUDP(){
+
+	defer handlepanic()
+
 	if e.PoolSize > 0{
 
 		var connectStatus = true
 
 		for i := 0; i < e.PoolSize; i++ {
 
-			e.Conn = e.createConnection()
+			e.Conn = e.createUDPConnection()
 
 			if e.Conn == nil{
 
@@ -135,19 +175,213 @@ func (e *CreateProperties) Connect(){
 
 			time.Sleep(2 * time.Second)
 
-			e.Connect()
+			e.connectTCP()
 
 		}
 
 	}else{
 
-		e.Conn = e.createConnection()
+		e.Conn = e.createUDPConnection()
 
 		if e.Conn == nil{
 
 			time.Sleep(2 * time.Second)
 
-			e.Connect()
+			e.connectTCP()
+
+			return
+
+		}
+
+		e.ConnPool = append(e.ConnPool, e.Conn)	
+
+	}
+
+	if len(e.requestPull) > 0{
+
+		var chancb = make(chan bool, 1)
+
+		for _, bodyMap := range e.requestPull{
+
+			go e.Publish(bodyMap, chancb)
+
+			<-chancb
+		}
+
+	}
+
+	if e.AppType == "producer"{
+
+		go log.Println("Application started as producer...")
+	}
+
+	if e.AppType == "consumer"{
+
+		go log.Println("Application started as consumer...")
+
+		if e.PoolSize > 0{
+
+			for index := range e.ConnPool{
+
+				go e.ReceiveSubMsg(e.ConnPool[index])
+
+			}
+
+		}else{
+
+			go e.ReceiveSubMsg(e.ConnPool[0])
+
+		}
+
+		if e.subReconnect{
+
+			for{
+
+				time.Sleep(1 * time.Second)
+
+				if e.Conn != nil{
+					break
+				}
+			}
+
+			e.Subscribe(e.contentMatcher)
+		}
+	} 
+
+	e.connectStatus = true
+
+	if e.AuthReconnect{
+
+		go e.checkUDPConnectStatus()
+		
+	}
+
+}
+
+func (e *CreateProperties) checkUDPConnectStatus(){
+
+	defer handlepanic()
+
+	for{
+
+		time.Sleep(2 * time.Second)
+
+		if e.connectStatus == false{
+
+			e.ConnPool = e.ConnPool[:0]
+
+			e.subscribeFD.Close()
+
+			e.connectUDP()
+
+			break
+
+		}
+	}
+
+}
+
+func (e *CreateProperties) createUDPConnection() net.Conn{
+
+	defer handlepanic()
+
+	var conn net.Conn
+
+	var err error
+
+	url, err := url.Parse(e.Url)
+
+    if err != nil {
+        go log.Println(err)
+        return nil
+    }
+
+	host, port, _ := net.SplitHostPort(url.Host)
+
+	dest := host + ":" + port
+
+	if e.ConnectionType != "tcp" && e.ConnectionType != "udp"{
+
+		conn, err = net.Dial("tcp", dest)
+
+	}else if e.ConnectionType == "tcp"{
+
+		conn, err = net.Dial("tcp", dest)
+
+	}else if e.ConnectionType == "udp"{
+
+		RemoteAddr, err := net.ResolveUDPAddr("udp", dest)
+
+		if err != nil{
+
+			go log.Println(err)
+
+			return nil
+
+		}
+
+		conn, err = net.DialUDP("udp", nil, RemoteAddr)
+	}
+
+
+	if err != nil{
+
+		go log.Println(err)
+
+		return nil
+	}
+
+	conn.(*net.UDPConn).SetReadBuffer(1000000000)
+	conn.(*net.UDPConn).SetWriteBuffer(1000000000)
+	conn.(*net.UDPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.UDPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
+	conn.(*net.UDPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
+
+	return conn
+
+}
+
+func (e *CreateProperties) connectTCP(){
+
+	defer handlepanic()
+
+	if e.PoolSize > 0{
+
+		var connectStatus = true
+
+		for i := 0; i < e.PoolSize; i++ {
+
+			e.Conn = e.createTCPConnection()
+
+			if e.Conn == nil{
+
+				connectStatus = false
+
+				break
+
+			}
+
+			e.ConnPool = append(e.ConnPool, e.Conn)	
+
+		}
+
+		if !connectStatus{
+
+			time.Sleep(2 * time.Second)
+
+			e.connectTCP()
+
+		}
+
+	}else{
+
+		e.Conn = e.createTCPConnection()
+
+		if e.Conn == nil{
+
+			time.Sleep(2 * time.Second)
+
+			e.connectTCP()
 
 			return
 
@@ -211,7 +445,7 @@ func (e *CreateProperties) Connect(){
 
 		}
 
-		if subReconnect{
+		if e.subReconnect{
 
 			for{
 
@@ -230,12 +464,12 @@ func (e *CreateProperties) Connect(){
 
 	if e.AuthReconnect{
 
-		go e.checkConnectStatus()
+		go e.checkTCPConnectStatus()
 		
 	}
 }
 
-func (e *CreateProperties) checkConnectStatus(){
+func (e *CreateProperties) checkTCPConnectStatus(){
 
 	defer handlepanic()
 
@@ -249,7 +483,7 @@ func (e *CreateProperties) checkConnectStatus(){
 
 			e.subscribeFD.Close()
 
-			e.Connect()
+			e.connectTCP()
 
 			break
 
@@ -258,7 +492,7 @@ func (e *CreateProperties) checkConnectStatus(){
 
 }
 
-func (e *CreateProperties) createConnection() net.Conn{
+func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	defer handlepanic()
 
@@ -298,7 +532,6 @@ func (e *CreateProperties) createConnection() net.Conn{
 		return nil
 	}
 
-	conn.(*net.TCPConn).SetKeepAlive(true)
 	conn.(*net.TCPConn).SetKeepAlive(true)
 	conn.(*net.TCPConn).SetLinger(1)
 	conn.(*net.TCPConn).SetNoDelay(true)
@@ -575,46 +808,90 @@ func (e *CreateProperties) ReceiveSubMsg(conn net.Conn){
 
 	var callbackChan = make(chan string, 1)
 
-	for {	
+	if e.ConnectionType == "tcp"{
 
-		sizeBuf := make([]byte, 8)
+		for {	
 
-		conn.Read(sizeBuf)
+			sizeBuf := make([]byte, 8)
 
-		packetSize := binary.BigEndian.Uint64(sizeBuf)
+			conn.Read(sizeBuf)
 
-		if packetSize < 0 {
-			continue
+			packetSize := binary.BigEndian.Uint64(sizeBuf)
+
+			if packetSize < 0 {
+				continue
+			}
+
+			statusBuf := make([]byte, 1)
+
+			conn.Read(statusBuf)
+
+			completePacket := make([]byte, packetSize)
+
+			conn.Read(completePacket)
+
+			if allZero(completePacket) {
+
+				break
+			}
+
+			if statusBuf[0] == 1{
+
+				panic(string(completePacket))
+
+				break
+
+			}
+
+			if e.ReadDelay > 0{
+				time.Sleep(time.Duration(e.ReadDelay) * time.Nanosecond)
+			}
+
+			go e.parseMsg(int64(packetSize), completePacket, "sub", callbackChan)
+
+			<-callbackChan
+
 		}
 
-		statusBuf := make([]byte, 1)
+	}else if e.ConnectionType == "udp"{
 
-		conn.Read(statusBuf)
+		for{
 
-		completePacket := make([]byte, packetSize)
+			sizeBuf := make([]byte, 1024)
 
-		conn.Read(completePacket)
+			conn.Read(sizeBuf)
 
-		if allZero(completePacket) {
+			packetSize := binary.BigEndian.Uint64(sizeBuf[:9])
 
-			break
+			if packetSize < 0 {
+				continue
+			}
+
+			if allZero(sizeBuf) {
+
+				break
+			}
+
+			var statusBuf = sizeBuf[8:9]
+
+			sizeBuf = sizeBuf[9:(packetSize + 9)]
+
+			if statusBuf[0] == 1{
+
+				panic(string(sizeBuf))
+
+				break
+
+			}
+
+			if e.ReadDelay > 0{
+				time.Sleep(time.Duration(e.ReadDelay) * time.Nanosecond)
+			}
+
+			go e.parseMsg(int64(packetSize), sizeBuf, "sub", callbackChan)
+
+			<-callbackChan
 		}
-
-		if statusBuf[0] == 1{
-
-			panic(string(completePacket))
-
-			break
-
-		}
-
-		if e.ReadDelay > 0{
-			time.Sleep(time.Duration(e.ReadDelay) * time.Nanosecond)
-		}
-
-		go e.parseMsg(int64(packetSize), completePacket, "sub", callbackChan)
-
-		<-callbackChan
 
 	}
 
@@ -647,7 +924,9 @@ func (e *CreateProperties) ReceiveMsg(conn net.Conn){
 
 		conn.Read(statusBuf)
 
-		completePacket := make([]byte, packetSize)
+		var completePacket []byte
+
+		completePacket = make([]byte, packetSize)
 
 		conn.Read(completePacket)
 

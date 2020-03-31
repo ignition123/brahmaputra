@@ -8,8 +8,8 @@ var ConfigTCPObj pojo.Config
 var ConfigUDPObj pojo.Config
 
 var TCPStorage = make(map[string] *pojo.ChannelStruct)
-var UDPStorage = make(map[string] *pojo.UDPChannelStruct)
+var UDPStorage = make(map[string] *pojo.ChannelStruct)
 
 var TCPSocketDetails = make(map[string] []*pojo.PacketStruct)
-var UDPSocketDetails = make(map[string] []*pojo.UDPPacketStruct)
+var UDPSocketDetails = make(map[string] []*pojo.PacketStruct)
 

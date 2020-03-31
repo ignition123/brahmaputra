@@ -7,7 +7,7 @@ import(
 	"pojo"
 )
 
-func ThroughUDPClientError(conn net.UDPConn, message string){
+func ThroughUDPClientError(conn net.UDPConn, packetStruct pojo.PacketStruct , message string){
 
 	defer ChannelList.Recover()
 
@@ -23,7 +23,7 @@ func ThroughUDPClientError(conn net.UDPConn, message string){
 
 	byteSendBuffer.Put([]byte(message)) // actual body
 
-	_, err := conn.Write(byteSendBuffer.Array())
+	_, err := conn.WriteToUDP(byteSendBuffer.Array(), packetStruct.UDPAddr)
 
 	if (err != nil){
 
@@ -60,7 +60,7 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 		var groupObj = ChannelList.UDPStorage[channelName].Group[groupName][i]
 
-		_, err := groupObj.Conn.Write(byteSendBuffer.Array())
+		_, err := groupObj.UDPConn.WriteToUDP(byteSendBuffer.Array(), groupObj.UDPAddr)
 		
 		if (err != nil){
 
@@ -76,7 +76,7 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	}
 
-	var newList []*pojo.UDPPacketStruct
+	var newList []*pojo.PacketStruct
 
 	ChannelList.UDPStorage[channelName].Group[groupName] = newList
 

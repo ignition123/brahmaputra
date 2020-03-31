@@ -48,8 +48,8 @@ func HostUDPServer(){
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting UDP server...")
 
-	serverObject.SetReadBuffer(10000)
-	serverObject.SetWriteBuffer(10000)
+	serverObject.SetReadBuffer(1000000000)
+	serverObject.SetWriteBuffer(1000000000)
 	serverObject.SetDeadline(time.Now().Add(1000000 * time.Second))
 	serverObject.SetReadDeadline(time.Now().Add(1000000 * time.Second))
 	serverObject.SetWriteDeadline(time.Now().Add(1000000 * time.Second))

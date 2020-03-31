@@ -14,7 +14,7 @@ import (
 var SubscriberHashMapMtx sync.RWMutex
 var SubscriberGroupMtx sync.RWMutex
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseChan chan bool, writeCount int, subscriberMapName *string, channelMapName *string, messageMapType *string, groupMapName *string){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, addr *net.UDPAddr, parseChan chan bool, writeCount int, subscriberMapName *string, channelMapName *string, messageMapType *string, groupMapName *string){
 
 	defer ChannelList.Recover()
 
@@ -34,18 +34,19 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 	*channelMapName = channelName
 
-	var packetObject = &pojo.UDPPacketStruct{
+	var packetObject = &pojo.PacketStruct{
 		MessageTypeLen: messageTypeLen,
 		MessageType: messageType,
 		ChannelNameLen: channelNameLen,
 		ChannelName: channelName,
+		UDPAddr: addr,
 	}
 
 	if messageType == "heart_beat"{
 
 		if channelName == ""{
 
-			ThroughUDPClientError(conn, INVALID_MESSAGE)
+			ThroughUDPClientError(conn, *packetObject, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -55,7 +56,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		go log.Println("HEART BEAT RECEIVED...")
 
-		packetObject.Conn = conn
+		packetObject.UDPConn = conn
 		
 		// ChannelList.UDPStorage["heart_beat"].BucketData[0] <- packetObject
 
@@ -97,7 +98,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		if channelName == ""{
 
-			ThroughUDPClientError(conn, INVALID_MESSAGE)
+			ThroughUDPClientError(conn, *packetObject, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -106,7 +107,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		if ChannelList.UDPStorage[channelName] == nil{
 
-			ThroughUDPClientError(conn, INVALID_CHANNEL)
+			ThroughUDPClientError(conn, *packetObject, INVALID_CHANNEL)
 
 			parseChan <- false
 
@@ -120,8 +121,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		packetObject.Id = nanoEpoch
 
-		packetObject.Conn = conn
-		
+		packetObject.UDPConn = conn
+
 		if ChannelList.UDPStorage[channelName].ChannelStorageType == "persistent"{
 
 			if *ChannelList.ConfigUDPObj.Storage.File.Active{
@@ -134,7 +135,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 							
 					if !message{
 
-						ThroughUDPClientError(conn, LOG_WRITE_FAILURE)
+						ThroughUDPClientError(conn, *packetObject, LOG_WRITE_FAILURE)
 
 						parseChan <- false
 
@@ -142,17 +143,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 					}
 				}
 
-				if packetObject.ProducerAck{
-
-					go ChannelMethod.SendAck(*packetObject, ChannelList.UDPStorage[channelName].WriteCallback)
-
-					<-ChannelList.UDPStorage[channelName].WriteCallback
-
-				}
-
 			}else{
 
-				ThroughUDPClientError(conn, PERSISTENT_CONFIG_ERROR)
+				ThroughUDPClientError(conn, *packetObject, PERSISTENT_CONFIG_ERROR)
 
 				parseChan <- false
 				
@@ -162,7 +155,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		}else{
 
-			ThroughUDPClientError(conn, ONLY_PERSISTENT_SUPPORT)
+			ThroughUDPClientError(conn, *packetObject, ONLY_PERSISTENT_SUPPORT)
 
 			parseChan <- false
 
@@ -175,7 +168,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		if channelName == ""{
 
-			ThroughUDPClientError(conn, INVALID_MESSAGE)
+			ThroughUDPClientError(conn, *packetObject, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -184,7 +177,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		if ChannelList.UDPStorage[channelName] == nil{
 
-			ThroughUDPClientError(conn, INVALID_CHANNEL)
+			ThroughUDPClientError(conn, *packetObject, INVALID_CHANNEL)
 
 			parseChan <- false
 
@@ -218,7 +211,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		packetObject.SubscriberTypeLen = int(subscriberTypeLen)
 
-		packetObject.Conn = conn
+		packetObject.UDPConn = conn
 
 		packetObject.ActiveMode = true
 
@@ -232,21 +225,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 				packetObject.GroupName = groupName
 
-				keyFound := LoadUDPChannelSubscriberList(channelName, channelName+subscriberName+groupName)
-
-				if keyFound{
-
-					ThroughUDPClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-					parseChan <- false
-
-					return
-				   
-				}
-
 				if !*ChannelList.ConfigUDPObj.Storage.File.Active{
 
-					ThroughUDPClientError(conn, PERSISTENT_CONFIG_ERROR)
+					ThroughUDPClientError(conn, *packetObject, PERSISTENT_CONFIG_ERROR)
 
 					parseChan <- false
 					
@@ -268,7 +249,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 					if groupLen == ChannelList.UDPStorage[channelName].PartitionCount{
 
-						ThroughUDPClientError(conn, SUBSCRIBER_FULL)
+						ThroughUDPClientError(conn, *packetObject, SUBSCRIBER_FULL)
 
 						parseChan <- false
 
@@ -282,7 +263,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 					if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
-			    		ThroughUDPClientError(conn, INVALID_PULL_FLAG)
+			    		ThroughUDPClientError(conn, *packetObject, INVALID_PULL_FLAG)
 
 						parseChan <- false
 
@@ -300,7 +281,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 				if !*ChannelList.ConfigUDPObj.Storage.File.Active{
 
-					ThroughUDPClientError(conn, PERSISTENT_CONFIG_ERROR)
+					ThroughUDPClientError(conn, *packetObject, PERSISTENT_CONFIG_ERROR)
 
 					parseChan <- false
 					
@@ -310,24 +291,12 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 		    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
-		    		ThroughUDPClientError(conn, INVALID_PULL_FLAG)
+		    		ThroughUDPClientError(conn, *packetObject, INVALID_PULL_FLAG)
 
 					parseChan <- false
 
 					return
 		    	}
-
-		    	keyFound := LoadUDPChannelSubscriberList(channelName, channelName+subscriberName)
-
-				if keyFound{
-
-					ThroughUDPClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-					parseChan <- false
-
-					return
-				   
-				}
 
     			*subscriberMapName = channelName+subscriberName
     			*messageMapType = messageType
@@ -347,7 +316,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 
 	}else{
 
-		ThroughUDPClientError(conn, INVALID_AGENT)
+		ThroughUDPClientError(conn, *packetObject, INVALID_AGENT)
 
 		parseChan <- false
 
@@ -355,7 +324,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.UDPConn, parseCh
 	}	
 }
 
-func WriteData(packet pojo.UDPPacketStruct, writeCount int){
+func WriteData(packet pojo.PacketStruct, writeCount int){
 
 	defer ChannelList.Recover()
 
