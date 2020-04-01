@@ -26,6 +26,8 @@ func HandleRequest(conn *net.UDPConn){
 
 	defer ChannelList.Recover()
 
+	log.Println("ok")
+
 	parseChan := make(chan bool, 1)
 
 	var writeCount = 0

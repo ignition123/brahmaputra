@@ -7,7 +7,7 @@ import(
 
 const TOLERANCE = 0.00000000001
 
-func AndMatch(messageData map[string]interface{}, cm map[string]interface{}) bool{
+func andMatch(messageData map[string]interface{}, cm map[string]interface{}) bool{
 
 	var contentMatch = cm["$and"].([]interface {})
 
@@ -230,7 +230,7 @@ func AndMatch(messageData map[string]interface{}, cm map[string]interface{}) boo
 
 }
 
-func OrMatch(messageData map[string]interface{}, cm map[string]interface{}) bool{
+func orMatch(messageData map[string]interface{}, cm map[string]interface{}) bool{
 
 	var contentMatch = cm["$or"].([]interface {})
 
