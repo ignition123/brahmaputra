@@ -1,15 +1,15 @@
 package ChannelList
 
 import(
-	// "runtime"
-	// "log"
+	"runtime"
+	"log"
 )
 
 func Recover(){	
-  //   if err := recover(); err != nil {
+    if err := recover(); err != nil {
 
-  //      	log.Println(err)
+       	log.Println(err)
 
-		// runtime.Goexit()
-  //  }	
+		runtime.Goexit()
+   }	
 }
