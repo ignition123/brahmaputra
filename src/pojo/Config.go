@@ -1,40 +1,40 @@
 package pojo
 
-type AuthStruct struct{
-	Username *string
-	Password *string
-}
-
 type ServerStruct struct{
 	TCP TCPStruct
 	UDP UDPStruct
+	RTMP RTMPStruct
 	ClusterName *string
 	HostName *string
+}
+
+type RTMPStruct struct{
+	Host *string
+	Port *string 
+	MaxSockets *int64
+	SocketTimeout *int
 }
 
 type TCPStruct struct{
 	Host *string
 	Port *string 
-	MaxSockets *int
+	MaxSockets *int64
 	SocketTimeout *int
 	BufferRead *int
-	TotalConnection *int64
 }
 
 type UDPStruct struct{
 	Host *string
 	Port *string 
-	MaxSockets *int
+	MaxSockets *int64
 	SocketTimeout *int
 	BufferRead *int
-	TotalConnection *int64
 }
 
 type Config struct{
 	Worker *int
 	Server ServerStruct
 	Dbpath *string
-	Auth AuthStruct
 	Storage StorageStruct
 	ChildWrite ChildWriteStruct
 	ClusterWrite *bool

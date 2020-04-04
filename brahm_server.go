@@ -56,14 +56,63 @@ func main(){
 
 	partionCount := flag.Int("partionCount", 5, "an int")
 
-	udpChannelType := flag.String("udpchanneltype", "pub_sub", "a string")
-	
+	authUrl := flag.String("authUrl", "", "a string")
+
+	// rtmp flags
+
+	hls_fragment := flag.Int("hls_fragment", 5, "an int")
+
+	hls_window := flag.Int("hls_window", 2, "an int")
+
+	hls_path := flag.String("hls_path", "default", "a string")
+
+	// on stream start events, both will get killed on stream end
+
+	onPublish_authUrl := flag.String("onPublish_authUrl", "default", "a string")
+
+	onPublish_hookCall := flag.String("onPublish_hookCall", "default", "a string")
+
+	onPublish_exec := flag.String("onPublish_exec", "default", "a string")
+
+	// on play events, both will get killed on stream end
+
+	onPlay_authUrl := flag.String("onPlay_authUrl", "default", "a string")
+
+	onPlay_hookCall := flag.String("onPlay_hookCall", "default", "a string")
+
+	onPlay_exec := flag.String("onPlay_exec", "default", "a string")
+
+	// on stream end events, dont call any such process which have to be stopped manually as after this event it wont close process
+
+	onEnd_hookCall := flag.String("onEnd_hookCall", "default", "a string")
+
+	onEnd_exec := flag.String("onEnd_exec", "default", "a string")
+
 	flag.Parse()
 
 	if *serverRun != "default"{
 		runConfigFile(*serverRun)
 	}else if *channelName != "default"{
-		createChannel(*path, *channelName, *channelType, *partionCount, *udpChannelType)
+
+		if *channelType == "tcp"{
+
+			createTCPChannel(*path, *channelName, *channelType, *partionCount, *authUrl)
+
+		}else if *channelType == "udp"{
+
+			createUDPChannel(*path, *channelName, *channelType, *partionCount, *authUrl)
+
+		}else if *channelType == "rtmp"{
+
+			createRTMPChannel(*path, *channelName, *channelType, *onPublish_authUrl, *onPublish_hookCall, *onPublish_exec, *onPlay_authUrl, *onPlay_hookCall, *onPlay_exec, *onEnd_hookCall, *onEnd_exec, *hls_fragment, *hls_window, *hls_path)
+
+		}else{
+
+			log.Println("Invalid channelType, please refer the documentation.")
+
+		}
+
+		
 	}else{
 		log.Println(`
 			possible commands:
@@ -156,6 +205,16 @@ func runConfigFile(configPath string){
 		}()
 	}
 
+	if *configObj.Server.RTMP.Host != "" && *configObj.Server.RTMP.Port != ""{
+		go func(){
+
+			time.Sleep(1 * time.Second)
+			
+			server.HostRTMP(configObj)
+
+		}()
+	}
+
 	for{
 
 		log.Println("Brahmaputra server started...")
@@ -185,7 +244,7 @@ func printLogo(){
 	fmt.Println(LOGO)  
 }
 
-func createChannel(path string, channelName string, channelType string, partionCount int, udpChannelType string){
+func createUDPChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
 
 	defer ChannelList.Recover()
 
@@ -194,18 +253,8 @@ func createChannel(path string, channelName string, channelType string, partionC
 		return
 	}
 
-	if channelType != "tcp" && channelType != "udp"{
-		log.Println("Invalid protocol, must be either tcp or udp...")
-		return
-	}	
-
 	if partionCount <= 0{
 		log.Println("Patition count must be greater than 0...")
-		return
-	}
-
-	if udpChannelType != "pub_sub" && udpChannelType != "udp_broadcast" && udpChannelType != "udp_multicast"{
-		log.Println("UDP channel type must be pub_sub, udp_broadcast or udp_multicast...")
 		return
 	}
 
@@ -247,10 +296,113 @@ func createChannel(path string, channelName string, channelType string, partionC
 
 		}else if os.IsNotExist(err){
 
-			if channelType != "tcp" && channelType != "udp"{
-				log.Println("Channel must be either tcp or udp...")
+			fDes, err := os.Create(filePath)
+
+			if err != nil{
+
+				log.Println(err)
+
 				return
+
 			}
+
+			defer fDes.Close()
+
+		}else{
+		  
+			log.Println("Error")
+
+		}
+
+	}
+	
+	var storage = make(map[string]map[string]interface{})
+
+	storage[channelName] = make(map[string]interface{})
+
+	storage[channelName]["channelName"] = channelName
+	storage[channelName]["type"] = "channel"
+	storage[channelName]["channelStorageType"] = "persistent"
+	storage[channelName]["path"] = directoryPath
+	storage[channelName]["channelType"] = channelType
+	storage[channelName]["partitions"] = partionCount
+	storage[channelName]["authUrl"] = authUrl
+
+	jsonData, err := json.Marshal(storage[channelName])
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	d1 := []byte(jsonData)
+
+	err = ioutil.WriteFile(directoryPath+"\\"+channelName+"_channel_details.json", d1, 0644)
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	log.Println("UDP channel created successfully...")
+
+}
+
+func createTCPChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
+
+	defer ChannelList.Recover()
+
+	if path == "default"{
+		log.Println("Please set a path for the channel storage...")
+		return
+	}
+
+	if partionCount <= 0{
+		log.Println("Patition count must be greater than 0...")
+		return
+	}
+
+	var directoryPath = path+"\\"+channelName
+
+	if _, err := os.Stat(directoryPath); err == nil{
+
+		log.Println("Channel already exists with name : "+channelName+"...")
+		return
+
+	}else if os.IsNotExist(err){
+
+		errDir := os.MkdirAll(directoryPath, 0755)
+
+		if errDir != nil {
+				
+			log.Println("Failed to create channel directory : "+channelName+"...")
+			return
+
+		}
+
+
+		log.Println("Channel directory : "+channelName+" created successfully...")
+	}else{
+		  
+		log.Println("Error")
+
+	}
+
+	for i:=0;i<partionCount;i++{
+
+		var filePath = directoryPath+"\\"+channelName+"_partition_"+strconv.Itoa(i)+".br"
+
+		if _, err := os.Stat(filePath); err == nil{
+
+		  	log.Println("Failed to create partion name : "+channelName+"...")
+
+			return
+
+		}else if os.IsNotExist(err){
 
 			fDes, err := os.Create(filePath)
 
@@ -274,36 +426,16 @@ func createChannel(path string, channelName string, channelType string, partionC
 	
 	var storage = make(map[string]map[string]interface{})
 
-	if channelType == "tcp"{
-		
-		storage[channelName] = make(map[string]interface{})
+	storage[channelName] = make(map[string]interface{})
 
-		storage[channelName]["channelName"] = channelName
-		storage[channelName]["type"] = "channel"
-		storage[channelName]["channelStorageType"] = "persistent"
-		storage[channelName]["path"] = directoryPath
-		storage[channelName]["worker"] = 1
-		storage[channelName]["channelType"] = channelType
-		storage[channelName]["partitions"] = partionCount
-
-	}else if channelType == "udp"{
-
-		storage[channelName] = make(map[string]interface{})
-
-		storage[channelName]["channelName"] = channelName
-		storage[channelName]["type"] = "channel"
-		storage[channelName]["channelStorageType"] = "persistent"
-		storage[channelName]["path"] = directoryPath
-		storage[channelName]["udpType"] = udpChannelType
-		storage[channelName]["channelType"] = channelType
-		storage[channelName]["partitions"] = partionCount
-
-	}else{
-
-		log.Println("Invalid protocol, must be either tcp or udp...")
-		return
-
-	}
+	storage[channelName]["channelName"] = channelName
+	storage[channelName]["type"] = "channel"
+	storage[channelName]["channelStorageType"] = "persistent"
+	storage[channelName]["path"] = directoryPath
+	storage[channelName]["worker"] = 1
+	storage[channelName]["channelType"] = channelType
+	storage[channelName]["partitions"] = partionCount
+	storage[channelName]["authUrl"] = authUrl
 
 	jsonData, err := json.Marshal(storage[channelName])
 
@@ -325,6 +457,163 @@ func createChannel(path string, channelName string, channelType string, partionC
 
 	}
 
-	log.Println("Channel created successfully...")
+	log.Println("TCP channel created successfully...")
 	
+}
+
+func createRTMPChannel(path string, channelName string, channelType string, onPublish_authUrl string, onPublish_hookCall string, onPublish_exec string, onPlay_authUrl string, onPlay_hookCall string, onPlay_exec string, onEnd_hookCall string, onEnd_exec string, hls_fragment int, hls_window int, hls_path string){
+
+	defer ChannelList.Recover()
+
+	if path == "default"{
+		log.Println("Please set a path for the channel storage...")
+		return
+	}
+
+	var directoryPath = path+"\\"+channelName
+
+	if _, err := os.Stat(directoryPath); err == nil{
+
+		log.Println("Channel already exists with name : "+channelName+"...")
+		return
+
+	}else if os.IsNotExist(err){
+
+		errDir := os.MkdirAll(directoryPath, 0755)
+
+		if errDir != nil {
+				
+			log.Println("Failed to create channel directory : "+channelName+"...")
+			return
+
+		}
+
+
+		log.Println("Channel directory : "+channelName+" created successfully...")
+	}else{
+		  
+		log.Println("Error")
+
+	}
+
+	// creating hashmap of onPublish events of RTMP
+
+	var onPublish = make(map[string]interface{})
+
+	if onPublish_authUrl != "default"{
+
+		onPublish["authUrl"] = onPublish_authUrl
+
+	}
+
+	if onPublish_hookCall != "default"{
+
+		onPublish["hookCall"] = onPublish_hookCall
+
+	}
+
+	if onPublish_exec != "default"{
+
+		onPublish["exec"] = onPublish_exec
+
+	}
+
+	// creating hashmap of onPlay events of RTMP
+
+	var onPlay = make(map[string]interface{})
+
+	if onPlay_authUrl != "default"{
+
+		onPlay["authUrl"] = onPlay_authUrl
+
+	}
+
+	if onPlay_hookCall != "default"{
+
+		onPlay["hookCall"] = onPlay_hookCall
+
+	}
+
+	if onPlay_exec != "default"{
+
+		onPlay["exec"] = onPlay_exec
+
+	}
+
+	// creating hashmap for onEnd event
+
+	var onEnd = make(map[string]interface{})
+
+	if onEnd_hookCall != "default"{
+
+		onEnd["hookCall"] = onEnd_hookCall
+
+	}
+
+	if onEnd_exec != "default"{
+
+		onEnd["exec"] = onEnd_exec
+
+	}
+
+	// create hashmap for hls configuration
+
+	var hls = make(map[string]interface{})
+
+	if hls_path != "default"{
+
+		if _, err := os.Stat(hls_path); err != nil{
+
+			errDir := os.MkdirAll(hls_path, 0755)
+
+			if errDir != nil {
+					
+				log.Println("Failed to create channel directory : "+channelName+"...")
+				return
+
+			}
+
+		}
+
+		hls["hls_path"] = hls_path
+
+		hls["hls_fragment"] = hls_fragment
+
+		hls["hls_window"] = hls_window
+
+	}
+
+	var storage = make(map[string]map[string]interface{})
+
+	storage[channelName] = make(map[string]interface{})
+
+	storage[channelName]["channelName"] = channelName
+	storage[channelName]["type"] = "channel"
+	storage[channelName]["channelType"] = channelType
+	storage[channelName]["onPublish"] = onPublish
+	storage[channelName]["onPlay"] = onPlay
+	storage[channelName]["onEnd"] = onEnd
+	storage[channelName]["hls"] = hls
+
+	jsonData, err := json.Marshal(storage[channelName])
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	d1 := []byte(jsonData)
+
+	err = ioutil.WriteFile(directoryPath+"\\"+channelName+"_channel_details.json", d1, 0644)
+
+	if err != nil{
+
+		log.Println(err)
+		return
+
+	}
+
+	log.Println("RTMP channel created successfully...")
 }

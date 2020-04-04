@@ -9,10 +9,6 @@
             "port":"8100",
             "maxSockets":0,
             "socketTimeout":12000,
-            "auth":{
-                "username":"sudeep",
-                "password":"kaihiwatari"
-            },
             "bufferRead":1
         },
         "udp":{
@@ -20,13 +16,14 @@
             "port":"8200",
             "maxSockets":0,
             "socketTimeout":12000,
-            "auth":{
-                "username":"sudeep",
-                "password":"kaihiwatari"
-            },
             "bufferRead":1
         },
-        "rtmp":{},
+        "rtmp":{
+            "host":"127.0.0.1",
+            "port":"1935",
+            "maxSockets":0,
+            "socketTimeout":12000
+        },
         "websocket":{},
         "udpMulticast":[],
         "udpBroadcast":[]

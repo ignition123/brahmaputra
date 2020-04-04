@@ -174,8 +174,3 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 
 	return channelObject
 }
-
-func LoadUDPChannelsToMemory(){
-
-    
-}
