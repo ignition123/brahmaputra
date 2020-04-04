@@ -65,7 +65,7 @@ func (dsh *DefaultServerHandler) OnClosed(s *RtmpNetStream){
 
 	if ChannelList.RTMPStorage[s.conn.appName].OnEnd.HookCall != ""{
 
-		hookRequest(s, s.appName, s.key)
+		hookRequest(s, s.appName, s.key, ChannelList.RTMPStorage[s.conn.appName].OnEnd.HookCall)
 
 	}
 

@@ -921,13 +921,13 @@ func createStreamMessageHandle(s *RtmpNetStream, csmsg *CreateStreamMessage) err
 
 }
 
-func authRequest(s *RtmpNetStream, app string, key string) bool{
+func authRequest(s *RtmpNetStream, app string, key string, url string) bool{
 	
 	client := http.Client{
 		Timeout: 5 * time.Second,
 	}
 
-	request, err := http.NewRequest("GET", ChannelList.RTMPStorage[app].OnPublish.AuthUrl, nil)
+	request, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
 
@@ -973,13 +973,13 @@ func authRequest(s *RtmpNetStream, app string, key string) bool{
 
 }
 
-func hookRequest(s *RtmpNetStream, app string, key string) bool{
+func hookRequest(s *RtmpNetStream, app string, key string, url string) bool{
 	
 	client := http.Client{
 		Timeout: 5 * time.Second,
 	}
 
-	request, err := http.NewRequest("GET", ChannelList.RTMPStorage[app].OnPublish.HookCall, nil)
+	request, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
 
@@ -1045,7 +1045,7 @@ func publishMessageHandle(s *RtmpNetStream, pbmsg *PublishMessage) error{
 
 	if ChannelList.RTMPStorage[s.conn.appName].OnPublish.AuthUrl != ""{
 
-		if !authRequest(s, s.conn.appName, pbmsg.PublishingName){
+		if !authRequest(s, s.conn.appName, pbmsg.PublishingName, ChannelList.RTMPStorage[s.conn.appName].OnPublish.AuthUrl){
 
 			return nil
 
@@ -1057,7 +1057,7 @@ func publishMessageHandle(s *RtmpNetStream, pbmsg *PublishMessage) error{
 
 	if ChannelList.RTMPStorage[s.conn.appName].OnPublish.HookCall != ""{
 
-		if !hookRequest(s, s.conn.appName, pbmsg.PublishingName){
+		if !hookRequest(s, s.conn.appName, pbmsg.PublishingName, ChannelList.RTMPStorage[s.conn.appName].OnPublish.HookCall){
 
 			return nil
 
@@ -1130,7 +1130,7 @@ func playMessageHandle(s *RtmpNetStream, plmsg *PlayMessage) error{
 
 	if ChannelList.RTMPStorage[s.conn.appName].OnPlay.AuthUrl != ""{
 
-		if !authRequest(s, s.conn.appName, plmsg.StreamName){
+		if !authRequest(s, s.conn.appName, plmsg.StreamName, ChannelList.RTMPStorage[s.conn.appName].OnPlay.AuthUrl){
 
 			return nil
 
@@ -1140,9 +1140,9 @@ func playMessageHandle(s *RtmpNetStream, plmsg *PlayMessage) error{
 
 	// hook event implementation will be done
 
-	if ChannelList.RTMPStorage[s.conn.appName].OnPublish.HookCall != ""{
+	if ChannelList.RTMPStorage[s.conn.appName].OnPlay.HookCall != ""{
 
-		if !hookRequest(s, s.conn.appName, plmsg.StreamName){
+		if !hookRequest(s, s.conn.appName, plmsg.StreamName, ChannelList.RTMPStorage[s.conn.appName].OnPlay.HookCall){
 
 			return nil
 
