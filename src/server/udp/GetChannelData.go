@@ -452,133 +452,136 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
-				if cursor < fileStat.Size(){
+				if cursor >= fileStat.Size(){
 
-					data := make([]byte, 8)
+					time.Sleep(1 * time.Second)
 
-					count, err := file.ReadAt(data, cursor)
+					continue
 
-					if err != nil {
-
-						continue
-
-					}
-
-					if int64(count) > 0 && int64(count) < fileStat.Size(){
-
-						cursor += 8
-
-						var packetSize = binary.BigEndian.Uint64(data)
-
-						restPacket := make([]byte, int64(packetSize))
-
-						totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
-
-						if errPacket != nil{
-
-							continue
-
-						}
-
-						if totalByteLen > 0{
-
-							cursor += int64(packetSize)
-
-							var byteFileBuffer = ByteBuffer.Buffer{
-								Endian:"big",
-							}
-
-							byteFileBuffer.Wrap(restPacket)
-
-							var messageTypeByte = byteFileBuffer.GetShort()
-							var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
-							var messageType = byteFileBuffer.Get(messageTypeLen)
-
-							var channelNameByte = byteFileBuffer.GetShort()
-							var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
-							var channelName = byteFileBuffer.Get(channelNameLen)
-
-							var producer_idByte = byteFileBuffer.GetShort()
-							var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
-							var producer_id = byteFileBuffer.Get(producer_idLen)
-
-							var agentNameByte  = byteFileBuffer.GetShort()
-							var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
-							var agentName = byteFileBuffer.Get(agentNameLen)
-
-							var idByte = byteFileBuffer.GetLong()
-							var id = binary.BigEndian.Uint64(idByte)
-
-							var bodyPacketSize = int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
-
-							var bodyBB = byteFileBuffer.Get(int(bodyPacketSize))
-
-							var newTotalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
-
-							var byteSendBuffer = ByteBuffer.Buffer{
-								Endian:"big",
-							}
-
-							byteSendBuffer.PutLong(newTotalByteLen) // total packet length
-
-							byteSendBuffer.PutByte(byte(0)) // status code
-
-							byteSendBuffer.PutShort(messageTypeLen) // total message type length
-
-							byteSendBuffer.Put([]byte(messageType)) // message type value
-
-							byteSendBuffer.PutShort(channelNameLen) // total channel name length
-
-							byteSendBuffer.Put([]byte(channelName)) // channel name value
-
-							byteSendBuffer.PutShort(producer_idLen) // producerid length
-
-							byteSendBuffer.Put([]byte(producer_id)) // producerid value
-
-							byteSendBuffer.PutShort(agentNameLen) // agentName length
-
-							byteSendBuffer.Put([]byte(agentName)) // agentName value
-
-							byteSendBuffer.PutLong(int(id)) // backend offset
-
-							byteSendBuffer.Put(bodyBB) // actual body
-
-							// log.Println(ChannelList.UDPStorage[packetObject.ChannelName][packetObject.GroupName])
-
-							go sendGroup(index, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg) // race
-
-							message, ok := <-sentMsg
-
-							if ok{
-
-								if !message{
-
-									exitLoop = true
+				}
 
 
-								}else{
+				data := make([]byte, 8)
 
-									exitLoop = false
+				count, err := file.ReadAt(data, cursor)
 
-								}
-							}
+				if err != nil {
 
-						}else{
+					time.Sleep(1 * time.Second)
 
-							time.Sleep(1 * time.Second)
+					continue
 
-						}
+				}
+
+				var packetSize = binary.BigEndian.Uint64(data)
+
+				if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
+
+					time.Sleep(1 * time.Second)
+
+					continue
+				}
+
+				cursor += int64(8)
+
+				restPacket := make([]byte, int64(packetSize))
+
+				totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
+
+				if errPacket != nil{
+
+					time.Sleep(1 * time.Second)
+
+					continue
+
+				}
+
+				if totalByteLen <= 0{
+
+					time.Sleep(1 * time.Second)
+
+					continue
+				}
+
+				cursor += int64(packetSize)
+
+				var byteFileBuffer = ByteBuffer.Buffer{
+					Endian:"big",
+				}
+
+				byteFileBuffer.Wrap(restPacket)
+
+				var messageTypeByte = byteFileBuffer.GetShort()
+				var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+				var messageType = byteFileBuffer.Get(messageTypeLen)
+
+				var channelNameByte = byteFileBuffer.GetShort()
+				var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+				var channelName = byteFileBuffer.Get(channelNameLen)
+
+				var producer_idByte = byteFileBuffer.GetShort()
+				var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+				var producer_id = byteFileBuffer.Get(producer_idLen)
+
+				var agentNameByte  = byteFileBuffer.GetShort()
+				var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+				var agentName = byteFileBuffer.Get(agentNameLen)
+
+				var idByte = byteFileBuffer.GetLong()
+				var id = binary.BigEndian.Uint64(idByte)
+
+				var bodyPacketSize = int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+
+				var bodyBB = byteFileBuffer.Get(int(bodyPacketSize))
+
+				var newTotalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
+
+				var byteSendBuffer = ByteBuffer.Buffer{
+					Endian:"big",
+				}
+
+				byteSendBuffer.PutLong(newTotalByteLen) // total packet length
+
+				byteSendBuffer.PutByte(byte(0)) // status code
+
+				byteSendBuffer.PutShort(messageTypeLen) // total message type length
+
+				byteSendBuffer.Put([]byte(messageType)) // message type value
+
+				byteSendBuffer.PutShort(channelNameLen) // total channel name length
+
+				byteSendBuffer.Put([]byte(channelName)) // channel name value
+
+				byteSendBuffer.PutShort(producer_idLen) // producerid length
+
+				byteSendBuffer.Put([]byte(producer_id)) // producerid value
+
+				byteSendBuffer.PutShort(agentNameLen) // agentName length
+
+				byteSendBuffer.Put([]byte(agentName)) // agentName value
+
+				byteSendBuffer.PutLong(int(id)) // backend offset
+
+				byteSendBuffer.Put(bodyBB) // actual body
+
+				// log.Println(ChannelList.UDPStorage[packetObject.ChannelName][packetObject.GroupName])
+
+				go sendGroup(index, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg) // race
+
+				message, ok := <-sentMsg
+
+				if ok{
+
+					if !message{
+
+						exitLoop = true
+
 
 					}else{
 
-						time.Sleep(1 * time.Second)
+						exitLoop = false
+
 					}
-
-				}else{
-
-					cursor = fileStat.Size()
-
-					time.Sleep(1 * time.Second)
 				}
 
 			}
@@ -690,132 +693,136 @@ func SubscribeChannel(conn net.UDPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
-				if cursor < fileStat.Size(){
+				if cursor >= fileStat.Size(){
 
-					data := make([]byte, 8)
+					time.Sleep(1 * time.Second)
 
-					count, err := file.ReadAt(data, cursor)
+					continue
 
-					if err != nil {
 
-						continue
+				}
 
-					}
+				data := make([]byte, 8)
 
-					if int64(count) > 0 && int64(count) < fileStat.Size(){
+				count, err := file.ReadAt(data, cursor)
 
-						cursor += 8
+				if err != nil {
 
-						var packetSize = binary.BigEndian.Uint64(data)
+					time.Sleep(1 * time.Second)
 
-						restPacket := make([]byte, packetSize)
+					continue
 
-						totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
+				}
 
-						if errPacket != nil{
+				var packetSize = binary.BigEndian.Uint64(data)
 
-							continue
+				if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
 
-						}
+					time.Sleep(1 * time.Second)
 
-						if totalByteLen > 0{
+					continue
+				}
 
-							cursor += int64(packetSize)
+				cursor += int64(8)
 
-							var byteFileBuffer = ByteBuffer.Buffer{
-								Endian:"big",
-							}
+				restPacket := make([]byte, packetSize)
 
-							byteFileBuffer.Wrap(restPacket)
+				totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
 
-							var messageTypeByte = byteFileBuffer.GetShort()
-							var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
-							var messageType = byteFileBuffer.Get(messageTypeLen)
+				if errPacket != nil{
 
-							var channelNameByte = byteFileBuffer.GetShort()
-							var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
-							var channelName = byteFileBuffer.Get(channelNameLen)
+					time.Sleep(1 * time.Second)
 
-							var producer_idByte = byteFileBuffer.GetShort()
-							var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
-							var producer_id = byteFileBuffer.Get(producer_idLen)
+					continue
 
-							var agentNameByte  = byteFileBuffer.GetShort()
-							var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
-							var agentName = byteFileBuffer.Get(agentNameLen)
+				}
 
-							var idByte = byteFileBuffer.GetLong()
-							var id = binary.BigEndian.Uint64(idByte)
+				if totalByteLen <= 0{
 
-							var bodyPacketSize = int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+					time.Sleep(1 * time.Second)
 
-							var bodyBB = byteFileBuffer.Get(int(bodyPacketSize))
+					continue
+				}
 
-							var newTotalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
+				cursor += int64(packetSize)
 
-							var byteSendBuffer = ByteBuffer.Buffer{
-								Endian:"big",
-							}
+				var byteFileBuffer = ByteBuffer.Buffer{
+					Endian:"big",
+				}
 
-							byteSendBuffer.PutLong(newTotalByteLen) // total packet length
+				byteFileBuffer.Wrap(restPacket)
 
-							byteSendBuffer.PutByte(byte(0)) // status code
+				var messageTypeByte = byteFileBuffer.GetShort()
+				var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+				var messageType = byteFileBuffer.Get(messageTypeLen)
 
-							byteSendBuffer.PutShort(messageTypeLen) // total message type length
+				var channelNameByte = byteFileBuffer.GetShort()
+				var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+				var channelName = byteFileBuffer.Get(channelNameLen)
 
-							byteSendBuffer.Put([]byte(messageType)) // message type value
+				var producer_idByte = byteFileBuffer.GetShort()
+				var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+				var producer_id = byteFileBuffer.Get(producer_idLen)
 
-							byteSendBuffer.PutShort(channelNameLen) // total channel name length
+				var agentNameByte  = byteFileBuffer.GetShort()
+				var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+				var agentName = byteFileBuffer.Get(agentNameLen)
 
-							byteSendBuffer.Put([]byte(channelName)) // channel name value
+				var idByte = byteFileBuffer.GetLong()
+				var id = binary.BigEndian.Uint64(idByte)
 
-							byteSendBuffer.PutShort(producer_idLen) // producerid length
+				var bodyPacketSize = int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
 
-							byteSendBuffer.Put([]byte(producer_id)) // producerid value
+				var bodyBB = byteFileBuffer.Get(int(bodyPacketSize))
 
-							byteSendBuffer.PutShort(agentNameLen) // agentName length
+				var newTotalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
 
-							byteSendBuffer.Put([]byte(agentName)) // agentName value
+				var byteSendBuffer = ByteBuffer.Buffer{
+					Endian:"big",
+				}
 
-							byteSendBuffer.PutLong(int(id)) // backend offset
+				byteSendBuffer.PutLong(newTotalByteLen) // total packet length
 
-							byteSendBuffer.Put(bodyBB) // actual body
+				byteSendBuffer.PutByte(byte(0)) // status code
 
-							go send(index, int(cursor), subscriberMtx, packetObject, conn, byteSendBuffer, sentMsg)
+				byteSendBuffer.PutShort(messageTypeLen) // total message type length
 
-							message, ok := <-sentMsg
+				byteSendBuffer.Put([]byte(messageType)) // message type value
 
-							if ok{
+				byteSendBuffer.PutShort(channelNameLen) // total channel name length
 
-								if !message{
+				byteSendBuffer.Put([]byte(channelName)) // channel name value
 
-									exitLoop = true
+				byteSendBuffer.PutShort(producer_idLen) // producerid length
 
-								}else{
+				byteSendBuffer.Put([]byte(producer_id)) // producerid value
 
-									exitLoop = false
+				byteSendBuffer.PutShort(agentNameLen) // agentName length
 
-								}
+				byteSendBuffer.Put([]byte(agentName)) // agentName value
 
-							}
+				byteSendBuffer.PutLong(int(id)) // backend offset
 
-						}else{
+				byteSendBuffer.Put(bodyBB) // actual body
 
-							time.Sleep(1 * time.Second)
+				go send(index, int(cursor), subscriberMtx, packetObject, conn, byteSendBuffer, sentMsg)
 
-						}
+				message, ok := <-sentMsg
+
+				if ok{
+
+					if !message{
+
+						exitLoop = true
 
 					}else{
 
-						time.Sleep(1 * time.Second)
+						exitLoop = false
+
 					}
 
-				}else{
-
-					cursor = fileStat.Size()
-
-					time.Sleep(1 * time.Second)
 				}
+
 			}
 
 
