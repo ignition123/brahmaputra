@@ -15,7 +15,7 @@ Distributed Pub/Sub, with georeplication and log transactions connectivity with 
 It is currently under development stage. will update sdk, client drivers and documentations shortly
 
 
-Copyright (c) <year> <copyright holders>
+Copyright (c) <2020> <79Labs>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
