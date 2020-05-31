@@ -92,6 +92,7 @@ func ReadFile(path string, file os.FileInfo){
 				Worker: worker,
 				BucketData: bucketData,
 				WriteCallback:make(chan bool, 1),
+				SyncChan: make(chan bool, 1),
 				ChannelStorageType: channelMap["channelStorageType"].(string),
 				SubscriberChannel: subscriberChannel,
 				Group: make(map[string][]*pojo.PacketStruct),
@@ -108,6 +109,8 @@ func ReadFile(path string, file os.FileInfo){
 			ChannelMethod.Lock()
 
 			ChannelList.TCPStorage[channelName] = channelObject
+
+			ChannelList.TCPSocketDetails[channelName] = make(map[string] *pojo.PacketStruct)
 
 			ChannelMethod.Unlock()
 		}	

@@ -24,12 +24,10 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	byteBuffer.Wrap(completePacket)
 
-	var messageTypeByte = byteBuffer.GetShort() // 2
-	var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+	var messageTypeLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 	var messageType = string(byteBuffer.Get(messageTypeLen)) // messageTypeLen
 
-	var channelNameByte = byteBuffer.GetShort() // 2
-	var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+	var channelNameLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 	var channelName = string(byteBuffer.Get(channelNameLen)) // channelNameLen
 
 	*channelMapName = channelName
@@ -61,12 +59,10 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	}else if messageType == "publish"{
 
-		var producer_idByte = byteBuffer.GetShort()
-		var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+		var producer_idLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		var producer_id = string(byteBuffer.Get(producer_idLen))
 
-		var agentNameByte = byteBuffer.GetShort()
-		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+		var agentNameLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		var agentName = string(byteBuffer.Get(agentNameLen))
 
 		var ackStatusByte = byteBuffer.GetByte()
@@ -150,6 +146,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				}
 
+				parseChan <- true
+
 			}else{
 
 				ThroughClientError(conn, PERSISTENT_CONFIG_ERROR)
@@ -196,20 +194,17 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		// bytes for start from flag
 
-		var startFromByte = byteBuffer.GetShort() //2
-		var startFromLen = binary.BigEndian.Uint16(startFromByte)
+		var startFromLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
 		var start_from = string(byteBuffer.Get(int(startFromLen))) // startFromLen
 
 		// bytes for subscriber name 
 
-		var subscriberNameByte = byteBuffer.GetShort() //2
-		var subscriberNameLen = binary.BigEndian.Uint16(subscriberNameByte)
+		var subscriberNameLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
 		var subscriberName = string(byteBuffer.Get(int(subscriberNameLen)))
 
 		// bytes for subscriber group name
 
-		var subscriberTypeByte = byteBuffer.GetShort() //2
-		var subscriberTypeLen = binary.BigEndian.Uint16(subscriberTypeByte)
+		var subscriberTypeLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
 
 		packetObject.StartFromLen = int(startFromLen)
 
@@ -225,6 +220,18 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		packetObject.ActiveMode = true
 
+		keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName)
+
+		if keyFound{
+
+			ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
+
+			parseChan <- false
+
+			return
+		   
+		}
+
 		// checking for group name existence
 
 		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
@@ -234,18 +241,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 				var groupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
 
 				packetObject.GroupName = groupName
-
-				keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName)
-
-				if keyFound{
-
-					ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-					parseChan <- false
-
-					return
-				   
-				}
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
@@ -299,6 +294,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from)
 				}
 
+				parseChan <- true
+
 			}else{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
@@ -320,18 +317,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					return
 		    	}
 
-		    	keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName)
-
-				if keyFound{
-
-					ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-					parseChan <- false
-
-					return
-				   
-				}
-
     			*subscriberMapName = channelName+subscriberName
     			*messageMapType = messageType
 
@@ -339,14 +324,19 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				go SubscribeChannel(conn, *packetObject, start_from)
 
+				parseChan <- true
+
 			}
 
 		}else{
 
-			AppendNewClientInmemory(channelName, packetObject)
+			*subscriberMapName = channelName+subscriberName
+			*messageMapType = messageType
+
+			AppendNewClientInmemory(channelName, *subscriberMapName, packetObject)
+
+			parseChan <- true
 		}
-		
-		parseChan <- true 
 
 	}else{
 

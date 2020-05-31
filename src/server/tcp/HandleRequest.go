@@ -93,6 +93,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	if messageMapType == "subscribe"{
 
+		DeleteInmemoryChannelList(channelMapName, subscriberMapName)
+
 		DeleteTCPChannelSubscriberList(channelMapName, subscriberMapName)
 
 		if groupMapName != ""{

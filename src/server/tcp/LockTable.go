@@ -211,16 +211,21 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 }
 
 
-func AppendNewClientInmemory(channelName string, packetObject *pojo.PacketStruct){
+func AppendNewClientInmemory(channelName string, subscriberMapName string, packetObject *pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
-	ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+
+	ChannelList.TCPSocketDetails[channelName][subscriberMapName] = packetObject
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+
 }
 
-func GetClientListInmemory(channelName string) []*pojo.PacketStruct{
+func GetClientListInmemory(channelName string) map[string]*pojo.PacketStruct{
+
+	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
 	var channelInmemoryList = ChannelList.TCPSocketDetails[channelName]
@@ -229,23 +234,34 @@ func GetClientListInmemory(channelName string) []*pojo.PacketStruct{
 	return channelInmemoryList
 }
 
-func DeleteInmemoryChannelList(channelName string, index int){
+func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
+
+	defer ChannelList.Recover()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
-	var cb = len(ChannelList.TCPSocketDetails[channelName]) > index
-	if cb{
-		ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName][:index], ChannelList.TCPSocketDetails[channelName][index+1:]...)	
-	}
+
+	delete(ChannelList.TCPSocketDetails[channelName], subscriberMapName)
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 }
 
-func FindInmemorySocketListLength(channelName string, index int) (bool, *pojo.PacketStruct){
+func FindInmemorySocketListLength(channelName string, key string) (bool, *pojo.PacketStruct){
+
+	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
-	var cb = len(ChannelList.TCPSocketDetails[channelName]) > index
+	
+	var cb bool
+
 	var sockClient *pojo.PacketStruct
-	if cb{
-		sockClient = ChannelList.TCPSocketDetails[channelName][index]
+
+	if val, ok := ChannelList.TCPSocketDetails[channelName][key]; ok {
+
+		sockClient = val
+
+		cb = ok
 	}
+
 	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
 
 	return cb, sockClient

@@ -13,6 +13,7 @@ type ChannelStruct struct{
 	Worker int
 	BucketData [] chan *PacketStruct
 	WriteCallback chan bool
+	SyncChan chan bool
 	ChannelLock sync.RWMutex
 	SubscriberChannelLock sync.RWMutex
 	SubscriberFileChannelLock sync.RWMutex
