@@ -343,7 +343,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		}else{
 
-			ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+			AppendNewClientInmemory(channelName, packetObject)
 		}
 		
 		parseChan <- true 

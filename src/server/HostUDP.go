@@ -27,6 +27,10 @@ func HostUDP(configObj pojo.Config){
 
 func HostUDPServer(){
 
+	defer ChannelList.Recover()
+
+	ChannelList.SetUlimit()
+
 	udpAddr, err := net.ResolveUDPAddr("udp4", *ChannelList.ConfigUDPObj.Server.UDP.Host +":"+ *ChannelList.ConfigUDPObj.Server.UDP.Port)
 
 	if err != nil {

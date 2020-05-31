@@ -105,8 +105,11 @@ func ReadFile(path string, file os.FileInfo){
 				}
 			}
 
+			ChannelMethod.Lock()
+
 			ChannelList.TCPStorage[channelName] = channelObject
 
+			ChannelMethod.Unlock()
 		}	
 
     }

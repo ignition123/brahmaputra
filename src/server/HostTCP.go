@@ -27,6 +27,8 @@ func HostTCPServer(){
 
 	defer ChannelList.Recover()
 
+	ChannelList.SetUlimit()
+
 	serverObject, err := net.Listen("tcp", *ChannelList.ConfigTCPObj.Server.TCP.Host +":"+ *ChannelList.ConfigTCPObj.Server.TCP.Port)
 
     if err != nil {
@@ -39,6 +41,7 @@ func HostTCPServer(){
 	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
 
 	tcp.LoadTCPChannelsToMemory()
+
 
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")
@@ -68,3 +71,4 @@ func HostTCPServer(){
 		go tcp.HandleRequest(*tcpObject)
 	}
 }
+

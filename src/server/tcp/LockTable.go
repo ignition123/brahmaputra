@@ -209,3 +209,44 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 
 	return groupLen
 }
+
+
+func AppendNewClientInmemory(channelName string, packetObject *pojo.PacketStruct){
+
+	defer ChannelList.Recover()
+
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName], packetObject) 
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+}
+
+func GetClientListInmemory(channelName string) []*pojo.PacketStruct{
+
+	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
+	var channelInmemoryList = ChannelList.TCPSocketDetails[channelName]
+	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
+
+	return channelInmemoryList
+}
+
+func DeleteInmemoryChannelList(channelName string, index int){
+	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
+	var cb = len(ChannelList.TCPSocketDetails[channelName]) > index
+	if cb{
+		ChannelList.TCPSocketDetails[channelName] = append(ChannelList.TCPSocketDetails[channelName][:index], ChannelList.TCPSocketDetails[channelName][index+1:]...)	
+	}
+	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
+}
+
+func FindInmemorySocketListLength(channelName string, index int) (bool, *pojo.PacketStruct){
+
+	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
+	var cb = len(ChannelList.TCPSocketDetails[channelName]) > index
+	var sockClient *pojo.PacketStruct
+	if cb{
+		sockClient = ChannelList.TCPSocketDetails[channelName][index]
+	}
+	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
+
+	return cb, sockClient
+}

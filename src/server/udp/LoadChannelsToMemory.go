@@ -88,8 +88,11 @@ func ReadFile(path string, file os.FileInfo){
 				}
 			}
 
+			ChannelMethod.Lock()
+
 			ChannelList.UDPStorage[channelName] = channelObject
 
+			ChannelMethod.Unlock()
 		}	
 
     }

@@ -3,16 +3,8 @@ package pojo
 type ServerStruct struct{
 	TCP TCPStruct
 	UDP UDPStruct
-	RTMP RTMPStruct
 	ClusterName *string
 	HostName *string
-}
-
-type RTMPStruct struct{
-	Host *string
-	Port *string 
-	MaxSockets *int64
-	SocketTimeout *int
 }
 
 type TCPStruct struct{

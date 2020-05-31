@@ -18,12 +18,6 @@
             "socketTimeout":12000,
             "bufferRead":1
         },
-        "rtmp":{
-            "host":"127.0.0.1",
-            "port":"1935",
-            "maxSockets":0,
-            "socketTimeout":12000
-        },
         "websocket":{},
         "udpMulticast":[],
         "udpBroadcast":[]

@@ -1,43 +1,31 @@
 {
-    "worker":4,
+    "worker":2,
+    "logWrite":true,
     "server":{
+        "clusterName":"cluster1",
+        "hostName":"host1",
         "tcp":{
             "host":"127.0.0.1",
-            "port":"8500",
-            "max_sockets":0,
-            "socket_timeout":12000,
-            "clusterName":"cluster2",
-            "hostName":"host2",
-            "auth":{
-                "username":"sudeep",
-                "password":"kaihiwatari"
-            },
-            "bufferRead":100
+            "port":"8100",
+            "maxSockets":0,
+            "socketTimeout":12000,
+            "bufferRead":1
         },
-        "udp":{}
+        "udp":{
+            "host":"127.0.0.1",
+            "port":"8200",
+            "maxSockets":0,
+            "socketTimeout":12000,
+            "bufferRead":1
+        },
+        "websocket":{},
+        "udpMulticast":[],
+        "udpBroadcast":[]
     },
+    "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",
     "storage":{
         "file":{
             "active":true
-        },
-        "mongodb":{
-            "active":false,
-            "url":""
-        },
-        "mySQL":{
-            "active":false
-        },
-        "hbase":{
-            "active":false
-        },
-        "couchDB":{
-            "active":false
-        },
-        "cassandra":{
-            "active":false
-        },
-        "postgres":{
-            "active":false
         }
     },
     "childWrite":{

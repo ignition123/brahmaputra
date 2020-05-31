@@ -24,6 +24,8 @@ func (e *ChannelMethods) GetChannelData(){
 
 	defer ChannelList.Recover()
 
+	ChannelMethod.Lock()
+
 	for channelName := range ChannelList.TCPStorage {
 
 	    go e.runChannel(channelName)
@@ -32,6 +34,7 @@ func (e *ChannelMethods) GetChannelData(){
 
 	}
 
+	ChannelMethod.Unlock()
 }
 
 func (e *ChannelMethods) subscriberChannel(channelName string){
@@ -48,7 +51,7 @@ func (e *ChannelMethods) subscriberChannel(channelName string){
 
 			defer close(SubChannel)
 
-			var cbChan = make(chan bool, 1) 
+			ackChan := make(chan bool, 1)
 
 			for{
 
@@ -58,10 +61,12 @@ func (e *ChannelMethods) subscriberChannel(channelName string){
 
 						if ok{
 
-							go e.sendMessageToClient(*message, cbChan)
+							go e.sendMessageToClient(*message)
 
-							<-cbChan
+							go e.SendAck(*message, ackChan)
 
+							<-ackChan
+	
 						}
 
 						break
@@ -130,76 +135,70 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
-func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, cbChan chan bool){
+func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
-	ackChan := make(chan bool, 1)
-	subsChan := make(chan bool, 1)
+	go func(){	
 
-	go e.SendAck(message, ackChan)
+		subsChan := make(chan bool, 1)
 
-	<-ackChan
+		var channelSockList = GetClientListInmemory(message.ChannelName)
 
-	for index := range ChannelList.TCPSocketDetails[message.ChannelName]{
+		for index := range channelSockList{
 
-		if len(ChannelList.TCPSocketDetails[message.ChannelName]) <= index{
-			break
-		} 
+			var byteBuffer = ByteBuffer.Buffer{
+				Endian:"big",
+			}
 
-		var byteBuffer = ByteBuffer.Buffer{
-			Endian:"big",
+			var totalByteLen = 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
+
+			byteBuffer.PutLong(totalByteLen) // total packet length
+
+			byteBuffer.PutByte(byte(0)) // status code
+
+			byteBuffer.PutShort(message.MessageTypeLen) // total message type length
+
+			byteBuffer.Put([]byte(message.MessageType)) // message type value
+
+			byteBuffer.PutShort(message.ChannelNameLen) // total channel name length
+
+			byteBuffer.Put([]byte(message.ChannelName)) // channel name value
+
+			byteBuffer.PutShort(message.Producer_idLen) // producerid length
+
+			byteBuffer.Put([]byte(message.Producer_id)) // producerid value
+
+			byteBuffer.PutShort(message.AgentNameLen) // agentName length
+
+			byteBuffer.Put([]byte(message.AgentName)) // agentName value
+
+			byteBuffer.PutLong(int(message.Id)) // backend offset
+
+			byteBuffer.PutLong(0) // total bytes subscriber packet received
+
+			byteBuffer.Put(message.BodyBB) // actual body
+
+			go e.sendInMemory(message, index, byteBuffer, subsChan)
+
+			<-subsChan
+
 		}
+	}()
 
-		var totalByteLen = 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
-
-		byteBuffer.PutLong(totalByteLen) // total packet length
-
-		byteBuffer.PutByte(byte(0)) // status code
-
-		byteBuffer.PutShort(message.MessageTypeLen) // total message type length
-
-		byteBuffer.Put([]byte(message.MessageType)) // message type value
-
-		byteBuffer.PutShort(message.ChannelNameLen) // total channel name length
-
-		byteBuffer.Put([]byte(message.ChannelName)) // channel name value
-
-		byteBuffer.PutShort(message.Producer_idLen) // producerid length
-
-		byteBuffer.Put([]byte(message.Producer_id)) // producerid value
-
-		byteBuffer.PutShort(message.AgentNameLen) // agentName length
-
-		byteBuffer.Put([]byte(message.AgentName)) // agentName value
-
-		byteBuffer.PutLong(int(message.Id)) // backend offset
-
-		byteBuffer.PutLong(0) // total bytes subscriber packet received
-
-		byteBuffer.Put(message.BodyBB) // actual body
-
-		go e.sendInMemory(message, index, byteBuffer, subsChan)
-
-		<-subsChan
-
-	}
-
-	cbChan <- true
 }
 
 func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, packetBuffer ByteBuffer.Buffer, callback chan bool){ 
 
 	defer ChannelList.Recover()
 
-	e.Lock()
-	defer e.Unlock()
-
 	var totalRetry = 0
 
 	RETRY:
 
-	if len(ChannelList.TCPSocketDetails[message.ChannelName]) > index{
+	var stat, sock = FindInmemorySocketListLength(message.ChannelName, index)
+
+	if stat{
 
 		totalRetry += 1
 
@@ -211,13 +210,13 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, index int, pack
 
 		}
 
-		_, err := ChannelList.TCPSocketDetails[message.ChannelName][index].Conn.Write(packetBuffer.Array())
+		_, err := sock.Conn.Write(packetBuffer.Array())
 		
 		if err != nil {
 		
 			go ChannelList.WriteLog(err.Error())
 
-			ChannelList.TCPSocketDetails[message.ChannelName] = append(ChannelList.TCPSocketDetails[message.ChannelName][:index], ChannelList.TCPSocketDetails[message.ChannelName][index+1:]...)
+			DeleteInmemoryChannelList(message.ChannelName, index)
 
 			goto RETRY
 

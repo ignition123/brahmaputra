@@ -51,13 +51,3 @@ type OnEndStruct struct{
 	HookCall string
 	Exec string
 }
-
-type RTMPChannelStruct struct{
-
-	ChannelName string
-	Hls HlsStruct
-	OnEnd OnEndStruct
-	OnPublish OnPublishStruct
-	OnPlay OnPlayStruct
-
-}
