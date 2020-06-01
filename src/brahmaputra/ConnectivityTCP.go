@@ -201,8 +201,6 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 	conn.(*net.TCPConn).SetKeepAlive(true)
 	conn.(*net.TCPConn).SetLinger(1)
 	conn.(*net.TCPConn).SetNoDelay(true)
-	conn.(*net.TCPConn).SetReadBuffer(10000)
-	conn.(*net.TCPConn).SetWriteBuffer(10000)
 	conn.(*net.TCPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
 	conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
 	conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))

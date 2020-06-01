@@ -8,6 +8,7 @@ import (
 	"time"
 	"ChannelList"
 	"server/tcp"
+	"runtime"
 )
 
 func HostTCP(configObj pojo.Config){
@@ -19,6 +20,7 @@ func HostTCP(configObj pojo.Config){
 	go tcp.ChannelMethod.GetChannelData()
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
+
 		HostTCPServer()
 	}
 }
@@ -36,8 +38,6 @@ func HostTCPServer(){
         os.Exit(1)
 	}
 	
-	defer serverObject.Close()
-
 	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
 
 	tcp.LoadTCPChannelsToMemory()
@@ -46,7 +46,20 @@ func HostTCPServer(){
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")
 
-    for {
+	for i := 0; i < runtime.NumCPU(); i++{
+
+		go acceptSocket(serverObject)
+
+	}
+
+    
+}
+
+func acceptSocket(serverObject net.Listener){
+
+	defer serverObject.Close()
+	
+	for {
 
 		conn, err := serverObject.Accept()
 		
@@ -62,8 +75,6 @@ func HostTCPServer(){
         tcpObject.SetNoDelay(true)
         tcpObject.SetKeepAlive(true)
 		tcpObject.SetLinger(1)
-		tcpObject.SetReadBuffer(10000)
-		tcpObject.SetWriteBuffer(10000)
 		tcpObject.SetDeadline(time.Now().Add(1000000 * time.Second))
 		tcpObject.SetReadDeadline(time.Now().Add(1000000 * time.Second))
 		tcpObject.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
@@ -71,4 +82,3 @@ func HostTCPServer(){
 		go tcp.HandleRequest(*tcpObject)
 	}
 }
-

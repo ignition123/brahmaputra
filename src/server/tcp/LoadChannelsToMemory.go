@@ -79,12 +79,6 @@ func ReadFile(path string, file os.FileInfo){
 			   bucketData[i] = make(chan *pojo.PacketStruct, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
 			}
 
-			var subscriberChannel = make([]chan *pojo.PacketStruct, worker)
-
-			for i := range subscriberChannel {
-			   subscriberChannel[i] = make(chan *pojo.PacketStruct, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
-			}
-
 			var channelName = channelMap["channelName"].(string)
 
 			var channelObject = &pojo.ChannelStruct{
@@ -94,7 +88,6 @@ func ReadFile(path string, file os.FileInfo){
 				WriteCallback:make(chan bool, 1),
 				SyncChan: make(chan bool, 1),
 				ChannelStorageType: channelMap["channelStorageType"].(string),
-				SubscriberChannel: subscriberChannel,
 				Group: make(map[string][]*pojo.PacketStruct),
 				SubscriberList: make(map[string]bool),
 			}
@@ -164,7 +157,7 @@ func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap
 		var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
 		f, err := os.OpenFile(filePath,
-			os.O_APPEND, os.ModeAppend)
+			os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 
 		if err != nil {
 			ChannelList.WriteLog(err.Error())

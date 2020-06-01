@@ -30,66 +30,11 @@ func (e *ChannelMethods) GetChannelData(){
 
 	    go e.runChannel(channelName)
 
-	    go e.subscriberChannel(channelName)
-
 	}
 
 	ChannelMethod.Unlock()
 }
 
-func (e *ChannelMethods) subscriberChannel(channelName string){
-
-	defer ChannelList.Recover()
-
-	for index := range ChannelList.TCPStorage[channelName].SubscriberChannel{
-
-		time.Sleep(100)
-
-		go func(index int, SubChannel chan *pojo.PacketStruct, channelName string){
-
-			defer ChannelList.Recover()
-
-			defer close(SubChannel)
-
-			ackChan := make(chan bool, 1)
-			msgChan := make(chan bool, 1)
-
-			for{
-
-				select {
-
-					case message, ok := <-SubChannel:	
-
-						if ok{
-
-							go func(msgChan chan bool){
-
-								go e.sendMessageToClient(*message, msgChan)
-
-								<-msgChan
-
-							}(msgChan)
-
-							go func(ackChan chan bool){
-
-								go e.SendAck(*message, ackChan)
-
-								<-ackChan
-
-							}(ackChan)
-	
-						}
-
-						break
-				}
-
-			}
-
-
-		}(index, ChannelList.TCPStorage[channelName].SubscriberChannel[index], channelName)
-	}
-
-}
 
 func (e *ChannelMethods) runChannel(channelName string){
 
@@ -105,7 +50,9 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 			defer close(BucketData)
 
-			var cbChan = make(chan bool, 1)
+			var msgChan = make(chan bool, 1)
+
+			defer close(msgChan)
 
 			for{
 
@@ -119,23 +66,10 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 							if(channelName == subchannelName && channelName != "heart_beat"){
 
-								if message.ProducerAck{
+								go e.sendMessageToClient(*message, msgChan)
 
-									go func(cbChan chan bool){
+								<-msgChan
 
-										go e.SendAck(*message, cbChan)
-
-										<-cbChan
-
-									}(cbChan)
-
-								}
-
-								go func(message *pojo.PacketStruct){
-
-									ChannelList.TCPStorage[channelName].SubscriberChannel[index] <- message
-
-								}(message)
 							}
 						}		
 					break
@@ -162,7 +96,7 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 		byteBuffer.PutLong(totalByteLen) // total packet length
 
-		byteBuffer.PutByte(byte(0)) // status code
+		byteBuffer.PutByte(byte(2)) // status code
 
 		byteBuffer.PutShort(message.MessageTypeLen) // total message type length
 
@@ -732,7 +666,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				byteSendBuffer.PutLong(newTotalByteLen) // total packet length
 
-				byteSendBuffer.PutByte(byte(0)) // status code
+				byteSendBuffer.PutByte(byte(2)) // status code
 
 				byteSendBuffer.PutShort(messageTypeLen) // total message type length
 
@@ -972,7 +906,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				byteSendBuffer.PutLong(newTotalByteLen) // total packet length
 
-				byteSendBuffer.PutByte(byte(0)) // status code
+				byteSendBuffer.PutByte(byte(2)) // status code
 
 				byteSendBuffer.PutShort(messageTypeLen) // total message type length
 
@@ -1102,7 +1036,7 @@ func (e *ChannelMethods) SendAck(messageMap pojo.PacketStruct, ackChan chan bool
 
 	byteBuffer.PutLong(len(messageMap.Producer_id))
 
-	byteBuffer.PutByte(byte(0)) // status code
+	byteBuffer.PutByte(byte(2)) // status code
 
 	byteBuffer.Put([]byte(messageMap.Producer_id))
 

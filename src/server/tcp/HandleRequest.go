@@ -7,6 +7,7 @@ import (
 	"ChannelList"
 	_"sync"
 	_"log"
+	"io"
 )
 
 var closeTCP = false
@@ -44,7 +45,7 @@ func HandleRequest(conn net.TCPConn) {
 	var groupMapName = ""
 
 	for {
-
+		
 		if closeTCP{
 			go ChannelList.WriteLog("Closing all current sockets...")
 			conn.Close()
@@ -53,7 +54,23 @@ func HandleRequest(conn net.TCPConn) {
 
 		sizeBuf := make([]byte, 8)
 
-		conn.Read(sizeBuf)
+		_, err := conn.Read(sizeBuf)
+
+		if err == io.EOF{
+			
+			go ChannelList.WriteLog("Connection closed...")
+
+			break
+
+		}
+
+		if err != nil{
+
+			go ChannelList.WriteLog(err.Error())
+
+			break
+
+		}
 
 		packetSize := binary.BigEndian.Uint64(sizeBuf)
 
@@ -63,11 +80,28 @@ func HandleRequest(conn net.TCPConn) {
 
 		completePacket := make([]byte, packetSize)
 
-		conn.Read(completePacket)
+		_, err = conn.Read(completePacket)
+
+		if err == io.EOF{
+
+			go ChannelList.WriteLog("Connection closed...")
+			
+			break
+
+		}
+
+		if err != nil{
+
+			go ChannelList.WriteLog(err.Error())
+
+			break
+
+		}
 
 		if allZero(completePacket) {
 
 			go ChannelList.WriteLog("Connection closed...")
+			
 			break
 		}
 

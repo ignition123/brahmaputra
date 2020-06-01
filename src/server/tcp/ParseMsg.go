@@ -24,10 +24,12 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	byteBuffer.Wrap(completePacket)
 
-	var messageTypeLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+	var messageTypeByte = byteBuffer.GetShort() // 2
+	var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
 	var messageType = string(byteBuffer.Get(messageTypeLen)) // messageTypeLen
 
-	var channelNameLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+	var channelNameByte = byteBuffer.GetShort() // 2
+	var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
 	var channelName = string(byteBuffer.Get(channelNameLen)) // channelNameLen
 
 	*channelMapName = channelName
@@ -59,10 +61,12 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	}else if messageType == "publish"{
 
-		var producer_idLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+		var producer_idByte = byteBuffer.GetShort()
+		var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
 		var producer_id = string(byteBuffer.Get(producer_idLen))
 
-		var agentNameLen = int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+		var agentNameByte = byteBuffer.GetShort()
+		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
 		var agentName = string(byteBuffer.Get(agentNameLen))
 
 		var ackStatusByte = byteBuffer.GetByte()
@@ -138,16 +142,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 					}
 				}
 
-				if packetObject.ProducerAck{
-
-					go ChannelMethod.SendAck(*packetObject, ChannelList.TCPStorage[channelName].WriteCallback)
-
-					<-ChannelList.TCPStorage[channelName].WriteCallback
-
-				}
-
-				parseChan <- true
-
 			}else{
 
 				ThroughClientError(conn, PERSISTENT_CONFIG_ERROR)
@@ -168,6 +162,14 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 			ChannelList.TCPStorage[channelName].BucketData[*counterRequest] <- packetObject
 
 			*counterRequest += 1
+		}
+
+		if packetObject.ProducerAck{
+
+			go ChannelMethod.SendAck(*packetObject, ChannelList.TCPStorage[channelName].WriteCallback)
+
+			<-ChannelList.TCPStorage[channelName].WriteCallback
+
 		}
 
 		parseChan <- true
@@ -194,17 +196,20 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		// bytes for start from flag
 
-		var startFromLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
+		var startFromByte = byteBuffer.GetShort() //2
+		var startFromLen = binary.BigEndian.Uint16(startFromByte)
 		var start_from = string(byteBuffer.Get(int(startFromLen))) // startFromLen
 
 		// bytes for subscriber name 
 
-		var subscriberNameLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
+		var subscriberNameByte = byteBuffer.GetShort() //2
+		var subscriberNameLen = binary.BigEndian.Uint16(subscriberNameByte)
 		var subscriberName = string(byteBuffer.Get(int(subscriberNameLen)))
 
 		// bytes for subscriber group name
 
-		var subscriberTypeLen = binary.BigEndian.Uint16(byteBuffer.GetShort())
+		var subscriberTypeByte = byteBuffer.GetShort() //2
+		var subscriberTypeLen = binary.BigEndian.Uint16(subscriberTypeByte)
 
 		packetObject.StartFromLen = int(startFromLen)
 
@@ -294,8 +299,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from)
 				}
 
-				parseChan <- true
-
 			}else{
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
@@ -324,8 +327,6 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				go SubscribeChannel(conn, *packetObject, start_from)
 
-				parseChan <- true
-
 			}
 
 		}else{
@@ -335,8 +336,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			AppendNewClientInmemory(channelName, *subscriberMapName, packetObject)
 
-			parseChan <- true
 		}
+		
+		parseChan <- true 
 
 	}else{
 
@@ -393,4 +395,3 @@ func WriteData(packet pojo.PacketStruct, writeCount int){
 
 	ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- true
 }
-

@@ -66,7 +66,7 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 	var agentNameLen = len(e.AgentName)
 
 	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + totalBytePacket
-	var totalByteLen = 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1 + len(bodyBB)
+	var totalByteLen = 2 + messageTypeLen + 2 + channelNameLen  + 2 + producer_idLen + 2 + agentNameLen + 1 + len(bodyBB)     
 	 
 	byteBuffer.PutLong(totalByteLen)
 
@@ -92,7 +92,7 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 		
 	}else{
 
-		byteBuffer.PutByte(byte(0))
+		byteBuffer.PutByte(byte(2))
 	}
 
 	byteBuffer.Put(bodyBB)
@@ -104,7 +104,7 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 		e.TransactionList[producer_id] = byteArrayResp	
 
 	}
-
+	
 	_, err := conn.Write(byteArrayResp)
 
 	if err != nil {

@@ -191,8 +191,6 @@ func (e *CreateProperties) createUDPConnection() net.Conn{
 		return nil
 	}
 
-	conn.(*net.UDPConn).SetReadBuffer(1000000000)
-	conn.(*net.UDPConn).SetWriteBuffer(1000000000)
 	conn.(*net.UDPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
 	conn.(*net.UDPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
 	conn.(*net.UDPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
