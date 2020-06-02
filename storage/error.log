@@ -38473,3 +38473,1503 @@ write tcp 127.0.0.1:8100->127.0.0.1:49298: use of closed network connection
 ############################### 
 2020-06-01 13:34:12.8940299 +0530 IST m=+23.084008701
 write tcp 127.0.0.1:8100->127.0.0.1:49298: use of closed network connection
+############################### 
+2020-06-01 18:16:02.3851967 +0530 IST m=+1.007305301
+Loading log files...
+############################### 
+2020-06-01 18:16:02.3861947 +0530 IST m=+1.008303301
+Starting UDP server...
+############################### 
+2020-06-01 18:16:02.387191 +0530 IST m=+1.009299601
+Loading log files...
+############################### 
+2020-06-01 18:16:02.387191 +0530 IST m=+1.009299601
+Starting TCP server...
+############################### 
+2020-06-01 18:17:03.1223316 +0530 IST m=+61.744440201
+read tcp 127.0.0.1:8100->127.0.0.1:56315: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.124326 +0530 IST m=+61.746434601
+read tcp 127.0.0.1:8100->127.0.0.1:56316: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1263216 +0530 IST m=+61.748430201
+read tcp 127.0.0.1:8100->127.0.0.1:56317: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1283159 +0530 IST m=+61.750424501
+read tcp 127.0.0.1:8100->127.0.0.1:56318: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1303104 +0530 IST m=+61.752419001
+read tcp 127.0.0.1:8100->127.0.0.1:56319: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1323053 +0530 IST m=+61.754413901
+read tcp 127.0.0.1:8100->127.0.0.1:56320: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1352971 +0530 IST m=+61.757405701
+read tcp 127.0.0.1:8100->127.0.0.1:56321: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1382878 +0530 IST m=+61.760396401
+read tcp 127.0.0.1:8100->127.0.0.1:56322: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1402822 +0530 IST m=+61.762390801
+read tcp 127.0.0.1:8100->127.0.0.1:56323: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:03.1422768 +0530 IST m=+61.764385401
+read tcp 127.0.0.1:8100->127.0.0.1:56324: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:24.5888786 +0530 IST m=+83.210987201
+read tcp 127.0.0.1:8100->127.0.0.1:56355: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2583823 +0530 IST m=+87.880490901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2593807 +0530 IST m=+87.881489301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2623725 +0530 IST m=+87.884481101
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2653629 +0530 IST m=+87.887471501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2653629 +0530 IST m=+87.887471501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2663603 +0530 IST m=+87.888468901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2683576 +0530 IST m=+87.890466201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2693533 +0530 IST m=+87.891461901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2773336 +0530 IST m=+87.899442201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2773336 +0530 IST m=+87.899442201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2793264 +0530 IST m=+87.901435001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2823187 +0530 IST m=+87.904427301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2853154 +0530 IST m=+87.907424001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2892993 +0530 IST m=+87.911407901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2942868 +0530 IST m=+87.916395401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2952824 +0530 IST m=+87.917391001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2962842 +0530 IST m=+87.918392801
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.2972798 +0530 IST m=+87.919388401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3042609 +0530 IST m=+87.926369501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3042609 +0530 IST m=+87.926369501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3092458 +0530 IST m=+87.931354401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3112432 +0530 IST m=+87.933351801
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3122373 +0530 IST m=+87.934345901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3182223 +0530 IST m=+87.940330901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3192186 +0530 IST m=+87.941327201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3192186 +0530 IST m=+87.941327201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3252047 +0530 IST m=+87.947313301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3301909 +0530 IST m=+87.952299501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3331833 +0530 IST m=+87.955291901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3341784 +0530 IST m=+87.956287001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3351761 +0530 IST m=+87.957284701
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.339166 +0530 IST m=+87.961274601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3481425 +0530 IST m=+87.970251101
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3491398 +0530 IST m=+87.971248401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3501363 +0530 IST m=+87.972244901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3511334 +0530 IST m=+87.973242001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3551248 +0530 IST m=+87.977233401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.361109 +0530 IST m=+87.983217601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.365096 +0530 IST m=+87.987204601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.365096 +0530 IST m=+87.987204601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3660942 +0530 IST m=+87.988202801
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.371082 +0530 IST m=+87.993190601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3790788 +0530 IST m=+88.001187401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3800568 +0530 IST m=+88.002165401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3800568 +0530 IST m=+88.002165401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3860409 +0530 IST m=+88.008149501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.391027 +0530 IST m=+88.013135601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.39402 +0530 IST m=+88.016128601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3950169 +0530 IST m=+88.017125501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.3960129 +0530 IST m=+88.018121501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4020031 +0530 IST m=+88.024111701
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4059863 +0530 IST m=+88.028094901
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4069849 +0530 IST m=+88.029093501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4079819 +0530 IST m=+88.030090501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4099817 +0530 IST m=+88.032090301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4109732 +0530 IST m=+88.033081801
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4119707 +0530 IST m=+88.034079301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4159612 +0530 IST m=+88.038069801
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4249367 +0530 IST m=+88.047045301
+read tcp 127.0.0.1:8100->127.0.0.1:56371: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.425935 +0530 IST m=+88.048043601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4279287 +0530 IST m=+88.050037301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4289247 +0530 IST m=+88.051033301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4329146 +0530 IST m=+88.055023201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4359069 +0530 IST m=+88.058015501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4359069 +0530 IST m=+88.058015501
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4369044 +0530 IST m=+88.059013001
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4379008 +0530 IST m=+88.060009401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4379008 +0530 IST m=+88.060009401
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4388991 +0530 IST m=+88.061007701
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.439896 +0530 IST m=+88.062004601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4408926 +0530 IST m=+88.063001201
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4498697 +0530 IST m=+88.071978301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.4498697 +0530 IST m=+88.071978301
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:29.450867 +0530 IST m=+88.072975601
+write tcp 127.0.0.1:8100->127.0.0.1:56371: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:34.1363265 +0530 IST m=+92.758435101
+read tcp 127.0.0.1:8100->127.0.0.1:56434: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0122768 +0530 IST m=+97.634385401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0132735 +0530 IST m=+97.635382101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0162677 +0530 IST m=+97.638376301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0222518 +0530 IST m=+97.644360401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0232485 +0530 IST m=+97.645357101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0282337 +0530 IST m=+97.650342301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0292317 +0530 IST m=+97.651340301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0302289 +0530 IST m=+97.652337501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0302289 +0530 IST m=+97.652337501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.031226 +0530 IST m=+97.653334601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0322247 +0530 IST m=+97.654333301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0322247 +0530 IST m=+97.654333301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0343109 +0530 IST m=+97.656419501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0352178 +0530 IST m=+97.657326401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0352178 +0530 IST m=+97.657326401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0362161 +0530 IST m=+97.658324701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0461872 +0530 IST m=+97.668295801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0471902 +0530 IST m=+97.669298801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0551629 +0530 IST m=+97.677271501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0611459 +0530 IST m=+97.683254501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0621452 +0530 IST m=+97.684253801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0631422 +0530 IST m=+97.685250801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0651456 +0530 IST m=+97.687254201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0661342 +0530 IST m=+97.688242801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0671321 +0530 IST m=+97.689240701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0721172 +0530 IST m=+97.694225801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0860796 +0530 IST m=+97.708188201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0860796 +0530 IST m=+97.708188201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0870766 +0530 IST m=+97.709185201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.0930659 +0530 IST m=+97.715174501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1000418 +0530 IST m=+97.722150401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1010392 +0530 IST m=+97.723147801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1020365 +0530 IST m=+97.724145101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1020365 +0530 IST m=+97.724145101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.103036 +0530 IST m=+97.725144601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1040307 +0530 IST m=+97.726139301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1080211 +0530 IST m=+97.730129701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.110046 +0530 IST m=+97.732154601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.110046 +0530 IST m=+97.732154601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1110131 +0530 IST m=+97.733121701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1120094 +0530 IST m=+97.734118001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1179939 +0530 IST m=+97.740102501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1259723 +0530 IST m=+97.748080901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1269741 +0530 IST m=+97.749082701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1279666 +0530 IST m=+97.750075201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1289652 +0530 IST m=+97.751073801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1309621 +0530 IST m=+97.753070701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1349486 +0530 IST m=+97.757057201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1359451 +0530 IST m=+97.758053701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1369422 +0530 IST m=+97.759050801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1379608 +0530 IST m=+97.760069401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1379608 +0530 IST m=+97.760069401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1389377 +0530 IST m=+97.761046301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1429283 +0530 IST m=+97.765036901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1509132 +0530 IST m=+97.773021801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1529012 +0530 IST m=+97.775009801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1529012 +0530 IST m=+97.775009801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1578879 +0530 IST m=+97.779996501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1628762 +0530 IST m=+97.784984801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.16487 +0530 IST m=+97.786978601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1658761 +0530 IST m=+97.787984701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1668647 +0530 IST m=+97.788973301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1668647 +0530 IST m=+97.788973301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1679888 +0530 IST m=+97.790097401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1688573 +0530 IST m=+97.790965901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.169856 +0530 IST m=+97.791964601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.169856 +0530 IST m=+97.791964601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1708519 +0530 IST m=+97.792960501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.174841 +0530 IST m=+97.796949601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1758385 +0530 IST m=+97.797947101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1778366 +0530 IST m=+97.799945201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1778366 +0530 IST m=+97.799945201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1838202 +0530 IST m=+97.805928801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1888082 +0530 IST m=+97.810916801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1927933 +0530 IST m=+97.814901901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1927933 +0530 IST m=+97.814901901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.1977821 +0530 IST m=+97.819890701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2047679 +0530 IST m=+97.826876501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2057585 +0530 IST m=+97.827867101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2067557 +0530 IST m=+97.828864301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2117473 +0530 IST m=+97.833855901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2187315 +0530 IST m=+97.840840101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2207202 +0530 IST m=+97.842828801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2217158 +0530 IST m=+97.843824401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2257073 +0530 IST m=+97.847815901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2327018 +0530 IST m=+97.854810401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.234681 +0530 IST m=+97.856789601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2356812 +0530 IST m=+97.857789801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2356812 +0530 IST m=+97.857789801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.236677 +0530 IST m=+97.858785601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.236677 +0530 IST m=+97.858785601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2376731 +0530 IST m=+97.859781701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2416619 +0530 IST m=+97.863770501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.243657 +0530 IST m=+97.865765601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2446555 +0530 IST m=+97.866764101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2456535 +0530 IST m=+97.867762101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2496425 +0530 IST m=+97.871751101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2556331 +0530 IST m=+97.877741701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2586173 +0530 IST m=+97.880725901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2596162 +0530 IST m=+97.881724801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2685933 +0530 IST m=+97.890701901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2695896 +0530 IST m=+97.891698201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2715844 +0530 IST m=+97.893693001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2745832 +0530 IST m=+97.896691801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2756298 +0530 IST m=+97.897738401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2765692 +0530 IST m=+97.898677801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2835514 +0530 IST m=+97.905660001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2845484 +0530 IST m=+97.906657001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.286544 +0530 IST m=+97.908652601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2885371 +0530 IST m=+97.910645701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2885371 +0530 IST m=+97.910645701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2905486 +0530 IST m=+97.912657201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.2925278 +0530 IST m=+97.914636401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.297517 +0530 IST m=+97.919625601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.300506 +0530 IST m=+97.922614601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3015034 +0530 IST m=+97.923612001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3025014 +0530 IST m=+97.924610001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3034992 +0530 IST m=+97.925607801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3055014 +0530 IST m=+97.927610001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3094808 +0530 IST m=+97.931589401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3144676 +0530 IST m=+97.936576201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3154678 +0530 IST m=+97.937576401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3164696 +0530 IST m=+97.938578201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3174607 +0530 IST m=+97.939569301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3214506 +0530 IST m=+97.943559201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3224467 +0530 IST m=+97.944555301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3284327 +0530 IST m=+97.950541301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.329429 +0530 IST m=+97.951537601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.329429 +0530 IST m=+97.951537601
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3314257 +0530 IST m=+97.953534301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3433916 +0530 IST m=+97.965500201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3453858 +0530 IST m=+97.967494401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3513767 +0530 IST m=+97.973485301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3524504 +0530 IST m=+97.974559001
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3533645 +0530 IST m=+97.975473101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3583513 +0530 IST m=+97.980459901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3683258 +0530 IST m=+97.990434401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3693228 +0530 IST m=+97.991431401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3693228 +0530 IST m=+97.991431401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3723153 +0530 IST m=+97.994423901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3772997 +0530 IST m=+97.999408301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3772997 +0530 IST m=+97.999408301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3782989 +0530 IST m=+98.000407501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3792948 +0530 IST m=+98.001403401
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3852853 +0530 IST m=+98.007393901
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3932596 +0530 IST m=+98.015368201
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3952551 +0530 IST m=+98.017363701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.3972471 +0530 IST m=+98.019355701
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4072209 +0530 IST m=+98.029329501
+read tcp 127.0.0.1:8100->127.0.0.1:56443: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4082175 +0530 IST m=+98.030326101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4093087 +0530 IST m=+98.031417301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4112139 +0530 IST m=+98.033322501
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4132035 +0530 IST m=+98.035312101
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4142012 +0530 IST m=+98.036309801
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:17:39.4151987 +0530 IST m=+98.037307301
+write tcp 127.0.0.1:8100->127.0.0.1:56443: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:35.153011 +0530 IST m=+153.775119601
+read tcp 127.0.0.1:8100->127.0.0.1:56448: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:35.8631183 +0530 IST m=+154.485226901
+read tcp 127.0.0.1:8100->127.0.0.1:56455: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5243119 +0530 IST m=+158.146420501
+read tcp 127.0.0.1:8100->127.0.0.1:56401: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5292989 +0530 IST m=+158.151407501
+read tcp 127.0.0.1:8100->127.0.0.1:56402: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5332893 +0530 IST m=+158.155397901
+read tcp 127.0.0.1:8100->127.0.0.1:56403: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5382744 +0530 IST m=+158.160383001
+read tcp 127.0.0.1:8100->127.0.0.1:56404: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.543262 +0530 IST m=+158.165370601
+read tcp 127.0.0.1:8100->127.0.0.1:56405: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.55124 +0530 IST m=+158.173348601
+read tcp 127.0.0.1:8100->127.0.0.1:56406: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5642068 +0530 IST m=+158.186315401
+read tcp 127.0.0.1:8100->127.0.0.1:56407: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5791658 +0530 IST m=+158.201274401
+read tcp 127.0.0.1:8100->127.0.0.1:56408: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.5931311 +0530 IST m=+158.215239701
+read tcp 127.0.0.1:8100->127.0.0.1:56409: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:18:39.6090846 +0530 IST m=+158.231193201
+read tcp 127.0.0.1:8100->127.0.0.1:56410: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:03.274147 +0530 IST m=+241.896255601
+read tcp 127.0.0.1:8100->127.0.0.1:56520: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:03.955323 +0530 IST m=+242.577431601
+read tcp 127.0.0.1:8100->127.0.0.1:56523: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0334385 +0530 IST m=+243.655547101
+read tcp 127.0.0.1:8100->127.0.0.1:56525: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0374287 +0530 IST m=+243.659537301
+read tcp 127.0.0.1:8100->127.0.0.1:56526: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0414176 +0530 IST m=+243.663526201
+read tcp 127.0.0.1:8100->127.0.0.1:56527: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0454076 +0530 IST m=+243.667516201
+read tcp 127.0.0.1:8100->127.0.0.1:56528: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0503934 +0530 IST m=+243.672502001
+read tcp 127.0.0.1:8100->127.0.0.1:56529: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0573748 +0530 IST m=+243.679483401
+read tcp 127.0.0.1:8100->127.0.0.1:56530: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0633598 +0530 IST m=+243.685468401
+read tcp 127.0.0.1:8100->127.0.0.1:56531: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0723347 +0530 IST m=+243.694443301
+read tcp 127.0.0.1:8100->127.0.0.1:56532: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0803129 +0530 IST m=+243.702421501
+read tcp 127.0.0.1:8100->127.0.0.1:56533: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-01 18:20:05.0872974 +0530 IST m=+243.709406001
+read tcp 127.0.0.1:8100->127.0.0.1:56534: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:16.8594814 +0530 IST m=+1.090107701
+Loading log files...
+############################### 
+2020-06-02 01:25:16.8933996 +0530 IST m=+1.124025901
+Starting TCP server...
+############################### 
+2020-06-02 01:25:16.8943627 +0530 IST m=+1.124989001
+Loading log files...
+############################### 
+2020-06-02 01:25:16.8993493 +0530 IST m=+1.129975601
+Starting UDP server...
+############################### 
+2020-06-02 01:25:40.5550399 +0530 IST m=+24.785666201
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5560371 +0530 IST m=+24.786663401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5620207 +0530 IST m=+24.792647001
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5650141 +0530 IST m=+24.795640401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5660108 +0530 IST m=+24.796637101
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5699995 +0530 IST m=+24.800625801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5949321 +0530 IST m=+24.825558401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5959299 +0530 IST m=+24.826556201
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5979246 +0530 IST m=+24.828550901
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5989223 +0530 IST m=+24.829548601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.5999185 +0530 IST m=+24.830544801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6009163 +0530 IST m=+24.831542601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6049065 +0530 IST m=+24.835532801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6078983 +0530 IST m=+24.838524601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6088947 +0530 IST m=+24.839521001
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6098921 +0530 IST m=+24.840518401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6108903 +0530 IST m=+24.841516601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6118875 +0530 IST m=+24.842513801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6128862 +0530 IST m=+24.843512501
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6178707 +0530 IST m=+24.848497001
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6198649 +0530 IST m=+24.850491201
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6218604 +0530 IST m=+24.852486701
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6228583 +0530 IST m=+24.853484601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6228583 +0530 IST m=+24.853484601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6238564 +0530 IST m=+24.854482701
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6248521 +0530 IST m=+24.855478401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6258506 +0530 IST m=+24.856476901
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6318338 +0530 IST m=+24.862460101
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6338282 +0530 IST m=+24.864454501
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6348261 +0530 IST m=+24.865452401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6358249 +0530 IST m=+24.866451201
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6368203 +0530 IST m=+24.867446601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6368203 +0530 IST m=+24.867446601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6378186 +0530 IST m=+24.868444901
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6388147 +0530 IST m=+24.869441001
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6388147 +0530 IST m=+24.869441001
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6448323 +0530 IST m=+24.875458601
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6457974 +0530 IST m=+24.876423701
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6477905 +0530 IST m=+24.878416801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6477905 +0530 IST m=+24.878416801
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6487884 +0530 IST m=+24.879414701
+read tcp 127.0.0.1:8100->127.0.0.1:63498: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6497866 +0530 IST m=+24.880412901
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:40.6507841 +0530 IST m=+24.881410401
+write tcp 127.0.0.1:8100->127.0.0.1:63498: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.944292 +0530 IST m=+29.174918301
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9452904 +0530 IST m=+29.175916701
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.952271 +0530 IST m=+29.182897301
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9542659 +0530 IST m=+29.184892201
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9562612 +0530 IST m=+29.186887501
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9632411 +0530 IST m=+29.193867401
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.964239 +0530 IST m=+29.194865301
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9652364 +0530 IST m=+29.195862701
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9702242 +0530 IST m=+29.200850501
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9712203 +0530 IST m=+29.201846601
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9722176 +0530 IST m=+29.202843901
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.974212 +0530 IST m=+29.204838301
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9752092 +0530 IST m=+29.205835501
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9752092 +0530 IST m=+29.205835501
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9772046 +0530 IST m=+29.207830901
+write tcp 127.0.0.1:8100->127.0.0.1:63495: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:44.9782016 +0530 IST m=+29.208827901
+read tcp 127.0.0.1:8100->127.0.0.1:63495: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1746174 +0530 IST m=+35.405243701
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1766136 +0530 IST m=+35.407239901
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1796046 +0530 IST m=+35.410230901
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1845942 +0530 IST m=+35.415220501
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1865857 +0530 IST m=+35.417212001
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1895778 +0530 IST m=+35.420204101
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1955639 +0530 IST m=+35.426190201
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.1975555 +0530 IST m=+35.428181801
+read tcp 127.0.0.1:8100->127.0.0.1:63516: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:51.2005481 +0530 IST m=+35.431174401
+write tcp 127.0.0.1:8100->127.0.0.1:63516: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7556801 +0530 IST m=+40.986306401
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7566784 +0530 IST m=+40.987304701
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7586728 +0530 IST m=+40.989299101
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7626618 +0530 IST m=+40.993288101
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7636595 +0530 IST m=+40.994285801
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7656541 +0530 IST m=+40.996280401
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7666519 +0530 IST m=+40.997278201
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7696451 +0530 IST m=+41.000271401
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7726362 +0530 IST m=+41.003262501
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7736327 +0530 IST m=+41.004259001
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7746318 +0530 IST m=+41.005258101
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7756278 +0530 IST m=+41.006254101
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7776217 +0530 IST m=+41.008248001
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7816116 +0530 IST m=+41.012237901
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7865974 +0530 IST m=+41.017223701
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7875953 +0530 IST m=+41.018221601
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7885923 +0530 IST m=+41.019218601
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7896034 +0530 IST m=+41.020229701
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.793579 +0530 IST m=+41.024205301
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7955748 +0530 IST m=+41.026201101
+read tcp 127.0.0.1:8100->127.0.0.1:63520: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:25:56.7965722 +0530 IST m=+41.027198501
+write tcp 127.0.0.1:8100->127.0.0.1:63520: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 01:31:48.1872367 +0530 IST m=+392.417863001
+read tcp 127.0.0.1:8100->127.0.0.1:63502: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.8950785 +0530 IST m=+48193.125705401
+read tcp 127.0.0.1:8100->127.0.0.1:63503: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.8990668 +0530 IST m=+48193.129693701
+read tcp 127.0.0.1:8100->127.0.0.1:63504: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9000754 +0530 IST m=+48193.130702301
+read tcp 127.0.0.1:8100->127.0.0.1:63505: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9010634 +0530 IST m=+48193.131690301
+read tcp 127.0.0.1:8100->127.0.0.1:63506: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9020743 +0530 IST m=+48193.132701201
+read tcp 127.0.0.1:8100->127.0.0.1:63507: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9020743 +0530 IST m=+48193.132701201
+read tcp 127.0.0.1:8100->127.0.0.1:63508: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9030574 +0530 IST m=+48193.133684301
+read tcp 127.0.0.1:8100->127.0.0.1:63509: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9030574 +0530 IST m=+48193.133684301
+read tcp 127.0.0.1:8100->127.0.0.1:63510: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9040568 +0530 IST m=+48193.134683701
+read tcp 127.0.0.1:8100->127.0.0.1:63511: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9050525 +0530 IST m=+48193.135679401
+read tcp 127.0.0.1:8100->127.0.0.1:63539: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:48:28.9100382 +0530 IST m=+48193.140665101
+read tcp 127.0.0.1:8100->127.0.0.1:63534: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:49:03.8123956 +0530 IST m=+1.042209701
+Loading log files...
+############################### 
+2020-06-02 14:49:03.8143906 +0530 IST m=+1.044204701
+Starting TCP server...
+############################### 
+2020-06-02 14:49:03.8263765 +0530 IST m=+1.056190601
+Loading log files...
+############################### 
+2020-06-02 14:49:03.8313453 +0530 IST m=+1.061159401
+Starting UDP server...
+############################### 
+2020-06-02 14:55:29.9647967 +0530 IST m=+1.011309901
+Loading log files...
+############################### 
+2020-06-02 14:55:29.9657762 +0530 IST m=+1.012289401
+Starting UDP server...
+############################### 
+2020-06-02 14:55:29.9657762 +0530 IST m=+1.012289401
+Loading log files...
+############################### 
+2020-06-02 14:55:29.9667928 +0530 IST m=+1.013306001
+Starting TCP server...
+############################### 
+2020-06-02 14:58:29.0665881 +0530 IST m=+180.113101301
+read tcp 127.0.0.1:8100->127.0.0.1:57040: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:58:30.6423709 +0530 IST m=+181.688884101
+read tcp 127.0.0.1:8100->127.0.0.1:57061: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 14:58:42.500633 +0530 IST m=+1.011293201
+Loading log files...
+############################### 
+2020-06-02 14:58:42.500633 +0530 IST m=+1.011293201
+Starting UDP server...
+############################### 
+2020-06-02 14:58:42.5026426 +0530 IST m=+1.013302801
+Loading log files...
+############################### 
+2020-06-02 14:58:42.5036258 +0530 IST m=+1.014286001
+Starting TCP server...
+############################### 
+2020-06-02 14:59:53.490639 +0530 IST m=+72.001299201
+read tcp 127.0.0.1:8100->127.0.0.1:57149: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:00:50.6330697 +0530 IST m=+1.009299101
+Loading log files...
+############################### 
+2020-06-02 15:00:50.6340682 +0530 IST m=+1.010297601
+Starting UDP server...
+############################### 
+2020-06-02 15:00:50.6350654 +0530 IST m=+1.011294801
+Loading log files...
+############################### 
+2020-06-02 15:00:50.6360763 +0530 IST m=+1.012305701
+Starting TCP server...
+############################### 
+2020-06-02 15:02:17.1380675 +0530 IST m=+1.010295201
+Loading log files...
+############################### 
+2020-06-02 15:02:17.1390656 +0530 IST m=+1.011293301
+Starting UDP server...
+############################### 
+2020-06-02 15:02:17.140062 +0530 IST m=+1.012289701
+Loading log files...
+############################### 
+2020-06-02 15:02:17.1410612 +0530 IST m=+1.013288901
+Starting TCP server...
+############################### 
+2020-06-02 15:03:09.668479 +0530 IST m=+1.010297401
+Loading log files...
+############################### 
+2020-06-02 15:03:09.6694765 +0530 IST m=+1.011294901
+Starting UDP server...
+############################### 
+2020-06-02 15:03:09.6694765 +0530 IST m=+1.011294901
+Loading log files...
+############################### 
+2020-06-02 15:03:09.6714714 +0530 IST m=+1.013289801
+Starting TCP server...
+############################### 
+2020-06-02 15:03:18.9356854 +0530 IST m=+1.010303401
+Loading log files...
+############################### 
+2020-06-02 15:03:18.9356854 +0530 IST m=+1.010303401
+Starting UDP server...
+############################### 
+2020-06-02 15:03:18.9366878 +0530 IST m=+1.011305801
+Loading log files...
+############################### 
+2020-06-02 15:03:18.9386672 +0530 IST m=+1.013285201
+Starting TCP server...
+############################### 
+2020-06-02 15:03:29.3358421 +0530 IST m=+11.410460101
+read tcp 127.0.0.1:8100->127.0.0.1:57476: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3368391 +0530 IST m=+11.411457101
+write tcp 127.0.0.1:8100->127.0.0.1:57475: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3398312 +0530 IST m=+11.414449201
+read tcp 127.0.0.1:8100->127.0.0.1:57477: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3418255 +0530 IST m=+11.416443501
+read tcp 127.0.0.1:8100->127.0.0.1:57478: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3428234 +0530 IST m=+11.417441401
+read tcp 127.0.0.1:8100->127.0.0.1:57480: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3438204 +0530 IST m=+11.418438401
+write tcp 127.0.0.1:8100->127.0.0.1:57479: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3458147 +0530 IST m=+11.420432701
+read tcp 127.0.0.1:8100->127.0.0.1:57479: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3478121 +0530 IST m=+11.422430101
+read tcp 127.0.0.1:8100->127.0.0.1:57481: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3528034 +0530 IST m=+11.427421401
+read tcp 127.0.0.1:8100->127.0.0.1:57475: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3547995 +0530 IST m=+11.429417501
+write tcp 127.0.0.1:8100->127.0.0.1:57483: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3557886 +0530 IST m=+11.430406601
+read tcp 127.0.0.1:8100->127.0.0.1:57483: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3567868 +0530 IST m=+11.431404801
+write tcp 127.0.0.1:8100->127.0.0.1:57482: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3587827 +0530 IST m=+11.433400701
+read tcp 127.0.0.1:8100->127.0.0.1:57482: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3597776 +0530 IST m=+11.434395601
+write tcp 127.0.0.1:8100->127.0.0.1:57484: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:29.3617742 +0530 IST m=+11.436392201
+read tcp 127.0.0.1:8100->127.0.0.1:57484: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:03:30.4638234 +0530 IST m=+12.538441401
+read tcp 127.0.0.1:8100->127.0.0.1:57469: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:04:55.5810183 +0530 IST m=+1.016280001
+Loading log files...
+############################### 
+2020-06-02 15:04:55.5860049 +0530 IST m=+1.021266601
+Starting UDP server...
+############################### 
+2020-06-02 15:04:55.5879995 +0530 IST m=+1.023261201
+Loading log files...
+############################### 
+2020-06-02 15:04:55.5890597 +0530 IST m=+1.024321401
+Starting TCP server...
+############################### 
+2020-06-02 15:06:38.4203686 +0530 IST m=+103.855630301
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4213657 +0530 IST m=+103.856627401
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4333352 +0530 IST m=+103.868596901
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.434331 +0530 IST m=+103.869592701
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4443056 +0530 IST m=+103.879567301
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4453014 +0530 IST m=+103.880563101
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4482932 +0530 IST m=+103.883554901
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4492913 +0530 IST m=+103.884553001
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4502886 +0530 IST m=+103.885550301
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4522833 +0530 IST m=+103.887545001
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4532832 +0530 IST m=+103.888544901
+read tcp 127.0.0.1:8100->127.0.0.1:52491: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4542781 +0530 IST m=+103.889539801
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4622569 +0530 IST m=+103.897518601
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4642519 +0530 IST m=+103.899513601
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:38.4652488 +0530 IST m=+103.900510501
+write tcp 127.0.0.1:8100->127.0.0.1:52491: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.0882283 +0530 IST m=+106.523490001
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.090223 +0530 IST m=+106.525484701
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.0932142 +0530 IST m=+106.528475901
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.0962072 +0530 IST m=+106.531468901
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1001954 +0530 IST m=+106.535457101
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1091733 +0530 IST m=+106.544435001
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1111665 +0530 IST m=+106.546428201
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.118148 +0530 IST m=+106.553409701
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1201434 +0530 IST m=+106.555405101
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.124132 +0530 IST m=+106.559393701
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1251312 +0530 IST m=+106.560392901
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1261295 +0530 IST m=+106.561391201
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1281223 +0530 IST m=+106.563384001
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1321114 +0530 IST m=+106.567373101
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1331226 +0530 IST m=+106.568384301
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1360996 +0530 IST m=+106.571361301
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1380946 +0530 IST m=+106.573356301
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1390923 +0530 IST m=+106.574354001
+read tcp 127.0.0.1:8100->127.0.0.1:52579: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:41.1400906 +0530 IST m=+106.575352301
+write tcp 127.0.0.1:8100->127.0.0.1:52579: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:43.904691 +0530 IST m=+109.339952701
+write tcp 127.0.0.1:8100->127.0.0.1:52474: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:43.9056882 +0530 IST m=+109.340949901
+write tcp 127.0.0.1:8100->127.0.0.1:52474: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:43.9086803 +0530 IST m=+109.343942001
+write tcp 127.0.0.1:8100->127.0.0.1:52474: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:43.9116721 +0530 IST m=+109.346933801
+read tcp 127.0.0.1:8100->127.0.0.1:52474: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:44.9818076 +0530 IST m=+110.417069301
+read tcp 127.0.0.1:8100->127.0.0.1:52477: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:44.9937824 +0530 IST m=+110.429044101
+read tcp 127.0.0.1:8100->127.0.0.1:52478: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:44.9947729 +0530 IST m=+110.430034601
+write tcp 127.0.0.1:8100->127.0.0.1:52478: use of closed network connection
+############################### 
+2020-06-02 15:06:45.0007572 +0530 IST m=+110.436018901
+write tcp 127.0.0.1:8100->127.0.0.1:52479: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.003749 +0530 IST m=+110.439010701
+read tcp 127.0.0.1:8100->127.0.0.1:52479: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0117281 +0530 IST m=+110.446989801
+read tcp 127.0.0.1:8100->127.0.0.1:52480: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0226995 +0530 IST m=+110.457961201
+write tcp 127.0.0.1:8100->127.0.0.1:52480: use of closed network connection
+############################### 
+2020-06-02 15:06:45.0276965 +0530 IST m=+110.462958201
+write tcp 127.0.0.1:8100->127.0.0.1:52481: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0316776 +0530 IST m=+110.466939301
+read tcp 127.0.0.1:8100->127.0.0.1:52481: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.036662 +0530 IST m=+110.471923701
+write tcp 127.0.0.1:8100->127.0.0.1:52482: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0416478 +0530 IST m=+110.476909501
+read tcp 127.0.0.1:8100->127.0.0.1:52482: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.064586 +0530 IST m=+110.499847701
+write tcp 127.0.0.1:8100->127.0.0.1:52483: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0665808 +0530 IST m=+110.501842501
+read tcp 127.0.0.1:8100->127.0.0.1:52483: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0805434 +0530 IST m=+110.515805101
+write tcp 127.0.0.1:8100->127.0.0.1:52484: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0825381 +0530 IST m=+110.517799801
+read tcp 127.0.0.1:8100->127.0.0.1:52484: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.0974984 +0530 IST m=+110.532760101
+read tcp 127.0.0.1:8100->127.0.0.1:52485: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.1234286 +0530 IST m=+110.558690301
+write tcp 127.0.0.1:8100->127.0.0.1:52486: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:06:45.1244281 +0530 IST m=+110.559689801
+read tcp 127.0.0.1:8100->127.0.0.1:52486: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:21:03.7245156 +0530 IST m=+1.011277301
+Loading log files...
+############################### 
+2020-06-02 15:21:03.7255098 +0530 IST m=+1.012271501
+Starting TCP server...
+############################### 
+2020-06-02 15:21:03.7265151 +0530 IST m=+1.013276801
+Loading log files...
+############################### 
+2020-06-02 15:21:03.7265151 +0530 IST m=+1.013276801
+Starting UDP server...
+############################### 
+2020-06-02 15:31:24.7031811 +0530 IST m=+1.013286201
+Loading log files...
+############################### 
+2020-06-02 15:31:24.7041775 +0530 IST m=+1.014282601
+Starting UDP server...
+############################### 
+2020-06-02 15:31:24.7041775 +0530 IST m=+1.014282601
+Loading log files...
+############################### 
+2020-06-02 15:31:24.705175 +0530 IST m=+1.015280101
+Starting TCP server...
+############################### 
+2020-06-02 15:31:43.388435 +0530 IST m=+19.698540101
+read tcp 127.0.0.1:8100->127.0.0.1:54317: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:31:48.0310098 +0530 IST m=+24.341114901
+read tcp 127.0.0.1:8100->127.0.0.1:54313: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:31:52.1400124 +0530 IST m=+28.450117501
+read tcp 127.0.0.1:8100->127.0.0.1:54346: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:31:56.6160327 +0530 IST m=+32.926137801
+read tcp 127.0.0.1:8100->127.0.0.1:54354: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:32:01.406254 +0530 IST m=+37.716359101
+read tcp 127.0.0.1:8100->127.0.0.1:54362: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:32:05.6757873 +0530 IST m=+41.985892401
+read tcp 127.0.0.1:8100->127.0.0.1:54339: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:32:10.2106495 +0530 IST m=+46.520754601
+read tcp 127.0.0.1:8100->127.0.0.1:54372: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-02 15:39:09.5939245 +0530 IST m=+1.010297701
+Loading log files...
+############################### 
+2020-06-02 15:39:09.5939245 +0530 IST m=+1.010297701
+Starting TCP server...
+############################### 
+2020-06-02 15:45:11.5234296 +0530 IST m=+1.011292301
+Loading log files...
+############################### 
+2020-06-02 15:45:11.5254246 +0530 IST m=+1.013287301
+Starting TCP server...

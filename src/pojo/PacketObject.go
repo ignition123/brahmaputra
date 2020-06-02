@@ -11,9 +11,7 @@ type PacketStruct struct{
 	MessageType string
 	ChannelNameLen int
 	ChannelName string
-	UDPAddr *net.UDPAddr
 	Conn net.TCPConn
-	UDPConn net.UDPConn
 	Producer_idLen int
 	Producer_id string
 	AgentNameLen int

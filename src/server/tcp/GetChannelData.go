@@ -24,15 +24,10 @@ func (e *ChannelMethods) GetChannelData(){
 
 	defer ChannelList.Recover()
 
-	ChannelMethod.Lock()
-
 	for channelName := range ChannelList.TCPStorage {
 
 	    go e.runChannel(channelName)
-
 	}
-
-	ChannelMethod.Unlock()
 }
 
 
@@ -51,7 +46,6 @@ func (e *ChannelMethods) runChannel(channelName string){
 			defer close(BucketData)
 
 			var msgChan = make(chan bool, 1)
-
 			defer close(msgChan)
 
 			for{
@@ -486,10 +480,12 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 	defer ChannelList.Recover()
 
 	var checkDirectoryChan = make(chan bool, 1)
+	defer close(checkDirectoryChan)
 
 	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
 	var partitionOffsetSubscriber = make(chan int64, 1)
+	defer close(partitionOffsetSubscriber)
 
 	go checkCreateGroupDirectory(channelName, groupName, checkDirectoryChan)
 
@@ -539,7 +535,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 			defer file.Close()
 
 			var sentMsg = make(chan bool, 1)
-
 			defer close(sentMsg)
 
 			var exitLoop = false
@@ -723,10 +718,12 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 	var consumerName = packetObject.ChannelName + packetObject.SubscriberName
 
 	var checkDirectoryChan = make(chan bool, 1)
+	defer close(checkDirectoryChan)
 
 	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
 	var partitionOffsetSubscriber = make(chan int64, 1)
+	defer close(partitionOffsetSubscriber)
 
 	go checkCreateDirectory(conn, packetObject, checkDirectoryChan)
 
@@ -780,7 +777,6 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 			}
 
 			var sentMsg = make(chan bool, 1)
-
 			defer close(sentMsg)
 
 			var exitLoop = false

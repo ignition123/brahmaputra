@@ -12,6 +12,7 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 	defer handlepanic()
 
 	var callbackChan = make(chan string, 1)
+	defer close(callbackChan)
 
 	if e.ConnectionType == "tcp"{
 
@@ -58,46 +59,6 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 		}
 
-	}else if e.ConnectionType == "udp"{
-
-		for{
-
-			sizeBuf := make([]byte, 1024)
-
-			conn.Read(sizeBuf)
-
-			packetSize := binary.BigEndian.Uint64(sizeBuf[:9])
-
-			if packetSize < 0 {
-				continue
-			}
-
-			if allZero(sizeBuf) {
-
-				break
-			}
-
-			var statusBuf = sizeBuf[8:9]
-
-			sizeBuf = sizeBuf[9:(packetSize + 9)]
-
-			if statusBuf[0] == 1{
-
-				panic(string(sizeBuf))
-
-				break
-
-			}
-
-			if e.ReadDelay > 0{
-				time.Sleep(time.Duration(e.ReadDelay) * time.Nanosecond)
-			}
-
-			go e.parseMsg(int64(packetSize), sizeBuf, "sub", callbackChan)
-
-			<-callbackChan
-		}
-
 	}
 
 	go log.Println("Socket disconnected...")
@@ -112,6 +73,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 	defer handlepanic()
 
 	var callbackChan = make(chan string, 1)
+	defer close(callbackChan)
 
 	for {	
 

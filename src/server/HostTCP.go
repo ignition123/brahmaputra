@@ -17,6 +17,8 @@ func HostTCP(configObj pojo.Config){
 
 	ChannelList.ConfigTCPObj = configObj
 
+	tcp.LoadTCPChannelsToMemory()
+	
 	go tcp.ChannelMethod.GetChannelData()
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
@@ -39,9 +41,6 @@ func HostTCPServer(){
 	}
 	
 	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
-
-	tcp.LoadTCPChannelsToMemory()
-
 
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting TCP server...")

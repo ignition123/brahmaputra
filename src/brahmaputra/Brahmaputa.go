@@ -52,9 +52,9 @@ func handlepanic() {
 
 func (e *CreateProperties) validateFields() bool {
 
-	if e.ConnectionType != "tcp" && e.ConnectionType != "udp" && e.ConnectionType != "ws"{
+	if e.ConnectionType != "tcp" && e.ConnectionType != "ws"{
 
-		go log.Println("ConnectionType must be tcp, udp, or ws...")
+		go log.Println("ConnectionType must be tcp or ws...")
 
 		return false
 
@@ -80,12 +80,6 @@ func (e *CreateProperties) Connect(){
 	}
 
 	e.subReconnect = false
-
-	if e.ConnectionType == "udp" {
-
-		e.Acknowledge = false
-
-	}
 
 	if e.Acknowledge{
 
@@ -132,10 +126,6 @@ func (e *CreateProperties) Connect(){
 	if e.ConnectionType == "tcp"{
 
 		e.connectTCP()
-
-	}else if e.ConnectionType == "udp"{
-
-		e.connectUDP()
 
 	}
 

@@ -99,13 +99,9 @@ func ReadFile(path string, file os.FileInfo){
 				}
 			}
 
-			ChannelMethod.Lock()
-
 			ChannelList.TCPStorage[channelName] = channelObject
 
 			ChannelList.TCPSocketDetails[channelName] = make(map[string] *pojo.PacketStruct)
-
-			ChannelMethod.Unlock()
 		}	
 
     }

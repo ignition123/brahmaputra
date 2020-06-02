@@ -216,9 +216,7 @@ func AppendNewClientInmemory(channelName string, subscriberMapName string, packe
 	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
-
 	ChannelList.TCPSocketDetails[channelName][subscriberMapName] = packetObject
-
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 
 }
@@ -239,9 +237,7 @@ func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
 	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
-
 	delete(ChannelList.TCPSocketDetails[channelName], subscriberMapName)
-
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 }
 
@@ -250,7 +246,8 @@ func FindInmemorySocketListLength(channelName string, key string) (bool, *pojo.P
 	defer ChannelList.Recover()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
-	
+	defer ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
+
 	var cb bool
 
 	var sockClient *pojo.PacketStruct
@@ -261,8 +258,6 @@ func FindInmemorySocketListLength(channelName string, key string) (bool, *pojo.P
 
 		cb = ok
 	}
-
-	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
 
 	return cb, sockClient
 }

@@ -11,16 +11,7 @@
             "socketTimeout":12000,
             "bufferRead":1
         },
-        "udp":{
-            "host":"127.0.0.1",
-            "port":"8200",
-            "maxSockets":0,
-            "socketTimeout":12000,
-            "bufferRead":1
-        },
         "websocket":{},
-        "udpMulticast":[],
-        "udpBroadcast":[]
     },
     "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",
     "storage":{

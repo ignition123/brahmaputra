@@ -2,20 +2,11 @@ package pojo
 
 type ServerStruct struct{
 	TCP TCPStruct
-	UDP UDPStruct
 	ClusterName *string
 	HostName *string
 }
 
 type TCPStruct struct{
-	Host *string
-	Port *string 
-	MaxSockets *int64
-	SocketTimeout *int
-	BufferRead *int
-}
-
-type UDPStruct struct{
 	Host *string
 	Port *string 
 	MaxSockets *int64

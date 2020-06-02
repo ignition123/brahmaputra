@@ -60,6 +60,7 @@ func (e *CreateProperties) connectTCP(){
 	if len(e.requestPull) > 0{
 
 		var chancb = make(chan bool, 1)
+		defer close(chancb)
 
 		for _, bodyMap := range e.requestPull{
 
