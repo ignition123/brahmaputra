@@ -10,8 +10,7 @@
             "maxSockets":0,
             "socketTimeout":12000,
             "bufferRead":1
-        },
-        "websocket":{},
+        }
     },
     "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",
     "storage":{

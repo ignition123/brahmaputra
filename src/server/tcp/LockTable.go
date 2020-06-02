@@ -4,6 +4,7 @@ import(
 	"pojo"
 	"ChannelList"
 	"os"
+	"runtime"
 )
 
 type SubscriberGroup struct{
@@ -17,6 +18,8 @@ type SubscriberGroup struct{
 func WriteSubscriberGrpOffset(index int, packetObject pojo.PacketStruct, byteArrayCursor []byte) bool{
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[packetObject.ChannelName].SubscriberFileChannelLock.Lock()
 	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
@@ -36,6 +39,8 @@ func CloseSubscriberGrpFD(packetObject pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[packetObject.ChannelName].SubscriberFileChannelLock.Lock()
 	defer ChannelList.TCPStorage[packetObject.ChannelName].SubscriberFileChannelLock.Unlock()
 
@@ -50,6 +55,8 @@ func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[ChannelName].SubscriberFileChannelLock.Lock()
 	var fileFDArray = make([]*os.File, ChannelList.TCPStorage[ChannelName].PartitionCount)
 	ChannelList.TCPStorage[ChannelName].SubscriberFileChannelLock.Unlock()
@@ -62,6 +69,8 @@ func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[packetObject.ChannelName].SubscriberFileChannelLock.Lock()
 	packetObject.SubscriberFD[index] = fDes
 	ChannelList.TCPStorage[packetObject.ChannelName].SubscriberFileChannelLock.Unlock()
@@ -71,6 +80,8 @@ func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
 func LoadTCPChannelSubscriberList(channelName string, subscriberName string) bool{
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.RLock()
 	var status = ChannelList.TCPStorage[channelName].SubscriberList[subscriberName]
@@ -83,6 +94,8 @@ func StoreTCPChannelSubscriberList(channelName string, subscriberName string, st
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.Lock()
 	ChannelList.TCPStorage[channelName].SubscriberList[subscriberName] = status
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.Unlock()
@@ -93,6 +106,8 @@ func DeleteTCPChannelSubscriberList(channelName string, subscriberName string){
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.Lock()
 	delete(ChannelList.TCPStorage[channelName].SubscriberList, subscriberName)	
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.Unlock()
@@ -102,6 +117,8 @@ func DeleteTCPChannelSubscriberList(channelName string, subscriberName string){
 func RenewSub(channelName string, groupName string){
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
@@ -116,6 +133,8 @@ func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	ChannelList.TCPStorage[channelName].Group[groupName] = append(ChannelList.TCPStorage[channelName].Group[groupName], &packetObject)
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
@@ -125,6 +144,8 @@ func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.
 func RemoveGroupMember(channelName string , groupName string, consumerName string){
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
@@ -149,6 +170,8 @@ func RemoveGroupMap(channelName string , groupName string, groupId *int){
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 
@@ -162,6 +185,8 @@ func RemoveGroupMap(channelName string , groupName string, groupId *int){
 func GetValue(channelName string , groupName string, groupId *int, index int) (*pojo.PacketStruct, int){
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
@@ -203,6 +228,8 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
 	var groupLen = len(ChannelList.TCPStorage[channelName].Group[groupName])
 	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
@@ -215,6 +242,8 @@ func AppendNewClientInmemory(channelName string, subscriberMapName string, packe
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	ChannelList.TCPSocketDetails[channelName][subscriberMapName] = packetObject
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
@@ -224,6 +253,8 @@ func AppendNewClientInmemory(channelName string, subscriberMapName string, packe
 func GetClientListInmemory(channelName string) map[string]*pojo.PacketStruct{
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
 	var channelInmemoryList = ChannelList.TCPSocketDetails[channelName]
@@ -236,6 +267,8 @@ func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
 
 	defer ChannelList.Recover()
 
+	runtime.Gosched()
+
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	delete(ChannelList.TCPSocketDetails[channelName], subscriberMapName)
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
@@ -244,6 +277,8 @@ func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
 func FindInmemorySocketListLength(channelName string, key string) (bool, *pojo.PacketStruct){
 
 	defer ChannelList.Recover()
+
+	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()

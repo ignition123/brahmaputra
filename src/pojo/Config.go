@@ -17,7 +17,6 @@ type TCPStruct struct{
 type Config struct{
 	Worker *int
 	Server ServerStruct
-	Dbpath *string
 	Storage StorageStruct
 	ChildWrite ChildWriteStruct
 	ClusterWrite *bool

@@ -1,5 +1,15 @@
 package tcp
 
+/*
+	This file contains all publishing from server to client methods
+
+	It contains both inmemory as well as persistent streaming methods
+
+	original @author Sudeep Dasgupta
+*/
+
+// importing modules
+
 import(
 	"encoding/binary"
 	"sync"
@@ -14,11 +24,17 @@ import(
 	"io/ioutil"
 )
 
-var ChannelMethod = &ChannelMethods{}
+// declaring a struct with a mutex
 
 type ChannelMethods struct{
 	sync.Mutex
 }
+
+// initializing a structure globally
+
+var ChannelMethod = &ChannelMethods{}
+
+// creating channels for inmemory subscription
 
 func (e *ChannelMethods) GetChannelData(){
 
@@ -30,23 +46,29 @@ func (e *ChannelMethods) GetChannelData(){
 	}
 }
 
+// initializing channels
 
 func (e *ChannelMethods) runChannel(channelName string){
 
 	defer ChannelList.Recover()
 
+	// iterating over the channel bucket and initializing
+
 	for index := range ChannelList.TCPStorage[channelName].BucketData{
 
 		time.Sleep(100)
 
+		// using go routines for starting infinite loops
+
 		go func(index int, BucketData chan *pojo.PacketStruct, channelName string){
 
 			defer ChannelList.Recover()
-
 			defer close(BucketData)
 
 			var msgChan = make(chan bool, 1)
 			defer close(msgChan)
+
+			// infinitely listening to channels
 
 			for{
 
@@ -56,11 +78,19 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 						if ok{
 
+							// if messages arives then
+
 							var subchannelName = message.ChannelName
+
+							// checking for not heart_beat channels
 
 							if(channelName == subchannelName && channelName != "heart_beat"){
 
+								// publishing to all subsriber
+
 								go e.sendMessageToClient(*message, msgChan)
+
+								// waiting for channel callback
 
 								<-msgChan
 
@@ -74,17 +104,29 @@ func (e *ChannelMethods) runChannel(channelName string){
 	}
 }
 
+// sending to all clients that are connected to inmemory channels
+
 func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan chan bool){
 
 	defer ChannelList.Recover()
 
+	// getting the client list this method uses mutex to prevent race condition
+
 	var channelSockList = GetClientListInmemory(message.ChannelName)
 
+	// iterating over the hashmap
+
 	for key, _ := range channelSockList{
+
+		// creating bytebuffer
 
 		var byteBuffer = ByteBuffer.Buffer{
 			Endian:"big",
 		}
+
+		// creating total length of the byte buffer
+
+		// MessageTypeLen + messageType + ChannelNameLength + channelname + producer_idLen + producer_id + AgentNameLen + AgentName + backendOffset + actualBody
 
 		var totalByteLen = 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
 
@@ -120,13 +162,21 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 	msgChan <- true
 }
 
+// sending Inmemory client
+
 func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, key string, packetBuffer ByteBuffer.Buffer){ 
 
 	defer ChannelList.Recover()
 
+	// getting the length of the socket client connected
+
 	var stat, sock = FindInmemorySocketListLength(message.ChannelName, key)
 
+	// if length creater than the index then writing to the client
+
 	if stat{
+
+		// writing to the tcp socket
 
 		_, err := sock.Conn.Write(packetBuffer.Array())
 		
@@ -141,26 +191,35 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, key string, pac
 	}
 }
 
+// checking if directory exists and creating if does not exists, used for offset management
 
 func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, checkDirectoryChan chan bool){
 
 	defer ChannelList.Recover()
 
-	var consumerName = packetObject.ChannelName + packetObject.SubscriberName
+	// declaring consumerName
 
-	var directoryPath = ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+consumerName
+	consumerName := packetObject.ChannelName + packetObject.SubscriberName
+
+	// declaring directory path
+
+	directoryPath := ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+consumerName
+
+	// getting the os stat if null then return true
 
 	if _, err := os.Stat(directoryPath); err == nil{
 
 		checkDirectoryChan <- true
 
-	}else if os.IsNotExist(err){
+	}else if os.IsNotExist(err){ // if not exists then create directory
 
 		errDir := os.MkdirAll(directoryPath, 0755)
 
-		if errDir != nil {
+		if errDir != nil { //  if error then throw error
 			
 			ThroughClientError(conn, err.Error())
+
+			// deleting the subscriber from the list, locking the channel list array using mutex
 
 			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
@@ -169,6 +228,8 @@ func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, chec
 			return
 
 		}
+
+		// else subscriber directory created return true
 
 		go ChannelList.WriteLog("Subscriber directory created successfully...")
 
@@ -181,31 +242,43 @@ func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, chec
 	}
 }
 
+// create subscriber offset file, used for persistent channels
+
 func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
 
 	defer ChannelList.Recover()
 
-	var consumerName = packetObject.ChannelName + packetObject.SubscriberName
+	// declaring consumer name
 
-	var directoryPath = ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+consumerName
+	consumerName := packetObject.ChannelName + packetObject.SubscriberName
 
-	var consumerOffsetPath = directoryPath+"\\"+packetObject.SubscriberName+"_offset_"+strconv.Itoa(index)+".index"
+	// declaring directory path
+
+	directoryPath := ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+consumerName
+
+	// declaring the consumer offset path
+
+	consumerOffsetPath := directoryPath+"\\"+packetObject.SubscriberName+"_offset_"+strconv.Itoa(index)+".index"
+
+	// checking the os stat of the path
 
 	if _, err := os.Stat(consumerOffsetPath); err == nil{
+
+		// if the start from flag is beginning then the offset will bet set to 0
 
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- 0
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL"{ // if no pull the offset will be equals to filelength
 
 			partitionOffsetSubscriber <- (-1)
 
-		}else if start_from == "LASTRECEIVED"{
+		}else if start_from == "LASTRECEIVED"{ // if last received then it will read the offset file and set the offset
 
 			dat, err := ioutil.ReadFile(consumerOffsetPath)
 
-			if err != nil{
+			if err != nil{ // if error not equals to null then error
 
 				ThroughClientError(conn, err.Error())
 
@@ -215,7 +288,9 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 				return
 
-			}
+			} 
+
+			// checking the length of the data that is being read from the file, if error then set to 0 else offet that is in the file
 
 			if len(dat) == 0{
 
@@ -233,8 +308,12 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		}
 
+		// opening the file and setting file descriptor
+
 		fDes, err := os.OpenFile(consumerOffsetPath,
 			os.O_WRONLY, os.ModeAppend)
+
+		// if error 
 
 		if err != nil {
 
@@ -247,9 +326,13 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 			return
 		}
 
+		// adding file descriptor object to packetObject
+
 		AddSubscriberFD(index, packetObject, fDes)
 
-	}else if os.IsNotExist(err){
+	}else if os.IsNotExist(err){ // if error in file existence
+
+		// creating file
 
 		fDes, err := os.Create(consumerOffsetPath)
 
@@ -265,21 +348,25 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		}
 
+		// then setting the file descriptor
+
 		AddSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
 	}else{
 
+		// if start_from is BEGINNING, then offset will be 0
+
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- 0
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL"{ // if NOPULL the -1, means offset will be total file length
 
 			partitionOffsetSubscriber <- (-1)
 
-		}else if start_from == "LASTRECEIVED"{
+		}else if start_from == "LASTRECEIVED"{ // if LASTRECEIVED then it will read file and get the last offset received by the file
 
 			dat, err := ioutil.ReadFile(consumerOffsetPath)
 
@@ -295,17 +382,21 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 			}
 
+			// length of the data == 0 then offset will be 0
+
 			if len(dat) == 0{
 
 				partitionOffsetSubscriber <- 0
 
-			}else{
+			}else{ // else the data that is in the file
 
 				partitionOffsetSubscriber <- int64(binary.BigEndian.Uint64(dat))
 
 			}
 
 		}else{
+
+			// sending offset as 0
 
 			partitionOffsetSubscriber <- 0
 
@@ -315,21 +406,27 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 }
 
+// create a directory for subscriber group
+
 func checkCreateGroupDirectory(channelName string, groupName string, checkDirectoryChan chan bool){
 
 	defer ChannelList.Recover()
 
+	// setting directory path
+
 	var directoryPath = ChannelList.TCPStorage[channelName].Path+"/"+groupName
+
+	// getting the stat of the directory path
 
 	if _, err := os.Stat(directoryPath); err == nil{
 
 		checkDirectoryChan <- true
 
-	}else if os.IsNotExist(err){
+	}else if os.IsNotExist(err){ // checking if file exists
 
 		errDir := os.MkdirAll(directoryPath, 0755)
 
-		if errDir != nil {
+		if errDir != nil { // if not equals to null then error
 			
 			ThroughGroupError(channelName, groupName, err.Error())
 
@@ -338,6 +435,8 @@ func checkCreateGroupDirectory(channelName string, groupName string, checkDirect
 			return
 
 		}
+
+		// directory created successfully
 
 		go ChannelList.WriteLog("Subscriber directory created successfully...")
 
@@ -351,25 +450,37 @@ func checkCreateGroupDirectory(channelName string, groupName string, checkDirect
 
 }
 
+// create subscriber group offset
+
 func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject pojo.PacketStruct, partitionOffsetSubscriber chan int64, start_from string){
 
 	defer ChannelList.Recover()
 
+	// set directory path
+
 	var directoryPath = ChannelList.TCPStorage[channelName].Path+"/"+groupName
+
+	// setting consumer offset path
 
 	var consumerOffsetPath = directoryPath+"\\"+groupName+"_offset_"+strconv.Itoa(index)+".index"
 
+	// getting the os stat
+
 	if _, err := os.Stat(consumerOffsetPath); err == nil{
+
+		// start_from == BEGINNING then offset = 0 means it will start reading file from beginning
 
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- 0
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL"{ // if start_from == NOPULL then offset = -1 then offset = file size
 
 			partitionOffsetSubscriber <- (-1)
 
-		}else if start_from == "LASTRECEIVED"{
+		}else if start_from == "LASTRECEIVED"{ // if start_from == LASTRECEIVED then offset = last offset written into the file
+
+			// reading the file to get the last offset of the subscriber 
 
 			dat, err := ioutil.ReadFile(consumerOffsetPath)
 
@@ -383,6 +494,8 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			}
 
+			// if data fetched from file === 0 then offset will be 0 else from file
+
 			if len(dat) == 0{
 
 				partitionOffsetSubscriber <- 0
@@ -395,9 +508,13 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		}else{
 
+			// offset = 0
+
 			partitionOffsetSubscriber <- 0
 
 		}
+
+		// getting the file descriptor object and setting to packetObject
 
 		fDes, err := os.OpenFile(consumerOffsetPath,
 			os.O_WRONLY, os.ModeAppend) //race
@@ -411,9 +528,13 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 			return
 		}
 
+		// adding to fD to packetObject
+
 		AddSubscriberFD(index, packetObject, fDes) // race
 
 	}else if os.IsNotExist(err){
+
+		// if not exists then create a offset file
 
 		fDes, err := os.Create(consumerOffsetPath)
 
@@ -427,21 +548,27 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		}
 
+		// then adding the file descriptor object
+
 		AddSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
 	}else{
 
+		// start_from == BEGINNING then offset = 0 means it will start reading file from beginning
+
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- 0
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL"{ // if start_from == NOPULL then offset = -1 then offset = file size
 
 			partitionOffsetSubscriber <- (-1)
 
-		}else if start_from == "LASTRECEIVED"{
+		}else if start_from == "LASTRECEIVED"{ // if start_from == LASTRECEIVED then offset = last offset written into the file
+
+			// reading the file to get the last offset of the subscriber 
 
 			dat, err := ioutil.ReadFile(consumerOffsetPath)
 
@@ -453,7 +580,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 				return
 
-			}
+			}	
+
+			// if data fetched from file === 0 then offset will be 0 else from file
 
 			if len(dat) == 0{
 
@@ -467,6 +596,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		}else{
 
+
+			// offset = 0 reading from beginning of the file
+
 			partitionOffsetSubscriber <- 0
 
 		}
@@ -475,9 +607,15 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 }
 
+/*
+	Subscriber Group Channel Method, here in this method the subscriber listens to file change in seperate go routines and publishes to subscriber
+*/
+
 func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
+
+	// 
 
 	var checkDirectoryChan = make(chan bool, 1)
 	defer close(checkDirectoryChan)

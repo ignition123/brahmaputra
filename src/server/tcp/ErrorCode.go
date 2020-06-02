@@ -1,5 +1,7 @@
 package tcp
 
+// error message list
+
 const (
     INVALID_MESSAGE = "Invalid message received..."
     INVALID_CHANNEL = "No such channel found..."
