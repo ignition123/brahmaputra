@@ -1,5 +1,11 @@
 package tcp
 
+/*
+	File contains methods writing error to the subscriber or publisher
+*/
+
+// importing modules
+
 import(
 	"net"
 	"ChannelList"
@@ -7,13 +13,15 @@ import(
 	"pojo"
 )
 
+// method throwing error to individual subscriber or publisher
+
 func ThroughClientError(conn net.TCPConn, message string){
 
 	defer ChannelList.Recover()
 
-	var totalByteLen = len(message)
+	totalByteLen := len(message)
 
-	var byteSendBuffer = ByteBuffer.Buffer{
+	byteSendBuffer := ByteBuffer.Buffer{
 		Endian:"big",
 	}
 
@@ -36,6 +44,8 @@ func ThroughClientError(conn net.TCPConn, message string){
 	conn.Close()
 }
 
+// method throwing error to subscriber group
+
 func ThroughGroupError(channelName string, groupName string, message string){
 
 	defer ChannelList.Recover()
@@ -43,9 +53,9 @@ func ThroughGroupError(channelName string, groupName string, message string){
 	ChannelList.TCPStorage[channelName].ChannelLock.Lock()
 	defer ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 
-	var totalByteLen = len(message)
+	totalByteLen := len(message)
 
-	var byteSendBuffer = ByteBuffer.Buffer{
+	byteSendBuffer := ByteBuffer.Buffer{
 		Endian:"big",
 	}
 
@@ -55,11 +65,11 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	byteSendBuffer.Put([]byte(message)) // actual body
 
-	var groupLen = len(ChannelList.TCPStorage[channelName].Group[groupName])
+	groupLen := len(ChannelList.TCPStorage[channelName].Group[groupName])
 
 	for i:=0;i<groupLen;i++{
 
-		var groupObj = ChannelList.TCPStorage[channelName].Group[groupName][i]
+		groupObj := ChannelList.TCPStorage[channelName].Group[groupName][i]
 
 		_, err := groupObj.Conn.Write(byteSendBuffer.Array())
 		
@@ -69,9 +79,9 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 		}
 
-		var groupPacket = ChannelList.TCPStorage[channelName].Group[groupName][i]
+		groupPacket := ChannelList.TCPStorage[channelName].Group[groupName][i]
 
-		var subscriberName = groupPacket.ChannelName+groupPacket.SubscriberName+groupPacket.GroupName
+		subscriberName := groupPacket.ChannelName+groupPacket.SubscriberName+groupPacket.GroupName
 
 		delete(ChannelList.TCPStorage[channelName].SubscriberList, subscriberName)	
 

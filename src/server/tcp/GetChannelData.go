@@ -13,7 +13,6 @@ package tcp
 import(
 	"encoding/binary"
 	"sync"
-	_"log"
 	"ChannelList"
 	"time"
 	"net"
@@ -65,7 +64,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 			defer ChannelList.Recover()
 			defer close(BucketData)
 
-			var msgChan = make(chan bool, 1)
+			msgChan := make(chan bool, 1)
 			defer close(msgChan)
 
 			// infinitely listening to channels
@@ -80,7 +79,7 @@ func (e *ChannelMethods) runChannel(channelName string){
 
 							// if messages arives then
 
-							var subchannelName = message.ChannelName
+							subchannelName := message.ChannelName
 
 							// checking for not heart_beat channels
 
@@ -112,7 +111,7 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 	// getting the client list this method uses mutex to prevent race condition
 
-	var channelSockList = GetClientListInmemory(message.ChannelName)
+	channelSockList := GetClientListInmemory(message.ChannelName)
 
 	// iterating over the hashmap
 
@@ -120,7 +119,7 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 		// creating bytebuffer
 
-		var byteBuffer = ByteBuffer.Buffer{
+		byteBuffer := ByteBuffer.Buffer{
 			Endian:"big",
 		}
 
@@ -128,7 +127,7 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 		// MessageTypeLen + messageType + ChannelNameLength + channelname + producer_idLen + producer_id + AgentNameLen + AgentName + backendOffset + actualBody
 
-		var totalByteLen = 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
+		totalByteLen := 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
 
 		byteBuffer.PutLong(totalByteLen) // total packet length
 
@@ -170,7 +169,7 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, key string, pac
 
 	// getting the length of the socket client connected
 
-	var stat, sock = FindInmemorySocketListLength(message.ChannelName, key)
+	stat, sock := FindInmemorySocketListLength(message.ChannelName, key)
 
 	// if length creater than the index then writing to the client
 
@@ -414,7 +413,7 @@ func checkCreateGroupDirectory(channelName string, groupName string, checkDirect
 
 	// setting directory path
 
-	var directoryPath = ChannelList.TCPStorage[channelName].Path+"/"+groupName
+	directoryPath := ChannelList.TCPStorage[channelName].Path+"/"+groupName
 
 	// getting the stat of the directory path
 
@@ -458,11 +457,11 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 	// set directory path
 
-	var directoryPath = ChannelList.TCPStorage[channelName].Path+"/"+groupName
+	directoryPath := ChannelList.TCPStorage[channelName].Path+"/"+groupName
 
 	// setting consumer offset path
 
-	var consumerOffsetPath = directoryPath+"\\"+groupName+"_offset_"+strconv.Itoa(index)+".index"
+	consumerOffsetPath := directoryPath+"\\"+groupName+"_offset_"+strconv.Itoa(index)+".index"
 
 	// getting the os stat
 
@@ -590,12 +589,13 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			}else{
 
+				// read the file bytes
+
 				partitionOffsetSubscriber <- int64(binary.BigEndian.Uint64(dat))
 
 			}
 
 		}else{
-
 
 			// offset = 0 reading from beginning of the file
 
@@ -615,15 +615,22 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	defer ChannelList.Recover()
 
-	// 
+	// creating channels for creating directory
 
-	var checkDirectoryChan = make(chan bool, 1)
+	checkDirectoryChan := make(chan bool, 1)
 	defer close(checkDirectoryChan)
 
-	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
-	var partitionOffsetSubscriber = make(chan int64, 1)
+	// offsetByteSize
+
+	offsetByteSize := make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
+
+	// creating channels for partition offsets
+
+	partitionOffsetSubscriber := make(chan int64, 1)
 	defer close(partitionOffsetSubscriber)
+
+	// checking for directory existence
 
 	go checkCreateGroupDirectory(channelName, groupName, checkDirectoryChan)
 
@@ -632,6 +639,8 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 		return
 
 	}
+
+	// setting file descriptor 
 
 	packetObject.SubscriberFD = CreateSubscriberGrpFD(packetObject.ChannelName)
 
@@ -643,6 +652,8 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	}
 
+	// checking file descriptor length for all partitions
+
 	if len(packetObject.SubscriberFD) == 0{
 
 		ThroughGroupError(channelName, groupName, INVALID_SUBSCRIBER_OFFSET)
@@ -651,15 +662,23 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	}
 
+	// iterating to all partitions and start listening to file change with go routines
+
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
 		go func(index int, cursor int64, packetObject pojo.PacketStruct){
 
 			defer ChannelList.Recover()
 
+			// declaring a mutex variable
+
 			var groupMtx sync.Mutex
 
-			var filePath = ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+			// setting the file path to read the log file
+
+			filePath := ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+
+			// opening the file
 
 			file, err := os.Open(filePath)
 
@@ -672,16 +691,22 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 			defer file.Close()
 
-			var sentMsg = make(chan bool, 1)
+			// creating a sent message boolean channel
+
+			sentMsg := make(chan bool, 1)
 			defer close(sentMsg)
 
-			var exitLoop = false
+			// setting a exitLoop variable which will stop the infinite loop when the subscriber is disconnected
+
+			exitLoop := false
 
 			for{
 
+				// if exitLoop == true then break and close file desciptor
+
 				if exitLoop{
 
-					var consumerGroupLen = GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
 
 					if consumerGroupLen <= 0{
 
@@ -692,6 +717,8 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 					break
 
 				}
+
+				// getting the file stat
 
 				fileStat, err := os.Stat(filePath)
 		 
@@ -705,11 +732,15 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 					
 				}
 
+				// if cursor == -1 then cursor  = file size
+
 				if cursor == -1{
 
 					cursor = fileStat.Size()
 
 				}
+
+				// if cursor  >= file size then skip the iteration
 
 				if cursor >= fileStat.Size(){
 
@@ -719,8 +750,12 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
+				// creating a data byte array of long data type
+
 
 				data := make([]byte, 8)
+
+				// reading the file at the exact cursor count
 
 				count, err := file.ReadAt(data, cursor)
 
@@ -732,7 +767,11 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
-				var packetSize = binary.BigEndian.Uint64(data)
+				// converting the packet to big endian int64
+
+				packetSize := binary.BigEndian.Uint64(data)
+
+				// if packet size is greater then file size then skip the iteration
 
 				if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
 
@@ -742,10 +781,15 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
+				// adding 8 number to cursor
 
 				cursor += int64(8)
 
+				// creating byte array of packet size
+
 				restPacket := make([]byte, int64(packetSize))
+
+				// reading from file at the cursor count
 
 				totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
 
@@ -757,6 +801,8 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				}
 
+				// if totalByteLen <= 0 then skip the iteration
+
 				if totalByteLen <= 0{
 
 					time.Sleep(1 * time.Second)
@@ -764,14 +810,20 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 					continue
 				}
 
+				// adding the packet size to cursor
 
 				cursor += int64(packetSize)
+
+				// creating a byte buffer of type big endian
 
 				byteFileBuffer := ByteBuffer.Buffer{
 					Endian:"big",
 				}
+				// wrapping the restPacket that is fetched from the file
 
 				byteFileBuffer.Wrap(restPacket)
+
+				// setting them to local variables
 
 				messageTypeLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
 				messageType := byteFileBuffer.Get(messageTypeLen)
@@ -793,9 +845,13 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
 
+				// creating another byte buffer in big endian 
+
 				byteSendBuffer := ByteBuffer.Buffer{
 					Endian:"big",
 				}
+
+				// adding values to the byte buffer along with packet header
 
 				byteSendBuffer.PutLong(newTotalByteLen) // total packet length
 
@@ -823,11 +879,17 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				// log.Println(ChannelList.TCPStorage[packetObject.ChannelName][packetObject.GroupName])
 
+				// sending to group and waiting for call back
+
 				go sendGroup(index, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg) // race
+
+				// waiting for callback
 
 				message, ok := <-sentMsg
 
 				if ok{
+
+					// if message if false then loop will exit
 
 					if !message{
 
@@ -849,21 +911,37 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 }
 
+/*
+	method to publish messages to individual subscriber in case of persistent channel
+*/
+
 func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
 
-	var consumerName = packetObject.ChannelName + packetObject.SubscriberName
+	//setting consumer name
 
-	var checkDirectoryChan = make(chan bool, 1)
+	consumerName := packetObject.ChannelName + packetObject.SubscriberName
+
+	// creating directory channel boolean
+
+	checkDirectoryChan := make(chan bool, 1)
 	defer close(checkDirectoryChan)
 
-	var offsetByteSize = make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
+	// creating offset byte size variable
 
-	var partitionOffsetSubscriber = make(chan int64, 1)
+	offsetByteSize := make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
+
+	// creating boolean channel for offset subscriber
+
+	partitionOffsetSubscriber := make(chan int64, 1)
 	defer close(partitionOffsetSubscriber)
 
+	// creating offset directory
+
 	go checkCreateDirectory(conn, packetObject, checkDirectoryChan)
+
+	// waiting for its callback
 
 	if false == <-checkDirectoryChan{
 
@@ -871,7 +949,11 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 	}
 
+	// creating file descriptor
+
 	packetObject.SubscriberFD = make([]*os.File, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
+
+	// iterating over the partition count and adding file desciptor object
 
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
@@ -880,6 +962,8 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 		offsetByteSize[i] = <-partitionOffsetSubscriber
 
 	}
+
+	// checking file descriptor length
 
 	if len(packetObject.SubscriberFD) == 0{
 
@@ -891,7 +975,11 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 	}
 
+	// creating a subscriberMtx mutex
+
 	var subscriberMtx sync.Mutex
+
+	// iterating over the paritition count to start listening to file change using go routines
 
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
@@ -899,7 +987,11 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 			defer ChannelList.Recover()
 
-			var filePath = ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+			// setting file path of the logs
+
+			filePath := ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+
+			// opening file 
 
 			file, err := os.Open(filePath)
 
@@ -914,12 +1006,18 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 				return
 			}
 
-			var sentMsg = make(chan bool, 1)
+			// creating sent message boolean channel
+
+			sentMsg := make(chan bool, 1)
 			defer close(sentMsg)
 
-			var exitLoop = false
+			// creating exitLoop variable
+
+			exitLoop := false
 
 			for{
+
+				// if exitLoop == true the break from iteration, it will be true when subscriber disconnects
 
 				if exitLoop{
 
@@ -933,6 +1031,8 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
+				// reading the file stat
+
 				fileStat, err := os.Stat(filePath)
 		 
 				if err != nil {
@@ -945,11 +1045,15 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 					
 				}
 
+				// cursor == -1 then cursor == file size
+
 				if cursor == -1{
 
 					cursor = fileStat.Size()
 
 				}
+
+				// if cursor >=  file size then skipping the iteration
 
 				if cursor >= fileStat.Size(){
 
@@ -959,8 +1063,11 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
+				// creating 8 byte empty array
 
 				data := make([]byte, 8)
+
+				// reading the file at the cursor point
 
 				count, err := file.ReadAt(data, cursor)
 
@@ -972,7 +1079,9 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
-				var packetSize = binary.BigEndian.Uint64(data)
+				// converting the packet size to big endian
+
+				packetSize := binary.BigEndian.Uint64(data)
 
 				if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
 
@@ -982,9 +1091,15 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
+				// adding 8 number to cursor
+
 				cursor += int64(8)
 
+				// creating restPacket byte array of packetSize
+
 				restPacket := make([]byte, packetSize)
+
+				// reading the file to exact cursor counter
 
 				totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
 
@@ -996,6 +1111,8 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
+				// if total byte length == 0 skipping the iteration
+
 				if totalByteLen <= 0{
 
 					time.Sleep(1 * time.Second)
@@ -1004,15 +1121,21 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				}
 
-
+				// adding packetsize to cursor
 
 				cursor += int64(packetSize)
+
+				// creating byte buffer in big endian
 
 				byteFileBuffer := ByteBuffer.Buffer{
 					Endian:"big",
 				}
 
+				// wrapping the restPacket
+
 				byteFileBuffer.Wrap(restPacket)
+
+				// setting the values to local variables
 
 				messageTypeLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
 				messageType := byteFileBuffer.Get(messageTypeLen)
@@ -1033,6 +1156,8 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 				bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
 
 				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
+
+				// creating bytebuffer of big endian and setting the values to be published
 
 				byteSendBuffer := ByteBuffer.Buffer{
 					Endian:"big",
@@ -1062,11 +1187,17 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				byteSendBuffer.Put(bodyBB) // actual body
 
+				// sending to the subscriber and waiting for callback
+
 				go send(index, int(cursor), subscriberMtx, packetObject, conn, byteSendBuffer, sentMsg)
+
+				// waiting for callbacks
 
 				message, ok := <-sentMsg
 
 				if ok{
+
+					// if message == false then exitLoop == true and loop will be breaked
 
 					if !message{
 
@@ -1089,17 +1220,25 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 }
 
+/*
+	method to send data to subscriber group
+*/
+
 func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
 
 	defer ChannelList.Recover()
+
+	// locking the method using mutex to prevent concurrent write to tcp
 
 	groupMtx.Lock()
 
 	defer groupMtx.Unlock()
 
-	var groupId = 0
+	groupId := 0
 
 	var group *pojo.PacketStruct
+
+	// setting a state of retry if disconnection happens then the data should be written to another subscriber
 
 	RETRY:
 
@@ -1111,6 +1250,8 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.Pac
 
 		return
 	}
+
+	// writing to tcp 
 	
 	_, err := group.Conn.Write(packetBuffer.Array())
 	
@@ -1129,15 +1270,23 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.Pac
 
 	}
 
+	// creating subscriber offset and writing into subscriber offset file
+
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
 	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 }
 
+/*
+	method to send message to subscriber
+*/
+
 func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.PacketStruct, conn net.TCPConn, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){ 
 
 	defer ChannelList.Recover()
+
+	// locking the method using mutex to prevent concurrent write to tcp
 
 	subscriberMtx.Lock()
 	defer subscriberMtx.Unlock()
@@ -1153,6 +1302,8 @@ func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.Pac
 		return
 	}
 
+	// creating subscriber offset and writing into subscriber offset file
+
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
@@ -1164,7 +1315,9 @@ func (e *ChannelMethods) SendAck(messageMap pojo.PacketStruct, ackChan chan bool
 
 	defer ChannelList.Recover()
 
-	var byteBuffer = ByteBuffer.Buffer{
+	// creating byte buffer to send acknowledgement to producer
+
+	byteBuffer := ByteBuffer.Buffer{
 		Endian:"big",
 	}
 
@@ -1173,6 +1326,8 @@ func (e *ChannelMethods) SendAck(messageMap pojo.PacketStruct, ackChan chan bool
 	byteBuffer.PutByte(byte(2)) // status code
 
 	byteBuffer.Put([]byte(messageMap.Producer_id))
+
+	// writing to tcp socket
 
 	_, err := messageMap.Conn.Write(byteBuffer.Array())
 
@@ -1188,3 +1343,5 @@ func (e *ChannelMethods) SendAck(messageMap pojo.PacketStruct, ackChan chan bool
 	ackChan <- true
 
 }
+
+// to be member for the future development contact @sudeep@pounze.com

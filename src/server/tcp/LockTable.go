@@ -1,11 +1,17 @@
 package tcp
 
+/*
+	This file contains all locking of channels using mutex to prevent race conditions when using multple goroutines
+*/
+
 import(
 	"pojo"
 	"ChannelList"
 	"os"
 	"runtime"
 )
+
+// Subscriber group struct declaration
 
 type SubscriberGroup struct{
 
@@ -14,6 +20,9 @@ type SubscriberGroup struct{
 
 }
 
+//######################################################### Persistent Channel Methods #############################################################################
+
+// method to write cursor counter, locking with mutex
 
 func WriteSubscriberGrpOffset(index int, packetObject pojo.PacketStruct, byteArrayCursor []byte) bool{
 
@@ -35,6 +44,8 @@ func WriteSubscriberGrpOffset(index int, packetObject pojo.PacketStruct, byteArr
 	return true
 }
 
+// method to close file descriptor
+
 func CloseSubscriberGrpFD(packetObject pojo.PacketStruct){
 
 	defer ChannelList.Recover()
@@ -51,6 +62,8 @@ func CloseSubscriberGrpFD(packetObject pojo.PacketStruct){
 	}
 }
 
+// creating file descriptor array to read from the log file
+
 func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 
 	defer ChannelList.Recover()
@@ -58,12 +71,14 @@ func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 	runtime.Gosched()
 
 	ChannelList.TCPStorage[ChannelName].SubscriberFileChannelLock.Lock()
-	var fileFDArray = make([]*os.File, ChannelList.TCPStorage[ChannelName].PartitionCount)
+	fileFDArray := make([]*os.File, ChannelList.TCPStorage[ChannelName].PartitionCount)
 	ChannelList.TCPStorage[ChannelName].SubscriberFileChannelLock.Unlock()
 
 	return fileFDArray
 
 }
+
+// adding file descriptor object to array
 
 func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
 
@@ -77,6 +92,8 @@ func AddSubscriberFD(index int, packetObject pojo.PacketStruct, fDes *os.File){
 
 }
 
+// reading the status of the channelist list with channel name exists or not
+
 func LoadTCPChannelSubscriberList(channelName string, subscriberName string) bool{
 
 	defer ChannelList.Recover()
@@ -84,11 +101,13 @@ func LoadTCPChannelSubscriberList(channelName string, subscriberName string) boo
 	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.RLock()
-	var status = ChannelList.TCPStorage[channelName].SubscriberList[subscriberName]
+	status := ChannelList.TCPStorage[channelName].SubscriberList[subscriberName]
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.RUnlock()
 
 	return status
 }	
+
+//storing status into the subscriber list hash map
 
 func StoreTCPChannelSubscriberList(channelName string, subscriberName string, status bool){
 
@@ -102,6 +121,8 @@ func StoreTCPChannelSubscriberList(channelName string, subscriberName string, st
 
 }
 
+// deleting subscriber name from subscriber list when the subscriber disconnects
+
 func DeleteTCPChannelSubscriberList(channelName string, subscriberName string){
 
 	defer ChannelList.Recover()
@@ -113,6 +134,7 @@ func DeleteTCPChannelSubscriberList(channelName string, subscriberName string){
 	ChannelList.TCPStorage[channelName].SubscriberChannelLock.Unlock()
 }
 
+// renewing subscriber list of any channel group
 
 func RenewSub(channelName string, groupName string){
 
@@ -129,6 +151,8 @@ func RenewSub(channelName string, groupName string){
 
 }
 
+// adding new client to subscriber channel group
+
 func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.PacketStruct){
 
 	defer ChannelList.Recover()
@@ -141,6 +165,8 @@ func AddNewClientToGrp(channelName string , groupName string, packetObject pojo.
 	
 }
 
+// removeing subscriber from chanel group
+
 func RemoveGroupMember(channelName string , groupName string, consumerName string){
 
 	defer ChannelList.Recover()
@@ -152,9 +178,9 @@ func RemoveGroupMember(channelName string , groupName string, consumerName strin
 
 	for index := range ChannelList.TCPStorage[channelName].Group[groupName]{
 
-		var groupMap = ChannelList.TCPStorage[channelName].Group[groupName][index]
+		groupMap := ChannelList.TCPStorage[channelName].Group[groupName][index]
 
-		var groupConsumerName = groupMap.ChannelName + groupMap.SubscriberName + groupMap.GroupName
+		groupConsumerName := groupMap.ChannelName + groupMap.SubscriberName + groupMap.GroupName
 
 		if groupConsumerName == consumerName{
 
@@ -165,6 +191,8 @@ func RemoveGroupMember(channelName string , groupName string, consumerName strin
 	}
 
 }
+
+// removing the group from the hashmap
 
 func RemoveGroupMap(channelName string , groupName string, groupId *int){
 
@@ -182,6 +210,8 @@ func RemoveGroupMap(channelName string , groupName string, groupId *int){
 
 }
 
+// getting the value groupId and subscriber packet object
+
 func GetValue(channelName string , groupName string, groupId *int, index int) (*pojo.PacketStruct, int){
 
 	defer ChannelList.Recover()
@@ -193,7 +223,7 @@ func GetValue(channelName string , groupName string, groupId *int, index int) (*
 
 	// log.Println(ChannelList.TCPStorage[channelName].Group[groupName])
 
-	var groupLen = len(ChannelList.TCPStorage[channelName].Group[groupName])
+	groupLen := len(ChannelList.TCPStorage[channelName].Group[groupName])
 
 	if groupLen <= 0{
 
@@ -224,6 +254,8 @@ func GetValue(channelName string , groupName string, groupId *int, index int) (*
 	return nil, -1
 }
 
+// getting the total size of the channel group
+
 func GetChannelGrpMapLen(channelName string, groupName string) int{
 
 	defer ChannelList.Recover()
@@ -231,12 +263,15 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
-	var groupLen = len(ChannelList.TCPStorage[channelName].Group[groupName])
+	groupLen := len(ChannelList.TCPStorage[channelName].Group[groupName])
 	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
 
 	return groupLen
 }
+	
+// ################################################## Inmemory Channel Methods ##########################################################################
 
+// adding new client to inmemory channel subscriber hashmap 
 
 func AppendNewClientInmemory(channelName string, subscriberMapName string, packetObject *pojo.PacketStruct){
 
@@ -250,6 +285,8 @@ func AppendNewClientInmemory(channelName string, subscriberMapName string, packe
 
 }
 
+// getting client list of inmemory subscriber list
+
 func GetClientListInmemory(channelName string) map[string]*pojo.PacketStruct{
 
 	defer ChannelList.Recover()
@@ -257,11 +294,13 @@ func GetClientListInmemory(channelName string) map[string]*pojo.PacketStruct{
 	runtime.Gosched()
 
 	ChannelList.TCPStorage[channelName].ChannelLock.RLock()
-	var channelInmemoryList = ChannelList.TCPSocketDetails[channelName]
+	channelInmemoryList := ChannelList.TCPSocketDetails[channelName]
 	ChannelList.TCPStorage[channelName].ChannelLock.RUnlock()
 
 	return channelInmemoryList
 }
+
+// deleting the user from the hashmap subscriber channelList
 
 func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
 
@@ -273,6 +312,8 @@ func DeleteInmemoryChannelList(channelName string, subscriberMapName string){
 	delete(ChannelList.TCPSocketDetails[channelName], subscriberMapName)
 	ChannelList.TCPStorage[channelName].ChannelLock.Unlock()
 }
+
+// checking if the client exists in the inmemory subscriber channel list
 
 func FindInmemorySocketListLength(channelName string, key string) (bool, *pojo.PacketStruct){
 

@@ -1,5 +1,15 @@
 package tcp
 
+/*
+
+	This file contains all the methods related to create packetObject 
+	and opening config file of each channel and loading data into 
+	inmemory of the channel details
+	
+*/
+
+// importing modules
+
 import(
 	"io/ioutil"
 	"path/filepath"
@@ -7,13 +17,16 @@ import(
 	"pojo"
 	"os"
 	"ChannelList"
-	_"log"
 	"strconv"
 )
+
+// memthod to read the directory defined in the config file
 
 func ReadDirectory(dirPath string, file os.FileInfo){
 
 	defer ChannelList.Recover()
+
+	// reading the directory
 
 	files, err := ioutil.ReadDir(dirPath)
 
@@ -22,7 +35,11 @@ func ReadDirectory(dirPath string, file os.FileInfo){
         return
     }
 
+    // iterating each files
+
     for _, file := range files{
+
+    	// getting the file stats
 
     	fi, err := os.Stat(dirPath+"/"+file.Name())
 
@@ -31,13 +48,19 @@ func ReadDirectory(dirPath string, file os.FileInfo){
 	        break
 	    }
 
+	    // checking if the path is a directory of file
+
 	    mode := fi.Mode()
 
 	    if mode.IsDir(){
 
+	    	// reading directory
+
 	    	ReadDirectory(dirPath+"/"+file.Name(), file)
 
 	    }else if mode.IsRegular(){
+
+	    	// reading files
 
 	    	ReadFile(dirPath, file)
 	    }
@@ -45,13 +68,21 @@ func ReadDirectory(dirPath string, file os.FileInfo){
     }
 }
 
+// reading config json files
+
 func ReadFile(path string, file os.FileInfo){
 
 	defer ChannelList.Recover()
 
+	// reading the file extension
+
 	extension := filepath.Ext(file.Name())
 
+	// if extension is json 
+
     if extension == ".json"{
+
+    	// reading the json content
 
     	data, err := ioutil.ReadFile(path+"/"+file.Name())
 
@@ -59,6 +90,8 @@ func ReadFile(path string, file os.FileInfo){
 			ChannelList.WriteLog(err.Error())
 			return
 		}
+
+		// loading the json to hashmap
 
 		channelMap := make(map[string]interface{})
 
@@ -69,19 +102,27 @@ func ReadFile(path string, file os.FileInfo){
 			return
 		}
 
+		// if the channel type is tcp, udp was also in the option is removed for now for data loss
+
 		if channelMap["type"] == "channel" && channelMap["channelType"] == "tcp"{
 
-			var worker = int(channelMap["worker"].(float64))
+			// getting number of workers, used for inmemory distribution
 
-			var bucketData  = make([]chan *pojo.PacketStruct, worker)
+			worker := int(channelMap["worker"].(float64))
+
+			// creating bucketData channel
+
+			bucketData  := make([]chan *pojo.PacketStruct, worker)
 
 			for i := range bucketData {
 			   bucketData[i] = make(chan *pojo.PacketStruct, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
 			}
 
-			var channelName = channelMap["channelName"].(string)
+			// setting packet objects of the channel
 
-			var channelObject = &pojo.ChannelStruct{
+			channelName := channelMap["channelName"].(string)
+
+			channelObject := &pojo.ChannelStruct{
 				Offset:int64(0),
 				Worker: worker,
 				BucketData: bucketData,
@@ -107,6 +148,8 @@ func ReadFile(path string, file os.FileInfo){
     }
 
 }
+
+// method to read the directory and open file config
 
 func LoadTCPChannelsToMemory(){
 
@@ -141,6 +184,8 @@ func LoadTCPChannelsToMemory(){
 
     }
 }
+
+// opening file descriptor for the log files
 
 func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 

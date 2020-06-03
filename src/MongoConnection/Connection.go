@@ -5,7 +5,7 @@ import(
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
     "go.mongodb.org/mongo-driver/bson"
-    "fmt"
+    "log"
     "ChannelList"
     "time"
     "io/ioutil"
@@ -30,8 +30,8 @@ func Connect() bool{
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil{
-		fmt.Println("Failed to connect mongodb")
-	    fmt.Println(err)
+		log.Println("Failed to connect mongodb")
+	    log.Println(err)
 	    return false
 	}
 
@@ -46,13 +46,13 @@ func Connect() bool{
 	err = client.Ping(context.TODO(), nil)
 
 	if err != nil{
-	    fmt.Println(err)
+	    log.Println(err)
 	    return false
 	}
 
 	MongoDB = client.Database("brahmaputra")
 
-	fmt.Println("Connected to MongoDB! on : ",*ChannelList.ConfigTCPObj.Storage.Mongodb.Url)
+	log.Println("Connected to MongoDB! on : ",*ChannelList.ConfigTCPObj.Storage.Mongodb.Url)
 
 	return true
 }
