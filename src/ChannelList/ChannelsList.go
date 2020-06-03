@@ -4,6 +4,8 @@ import(
 	"pojo"
 )
 
+// global object to store channel config inmemory and packet object + producer and subscriber details
+
 var ConfigTCPObj pojo.Config
 var ConfigUDPObj pojo.Config
 

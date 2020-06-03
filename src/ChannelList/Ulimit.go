@@ -6,6 +6,8 @@ import(
     _"os"
 )
 
+// increasing ulimit only works in linux and darwin(mac) os, to be commented for windows as the objects are undefined
+
 func SetUlimit(){
 
     // if runtime.GOOS == "linux" && *syscall.Rlimit != nil{

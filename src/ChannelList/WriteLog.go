@@ -9,6 +9,8 @@ import (
 
 var mutex = &sync.Mutex{}
 
+// method to write logs, any sort of logs exception as well as success logs
+
 func WriteLog(logMessage string){
 
 	defer Recover()
