@@ -1,5 +1,11 @@
 package brahmaputra
 
+/*
+	Connecting the TCP sockets
+*/
+
+// importing modules
+
 import(
 	"time"
 	"log"
@@ -7,17 +13,29 @@ import(
 	"net/url"
 )
 
+// connecting the tcp
+
 func (e *CreateProperties) connectTCP(){
 
 	defer handlepanic()
 
+	// checking pool size if greater than 0
+
 	if e.PoolSize > 0{
 
-		var connectStatus = true
+		// setting connection status as true by default
+
+		connectStatus := true
+
+		// iterating over the pool size 
 
 		for i := 0; i < e.PoolSize; i++ {
 
+			// creating tcp connections
+
 			e.Conn = e.createTCPConnection()
+
+			// if connection is not successful then connectionStatus is set to false
 
 			if e.Conn == nil{
 
@@ -27,9 +45,13 @@ func (e *CreateProperties) connectTCP(){
 
 			}
 
+			// appending all connection object to connection pool array
+
 			e.ConnPool = append(e.ConnPool, e.Conn)	
 
 		}
+
+		// if connectionStatus == false then it will attempt to reconnect after 2 seconds
 
 		if !connectStatus{
 
@@ -41,7 +63,11 @@ func (e *CreateProperties) connectTCP(){
 
 	}else{
 
+		// if there is no pool size set then it will create a single tcp connection
+
 		e.Conn = e.createTCPConnection()
+
+		// if connection is failure then it will attempt to reconnect to tcp after every 2 seconds
 
 		if e.Conn == nil{
 
@@ -53,29 +79,45 @@ func (e *CreateProperties) connectTCP(){
 
 		}
 
+		// appending the single tcp connection to the pool array
+
 		e.ConnPool = append(e.ConnPool, e.Conn)	
 
 	}
 
+	// checking the length of requestPull array if greater than 0
+
 	if len(e.requestPull) > 0{
 
-		var chancb = make(chan bool, 1)
+		// creating a boolean channel
+
+		chancb := make(chan bool, 1)
 		defer close(chancb)
+
+		// after reconnection if any message are pending in the request pull then it will publish message to the server again
 
 		for _, bodyMap := range e.requestPull{
 
 			go e.Publish(bodyMap, chancb)
+
+			// waiting for callbacks
 
 			<-chancb
 		}
 
 	}
 
+	// if app type == producer then 
+
 	if e.AppType == "producer"{
 
 		go log.Println("Application started as producer...")
 
+		// checking if acknowledgment is True
+
 		if e.Acknowledge{
+
+			// if pool size greater than 0 then receiving ack message from all the pool connections
 
 			if e.PoolSize > 0{
 
@@ -87,6 +129,8 @@ func (e *CreateProperties) connectTCP(){
 
 			}else{
 
+				// receiving ack message from single tcp connection
+
 				go e.receiveMsg(e.ConnPool[0])
 
 			}
@@ -94,9 +138,13 @@ func (e *CreateProperties) connectTCP(){
 		}
 	}
 
+	// app type is consumer then 
+
 	if e.AppType == "consumer"{
 
 		go log.Println("Application started as consumer...")
+
+		// if pool size greater than 0 then receiving message from all the pool connections
 
 		if e.PoolSize > 0{
 
@@ -108,11 +156,15 @@ func (e *CreateProperties) connectTCP(){
 
 		}else{
 
+			// receiving message from single tcp connection
+
 			go e.receiveSubMsg(e.ConnPool[0])
 
 		}
 
-		if e.subReconnect{
+		// checking if subscriber content matcher flag is true then, it will match the packet with the content matcher if true then pass ele discard message
+
+		if e.subContentmatcher{
 
 			for{
 
@@ -127,7 +179,11 @@ func (e *CreateProperties) connectTCP(){
 		}
 	} 
 
+	// marking the connectStatus as true after successfull connection
+
 	e.connectStatus = true
+
+	// if auto reconnect flag is true then it will start listening for disconnection of tcp socket
 
 	if e.AuthReconnect{
 
@@ -135,6 +191,8 @@ func (e *CreateProperties) connectTCP(){
 		
 	}
 }
+
+// method to check if any sort of disconnection in tcp socket, attempting to reconnect
 
 func (e *CreateProperties) checkTCPConnectStatus(){
 
@@ -159,6 +217,8 @@ func (e *CreateProperties) checkTCPConnectStatus(){
 
 }
 
+// connecting tcp connection
+
 func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	defer handlepanic()
@@ -174,23 +234,21 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
         return nil
     }
 
+    // splitting the url into host and port
+
 	host, port, _ := net.SplitHostPort(url.Host)
 
 	dest := host + ":" + port
 
-	if e.ConnectionType != "tcp" && e.ConnectionType != "udp"{
+	// connecting to tcp socket
+
+	if e.ConnectionType != "tcp"{
 
 		conn, err = net.Dial("tcp", dest)
-
-	}else if e.ConnectionType == "tcp"{
-
-		conn, err = net.Dial("tcp", dest)
-
-	}else if e.ConnectionType == "udp"{
-
-		conn, err = net.Dial("udp", dest)
 
 	}
+
+	// chekcing for error while connecting the tcp
 
 	if err != nil{
 
@@ -198,6 +256,8 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 		return nil
 	}
+
+	// setting some default tcp flags and connection
 
 	conn.(*net.TCPConn).SetKeepAlive(true)
 	conn.(*net.TCPConn).SetLinger(1)

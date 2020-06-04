@@ -1,5 +1,11 @@
 package brahmaputra
 
+/*
+	Parsing incomming messages from the server
+*/
+
+// importing the modules in golang 
+
 import(
 	"ByteBuffer"
 	"encoding/json"
@@ -7,51 +13,76 @@ import(
 	"log"
 )
 
+// parse incomming message
+
 func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType string, callbackChan chan string){
 
 	defer handlepanic()
 
+	// checking for message type, if publisher
+
 	if msgType == "pub"{
 
-		var producer_id = string(message)
+		producer_id := string(message)
 
 		callbackChan <- string(producer_id)
 
+		return
 	}
+
+	// checking for message type, if subscriber
 
 	if msgType == "sub"{	
 
-		var byteBuffer = ByteBuffer.Buffer{
+		// creating a byte buffer in big endian
+
+		byteBuffer := ByteBuffer.Buffer{
 			Endian:"big",
 		}
 
+		// wrapping the current message to byte buffer
+
 		byteBuffer.Wrap(message)
 
-		var messageTypeByte = byteBuffer.GetShort()
-		var messageTypeLen = int(binary.BigEndian.Uint16(messageTypeByte))
+		// parsing the message type
+
+		messageTypeLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		byteBuffer.Get(messageTypeLen)
 
-		var channelNameByte = byteBuffer.GetShort()
-		var channelNameLen = int(binary.BigEndian.Uint16(channelNameByte))
+		// parsing the channelName
+
+		channelNameLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		byteBuffer.Get(channelNameLen)
 
-		var producer_idByte = byteBuffer.GetShort()
-		var producer_idLen = int(binary.BigEndian.Uint16(producer_idByte))
+		// parsing the producer length
+
+		producer_idLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		byteBuffer.Get(producer_idLen)
 
-		var agentNameByte = byteBuffer.GetShort()
-		var agentNameLen = int(binary.BigEndian.Uint16(agentNameByte))
+		// parsing the agent name length
+
+		agentNameLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
 		byteBuffer.Get(agentNameLen)
+
+		// getting the id
 
 		byteBuffer.GetLong() //id
 
-		var bodyPacketSize = packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+		// getting the actual body packet size
 
-		var bodyPacket = byteBuffer.Get(int(bodyPacketSize))
+		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+
+		// parsing the body packet
+
+		bodyPacket := byteBuffer.Get(int(bodyPacketSize))
+
+		// if content matcher map is != 0 then parsing the message with the content macterh
 
 		if len(e.contentMatcherMap) != 0{
 
-			var messageData = make(map[string]interface{})
+			// messageData hashmap to map the body
+
+			messageData := make(map[string]interface{})
 
 			errJson := json.Unmarshal(bodyPacket, &messageData)
 
@@ -65,6 +96,8 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 			}
 
+			// matching with the content matcher
+
 			e.contentMatch(messageData)
 
 		}else{
@@ -77,9 +110,11 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 	}
 }
 
+// match the body packet with the content Match
+
 func (e *CreateProperties) contentMatch(messageData map[string]interface{}){
 
-	var matchFound = true
+	matchFound := true
 
 	if _, found := e.contentMatcherMap["$and"]; found {
 

@@ -1,5 +1,11 @@
 package brahmaputra
 
+/*
+	client driver main file
+*/
+
+// importing modules
+
 import(
 	"log"
 	"net"
@@ -8,7 +14,11 @@ import(
 	"runtime"
 )
 
+// creating susbcriber channel with type interface
+
 var SubscriberChannel = make(chan interface{}, 1)
+
+// creating a structure with many fields as configuration
 
 type CreateProperties struct{
 	Url string
@@ -40,8 +50,10 @@ type CreateProperties struct{
 	SubscriberName string
 	AuthReconnect bool
 	Acknowledge bool
-	subReconnect bool
+	subContentmatcher bool
 }	
+
+// mathod to handle panics
 
 func handlepanic() { 
   
@@ -49,6 +61,8 @@ func handlepanic() {
         log.Println(a)
     } 
 } 
+
+// validating the connection type and app type
 
 func (e *CreateProperties) validateFields() bool {
 
@@ -71,6 +85,8 @@ func (e *CreateProperties) validateFields() bool {
 	return true
 }
 
+// method to connect tcp server
+
 func (e *CreateProperties) Connect(){
 
 	defer handlepanic()
@@ -79,39 +95,25 @@ func (e *CreateProperties) Connect(){
 		return
 	}
 
-	e.subReconnect = false
+	// by default reconnect flag is false
 
-	if e.Acknowledge{
+	e.subContentmatcher = false
 
-		e.TransactionList = make(map[string][]byte)
-		
-	}
-
-	e.contentMatcherMap = make(map[string]interface{})
-
-	if e.AlwaysStartFrom == ""{
-
-		e.AlwaysStartFrom = "BEGINNING"
-
-	}
+	// checking the agent name
 
 	if e.AgentName != ""{
 
-		e.subReconnect = true
+		e.subContentmatcher = true
 
 	} 
 
-	e.roundRobin = 0
-
-	if e.Worker > 0{
-		runtime.GOMAXPROCS(e.Worker)
-	}
-
-	e.autoIncr = 0
+	// getting the agent name from the current login session
 
 	var agentErr error
 
 	e.AgentName, agentErr = os.Hostname()
+
+	// creating a request boolean channel
 
 	e.requestChan = make(chan bool, 1)
 
@@ -123,6 +125,41 @@ func (e *CreateProperties) Connect(){
 
 	}
 
+	if e.AppType == "producer"{
+
+		// checking if producer acknowledgement is true
+
+		if e.Acknowledge{
+
+			e.TransactionList = make(map[string][]byte)
+			
+		}
+
+		// setting round robin flag = 0 by default
+
+		e.roundRobin = 0
+
+		if e.Worker > 0{
+			runtime.GOMAXPROCS(e.Worker)
+		}
+
+		e.autoIncr = 0
+
+	}else{
+
+		// content matcher map hashmap
+
+		e.contentMatcherMap = make(map[string]interface{})
+
+		// checking always start from flags 
+
+		if e.AlwaysStartFrom == ""{
+
+			e.AlwaysStartFrom = "BEGINNING"
+
+		}
+	}
+
 	if e.ConnectionType == "tcp"{
 
 		e.connectTCP()
@@ -130,6 +167,8 @@ func (e *CreateProperties) Connect(){
 	}
 
 }
+
+// closing the tcp connection
 
 func (e *CreateProperties) Close(){
 

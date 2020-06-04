@@ -1,11 +1,38 @@
 package brahmaputra
 
+/*
+	Subscribe method, here the publisher receives the ack and subscriber receives the packets
+*/
+
+// import modules
+
 import(
 	"encoding/binary"
 	"net"
 	"log"
 	"time"
 )
+
+// method to check if the packet is blank
+
+func allZero(s []byte) bool {
+
+	defer handlepanic()
+
+	for _, v := range s {
+
+		if v != 0 {
+
+			return false
+
+		}
+
+	}
+
+	return true
+}
+
+// 
 
 func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
