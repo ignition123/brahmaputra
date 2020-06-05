@@ -18,7 +18,7 @@ func main() {
 		ConnectionType:"tcp",
 		ChannelName:"brahm",
 		AppType:"consumer",
-		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
+		AlwaysStartFrom:"NOPULL", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber_fo1",
 		GroupName:"brahm_group", //brahm_group_123

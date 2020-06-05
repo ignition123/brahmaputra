@@ -706,7 +706,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				// if exitLoop == true then break and close file desciptor
 
-				if exitLoop || *socketDisconnect{
+				if exitLoop{
 
 					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
 
@@ -717,6 +717,21 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 					}
 
 					break
+
+				}
+
+				// socket client disconnected checking the length of the group if 0 then closing the loop and file descriptor
+
+				if *socketDisconnect{
+
+					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+
+					if consumerGroupLen <= 0{
+
+						go CloseSubscriberGrpFD(packetObject)
+
+						break
+					}
 
 				}
 
