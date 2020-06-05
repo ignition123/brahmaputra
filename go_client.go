@@ -22,7 +22,7 @@ func main(){
 		PoolSize:10,
 		WriteDelay:0, // nano second
 		Acknowledge:true,
-		Compression:"zlib",
+		Compression:"lz4",
 	}
 
 	brahm.Connect()

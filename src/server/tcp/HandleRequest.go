@@ -52,6 +52,9 @@ func HandleRequest(conn net.TCPConn) {
 	writeCount := 0
 	groupMapName := ""
 
+	// socket disconnect variable to exits subscriber loop from file
+	socketDisconnect := false
+
 	var subscriberMapName string
 	var channelMapName string
 	var messageMapType string
@@ -154,7 +157,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		// calling the parseMessage method and waiting for callback
 		
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName)
+		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName, &socketDisconnect)
 
 		// after callback incrementing writeCount = 1
 
@@ -162,6 +165,8 @@ func HandleRequest(conn net.TCPConn) {
 
 		<-parseChan
 	}
+
+	socketDisconnect = true
 
 	// if loop breaks then checking the socket type publisher or subscriber
 

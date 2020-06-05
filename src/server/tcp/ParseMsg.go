@@ -18,7 +18,7 @@ import (
 
 // method to parse message from socket client
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount int, counterRequest *int, subscriberMapName *string, channelMapName *string, messageMapType *string, groupMapName *string){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount int, counterRequest *int, subscriberMapName *string, channelMapName *string, messageMapType *string, groupMapName *string, socketDisconnect *bool){
 
 	defer ChannelList.Recover()
 
@@ -406,7 +406,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
     				// infinitely listening to the log file for changes and publishing to subscriber, subscriber group list
 
-		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from)
+		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from, socketDisconnect)
 				}
 
 			}else{
@@ -445,7 +445,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
     			// infinitely listening to the log file for changes and publishing to subscriber individually listening
 
-				go SubscribeChannel(conn, *packetObject, start_from)
+				go SubscribeChannel(conn, *packetObject, start_from, socketDisconnect)
 
 			}
 
@@ -484,9 +484,9 @@ func WriteData(packet pojo.PacketStruct, writeCount int){
 		Endian:"big",
 	}
 
-	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + _id + totalBytePacket
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + _id + compressionType + totalBytePacket
 
-	totalByteLen := 2 + packet.MessageTypeLen + 2 + packet.ChannelNameLen + 2 + packet.Producer_idLen + 2 + packet.AgentNameLen + 8 + len(packet.BodyBB)
+	totalByteLen := 2 + packet.MessageTypeLen + 2 + packet.ChannelNameLen + 2 + packet.Producer_idLen + 2 + packet.AgentNameLen + 8 + 1 + len(packet.BodyBB)
 
 	byteBuffer.PutLong(totalByteLen)
 

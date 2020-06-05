@@ -106,7 +106,7 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 		}
 
-		// if content matcher map is != 0 then parsing the message with the content macterh
+		// if content matcher map is != 0 then parsing the message with the content match
 
 		if len(e.contentMatcherMap) != 0{
 

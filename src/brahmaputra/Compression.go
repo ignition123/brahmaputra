@@ -8,7 +8,6 @@ import(
 	"github.com/pierrec/lz4"
 	"github.com/golang/snappy"
 	"bytes"
-	"log"
 	"ByteBuffer"
 	"io/ioutil"
 )
@@ -72,7 +71,13 @@ func lz4CompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte byt
 
 	// writing to lz4 for compression
 
-	lzWriterObj.Write(bodyBB)
+	if _, err := lzWriterObj.Write(bodyBB); err != nil {
+		return nil
+	}
+
+	if err := lzWriterObj.Close(); err != nil {
+		return nil
+	}
 
 	// pushing actual body
 
@@ -132,7 +137,10 @@ func snappyCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte 
 	// writing to snappy for compression
 
 	if _, err := snappyWriterObj.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using snappy")
+		return nil
+	}
+
+	if err := snappyWriterObj.Close(); err != nil {
 		return nil
 	}
 
@@ -177,6 +185,8 @@ func gzipCompressionReadMethod(bodyBB []byte)[] byte{
        return nil
     }
 
+    gzipReaderObj.Close()
+
     return uncompressByte
 }
 
@@ -197,7 +207,6 @@ func gzipCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte by
 		// error while compressing
 
 		if err != nil{
-			log.Println("Failed to compress using gzip")
 			return nil
 		}
 
@@ -210,7 +219,10 @@ func gzipCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte by
 	// writing to gzib for compression
 
 	if _, err := gzipWriterObj.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using gzip")
+		return nil
+	}
+
+	if err := gzipWriterObj.Close(); err != nil {
 		return nil
 	}
 
@@ -267,7 +279,6 @@ func zlibCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte by
 		// error while compressing
 
 		if err != nil{
-			log.Println("Failed to compress using zlib")
 			return nil
 		}
 
@@ -280,7 +291,10 @@ func zlibCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte by
 	// writing to zlib for compression
 
 	if _, err := zlibWriterObj.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using zlib")
+		return nil
+	}
+
+	if err := zlibWriterObj.Close(); err != nil {
 		return nil
 	}
 

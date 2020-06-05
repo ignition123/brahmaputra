@@ -184,6 +184,7 @@ func (e *CreateProperties) Connect(){
 			e.AlwaysStartFrom = "BEGINNING"
 
 		}
+
 	}
 
 	if e.ConnectionType == "tcp"{

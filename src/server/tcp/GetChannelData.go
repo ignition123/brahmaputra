@@ -613,7 +613,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 	Subscriber Group Channel Method, here in this method the subscriber listens to file change in seperate go routines and publishes to subscriber
 */
 
-func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string){
+func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string, socketDisconnect *bool){
 
 	defer ChannelList.Recover()
 
@@ -706,7 +706,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				// if exitLoop == true then break and close file desciptor
 
-				if exitLoop{
+				if exitLoop || *socketDisconnect{
 
 					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
 
@@ -921,7 +921,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 	method to publish messages to individual subscriber in case of persistent channel
 */
 
-func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_from string){
+func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_from string, socketDisconnect *bool){
 
 	defer ChannelList.Recover()
 
@@ -1025,7 +1025,7 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				// if exitLoop == true the break from iteration, it will be true when subscriber disconnects
 
-				if exitLoop{
+				if exitLoop || *socketDisconnect{
 
 					conn.Close()
 
@@ -1222,7 +1222,6 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 				}
 
 			}
-
 
 		}(i, offsetByteSize[i], conn, packetObject)
 

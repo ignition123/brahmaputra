@@ -18,7 +18,7 @@ func main() {
 		ConnectionType:"tcp",
 		ChannelName:"brahm",
 		AppType:"consumer",
-		AlwaysStartFrom:"BEGINNING", // BEGINNING | NOPULL | LASTRECEIVED,
+		AlwaysStartFrom:"NOPULL", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber_fo",
 		GroupName:"brahm_group", //brahm_group_123
@@ -64,7 +64,11 @@ func main() {
 				if ok{
 						
 					count += 1 
+
+					// var msgg = msg.([]byte)
 						
+					// log.Println(string(msgg))
+
 					log.Println(count)
 
 				}	
