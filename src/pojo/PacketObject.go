@@ -5,8 +5,9 @@ import(
 	"os"
 )
 
-type PacketStruct struct{
+// packet struct, packet received fromt the client
 
+type PacketStruct struct{
 	MessageTypeLen int
 	MessageType string
 	ChannelNameLen int

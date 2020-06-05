@@ -1,10 +1,11 @@
 package pojo
 
 import(
-	"net"
 	"os"
 	"sync"
 )
+
+// channel config struct
 
 type ChannelStruct struct{
 	FD []*os.File 
@@ -22,33 +23,4 @@ type ChannelStruct struct{
 	PartitionCount int
 	Group map[string][]*PacketStruct
 	SubscriberList map[string]bool
-}
-
-type SocketDetails struct{
-	Conn net.TCPConn
-	ContentMatcher map[string]interface{}
-}
-
-
-type HlsStruct struct{
-	Hls_fragment int
-	Hls_path string
-	Hls_window int
-}
-
-type OnPublishStruct struct{
-	AuthUrl string
-	HookCall string
-	Exec string
-}
-
-type OnPlayStruct struct{
-	AuthUrl string
-	HookCall string
-	Exec string
-}
-
-type OnEndStruct struct{
-	HookCall string
-	Exec string
 }

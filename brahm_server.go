@@ -1,5 +1,9 @@
 package main
 
+// main function to start the brahmaputra server
+
+// importing modules
+
 import (
 	"log"
 	"os"
@@ -17,12 +21,15 @@ import (
 	"fmt"
 )
 
+// commandline hashmap
 
 var commandLineMap = make(map[string]interface{})
 
 func main(){
 
 	defer ChannelList.Recover()
+
+	// creating a signal channel to close the socket properly if socket is killed
 
 	sigs := make(chan os.Signal, 1)
 
@@ -46,6 +53,8 @@ func main(){
 		return
 	}
 
+	// getting the comamnd line arguments
+
 	serverRun := flag.String("config", "default", "a string")
 
 	channelName := flag.String("create-channel", "default", "a string")
@@ -59,6 +68,8 @@ func main(){
 	authUrl := flag.String("authUrl", "", "a string")
 
 	flag.Parse()
+
+	// creating config file and running tcp server
 
 	if *serverRun != "default"{
 		runConfigFile(*serverRun)
@@ -88,6 +99,8 @@ func main(){
 	}
 }
 
+// iterating over the tcp storage and closing the open file descriptors
+
 func cleanupAllTheThings(){
 
 	defer ChannelList.Recover()
@@ -106,6 +119,8 @@ func cleanupAllTheThings(){
 		
 	}
 }
+
+// reading the config file and converting to object
 
 func runConfigFile(configPath string){
 	
@@ -151,6 +166,8 @@ func runConfigFile(configPath string){
 	}
 }
 
+// printing logo of brahmaputra in command line
+
 func printLogo(){
 
 	year, _, _ := time.Now().Date()
@@ -171,6 +188,8 @@ func printLogo(){
 
 	fmt.Println(LOGO)  
 }
+
+// creating tcp channels
 
 func createTCPChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
 
