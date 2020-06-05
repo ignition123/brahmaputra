@@ -13,6 +13,7 @@ import(
 	"strconv"
 	"ByteBuffer"
 	"encoding/json"
+	"bytes"
 )
 
 // publishing message to the server
@@ -81,8 +82,8 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 	// total length of the packet size
 
-	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + totalBytePacket
-	totalByteLen := 2 + messageTypeLen + 2 + channelNameLen  + 2 + producer_idLen + 2 + agentNameLen + 1 + len(bodyBB)  
+	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + Acknowledgement + compression + totalBytePacket
+	totalByteLen := 2 + messageTypeLen + 2 + channelNameLen  + 2 + producer_idLen + 2 + agentNameLen + 1 + 1 + len(bodyBB)  
 
 	// pushing total body length   
 	 
@@ -131,14 +132,53 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 		byteBuffer.PutByte(byte(2))
 	}
 
-	// pushing actual body
+	var compressionByte bytes.Buffer
 
-	byteBuffer.Put(bodyBB)
+	var byteArrayResp []byte
 
-	// converting the byte buffer to byte array
+	// compression algorithm
 
-	byteArrayResp := byteBuffer.Array()
- 
+	if e.Compression == "zlib"{
+
+		byteArrayResp = zlibCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "gzip"{
+
+		byteArrayResp = gzipCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "snappy"{
+
+		byteArrayResp = snappyCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "lz4"{
+
+		byteArrayResp = lz4CompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else{
+
+		// no compression (value = 1)
+
+		byteBuffer.PutByte(byte(noCompression))
+
+		// pushing actual body
+
+		byteBuffer.Put(bodyBB)
+
+		// converting to byte array
+
+		byteArrayResp = byteBuffer.Array()
+
+	}
+
+	// if error while compression then return
+
+	if byteArrayResp == nil{
+		e.requestChan <- false
+		return
+	}
+
+	// checking acknowledgment flag
+
 	if e.Acknowledge{
 
 		e.TransactionList[producer_id] = byteArrayResp	

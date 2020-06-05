@@ -242,10 +242,13 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	// connecting to tcp socket
 
-	if e.ConnectionType != "tcp"{
-
+	if e.ConnectionType == "tcp"{
+		
 		conn, err = net.Dial("tcp", dest)
 
+	}else{
+
+		conn, err = net.Dial("tcp", dest)
 	}
 
 	// chekcing for error while connecting the tcp

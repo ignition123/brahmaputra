@@ -51,7 +51,18 @@ type CreateProperties struct{
 	AuthReconnect bool
 	Acknowledge bool
 	subContentmatcher bool
+	Compression string
 }	
+
+// compression constant
+
+const(
+	noCompression = 1
+	zlibCompression = 2
+	gzibCompression = 3
+	snappyCompression = 4
+	lzCompression = 5
+)
 
 // mathod to handle panics
 
@@ -143,6 +154,21 @@ func (e *CreateProperties) Connect(){
 			runtime.GOMAXPROCS(e.Worker)
 		}
 
+		// checking the compression set for the packet
+
+		if e.Compression != ""{
+
+			if e.Compression != "zlib" && e.Compression != "gzib" && e.Compression != "lz4" && e.Compression != "snappy"{
+
+				go log.Println("Invalid compression, must be zlib, gzip, snappy or lz4 ...")
+
+				return
+			} 
+
+		}
+
+		// setting the autoincrement producer id = 0
+ 
 		e.autoIncr = 0
 
 	}else{

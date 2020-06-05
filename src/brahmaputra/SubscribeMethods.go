@@ -11,6 +11,7 @@ import(
 	"net"
 	"log"
 	"time"
+	"io"
 )
 
 // method to check if the packet is blank
@@ -79,7 +80,7 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 			statusBuf := make([]byte, 1)
 
-			_, err :=conn.Read(statusBuf)
+			_, err =conn.Read(statusBuf)
 
 			// reading from tcp socket getting the size of the total packet
 
@@ -97,7 +98,7 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 			// reading the complete packet
 
-			_, err := conn.Read(completePacket)
+			_, err = conn.Read(completePacket)
 
 			// reading from tcp socket getting the size of the total packet
 
@@ -202,7 +203,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 
 		statusBuf := make([]byte, 1)
 
-		_, err := conn.Read(statusBuf)
+		_, err = conn.Read(statusBuf)
 
 		// reading from tcp socket getting the size of the total packet
 
@@ -220,7 +221,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 
 		// reading the entire packet from tcp pipe
 
-		_, err := conn.Read(completePacket)
+		_, err = conn.Read(completePacket)
 
 		// reading from tcp socket getting the size of the total packet
 
