@@ -59,7 +59,7 @@ type CreateProperties struct{
 const(
 	noCompression = 1
 	zlibCompression = 2
-	gzibCompression = 3
+	gzipCompression = 3
 	snappyCompression = 4
 	lzCompression = 5
 )
@@ -68,9 +68,9 @@ const(
 
 func handlepanic() { 
   
-    if a := recover(); a != nil { 
-        log.Println(a)
-    } 
+    // if a := recover(); a != nil { 
+    //     log.Println(a)
+    // } 
 } 
 
 // validating the connection type and app type
@@ -158,7 +158,7 @@ func (e *CreateProperties) Connect(){
 
 		if e.Compression != ""{
 
-			if e.Compression != "zlib" && e.Compression != "gzib" && e.Compression != "lz4" && e.Compression != "snappy"{
+			if e.Compression != "zlib" && e.Compression != "gzip" && e.Compression != "lz4" && e.Compression != "snappy"{
 
 				go log.Println("Invalid compression, must be zlib, gzip, snappy or lz4 ...")
 

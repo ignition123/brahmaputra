@@ -68,13 +68,43 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 		byteBuffer.GetLong() //id
 
+		// getting the compression type 
+
+		compression := byteBuffer.GetByte()
+
 		// getting the actual body packet size
 
-		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1)
+
+		bodyPacket := byteBuffer.Get(int(bodyPacketSize))
 
 		// parsing the body packet
 
-		bodyPacket := byteBuffer.Get(int(bodyPacketSize))
+		if compression[0] == 2{
+
+			// zlib compression
+
+			bodyPacket = zlibCompressionReadMethod(bodyPacket)
+
+		}else if compression[0] == 3{
+
+			// gzip compression
+
+			bodyPacket = gzipCompressionReadMethod(bodyPacket)
+
+		}else if compression[0] == 4{
+
+			// snappy compression
+
+			bodyPacket = snappyCompressionReadMethod(bodyPacket)
+
+		}else if compression[0] == 5{
+
+			// lz4 compression
+
+			bodyPacket = lz4CompressionReadMethod(bodyPacket)
+
+		}
 
 		// if content matcher map is != 0 then parsing the message with the content macterh
 

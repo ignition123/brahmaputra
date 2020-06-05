@@ -80,6 +80,29 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 	agentNameLen := len(e.AgentName)
 
+
+	var compressionByte bytes.Buffer
+
+	// compression algorithm
+
+	if e.Compression == "zlib"{
+
+		bodyBB = zlibCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "gzip"{
+
+		bodyBB = gzipCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "snappy"{
+
+		bodyBB = snappyCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}else if e.Compression == "lz4"{
+
+		bodyBB = lz4CompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+
+	}
+
 	// total length of the packet size
 
 	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + Acknowledgement + compression + totalBytePacket
@@ -132,43 +155,37 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 		byteBuffer.PutByte(byte(2))
 	}
 
-	var compressionByte bytes.Buffer
-
-	var byteArrayResp []byte
-
-	// compression algorithm
+	// appending compression type
 
 	if e.Compression == "zlib"{
 
-		byteArrayResp = zlibCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+		byteBuffer.PutByte(byte(zlibCompression))
 
 	}else if e.Compression == "gzip"{
 
-		byteArrayResp = gzipCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+		byteBuffer.PutByte(byte(gzipCompression))
 
 	}else if e.Compression == "snappy"{
 
-		byteArrayResp = snappyCompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+		byteBuffer.PutByte(byte(snappyCompression))
 
 	}else if e.Compression == "lz4"{
 
-		byteArrayResp = lz4CompressionWriteMethod(byteBuffer, compressionByte, bodyBB)
+		byteBuffer.PutByte(byte(lzCompression))
 
 	}else{
 
-		// no compression (value = 1)
-
 		byteBuffer.PutByte(byte(noCompression))
 
-		// pushing actual body
-
-		byteBuffer.Put(bodyBB)
-
-		// converting to byte array
-
-		byteArrayResp = byteBuffer.Array()
-
 	}
+
+	// appending actual body packet
+
+	byteBuffer.Put(bodyBB)
+
+	// converting the byte buffer into byte array
+
+	byteArrayResp := byteBuffer.Array()
 
 	// if error while compression then return
 

@@ -27,5 +27,6 @@ type PacketStruct struct{
 	GroupName string
 	SubscriberFD []*os.File 
 	ProducerAck bool
+	CompressionType byte
 	ActiveMode bool
 }

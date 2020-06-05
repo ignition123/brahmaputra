@@ -125,9 +125,9 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 		// creating total length of the byte buffer
 
-		// MessageTypeLen + messageType + ChannelNameLength + channelname + producer_idLen + producer_id + AgentNameLen + AgentName + backendOffset + actualBody
+		// MessageTypeLen + messageType + ChannelNameLength + channelname + producer_idLen + producer_id + AgentNameLen + AgentName + backendOffset + compressionType + actualBody
 
-		totalByteLen := 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 8 + len(message.BodyBB)
+		totalByteLen := 2 + message.MessageTypeLen + 2 + message.ChannelNameLen + 2 + message.Producer_idLen + 2 + message.AgentNameLen + 8 + 1 + len(message.BodyBB)
 
 		byteBuffer.PutLong(totalByteLen) // total packet length
 
@@ -151,7 +151,9 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 		byteBuffer.PutLong(int(message.Id)) // backend offset
 
-		byteBuffer.PutLong(0) // total bytes subscriber packet received
+		// byteBuffer.PutLong(0) // total bytes subscriber packet received
+
+		byteBuffer.PutByte(message.CompressionType) // compression type (zlib, gzip, snappy, lz4)
 
 		byteBuffer.Put(message.BodyBB) // actual body
 
@@ -839,11 +841,13 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				id := binary.BigEndian.Uint64(byteFileBuffer.GetLong())
 
-				bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+				CompressionType := byteFileBuffer.GetByte()
+
+				bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1)
 
 				bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
 
-				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
+				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1 + len(bodyBB)
 
 				// creating another byte buffer in big endian 
 
@@ -874,6 +878,8 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 				byteSendBuffer.Put([]byte(agentName)) // agentName value
 
 				byteSendBuffer.PutLong(int(id)) // backend offset
+
+				byteSendBuffer.PutByte(CompressionType[0]) // compression type
 
 				byteSendBuffer.Put(bodyBB) // actual body
 
@@ -1151,11 +1157,13 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 				id := binary.BigEndian.Uint64(byteFileBuffer.GetLong())
 
-				bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8)
+				CompressionType := byteFileBuffer.GetByte()
+
+				bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1)
 
 				bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
 
-				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + len(bodyBB)
+				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1 + len(bodyBB)
 
 				// creating bytebuffer of big endian and setting the values to be published
 
@@ -1184,6 +1192,8 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 				byteSendBuffer.Put([]byte(agentName)) // agentName value
 
 				byteSendBuffer.PutLong(int(id)) // backend offset
+
+				byteSendBuffer.PutByte(CompressionType[0]) // compression type
 
 				byteSendBuffer.Put(bodyBB) // actual body
 

@@ -93,9 +93,14 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		ackStatusByte := byteBuffer.GetByte()
 
+		// compression type byte packet
+
+		compression := byteBuffer.GetByte()
+		packetObject.CompressionType = compression[0]
+
 		// getting the actual body packet size
 
-		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1)
+		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1 + 1)
 
 		// actual body packet
 
@@ -502,6 +507,8 @@ func WriteData(packet pojo.PacketStruct, writeCount int){
 	byteBuffer.Put([]byte(packet.AgentName))
 
 	byteBuffer.PutLong(int(packet.Id))
+
+	byteBuffer.PutByte(packet.CompressionType)
 
 	byteBuffer.Put(packet.BodyBB)
 

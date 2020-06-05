@@ -10,37 +10,69 @@ import(
 	"bytes"
 	"log"
 	"ByteBuffer"
+	"io/ioutil"
 )
 
+var(
+	lzReaderObj *lz4.Reader
+	snappyReaderObj *snappy.Reader
+	gzipReaderObj *gzip.Reader
+
+	lzWriterObj *lz4.Writer
+	snappyWriterObj *snappy.Writer
+	gzipWriterObj *gzip.Writer
+	zlibWriterObj *zlib.Writer
+)
+
+// ###############################################################################################################################################
 // lz4 compression 
+
+// read method
+
+func lz4CompressionReadMethod(bodyBB []byte)[] byte{
+
+	defer handlepanic()
+
+	byteRead := bytes.NewReader(bodyBB)
+
+	if lzReaderObj == nil{
+
+		lzReaderObj = lz4.NewReader(byteRead)
+
+	}else{
+
+		lzReaderObj.Reset(byteRead)
+	}
+
+	uncompressByte, err := ioutil.ReadAll(lzReaderObj)
+
+    if err != nil {
+       return nil
+    }
+
+    return uncompressByte
+}
+
+// write method
 
 func lz4CompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
 
-	// compression lz4 algorithm (value = 5)
-
-	byteBuffer.PutByte(byte(lzCompression))
+	defer handlepanic()
 
 	// creating new writer for lz4 compression
 
-	lzw := lz4.NewWriter(&compressionByte)
+	if lzWriterObj == nil{
+
+		lzWriterObj = lz4.NewWriter(&compressionByte)
+
+	}else{
+
+		lzWriterObj.Reset(&compressionByte)
+	}
 
 	// writing to lz4 for compression
 
-	lzw.Write(bodyBB)
-
-	// flushing the snappy buffer
-
-	if err := lzw.Flush(); err != nil {
-		log.Println("Failed to compress using lz4")
-		return nil
-	}
-
-	// closing the gzib compression
-
-	if err := lzw.Close(); err != nil {
-		log.Println("Failed to compress using lz4")
-		return nil
-	}
+	lzWriterObj.Write(bodyBB)
 
 	// pushing actual body
 
@@ -49,34 +81,57 @@ func lz4CompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte byt
 	return byteBuffer.Array()
 }
 
+// ###############################################################################################################################################
 // snappy compression
 
-func snappyCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
-	// compression snappy algorithm (value = 4)
+// read method
 
-	byteBuffer.PutByte(byte(snappyCompression))
+
+func snappyCompressionReadMethod(bodyBB []byte)[] byte{
+	
+	defer handlepanic()
+
+	byteRead := bytes.NewReader(bodyBB)
+
+	if snappyReaderObj == nil{
+
+		snappyReaderObj = snappy.NewReader(byteRead)
+
+	}else{
+
+		snappyReaderObj.Reset(byteRead)
+
+	}
+
+	uncompressByte, err := ioutil.ReadAll(snappyReaderObj)
+
+    if err != nil {
+       return nil
+    }
+
+    return uncompressByte
+}
+
+// write method
+
+func snappyCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
+	
+	defer handlepanic()
 
 	// creating new writer for snappy compression
 
-	snpw := snappy.NewWriter(&compressionByte)
+	if snappyWriterObj == nil{
+
+		snappyWriterObj = snappy.NewWriter(&compressionByte)
+
+	}else{
+
+		snappyWriterObj.Reset(&compressionByte)
+	}
 
 	// writing to snappy for compression
 
-	if _, err := snpw.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using snappy")
-		return nil
-	}
-
-	// flushing the snappy buffer
-
-	if err := snpw.Flush(); err != nil {
-		log.Println("Failed to compress using snappy")
-		return nil
-	}
-
-	// closing the snappy compression
-
-	if err := snpw.Close(); err != nil {
+	if _, err := snappyWriterObj.Write(bodyBB); err != nil {
 		log.Println("Failed to compress using snappy")
 		return nil
 	}
@@ -88,41 +143,73 @@ func snappyCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte 
 	return byteBuffer.Array()
 }
 
+// ###############################################################################################################################################
 // gzip compression
 
-func gzipCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
-	// compression gzip algorithm (value = 3)
+// read method
 
-	byteBuffer.PutByte(byte(gzibCompression))
+
+func gzipCompressionReadMethod(bodyBB []byte)[] byte{
+	
+	defer handlepanic()
+
+	var err error
+
+	byteRead := bytes.NewReader(bodyBB)
+
+	if gzipReaderObj == nil{
+
+		gzipReaderObj, err = gzip.NewReader(byteRead)
+
+	}else{
+
+		err = gzipReaderObj.Reset(byteRead)
+
+	}
+
+	if err != nil{
+		return nil
+	}
+
+	uncompressByte, err := ioutil.ReadAll(gzipReaderObj)
+
+    if err != nil {
+       return nil
+    }
+
+    return uncompressByte
+}
+
+// write method
+
+func gzipCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
+	
+	defer handlepanic()
+
+	var err error
 
 	// creating new writer for gzip compression
 
-	gz, err := gzip.NewWriterLevel(&compressionByte, gzip.BestCompression)
+	if gzipWriterObj == nil{
 
-	// error while compressing
+		gzipWriterObj, err = gzip.NewWriterLevel(&compressionByte, gzip.BestCompression)
 
-	if err != nil{
-		log.Println("Failed to compress using gzip")
-		return nil
+		// error while compressing
+
+		if err != nil{
+			log.Println("Failed to compress using gzip")
+			return nil
+		}
+
+	}else{
+
+		gzipWriterObj.Reset(&compressionByte)
+
 	}
 
 	// writing to gzib for compression
 
-	if _, err := gz.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using gzip")
-		return nil
-	}
-
-	// flushing the gzip buffer
-
-	if err := gz.Flush(); err != nil {
-		log.Println("Failed to compress using gzip")
-		return nil
-	}
-
-	// closing the gzib compression
-
-	if err := gz.Close(); err != nil {
+	if _, err := gzipWriterObj.Write(bodyBB); err != nil {
 		log.Println("Failed to compress using gzip")
 		return nil
 	}
@@ -134,41 +221,65 @@ func gzipCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte by
 	return byteBuffer.Array()
 }
 
+// ###############################################################################################################################################
 // zlib compression
 
-func zlibCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
-	// compression zlib algorithm (value = 2)
+// read method
 
-	byteBuffer.PutByte(byte(zlibCompression))
+
+func zlibCompressionReadMethod(bodyBB []byte)[] byte{
+	
+	defer handlepanic()
+
+	byteRead := bytes.NewReader(bodyBB)
+
+	zlibObj, err := zlib.NewReader(byteRead)
+
+	if err != nil{
+		return nil
+	}
+
+	uncompressByte, err := ioutil.ReadAll(zlibObj)
+
+    if err != nil {
+       return nil
+    }
+
+    zlibObj.Close()
+
+    return uncompressByte
+}
+
+// write method
+
+func zlibCompressionWriteMethod(byteBuffer ByteBuffer.Buffer, compressionByte bytes.Buffer, bodyBB []byte)[] byte{
+
+	defer handlepanic()
+
+	var err error
 
 	// creating new writer for zlib compression
 
-	zl, err := zlib.NewWriterLevel(&compressionByte, zlib.BestCompression)
+	if zlibWriterObj == nil{
 
-	// error while compressing
+		zlibWriterObj, err = zlib.NewWriterLevel(&compressionByte, zlib.BestCompression)
 
-	if err != nil{
-		log.Println("Failed to compress using zlib")
-		return nil
+		// error while compressing
+
+		if err != nil{
+			log.Println("Failed to compress using zlib")
+			return nil
+		}
+
+	}else{
+
+		zlibWriterObj.Reset(&compressionByte)
+
 	}
 
 	// writing to zlib for compression
 
-	if _, err := zl.Write(bodyBB); err != nil {
-		log.Println("Failed to compress using zlib")
-		return nil
-	}
-
-	// flushing the zlib buffer
-
-	if err := zl.Flush(); err != nil {
-		log.Println("Failed to compress using zlib")
-		return nil
-	}
-
-	// closing the zlib compression
-
-	if err := zl.Close(); err != nil {
+	if _, err := zlibWriterObj.Write(bodyBB); err != nil {
 		log.Println("Failed to compress using zlib")
 		return nil
 	}
