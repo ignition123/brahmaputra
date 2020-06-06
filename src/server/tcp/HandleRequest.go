@@ -11,6 +11,7 @@ import (
 	"net"
 	"ChannelList"
 	"io"
+	"pojo"
 )
 
 // creating a closeTCP variale with boolean value false, it is set to true when the application crashes it will close all tcp client
@@ -46,18 +47,22 @@ func HandleRequest(conn net.TCPConn) {
 	parseChan := make(chan bool, 1)
 	defer close(parseChan)
 
-	// creating local variables to manager counters
+	// creating client object
 
-	counterRequest := 0
+	clientObj := pojo.ClientObject{
+		CounterRequest: 0,
+		SubscriberMapName: "",
+		ChannelMapName: "",
+		MessageMapType: "",
+		GroupMapName: "",
+	}
+
+	// writeCount for round robin writes in file
+
 	writeCount := 0
-	groupMapName := ""
 
 	// socket disconnect variable to exits subscriber loop from file
 	socketDisconnect := false
-
-	var subscriberMapName string
-	var channelMapName string
-	var messageMapType string
 
 	// staring infinite loop
 
@@ -99,7 +104,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		// converting the packet size to int64
 
-		packetSize := binary.BigEndian.Uint64(sizeBuf)
+		packetSize := int64(binary.BigEndian.Uint64(sizeBuf))
 
 		if packetSize < 0 {
 			continue
@@ -138,13 +143,13 @@ func HandleRequest(conn net.TCPConn) {
 			break
 		}
 
-		// checking if the channelMapName exists and is not nul
+		// checking if the clientObj.ChannelMapName exists and is not nul
 
-		if ChannelList.TCPStorage[channelMapName] != nil{
+		if ChannelList.TCPStorage[clientObj.ChannelMapName] != nil{
 
-			// if writeCount >= ChannelList.TCPStorage[channelMapName].PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
+			// if writeCount >= ChannelList.TCPStorage[clientObj.ChannelMapName].PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
 
-			if writeCount >= ChannelList.TCPStorage[channelMapName].PartitionCount{
+			if writeCount >= ChannelList.TCPStorage[clientObj.ChannelMapName].PartitionCount{
 
 				writeCount = 0
 
@@ -157,7 +162,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		// calling the parseMessage method and waiting for callback
 		
-		go ParseMsg(int64(packetSize), completePacket, conn, parseChan, writeCount, &counterRequest, &subscriberMapName, &channelMapName, &messageMapType, &groupMapName, &socketDisconnect)
+		go ParseMsg(packetSize, completePacket, conn, parseChan, &socketDisconnect, writeCount,&clientObj)
 
 		// after callback incrementing writeCount = 1
 
@@ -170,31 +175,31 @@ func HandleRequest(conn net.TCPConn) {
 
 	// if loop breaks then checking the socket type publisher or subscriber
 
-	if messageMapType == "subscribe"{
+	if clientObj.MessageMapType == "subscribe"{
 
 		// if messageType == subscribe
 
 		// deleting the subscriber from ChannelList client hashmap
 
-		DeleteInmemoryChannelList(channelMapName, subscriberMapName)
+		DeleteInmemoryChannelList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
 
 		// deleting the subscriber from tcp subscriber list
 
-		DeleteTCPChannelSubscriberList(channelMapName, subscriberMapName)
+		DeleteTCPChannelSubscriberList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
 
 		// checking if the subscriber is a part of any group
 
-		if groupMapName != ""{
+		if clientObj.GroupMapName != ""{
 
 			//get consumer group Length
 
-			var consumerGroupLen = GetChannelGrpMapLen(channelMapName, groupMapName)
+			var consumerGroupLen = GetChannelGrpMapLen(clientObj.ChannelMapName, clientObj.GroupMapName)
 
 			if consumerGroupLen > 0{
 
 				// Delete Group Member
 
-				RemoveGroupMember(channelMapName, groupMapName, subscriberMapName)
+				RemoveGroupMember(clientObj.ChannelMapName, clientObj.GroupMapName, clientObj.SubscriberMapName)
 
 			}
 		}

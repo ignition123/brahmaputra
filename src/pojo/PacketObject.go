@@ -5,6 +5,16 @@ import(
 	"os"
 )
 
+// client objetc
+
+type ClientObject struct{
+	CounterRequest int
+	SubscriberMapName string
+	ChannelMapName string
+	MessageMapType string
+	GroupMapName string
+}
+
 // packet struct, packet received fromt the client
 
 type PacketStruct struct{

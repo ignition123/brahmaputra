@@ -68,9 +68,9 @@ const(
 
 func handlepanic() { 
   
-    // if a := recover(); a != nil { 
-    //     log.Println(a)
-    // } 
+    if a := recover(); a != nil { 
+        log.Println(a)
+    } 
 } 
 
 // validating the connection type and app type

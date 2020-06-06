@@ -18,7 +18,7 @@ import (
 
 // method to parse message from socket client
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, writeCount int, counterRequest *int, subscriberMapName *string, channelMapName *string, messageMapType *string, groupMapName *string, socketDisconnect *bool){
+func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, socketDisconnect *bool, writeCount int, clientObj *pojo.ClientObject){
 
 	defer ChannelList.Recover()
 
@@ -44,7 +44,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	// setting the channelName to a channelMapName pointer for reference of memory address, used when the socket disconnects
 
-	*channelMapName = channelName
+	clientObj.ChannelMapName = channelName
 
 	// create object of struct PacketStruct
 
@@ -187,7 +187,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				// appending data to file
 
-				go WriteData(*packetObject, writeCount)
+				go WriteData(*packetObject, writeCount, clientObj)
 
 				// waiting for callbacks
 
@@ -223,18 +223,18 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			// if counterRequest == worker means it has reached to max limit then the counterRequest will be set to zero
 
-			if *counterRequest == ChannelList.TCPStorage[channelName].Worker{
+			if clientObj.CounterRequest == ChannelList.TCPStorage[channelName].Worker{
 
-				*counterRequest = 0
+				clientObj.CounterRequest = 0
 			}
 
 			// writing packet object to bucket channels it executed in case of inmemory channels
 
-			ChannelList.TCPStorage[channelName].BucketData[*counterRequest] <- packetObject
+			ChannelList.TCPStorage[channelName].BucketData[clientObj.CounterRequest] <- packetObject
 
 			// request Counter incremented by 1
 
-			*counterRequest += 1
+			clientObj.CounterRequest += 1
 		}
 
 		// if producer Ack == True then acknowledgement is sent to the producer
@@ -351,9 +351,9 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				// setting the subscriber mapName, messageType and groupName pointers for reference
 
-				*subscriberMapName = channelName+subscriberName+groupName
-				*messageMapType = messageType
-				*groupMapName = groupName
+				clientObj.SubscriberMapName = channelName+subscriberName+groupName
+				clientObj.MessageMapType = messageType
+				clientObj.GroupMapName = groupName
 
 				// storing the subscriber in the subscriber list
     				
@@ -436,8 +436,8 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		    	// setting the subscriber mapName, messageType and groupName pointers for reference
 
-    			*subscriberMapName = channelName+subscriberName
-    			*messageMapType = messageType
+    			clientObj.SubscriberMapName = channelName+subscriberName
+    			clientObj.MessageMapType = messageType
 
     			// storing the client in the subscriber list
 
@@ -453,12 +453,12 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			// setting the subscriber mapName, messageType and groupName pointers for reference
 
-			*subscriberMapName = channelName+subscriberName
-			*messageMapType = messageType
+			clientObj.SubscriberMapName = channelName+subscriberName
+			clientObj.MessageMapType = messageType
 
 			// adding new subscriber to inmemory client
 
-			AppendNewClientInmemory(channelName, *subscriberMapName, packetObject)
+			AppendNewClientInmemory(channelName, clientObj.SubscriberMapName, packetObject)
 
 		}
 		
@@ -472,54 +472,4 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		return
 	}	
-}
-
-// writing data to file, in append mode
-
-func WriteData(packet pojo.PacketStruct, writeCount int){
-
-	defer ChannelList.Recover()
-
-	byteBuffer := ByteBuffer.Buffer{
-		Endian:"big",
-	}
-
-	// totalLen + messageTypelen + messageType + channelNameLen + channelName + producerIdLen + producerID + agentNameLen + agentName + _id + compressionType + totalBytePacket
-
-	totalByteLen := 2 + packet.MessageTypeLen + 2 + packet.ChannelNameLen + 2 + packet.Producer_idLen + 2 + packet.AgentNameLen + 8 + 1 + len(packet.BodyBB)
-
-	byteBuffer.PutLong(totalByteLen)
-
-	byteBuffer.PutShort(packet.MessageTypeLen)
-
-	byteBuffer.Put([]byte(packet.MessageType))
-
-	byteBuffer.PutShort(packet.ChannelNameLen)
-
-	byteBuffer.Put([]byte(packet.ChannelName))
-
-	byteBuffer.PutShort(packet.Producer_idLen)
-
-	byteBuffer.Put([]byte(packet.Producer_id))
-
-	byteBuffer.PutShort(packet.AgentNameLen)
-
-	byteBuffer.Put([]byte(packet.AgentName))
-
-	byteBuffer.PutLong(int(packet.Id))
-
-	byteBuffer.PutByte(packet.CompressionType)
-
-	byteBuffer.Put(packet.BodyBB)
-
-	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[writeCount].Write(byteBuffer.Array())
-
-
-	if (err != nil){
-		go ChannelList.WriteLog(err.Error())
-		ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- false
-		return
-	}
-
-	ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- true
 }
