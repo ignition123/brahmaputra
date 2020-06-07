@@ -264,38 +264,42 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	// setting linger
 
-	if e.TCP.Linger != 0{
-		conn.(*net.TCPConn).SetLinger(e.TCP.Linger)
-	}
+	if e.TCP != nil{
 
-	// keepalive
+		if e.TCP.Linger != 0{
+			conn.(*net.TCPConn).SetLinger(e.TCP.Linger)
+		}
 
-	if e.TCP.KeepAlive != false{
-		conn.(*net.TCPConn).SetKeepAlive(e.TCP.KeepAlive)
-	}
+		// keepalive
 
-	// no delay 
+		if e.TCP.KeepAlive != false{
+			conn.(*net.TCPConn).SetKeepAlive(e.TCP.KeepAlive)
+		}
 
-	if e.TCP.NoDelay != false{
-		conn.(*net.TCPConn).SetNoDelay(e.TCP.NoDelay)
-	}
+		// no delay 
 
-	// timeout
+		if e.TCP.NoDelay != false{
+			conn.(*net.TCPConn).SetNoDelay(e.TCP.NoDelay)
+		}
 
-	if e.TCP.Timeout != 0{
-		conn.(*net.TCPConn).SetDeadline(time.Now().Add(time.Duration(e.TCP.Timeout) * time.Millisecond))
-	}
+		// timeout
 
-	// read timeout
+		if e.TCP.Timeout != 0{
+			conn.(*net.TCPConn).SetDeadline(time.Now().Add(time.Duration(e.TCP.Timeout) * time.Millisecond))
+		}
 
-	if e.TCP.SocketReadTimeout != 0{
-		conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
-	}
+		// read timeout
 
-	// write timeout
+		if e.TCP.SocketReadTimeout != 0{
+			conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
+		}
 
-	if e.TCP.SocketWriteTimeout != 0{
-		conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
+		// write timeout
+
+		if e.TCP.SocketWriteTimeout != 0{
+			conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
+		}
+
 	}
 
 	return conn
