@@ -15,13 +15,23 @@ func HostTCP(configObj pojo.Config){
 
 	defer ChannelList.Recover()
 
+	// loading the config object
+
 	ChannelList.ConfigTCPObj = configObj
 
+	// loading all configurations to inmemory
+
 	tcp.LoadTCPChannelsToMemory()
+
+	// opening channels for inmemory
 	
 	go tcp.ChannelMethod.GetChannelData()
 
+	// checking for host and port
+
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
+
+		// starting the tcp server
 
 		HostTCPServer()
 	}
@@ -31,7 +41,11 @@ func HostTCPServer(){
 
 	defer ChannelList.Recover()
 
+	// changing the ulimit, it works in linux and mac kindly uncomment the code
+
 	ChannelList.SetUlimit()
+
+	// lisetning to the host ip and port
 
 	serverObject, err := net.Listen("tcp", *ChannelList.ConfigTCPObj.Server.TCP.Host +":"+ *ChannelList.ConfigTCPObj.Server.TCP.Port)
 
@@ -45,6 +59,8 @@ func HostTCPServer(){
 	ChannelList.WriteLog("Loading log files...")
 	ChannelList.WriteLog("Starting Brahmaputra TCP server...")
 
+	// start accepting for new sockets
+
 	for i := 0; i < runtime.NumCPU(); i++{
 
 		go acceptSocket(serverObject)
@@ -57,6 +73,8 @@ func HostTCPServer(){
 func acceptSocket(serverObject net.Listener){
 
 	defer serverObject.Close()
+
+	// waiting for new sockets
 	
 	for {
 
@@ -71,12 +89,43 @@ func acceptSocket(serverObject net.Listener){
 
 		tcpObject := conn.(*net.TCPConn)
 
-        tcpObject.SetNoDelay(true)
-        tcpObject.SetKeepAlive(true)
-		tcpObject.SetLinger(1)
-		tcpObject.SetDeadline(time.Now().Add(1000000 * time.Second))
-		tcpObject.SetReadDeadline(time.Now().Add(1000000 * time.Second))
-		tcpObject.SetWriteDeadline(time.Now().Add(1000000 * time.Second))
+		// checking for nodelay flag of tcp
+
+		if *ChannelList.ConfigTCPObj.Server.TCP.NoDelay != false{
+			tcpObject.SetNoDelay(*ChannelList.ConfigTCPObj.Server.TCP.NoDelay)
+		}
+
+		// checking for keepalive flag
+
+		if *ChannelList.ConfigTCPObj.Server.TCP.KeepAlive != false{
+			tcpObject.SetKeepAlive(*ChannelList.ConfigTCPObj.Server.TCP.KeepAlive)
+		}
+
+		// checking for linger
+        
+        if *ChannelList.ConfigTCPObj.Server.TCP.Linger != 0{
+        	tcpObject.SetLinger(*ChannelList.ConfigTCPObj.Server.TCP.Linger)
+        }
+
+        // checking for read and write timeout
+        
+        if *ChannelList.ConfigTCPObj.Server.TCP.Timeout != 0{
+        	tcpObject.SetDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.Timeout) * time.Millisecond))
+        }
+
+        // checking for read timeout
+
+        if *ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout != 0{
+        	tcpObject.SetReadDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout) * time.Millisecond))
+        }
+			
+		// checking for write timeout
+
+		if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+			tcpObject.SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+		}
+		
+		// handling the new socket
 
 		go tcp.HandleRequest(*tcpObject)
 	}

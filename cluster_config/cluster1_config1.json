@@ -7,9 +7,13 @@
         "tcp":{
             "host":"127.0.0.1",
             "port":"8100",
-            "maxSockets":0,
-            "socketTimeout":12000,
-            "bufferRead":1
+            "bufferRead":1,
+            "timeout":1000000,
+            "socketReadTimeout":1000000,
+            "socketWriteTimeout":1000000,
+            "linger":1,
+            "keepAlive":true,
+            "noDelay":true
         }
     },
     "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",

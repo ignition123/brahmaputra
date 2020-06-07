@@ -262,12 +262,41 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	// setting some default tcp flags and connection
 
-	conn.(*net.TCPConn).SetKeepAlive(true)
-	conn.(*net.TCPConn).SetLinger(1)
-	conn.(*net.TCPConn).SetNoDelay(true)
-	conn.(*net.TCPConn).SetDeadline(time.Now().Add(1000000 * time.Second))
-	conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(1000000 * time.Second))
-	conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(1000000 * time.Second))
+	// setting linger
+
+	if e.TCP.Linger != 0{
+		conn.(*net.TCPConn).SetLinger(e.TCP.Linger)
+	}
+
+	// keepalive
+
+	if e.TCP.KeepAlive != false{
+		conn.(*net.TCPConn).SetKeepAlive(e.TCP.KeepAlive)
+	}
+
+	// no delay 
+
+	if e.TCP.NoDelay != false{
+		conn.(*net.TCPConn).SetNoDelay(e.TCP.NoDelay)
+	}
+
+	// timeout
+
+	if e.TCP.Timeout != 0{
+		conn.(*net.TCPConn).SetDeadline(time.Now().Add(time.Duration(e.TCP.Timeout) * time.Millisecond))
+	}
+
+	// read timeout
+
+	if e.TCP.SocketReadTimeout != 0{
+		conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
+	}
+
+	// write timeout
+
+	if e.TCP.SocketWriteTimeout != 0{
+		conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
+	}
 
 	return conn
 }

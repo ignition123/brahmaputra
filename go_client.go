@@ -23,6 +23,14 @@ func main(){
 		WriteDelay:0, // nano second
 		Acknowledge:true,
 		Compression:"lz4",
+		TCP: &brahmaputra.TCPConf{
+			Linger:1,
+			NoDelay:true,
+			KeepAlive:true,
+			Timeout:1000000,
+			SocketReadTimeout:1000000,
+			SocketWriteTimeout:1000000,
+		},
 	}
 
 	brahm.Connect()

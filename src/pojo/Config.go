@@ -13,9 +13,13 @@ type ServerStruct struct{
 type TCPStruct struct{
 	Host *string
 	Port *string 
-	MaxSockets *int64
-	SocketTimeout *int
+	SocketReadTimeout *int
+	SocketWriteTimeout *int
 	BufferRead *int
+	Timeout *int
+	Linger *int
+	KeepAlive *bool
+	NoDelay *bool
 }
 
 // config struct

@@ -18,6 +18,18 @@ import(
 
 var SubscriberChannel = make(chan interface{}, 1)
 
+// TCP Config structure
+
+type TCPConf struct{
+	SocketReadTimeout int
+	SocketWriteTimeout int
+	BufferRead int
+	Timeout int
+	Linger int
+	KeepAlive bool
+	NoDelay bool
+}
+
 // creating a structure with many fields as configuration
 
 type CreateProperties struct{
@@ -52,6 +64,7 @@ type CreateProperties struct{
 	Acknowledge bool
 	subContentmatcher bool
 	Compression string
+	TCP *TCPConf
 }	
 
 // compression constant
