@@ -15,7 +15,7 @@ import(
 
 // method throwing error to individual subscriber or publisher
 
-func ThroughClientError(conn net.TCPConn, message string){
+func throughClientError(conn net.TCPConn, message string){
 
 	defer ChannelList.Recover()
 
@@ -46,7 +46,7 @@ func ThroughClientError(conn net.TCPConn, message string){
 
 // method throwing error to subscriber group
 
-func ThroughGroupError(channelName string, groupName string, message string){
+func throughGroupError(channelName string, groupName string, message string){
 
 	defer ChannelList.Recover()
 

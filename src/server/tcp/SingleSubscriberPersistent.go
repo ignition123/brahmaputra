@@ -39,11 +39,11 @@ func checkCreateDirectory(conn net.TCPConn, packetObject pojo.PacketStruct, chec
 
 		if errDir != nil { //  if error then throw error
 			
-			ThroughClientError(conn, err.Error())
+			throughClientError(conn, err.Error())
 
 			// deleting the subscriber from the list, locking the channel list array using mutex
 
-			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+			deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			checkDirectoryChan <- false
 
@@ -102,9 +102,9 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 			if err != nil{ // if error not equals to null then error
 
-				ThroughClientError(conn, err.Error())
+				throughClientError(conn, err.Error())
 
-				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+				deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				partitionOffsetSubscriber <- 0
 
@@ -139,9 +139,9 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		if err != nil {
 
-			ThroughClientError(conn, err.Error())
+			throughClientError(conn, err.Error())
 
-			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+			deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			partitionOffsetSubscriber <- 0
 
@@ -150,7 +150,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		// adding file descriptor object to packetObject
 
-		AddSubscriberFD(index, packetObject, fDes)
+		addSubscriberFD(index, packetObject, fDes)
 
 	}else if os.IsNotExist(err){ // if error in file existence
 
@@ -160,9 +160,9 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		if err != nil{
 
-			ThroughClientError(conn, err.Error())
+			throughClientError(conn, err.Error())
 
-			DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+			deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 			partitionOffsetSubscriber <- 0
 
@@ -172,7 +172,7 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 		// then setting the file descriptor
 
-		AddSubscriberFD(index, packetObject, fDes)
+		addSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
@@ -194,9 +194,9 @@ func createSubscriberOffsetFile(index int, conn net.TCPConn, packetObject pojo.P
 
 			if err != nil{
 
-				ThroughClientError(conn, err.Error())
+				throughClientError(conn, err.Error())
 
-				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+				deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				partitionOffsetSubscriber <- 0
 
@@ -284,9 +284,9 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 	if len(packetObject.SubscriberFD) == 0{
 
-		ThroughClientError(conn, INVALID_SUBSCRIBER_OFFSET)
+		throughClientError(conn, INVALID_SUBSCRIBER_OFFSET)
 
-		DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+		deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 		return
 
@@ -316,9 +316,9 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 			if err != nil {
 				
-				ThroughClientError(conn, err.Error())
+				throughClientError(conn, err.Error())
 
-				DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+				deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 				return
 			}
@@ -340,9 +340,9 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 
 					conn.Close()
 
-					go CloseSubscriberGrpFD(packetObject)
+					go closeSubscriberGrpFD(packetObject)
 
-					DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+					deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 					break
 
@@ -354,9 +354,9 @@ func SubscribeChannel(conn net.TCPConn, packetObject pojo.PacketStruct, start_fr
 		 
 				if err != nil {
 
-					ThroughClientError(conn, err.Error())
+					throughClientError(conn, err.Error())
 
-					DeleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
+					deleteTCPChannelSubscriberList(packetObject.ChannelName, consumerName)
 
 					break
 					
@@ -569,6 +569,6 @@ func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject pojo.Pac
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
+	sentMsg <- writeSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 
 }

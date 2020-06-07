@@ -18,7 +18,7 @@ import (
 
 // method to parse message from socket client
 
-func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, socketDisconnect *bool, writeCount int, clientObj *pojo.ClientObject){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, socketDisconnect *bool, writeCount int, clientObj *pojo.ClientObject){
 
 	defer ChannelList.Recover()
 
@@ -61,7 +61,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		if channelName == ""{
 
-			ThroughClientError(conn, INVALID_MESSAGE)
+			throughClientError(conn, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -142,7 +142,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		if channelName == ""{
 
-			ThroughClientError(conn, INVALID_MESSAGE)
+			throughClientError(conn, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -153,7 +153,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		if ChannelList.TCPStorage[channelName] == nil{
 
-			ThroughClientError(conn, INVALID_CHANNEL)
+			throughClientError(conn, INVALID_CHANNEL)
 
 			parseChan <- false
 
@@ -199,7 +199,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 					if !message{
 
-						ThroughClientError(conn, LOG_WRITE_FAILURE)
+						throughClientError(conn, LOG_WRITE_FAILURE)
 
 						parseChan <- false
 
@@ -211,7 +211,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				// if file active != true then error as mongodb is yet not implemented
 
-				ThroughClientError(conn, PERSISTENT_CONFIG_ERROR)
+				throughClientError(conn, PERSISTENT_CONFIG_ERROR)
 
 				parseChan <- false
 				
@@ -259,7 +259,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		if channelName == ""{
 
-			ThroughClientError(conn, INVALID_MESSAGE)
+			throughClientError(conn, INVALID_MESSAGE)
 
 			parseChan <- false
 
@@ -270,7 +270,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		if ChannelList.TCPStorage[channelName] == nil{
 
-			ThroughClientError(conn, INVALID_CHANNEL)
+			throughClientError(conn, INVALID_CHANNEL)
 
 			parseChan <- false
 
@@ -309,13 +309,13 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		// loading the tcp channel subscriber list
 
-		keyFound := LoadTCPChannelSubscriberList(channelName, channelName+subscriberName)
+		keyFound := loadTCPChannelSubscriberList(channelName, channelName+subscriberName)
 
 		// if same subscriber found then it will not allow to the subscriber to listen, all subscriber must have unique name
 
 		if keyFound{
 
-			ThroughClientError(conn, SAME_SUBSCRIBER_DETECTED)
+			throughClientError(conn, SAME_SUBSCRIBER_DETECTED)
 
 			parseChan <- false
 
@@ -341,7 +341,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
-					ThroughClientError(conn, PERSISTENT_CONFIG_ERROR)
+					throughClientError(conn, PERSISTENT_CONFIG_ERROR)
 
 					parseChan <- false
 					
@@ -357,11 +357,11 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				// storing the subscriber in the subscriber list
     				
-    			StoreTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName, true)
+    			storeTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName, true)
 
 				// checking for key already in the hashmap
 
-				groupLen := GetChannelGrpMapLen(channelName, groupName)
+				groupLen := getChannelGrpMapLen(channelName, groupName)
 
 				if groupLen > 0{
 
@@ -371,7 +371,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 					if groupLen == ChannelList.TCPStorage[channelName].PartitionCount{
 
-						ThroughClientError(conn, SUBSCRIBER_FULL)
+						throughClientError(conn, SUBSCRIBER_FULL)
 
 						parseChan <- false
 
@@ -381,7 +381,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 					// adding new client to group
 
-					AddNewClientToGrp(channelName, groupName, *packetObject)
+					addNewClientToGrp(channelName, groupName, *packetObject)
 
 				}else{
 
@@ -389,7 +389,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 					if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
-			    		ThroughClientError(conn, INVALID_PULL_FLAG)
+			    		throughClientError(conn, INVALID_PULL_FLAG)
 
 						parseChan <- false
 
@@ -398,15 +398,15 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			    	// renew subscriber
 
-    				RenewSub(channelName, groupName)
+    				renewSub(channelName, groupName)
 
     				// add new client to group
 
-    				AddNewClientToGrp(channelName, groupName, *packetObject)
+    				addNewClientToGrp(channelName, groupName, *packetObject)
 
     				// infinitely listening to the log file for changes and publishing to subscriber, subscriber group list
 
-		    		go SubscribeGroupChannel(channelName, groupName, *packetObject, start_from, socketDisconnect)
+		    		go subscribeGroupChannel(channelName, groupName, *packetObject, start_from, socketDisconnect)
 				}
 
 			}else{
@@ -415,7 +415,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
 
-					ThroughClientError(conn, PERSISTENT_CONFIG_ERROR)
+					throughClientError(conn, PERSISTENT_CONFIG_ERROR)
 
 					parseChan <- false
 					
@@ -427,7 +427,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
 
-		    		ThroughClientError(conn, INVALID_PULL_FLAG)
+		    		throughClientError(conn, INVALID_PULL_FLAG)
 
 					parseChan <- false
 
@@ -441,7 +441,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
     			// storing the client in the subscriber list
 
-    			StoreTCPChannelSubscriberList(channelName, channelName+subscriberName, true)
+    			storeTCPChannelSubscriberList(channelName, channelName+subscriberName, true)
 
     			// infinitely listening to the log file for changes and publishing to subscriber individually listening
 
@@ -458,7 +458,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 			// adding new subscriber to inmemory client
 
-			AppendNewClientInmemory(channelName, clientObj.SubscriberMapName, packetObject)
+			appendNewClientInmemory(channelName, clientObj.SubscriberMapName, packetObject)
 
 		}
 		
@@ -466,7 +466,7 @@ func ParseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	}else{
 
-		ThroughClientError(conn, INVALID_AGENT)
+		throughClientError(conn, INVALID_AGENT)
 
 		parseChan <- false
 

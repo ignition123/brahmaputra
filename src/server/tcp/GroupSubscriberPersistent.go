@@ -34,7 +34,7 @@ func checkCreateGroupDirectory(channelName string, groupName string, checkDirect
 
 		if errDir != nil { // if not equals to null then error
 			
-			ThroughGroupError(channelName, groupName, err.Error())
+			throughGroupError(channelName, groupName, err.Error())
 
 			checkDirectoryChan <- false
 
@@ -92,7 +92,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if err != nil{
 
-				ThroughGroupError(channelName, groupName, err.Error())
+				throughGroupError(channelName, groupName, err.Error())
 
 				partitionOffsetSubscriber <- 0
 
@@ -127,7 +127,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		if err != nil {
 
-			ThroughGroupError(channelName, groupName, err.Error())
+			throughGroupError(channelName, groupName, err.Error())
 
 			partitionOffsetSubscriber <- 0
 
@@ -136,7 +136,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		// adding to fD to packetObject
 
-		AddSubscriberFD(index, packetObject, fDes) // race
+		addSubscriberFD(index, packetObject, fDes) // race
 
 	}else if os.IsNotExist(err){
 
@@ -146,7 +146,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		if err != nil{
 
-			ThroughGroupError(channelName, groupName, err.Error())
+			throughGroupError(channelName, groupName, err.Error())
 
 			partitionOffsetSubscriber <- 0
 
@@ -156,7 +156,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		// then adding the file descriptor object
 
-		AddSubscriberFD(index, packetObject, fDes)
+		addSubscriberFD(index, packetObject, fDes)
 
 		partitionOffsetSubscriber <- 0
 
@@ -180,7 +180,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if err != nil{
 
-				ThroughGroupError(channelName, groupName, err.Error())
+				throughGroupError(channelName, groupName, err.Error())
 
 				partitionOffsetSubscriber <- 0
 
@@ -218,7 +218,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 	Subscriber Group Channel Method, here in this method the subscriber listens to file change in seperate go routines and publishes to subscriber
 */
 
-func SubscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string, socketDisconnect *bool){
+func subscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string, socketDisconnect *bool){
 
 	defer ChannelList.Recover()
 
@@ -249,7 +249,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	// setting file descriptor 
 
-	packetObject.SubscriberFD = CreateSubscriberGrpFD(packetObject.ChannelName)
+	packetObject.SubscriberFD = createSubscriberGrpFD(packetObject.ChannelName)
 
 	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
@@ -263,7 +263,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 	if len(packetObject.SubscriberFD) == 0{
 
-		ThroughGroupError(channelName, groupName, INVALID_SUBSCRIBER_OFFSET)
+		throughGroupError(channelName, groupName, INVALID_SUBSCRIBER_OFFSET)
 
 		return
 
@@ -291,7 +291,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 			if err != nil {
 
-				ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
+				throughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
 				return
 			}
@@ -313,11 +313,11 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				if exitLoop{
 
-					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+					consumerGroupLen := getChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
 
 					if consumerGroupLen <= 0{
 
-						go CloseSubscriberGrpFD(packetObject)
+						go closeSubscriberGrpFD(packetObject)
 
 					}
 
@@ -329,11 +329,11 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 
 				if *socketDisconnect{
 
-					consumerGroupLen := GetChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+					consumerGroupLen := getChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
 
 					if consumerGroupLen <= 0{
 
-						go CloseSubscriberGrpFD(packetObject)
+						go closeSubscriberGrpFD(packetObject)
 
 						break
 					}
@@ -346,7 +346,7 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject po
 		 
 				if err != nil {
 
-					ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
+					throughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
 					exitLoop = true
 					
@@ -559,7 +559,7 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.Pac
 
 	RETRY:
 
-	group, groupId = GetValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
+	group, groupId = getValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
 
 	if group == nil{
 
@@ -574,7 +574,7 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.Pac
 	
 	if err != nil {
 
-		group, groupId = GetValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
+		group, groupId = getValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
 
 		if group == nil{
 
@@ -592,5 +592,5 @@ func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.Pac
 	byteArrayCursor := make([]byte, 8)
 	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-	sentMsg <- WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
+	sentMsg <- writeSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 }

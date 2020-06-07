@@ -162,7 +162,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		// calling the parseMessage method and waiting for callback
 		
-		go ParseMsg(packetSize, completePacket, conn, parseChan, &socketDisconnect, writeCount,&clientObj)
+		go parseMsg(packetSize, completePacket, conn, parseChan, &socketDisconnect, writeCount,&clientObj)
 
 		// after callback incrementing writeCount = 1
 
@@ -181,11 +181,11 @@ func HandleRequest(conn net.TCPConn) {
 
 		// deleting the subscriber from ChannelList client hashmap
 
-		DeleteInmemoryChannelList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
+		deleteInmemoryChannelList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
 
 		// deleting the subscriber from tcp subscriber list
 
-		DeleteTCPChannelSubscriberList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
+		deleteTCPChannelSubscriberList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
 
 		// checking if the subscriber is a part of any group
 
@@ -193,13 +193,13 @@ func HandleRequest(conn net.TCPConn) {
 
 			//get consumer group Length
 
-			var consumerGroupLen = GetChannelGrpMapLen(clientObj.ChannelMapName, clientObj.GroupMapName)
+			var consumerGroupLen = getChannelGrpMapLen(clientObj.ChannelMapName, clientObj.GroupMapName)
 
 			if consumerGroupLen > 0{
 
 				// Delete Group Member
 
-				RemoveGroupMember(clientObj.ChannelMapName, clientObj.GroupMapName, clientObj.SubscriberMapName)
+				removeGroupMember(clientObj.ChannelMapName, clientObj.GroupMapName, clientObj.SubscriberMapName)
 
 			}
 		}

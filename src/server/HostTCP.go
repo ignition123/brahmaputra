@@ -43,7 +43,7 @@ func HostTCPServer(){
 	log.Println("Listening on " + *ChannelList.ConfigTCPObj.Server.TCP.Host + ":" + *ChannelList.ConfigTCPObj.Server.TCP.Port+"...")
 
 	ChannelList.WriteLog("Loading log files...")
-	ChannelList.WriteLog("Starting TCP server...")
+	ChannelList.WriteLog("Starting Brahmaputra TCP server...")
 
 	for i := 0; i < runtime.NumCPU(); i++{
 
@@ -51,7 +51,7 @@ func HostTCPServer(){
 
 	}
 
-    
+    ChannelList.WriteLog("Started Brahmaputra TCP server...")
 }
 
 func acceptSocket(serverObject net.Listener){

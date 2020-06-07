@@ -14,7 +14,7 @@ func (e *ChannelMethods) sendMessageToClient(message pojo.PacketStruct, msgChan 
 
 	// getting the client list this method uses mutex to prevent race condition
 
-	channelSockList := GetClientListInmemory(message.ChannelName)
+	channelSockList := getClientListInmemory(message.ChannelName)
 
 	// iterating over the hashmap
 
@@ -74,7 +74,7 @@ func (e *ChannelMethods) sendInMemory(message pojo.PacketStruct, key string, pac
 
 	// getting the length of the socket client connected
 
-	stat, sock := FindInmemorySocketListLength(message.ChannelName, key)
+	stat, sock := findInmemorySocketListLength(message.ChannelName, key)
 
 	// if length creater than the index then writing to the client
 
