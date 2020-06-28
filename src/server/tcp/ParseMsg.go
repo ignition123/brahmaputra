@@ -9,7 +9,7 @@ package tcp
 import (
 	"net"
 	"time"
-	"log"
+	_"log"
 	"ChannelList"
 	"pojo"
 	"ByteBuffer"
@@ -18,7 +18,7 @@ import (
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, socketDisconnect *bool, writeCount int, clientObj *pojo.ClientObject){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *pojo.ClientObject, writeCount int){
 
 	defer ChannelList.Recover()
 
@@ -46,430 +46,315 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	clientObj.ChannelMapName = channelName
 
+	// checking for channelName emptyness
+
+	if channelName == ""{
+
+		ChannelList.ThroughClientError(conn, ChannelList.INVALID_MESSAGE)
+
+		return
+	}
+
+	// checking if channel name does not exists in the system
+
+	_, chanExits := pojo.SubscriberObj[channelName]
+
+	if !chanExits{
+
+		ChannelList.ThroughClientError(conn, ChannelList.INVALID_CHANNEL)
+
+		return
+	}
+
 	// create object of struct PacketStruct
 
-	packetObject := &pojo.PacketStruct{
+	packetObject := pojo.PacketStruct{
 		MessageTypeLen: messageTypeLen,
 		MessageType: messageType,
 		ChannelNameLen: channelNameLen,
 		ChannelName: channelName,
 	}
 
-	// checking the message type
+	if messageType == "publish"{
 
-	if messageType == "heart_beat"{
-
-		if channelName == ""{
-
-			throughClientError(conn, INVALID_MESSAGE)
-
-			parseChan <- false
-
-			return
-
-		}
-
-		go log.Println("HEART BEAT RECEIVED...")
-
-		packetObject.Conn = conn
-		
-		ChannelList.TCPStorage["heart_beat"].BucketData[0] <- packetObject
-
-	}else if messageType == "publish"{
-
-		// if message type is publish
-
-		// parsing the producerId
-
-		producer_idLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
-		producer_id := string(byteBuffer.Get(producer_idLen))
-
-		// parsing the agentName
-
-		agentNameLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
-		agentName := string(byteBuffer.Get(agentNameLen))
-
-		// producer acknowledgement byte packet
-
-		ackStatusByte := byteBuffer.GetByte()
-
-		// compression type byte packet
-
-		compression := byteBuffer.GetByte()
-		packetObject.CompressionType = compression[0]
-
-		// getting the actual body packet size
-
-		bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1 + 1)
-
-		// actual body packet
-
-		bodyPacket := byteBuffer.Get(int(bodyPacketSize))
-
-		// if ack flag is 1 that means producer needs acknowledgement
-
-		if ackStatusByte[0] == 1{
-
-			packetObject.ProducerAck = true
-
-		}else{
-
-			packetObject.ProducerAck = false
-			
-		}
-
-		// setting producerLen
-
-		packetObject.Producer_idLen = producer_idLen
-
-		// settig producerId
-
-		packetObject.Producer_id = producer_id
-
-		// setting agentName length
-
-		packetObject.AgentNameLen = agentNameLen
-
-		// setting agent name
-
-		packetObject.AgentName = agentName
-
-		// setting actual body packet
-
-		packetObject.BodyBB = bodyPacket
-
-		// if channel name is empty then error
-
-		if channelName == ""{
-
-			throughClientError(conn, INVALID_MESSAGE)
-
-			parseChan <- false
-
-			return
-		}
-
-		// if channel name does not exists in the system then error
-
-		if ChannelList.TCPStorage[channelName] == nil{
-
-			throughClientError(conn, INVALID_CHANNEL)
-
-			parseChan <- false
-
-			return
-
-		}
-
-		// getting current time
-
-		currentTime := time.Now()
-
-		// getting current time in nano second
-
-		nanoEpoch := currentTime.UnixNano()
-
-		// setting the nanoEpoch as Id
-
-		packetObject.Id = nanoEpoch
-
-		// setting the socket object
-
-		packetObject.Conn = conn
-
-		// checking if the channel storage type is persistent
-		
-		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
-
-			// checking if the storage file is active, other options databases like mongodb, mySQL, Cassandra, Hbase etc (current support only for files and mongodb)
-
-			if *ChannelList.ConfigTCPObj.Storage.File.Active{
-
-				// appending data to file
-
-				go WriteData(*packetObject, writeCount, clientObj)
-
-				// waiting for callbacks
-
-				message, ok := <-ChannelList.TCPStorage[channelName].WriteCallback
-
-				if ok{
-						
-					// if message is false boolean then throw error
-
-					if !message{
-
-						throughClientError(conn, LOG_WRITE_FAILURE)
-
-						parseChan <- false
-
-						return
-					}
-				}
-
-			}else{
-
-				// if file active != true then error as mongodb is yet not implemented
-
-				throughClientError(conn, PERSISTENT_CONFIG_ERROR)
-
-				parseChan <- false
-				
-				return
-
-			}	
-
-		}else{
-
-			// if counterRequest == worker means it has reached to max limit then the counterRequest will be set to zero
-
-			if clientObj.CounterRequest == ChannelList.TCPStorage[channelName].Worker{
-
-				clientObj.CounterRequest = 0
-			}
-
-			// writing packet object to bucket channels it executed in case of inmemory channels
-
-			ChannelList.TCPStorage[channelName].BucketData[clientObj.CounterRequest] <- packetObject
-
-			// request Counter incremented by 1
-
-			clientObj.CounterRequest += 1
-		}
-
-		// if producer Ack == True then acknowledgement is sent to the producer
-
-		if packetObject.ProducerAck{
-
-			go ChannelMethod.SendAck(*packetObject, ChannelList.TCPStorage[channelName].WriteCallback)
-
-			<-ChannelList.TCPStorage[channelName].WriteCallback
-
-		}
-
-		// callback sent to the channel of parseMsg Method
-
-		parseChan <- true
+		handleProducerMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen, writeCount)
 
 	}else if messageType == "subscribe"{
 
-		// if messageType is for subscriber then this snippet is executed
+		if pojo.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
 
-		// checking for channelName emptyness
-
-		if channelName == ""{
-
-			throughClientError(conn, INVALID_MESSAGE)
-
-			parseChan <- false
-
-			return
-		}
-
-		// checking if channel name does not exists in the system
-
-		if ChannelList.TCPStorage[channelName] == nil{
-
-			throughClientError(conn, INVALID_CHANNEL)
-
-			parseChan <- false
-
-			return
-		}
-
-		// bytes for start from flag
-
-		startFromLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
-		start_from := string(byteBuffer.Get(int(startFromLen))) // startFromLen
-
-		// bytes for subscriber name 
-
-		subscriberNameLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
-		subscriberName := string(byteBuffer.Get(int(subscriberNameLen)))
-
-		// bytes for subscriber group name
-
-		subscriberTypeLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
-
-		// setting variables to the packetObject
-
-		packetObject.StartFromLen = int(startFromLen)
-
-		packetObject.Start_from = start_from
-
-		packetObject.SubscriberNameLen = int(subscriberNameLen)
-
-		packetObject.SubscriberName = subscriberName
-
-		packetObject.SubscriberTypeLen = int(subscriberTypeLen)
-
-		packetObject.Conn = conn
-
-		packetObject.ActiveMode = true
-
-		// loading the tcp channel subscriber list
-
-		keyFound := loadTCPChannelSubscriberList(channelName, channelName+subscriberName)
-
-		// if same subscriber found then it will not allow to the subscriber to listen, all subscriber must have unique name
-
-		if keyFound{
-
-			throughClientError(conn, SAME_SUBSCRIBER_DETECTED)
-
-			parseChan <- false
-
-			return
-		   
-		}
-
-		// checking for group name existence
-
-		if ChannelList.TCPStorage[channelName].ChannelStorageType == "persistent"{
-
-			// if the subscriberType length > 0
-
-			if subscriberTypeLen > 0{
-
-				// getting the groupName
-
-				groupName := string(byteBuffer.Get(int(subscriberTypeLen))) 
-
-				packetObject.GroupName = groupName
-
-				// checking if the file type is active is case of persistent to read from file else error
-
-				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
-
-					throughClientError(conn, PERSISTENT_CONFIG_ERROR)
-
-					parseChan <- false
-					
-					return
-
-				}
-
-				// setting the subscriber mapName, messageType and groupName pointers for reference
-
-				clientObj.SubscriberMapName = channelName+subscriberName+groupName
-				clientObj.MessageMapType = messageType
-				clientObj.GroupMapName = groupName
-
-				// storing the subscriber in the subscriber list
-    				
-    			storeTCPChannelSubscriberList(channelName, channelName+subscriberName+groupName, true)
-
-				// checking for key already in the hashmap
-
-				groupLen := getChannelGrpMapLen(channelName, groupName)
-
-				if groupLen > 0{
-
-					// if group length > 0
-
-					// if group length == channel partition count then error
-
-					if groupLen == ChannelList.TCPStorage[channelName].PartitionCount{
-
-						throughClientError(conn, SUBSCRIBER_FULL)
-
-						parseChan <- false
-
-						return
-
-					}
-
-					// adding new client to group
-
-					addNewClientToGrp(channelName, groupName, *packetObject)
-
-				}else{
-
-					// checking if the start_from has invalid value not amoung the three
-
-					if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
-
-			    		throughClientError(conn, INVALID_PULL_FLAG)
-
-						parseChan <- false
-
-						return
-			    	}
-
-			    	// renew subscriber
-
-    				renewSub(channelName, groupName)
-
-    				// add new client to group
-
-    				addNewClientToGrp(channelName, groupName, *packetObject)
-
-    				// infinitely listening to the log file for changes and publishing to subscriber, subscriber group list
-
-		    		go subscribeGroupChannel(channelName, groupName, *packetObject, start_from, socketDisconnect)
-				}
-
-			}else{
-
-				// checking if file type is active
-
-				if !*ChannelList.ConfigTCPObj.Storage.File.Active{
-
-					throughClientError(conn, PERSISTENT_CONFIG_ERROR)
-
-					parseChan <- false
-					
-					return
-
-				}
-
-				// checking if the start_from has invalid value not amoung the three
-
-		    	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
-
-		    		throughClientError(conn, INVALID_PULL_FLAG)
-
-					parseChan <- false
-
-					return
-		    	}
-
-		    	// setting the subscriber mapName, messageType and groupName pointers for reference
-
-    			clientObj.SubscriberMapName = channelName+subscriberName
-    			clientObj.MessageMapType = messageType
-
-    			// storing the client in the subscriber list
-
-    			storeTCPChannelSubscriberList(channelName, channelName+subscriberName, true)
-
-    			// infinitely listening to the log file for changes and publishing to subscriber individually listening
-
-				go SubscribeChannel(conn, *packetObject, start_from, socketDisconnect)
-
-			}
-
+			handleSubscriberInmemoryMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen)
+				
 		}else{
 
-			// setting the subscriber mapName, messageType and groupName pointers for reference
-
-			clientObj.SubscriberMapName = channelName+subscriberName
-			clientObj.MessageMapType = messageType
-
-			// adding new subscriber to inmemory client
-
-			appendNewClientInmemory(channelName, clientObj.SubscriberMapName, packetObject)
+			handleSubscriberPersistentMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen)
 
 		}
 		
-		parseChan <- true 
+	}
+
+	parseChan <- true	
+}
+
+func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+
+	defer ChannelList.Recover()
+
+	// bytes for start from flag
+
+	startFromLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+	start_from := string(byteBuffer.Get(int(startFromLen))) // startFromLen
+
+	// bytes for subscriber name 
+
+	subscriberNameLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+	subscriberName := string(byteBuffer.Get(int(subscriberNameLen)))
+
+	// bytes for subscriber group name
+
+	subscriberTypeLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+
+	// setting variables to the packetObject
+
+	packetObject.StartFromLen = int(startFromLen)
+
+	packetObject.Start_from = start_from
+
+	packetObject.SubscriberNameLen = int(subscriberNameLen)
+
+	packetObject.SubscriberName = subscriberName
+
+	packetObject.SubscriberTypeLen = int(subscriberTypeLen)
+
+	packetObject.ActiveMode = true
+
+	clientObj.Conn = conn
+
+	clientObj.MessageMapType = messageType
+
+	// checking if the start_from has invalid value not amoung the three
+
+	if start_from != "BEGINNING" && start_from != "NOPULL" && start_from != "LASTRECEIVED"{
+
+		ChannelList.ThroughClientError(conn, ChannelList.INVALID_PULL_FLAG)
+
+		return
+	}
+
+	// checking if file type is active
+
+	if !*ChannelList.ConfigTCPObj.Storage.File.Active{
+
+		ChannelList.ThroughClientError(conn, ChannelList.PERSISTENT_CONFIG_ERROR)
+		
+		return
+
+	}
+
+	if subscriberTypeLen > 0{
+
+		// getting the groupName
+
+		packetObject.GroupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
+
+		// setting the subscriber mapName, messageType and groupName pointers for reference
+
+		clientObj.SubscriberMapName = channelName+subscriberName+packetObject.GroupName
+		
+		clientObj.GroupMapName = packetObject.GroupName
+
+		// storing the subscriber in the subscriber list
+			
+		if ChannelList.GetChannelGrpMapLen(channelName, packetObject.GroupName) == 0{
+
+			go SubscribeGroupChannel(channelName, packetObject.GroupName, packetObject, clientObj, start_from)
+
+		}
+
+		pojo.SubscriberObj[channelName].Register <- clientObj
 
 	}else{
 
-		throughClientError(conn, INVALID_AGENT)
+    	// setting the subscriber mapName, messageType and groupName pointers for reference
 
-		parseChan <- false
+		clientObj.SubscriberMapName = channelName+subscriberName
+
+		// storing the client in the subscriber list
+
+		pojo.SubscriberObj[channelName].Register <- clientObj
+
+		// infinitely listening to the log file for changes and publishing to subscriber individually listening
+
+		go SubscriberSinglePersistent(clientObj, packetObject, start_from)
+
+	}
+
+}
+
+func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+
+	defer ChannelList.Recover()
+
+	// bytes for start from flag
+
+	startFromLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+	start_from := string(byteBuffer.Get(int(startFromLen))) // startFromLen
+
+	// bytes for subscriber name 
+
+	subscriberNameLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+	subscriberName := string(byteBuffer.Get(int(subscriberNameLen)))
+
+	// bytes for subscriber group name
+
+	subscriberTypeLen := binary.BigEndian.Uint16(byteBuffer.GetShort())
+
+	// setting variables to the packetObject
+
+	packetObject.StartFromLen = int(startFromLen)
+
+	packetObject.Start_from = start_from
+
+	packetObject.SubscriberNameLen = int(subscriberNameLen)
+
+	packetObject.SubscriberName = subscriberName
+
+	packetObject.SubscriberTypeLen = int(subscriberTypeLen)
+
+	packetObject.ActiveMode = true
+
+	clientObj.Conn = conn
+
+	// setting the subscriber mapName, messageType and groupName pointers for reference
+
+	clientObj.SubscriberMapName = channelName+subscriberName
+	clientObj.MessageMapType = messageType
+
+	pojo.SubscriberObj[channelName].Register <- clientObj
+
+	go SubscriberInmemory(clientObj)
+
+}
+
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount int){
+
+	defer ChannelList.Recover()
+
+	// parsing the producerId
+
+	producer_idLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+	producer_id := string(byteBuffer.Get(producer_idLen))
+
+	// parsing the agentName
+
+	agentNameLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
+	agentName := string(byteBuffer.Get(agentNameLen))
+
+	// producer acknowledgement byte packet
+
+	ackStatusByte := byteBuffer.GetByte()
+
+	// compression type byte packet
+
+	compression := byteBuffer.GetByte()
+	packetObject.CompressionType = compression[0]
+
+	// getting the actual body packet size
+
+	bodyPacketSize := packetSize - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 1 + 1)
+
+	// actual body packet
+
+	bodyPacket := byteBuffer.Get(int(bodyPacketSize))
+
+	// if ack flag is 1 that means producer needs acknowledgement
+
+	if ackStatusByte[0] == 1{
+
+		packetObject.ProducerAck = true
+
+	}else{
+
+		packetObject.ProducerAck = false
+		
+	}
+
+	// setting producerLen
+
+	packetObject.Producer_idLen = producer_idLen
+
+	// settig producerId
+
+	packetObject.Producer_id = producer_id
+
+	// setting agentName length
+
+	packetObject.AgentNameLen = agentNameLen
+
+	// setting agent name
+
+	packetObject.AgentName = agentName
+
+	// setting actual body packet
+
+	packetObject.BodyBB = bodyPacket
+
+	// if channel name is empty then error
+
+	if channelName == ""{
+
+		ChannelList.ThroughClientError(conn, ChannelList.INVALID_MESSAGE)
 
 		return
-	}	
+	}
+
+	// if channel name does not exists in the system then error
+
+	if pojo.SubscriberObj[channelName] == nil{
+
+		ChannelList.ThroughClientError(conn, ChannelList.INVALID_CHANNEL)
+
+		return
+
+	}
+
+	// getting current time
+
+	currentTime := time.Now()
+
+	// getting current time in nano second
+
+	nanoEpoch := currentTime.UnixNano()
+
+	// setting the nanoEpoch as Id
+
+	packetObject.Id = nanoEpoch
+
+	// setting the socket object
+
+	clientObj.Conn = conn
+
+	if pojo.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
+
+		pojo.SubscriberObj[channelName].BroadCast <- packetObject
+
+	}else{
+
+		if *ChannelList.ConfigTCPObj.Storage.File.Active{
+
+			if !WriteData(*packetObject, writeCount, clientObj){
+
+				ChannelList.ThroughClientError(conn, ChannelList.LOG_WRITE_FAILURE)
+
+			}
+
+		}
+
+	}
+
+	if packetObject.ProducerAck{
+
+		ChannelList.SendAck(packetObject, clientObj)
+	}
+
 }

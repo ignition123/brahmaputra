@@ -1,23 +1,14 @@
 package tcp
 
-/*
-
-	This file contains all the methods related to create packetObject 
-	and opening config file of each channel and loading data into 
-	inmemory of the channel details
-	
-*/
-
-// importing modules
-
 import(
+	"ChannelList"
+	"os"
 	"io/ioutil"
 	"path/filepath"
-	"encoding/json"
 	"pojo"
-	"os"
-	"ChannelList"
+	"encoding/json"
 	"strconv"
+	_"log"
 )
 
 // memthod to read the directory defined in the config file
@@ -87,7 +78,9 @@ func ReadFile(path string, file os.FileInfo){
     	data, err := ioutil.ReadFile(path+"/"+file.Name())
 
 		if err != nil{
+
 			ChannelList.WriteLog(err.Error())
+
 			return
 		}
 
@@ -98,58 +91,50 @@ func ReadFile(path string, file os.FileInfo){
 		err = json.Unmarshal(data, &channelMap)
 
 		if err != nil{
+
 			ChannelList.WriteLog(err.Error())
+
 			return
 		}
 
 		// if the channel type is tcp, udp was also in the option is removed for now for data loss
 
-		if channelMap["type"] == "channel" && channelMap["channelType"] == "tcp"{
+		if channelMap["type"] == "channel"{
 
-			// getting number of workers, used for inmemory distribution
-
-			worker := int(channelMap["worker"].(float64))
-
-			// creating bucketData channel
-
-			bucketData  := make([]chan *pojo.PacketStruct, worker)
-
-			for i := range bucketData {
-			   bucketData[i] = make(chan *pojo.PacketStruct, *ChannelList.ConfigTCPObj.Server.TCP.BufferRead)
+			channelObject := &pojo.ChannelStruct{
+				ChannelStorageType: channelMap["channelStorageType"].(string),
 			}
 
 			// setting packet objects of the channel
 
 			channelName := channelMap["channelName"].(string)
 
-			channelObject := &pojo.ChannelStruct{
-				Offset:int64(0),
-				Worker: worker,
-				BucketData: bucketData,
-				WriteCallback:make(chan bool, 1),
-				SyncChan: make(chan bool, 1),
-				ChannelStorageType: channelMap["channelStorageType"].(string),
-				Group: make(map[string][]*pojo.PacketStruct),
-				SubscriberList: make(map[string]bool),
-			}
-
 			if *ChannelList.ConfigTCPObj.Storage.File.Active && channelName != "heart_beat"{
 
-				if channelObject.ChannelStorageType == "persistent"{
-					channelObject = openDataFile("tcp", channelObject, channelMap)
+				if channelObject.ChannelStorageType == "inmemory"{
+
+					ChannelList.CreateSubscriberChannels(channelName, channelObject)
+
+				}else if channelObject.ChannelStorageType == "persistent"{
+
+					channelObject = openDataFile(channelObject, channelMap)
+
+					ChannelList.CreateSubscriberChannels(channelName, channelObject)
+
+				}else{
+
+					ChannelList.WriteLog("Invalid channel type")
+
+        			return
 				}
+
 			}
 
-			ChannelList.TCPStorage[channelName] = channelObject
-
-			ChannelList.TCPSocketDetails[channelName] = make(map[string] *pojo.PacketStruct)
 		}	
 
     }
 
 }
-
-// method to read the directory and open file config
 
 func LoadTCPChannelsToMemory(){
 
@@ -187,15 +172,15 @@ func LoadTCPChannelsToMemory(){
 
 // opening file descriptor for the log files
 
-func openDataFile(protocol string, channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
+func openDataFile(channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
 
 	defer ChannelList.Recover()
 
-	var partitions = int(channelMap["partitions"].(float64))
+	partitions := int(channelMap["partitions"].(float64))
 
 	for i:=0;i<partitions;i++{
 
-		var filePath = channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
+		filePath := channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
 		f, err := os.OpenFile(filePath,
 			os.O_APPEND|os.O_WRONLY, os.ModeAppend)

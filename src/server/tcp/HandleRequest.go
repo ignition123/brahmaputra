@@ -50,19 +50,16 @@ func HandleRequest(conn net.TCPConn) {
 	// creating client object
 
 	clientObj := pojo.ClientObject{
-		CounterRequest: 0,
+		Channel: make(chan *pojo.PacketStruct, 1024),
 		SubscriberMapName: "",
-		ChannelMapName: "",
 		MessageMapType: "",
 		GroupMapName: "",
+		ChannelMapName: "",
 	}
 
 	// writeCount for round robin writes in file
 
 	writeCount := 0
-
-	// socket disconnect variable to exits subscriber loop from file
-	socketDisconnect := false
 
 	// staring infinite loop
 
@@ -145,11 +142,11 @@ func HandleRequest(conn net.TCPConn) {
 
 		// checking if the clientObj.ChannelMapName exists and is not nul
 
-		if ChannelList.TCPStorage[clientObj.ChannelMapName] != nil{
+		if pojo.SubscriberObj[clientObj.ChannelMapName] != nil && pojo.SubscriberObj[clientObj.ChannelMapName].Channel != nil{
 
-			// if writeCount >= ChannelList.TCPStorage[clientObj.ChannelMapName].PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
+			// if writeCount >= pojo.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
 
-			if writeCount >= ChannelList.TCPStorage[clientObj.ChannelMapName].PartitionCount{
+			if writeCount >= pojo.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount{
 
 				writeCount = 0
 
@@ -162,47 +159,17 @@ func HandleRequest(conn net.TCPConn) {
 
 		// calling the parseMessage method and waiting for callback
 		
-		go parseMsg(packetSize, completePacket, conn, parseChan, &socketDisconnect, writeCount,&clientObj)
+		go parseMsg(packetSize, completePacket, conn, parseChan, &clientObj, writeCount)
 
-		// after callback incrementing writeCount = 1
+		<-parseChan
 
 		writeCount += 1
 
-		<-parseChan
 	}
 
-	socketDisconnect = true
+	if pojo.SubscriberObj[clientObj.ChannelMapName] != nil{
 
-	// if loop breaks then checking the socket type publisher or subscriber
-
-	if clientObj.MessageMapType == "subscribe"{
-
-		// if messageType == subscribe
-
-		// deleting the subscriber from ChannelList client hashmap
-
-		deleteInmemoryChannelList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
-
-		// deleting the subscriber from tcp subscriber list
-
-		deleteTCPChannelSubscriberList(clientObj.ChannelMapName, clientObj.SubscriberMapName)
-
-		// checking if the subscriber is a part of any group
-
-		if clientObj.GroupMapName != ""{
-
-			//get consumer group Length
-
-			var consumerGroupLen = getChannelGrpMapLen(clientObj.ChannelMapName, clientObj.GroupMapName)
-
-			if consumerGroupLen > 0{
-
-				// Delete Group Member
-
-				removeGroupMember(clientObj.ChannelMapName, clientObj.GroupMapName, clientObj.SubscriberMapName)
-
-			}
-		}
+		pojo.SubscriberObj[clientObj.ChannelMapName].UnRegister <- &clientObj
 	}
 
 }

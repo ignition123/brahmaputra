@@ -10,17 +10,8 @@ import(
 type ChannelStruct struct{
 	FD []*os.File 
 	Path string
-	Offset int64
-	Worker int
-	BucketData [] chan *PacketStruct
-	WriteCallback chan bool
-	SyncChan chan bool
-	ChannelLock sync.RWMutex
-	SubscriberChannelLock sync.RWMutex
-	SubscriberFileChannelLock sync.RWMutex
 	ChannelStorageType string
-	SubscriberChannel []chan *PacketStruct
 	PartitionCount int
-	Group map[string][]*PacketStruct
-	SubscriberList map[string]bool
+	ChannelLock sync.RWMutex
+	SubscriberFileChannelLock sync.RWMutex
 }

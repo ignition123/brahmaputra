@@ -61,7 +61,7 @@ func main(){
 
 	path := flag.String("path", "default", "a string")
 
-	channelType := flag.String("channeltype", "tcp", "a string")
+	channelType := flag.String("channeltype", "persistent", "a string")
 
 	partionCount := flag.Int("partionCount", 5, "an int")
 
@@ -72,21 +72,15 @@ func main(){
 	// creating config file and running tcp server
 
 	if *serverRun != "default"{
+
 		runConfigFile(*serverRun)
+
 	}else if *channelName != "default"{
 
-		if *channelType == "tcp"{
+		createChannel(*path, *channelName, *channelType, *partionCount, *authUrl)
 
-			createTCPChannel(*path, *channelName, *channelType, *partionCount, *authUrl)
-
-		}else{
-
-			log.Println("Invalid channelType, please refer the documentation.")
-
-		}
-
-		
 	}else{
+
 		log.Println(`
 			possible commands:
 			1) -config=d:\brahmaputra\config.json
@@ -96,6 +90,7 @@ func main(){
 			5) -reclaim-drive=true -path=d:\brahmaputra\storage\
 			6)
 		`)
+
 	}
 }
 
@@ -105,19 +100,19 @@ func cleanupAllTheThings(){
 
 	defer ChannelList.Recover()
 
-	for key := range ChannelList.TCPStorage{
+	// for key := range ChannelList.TCPStorage{
 
-		time.Sleep(1 * time.Second)
+	// 	time.Sleep(1 * time.Second)
 
-		log.Println("Closing storage files of the channel "+ key+"...")
+	// 	log.Println("Closing storage files of the channel "+ key+"...")
 
-		for index :=  range ChannelList.TCPStorage[key].FD{
+	// 	for index :=  range ChannelList.TCPStorage[key].FD{
 
-			ChannelList.TCPStorage[key].FD[index].Close()
+	// 		ChannelList.TCPStorage[key].FD[index].Close()
 
-		}
+	// 	}
 		
-	}
+	// }
 }
 
 // reading the config file and converting to object
@@ -148,15 +143,13 @@ func runConfigFile(configPath string){
 
 	log.Println("Starting server logs...")
 
-	if *configObj.Server.TCP.Host != "" && *configObj.Server.TCP.Port != ""{
-		go func(){
+	go func(){
 
-			time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Second)
 
-			server.HostTCP(configObj)
+		server.HostTCP(configObj)
 
-		}()
-	}
+	}()
 
 	for{
 
@@ -191,7 +184,7 @@ func printLogo(){
 
 // creating tcp channels
 
-func createTCPChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
+func createChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
 
 	defer ChannelList.Recover()
 
@@ -269,10 +262,8 @@ func createTCPChannel(path string, channelName string, channelType string, parti
 
 	storage[channelName]["channelName"] = channelName
 	storage[channelName]["type"] = "channel"
-	storage[channelName]["channelStorageType"] = "persistent"
+	storage[channelName]["channelStorageType"] = channelType
 	storage[channelName]["path"] = directoryPath
-	storage[channelName]["worker"] = 1
-	storage[channelName]["channelType"] = channelType
 	storage[channelName]["partitions"] = partionCount
 	storage[channelName]["authUrl"] = authUrl
 
@@ -296,7 +287,7 @@ func createTCPChannel(path string, channelName string, channelType string, parti
 
 	}
 
-	log.Println("TCP channel created successfully...")
+	log.Println("Channel created successfully...")
 	
 }
 

@@ -262,9 +262,9 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 	// setting some default tcp flags and connection
 
-	// setting linger
-
 	if e.TCP != nil{
+
+		// setting linger
 
 		if e.TCP.Linger != 0{
 			conn.(*net.TCPConn).SetLinger(e.TCP.Linger)

@@ -8,7 +8,7 @@ import(
 
 // writing data to file, in append mode
 
-func WriteData(packet pojo.PacketStruct, writeCount int, clientObj *pojo.ClientObject) bool{
+func WriteData(packet pojo.PacketStruct, writeCount int, clientObj *pojo.ClientObject){
 
 	defer ChannelList.Recover()
 
@@ -44,15 +44,14 @@ func WriteData(packet pojo.PacketStruct, writeCount int, clientObj *pojo.ClientO
 
 	byteBuffer.Put(packet.BodyBB)
 
-	_, err := pojo.SubscriberObj[packet.ChannelName].Channel.FD[writeCount].Write(byteBuffer.Array())
+	_, err := ChannelList.TCPStorage[packet.ChannelName].FD[writeCount].Write(byteBuffer.Array())
 
 
 	if (err != nil){
-		
 		go ChannelList.WriteLog(err.Error())
-		
-		return false
+		ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- false
+		return
 	}
 
-	return true
+	ChannelList.TCPStorage[packet.ChannelName].WriteCallback <- true
 }

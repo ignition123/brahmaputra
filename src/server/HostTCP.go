@@ -23,10 +23,6 @@ func HostTCP(configObj pojo.Config){
 
 	tcp.LoadTCPChannelsToMemory()
 
-	// opening channels for inmemory
-	
-	go tcp.ChannelMethod.GetChannelData()
-
 	// checking for host and port
 
 	if *ChannelList.ConfigTCPObj.Server.TCP.Host != "" && *ChannelList.ConfigTCPObj.Server.TCP.Port != ""{
@@ -129,4 +125,5 @@ func acceptSocket(serverObject net.Listener){
 
 		go tcp.HandleRequest(*tcpObject)
 	}
+	
 }

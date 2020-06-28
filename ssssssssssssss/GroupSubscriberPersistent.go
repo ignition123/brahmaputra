@@ -1,26 +1,26 @@
 package tcp
 
 import(
-	"ChannelList"
 	"pojo"
+	"ChannelList"
 	"os"
 	"strconv"
 	"io/ioutil"
-	"encoding/binary"
+	"sync"
 	"time"
+	"encoding/binary"
 	"ByteBuffer"
-	_"log"
 )
 
 // create a directory for subscriber group
 
-func checkCreateGroupDirectory(channelName string, groupName string, clientObj *pojo.ClientObject, checkDirectoryChan chan bool){
+func checkCreateGroupDirectory(channelName string, groupName string, checkDirectoryChan chan bool){
 
 	defer ChannelList.Recover()
 
 	// setting directory path
 
-	directoryPath := pojo.SubscriberObj[channelName].Channel.Path+"/"+groupName
+	directoryPath := ChannelList.TCPStorage[channelName].Path+"/"+groupName
 
 	// getting the stat of the directory path
 
@@ -34,9 +34,7 @@ func checkCreateGroupDirectory(channelName string, groupName string, clientObj *
 
 		if errDir != nil { // if not equals to null then error
 			
-			ChannelList.ThroughGroupError(channelName, groupName, err.Error())
-
-			pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
+			throughGroupError(channelName, groupName, err.Error())
 
 			checkDirectoryChan <- false
 
@@ -60,13 +58,13 @@ func checkCreateGroupDirectory(channelName string, groupName string, clientObj *
 
 // create subscriber group offset
 
-func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject *pojo.PacketStruct, start_from string, clientObj *pojo.ClientObject, partitionOffsetSubscriber chan int64){
+func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject pojo.PacketStruct, partitionOffsetSubscriber chan int64, start_from string){
 
 	defer ChannelList.Recover()
 
 	// set directory path
 
-	directoryPath := pojo.SubscriberObj[channelName].Channel.Path+"/"+groupName
+	directoryPath := ChannelList.TCPStorage[channelName].Path+"/"+groupName
 
 	// setting consumer offset path
 
@@ -76,35 +74,15 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 	if _, err := os.Stat(consumerOffsetPath); err == nil{
 
-		// getting the file descriptor object and setting to packetObject
-
-		fDes, err := os.OpenFile(consumerOffsetPath,
-			os.O_WRONLY, 0644) //race
-
-		if err != nil {
-
-			ChannelList.ThroughGroupError(channelName, groupName, err.Error())
-
-			pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
-
-			partitionOffsetSubscriber <- int64(-2)
-
-			return
-		}
-
-		// adding to fD to packetObject
-
-		packetObject.SubscriberFD[index] = fDes // race
-
 		// start_from == BEGINNING then offset = 0 means it will start reading file from beginning
 
 		if start_from == "BEGINNING"{
 
-			partitionOffsetSubscriber <- int64(0)
+			partitionOffsetSubscriber <- 0
 
 		}else if start_from == "NOPULL"{ // if start_from == NOPULL then offset = -1 then offset = file size
 
-			partitionOffsetSubscriber <- int64(-1)
+			partitionOffsetSubscriber <- (-1)
 
 		}else if start_from == "LASTRECEIVED"{ // if start_from == LASTRECEIVED then offset = last offset written into the file
 
@@ -114,11 +92,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if err != nil{
 
-				ChannelList.ThroughGroupError(channelName, groupName, err.Error())
+				throughGroupError(channelName, groupName, err.Error())
 
-				pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
-
-				partitionOffsetSubscriber <- int64(-2)
+				partitionOffsetSubscriber <- 0
 
 				return
 
@@ -128,7 +104,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if len(dat) == 0{
 
-				partitionOffsetSubscriber <- int64(0)
+				partitionOffsetSubscriber <- 0
 
 			}else{
 
@@ -140,9 +116,27 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			// offset = 0
 
-			partitionOffsetSubscriber <- int64(0)
+			partitionOffsetSubscriber <- 0
 
 		}
+
+		// getting the file descriptor object and setting to packetObject
+
+		fDes, err := os.OpenFile(consumerOffsetPath,
+			os.O_WRONLY, os.ModeAppend) //race
+
+		if err != nil {
+
+			throughGroupError(channelName, groupName, err.Error())
+
+			partitionOffsetSubscriber <- 0
+
+			return
+		}
+
+		// adding to fD to packetObject
+
+		addSubscriberFD(index, packetObject, fDes) // race
 
 	}else if os.IsNotExist(err){
 
@@ -152,11 +146,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		if err != nil{
 
-			ChannelList.ThroughGroupError(channelName, groupName, err.Error())
+			throughGroupError(channelName, groupName, err.Error())
 
-			pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
-
-			partitionOffsetSubscriber <- int64(-2)
+			partitionOffsetSubscriber <- 0
 
 			return
 
@@ -164,17 +156,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		// then adding the file descriptor object
 
-		packetObject.SubscriberFD[index] = fDes
+		addSubscriberFD(index, packetObject, fDes)
 
-		if start_from == "BEGINNING"{
-
-			partitionOffsetSubscriber <- int64(0)
-
-		}else if start_from == "NOPULL"{
-
-			partitionOffsetSubscriber <- int64(-1)
-
-		}
+		partitionOffsetSubscriber <- 0
 
 	}else{
 
@@ -182,11 +166,11 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 		if start_from == "BEGINNING"{
 
-			partitionOffsetSubscriber <- int64(0)
+			partitionOffsetSubscriber <- 0
 
 		}else if start_from == "NOPULL"{ // if start_from == NOPULL then offset = -1 then offset = file size
 
-			partitionOffsetSubscriber <- int64(-1)
+			partitionOffsetSubscriber <- (-1)
 
 		}else if start_from == "LASTRECEIVED"{ // if start_from == LASTRECEIVED then offset = last offset written into the file
 
@@ -196,11 +180,9 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if err != nil{
 
-				ChannelList.ThroughGroupError(channelName, groupName, err.Error())
+				throughGroupError(channelName, groupName, err.Error())
 
-				pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
-
-				partitionOffsetSubscriber <- int64(-2)
+				partitionOffsetSubscriber <- 0
 
 				return
 
@@ -210,7 +192,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			if len(dat) == 0{
 
-				partitionOffsetSubscriber <- int64(0)
+				partitionOffsetSubscriber <- 0
 
 			}else{
 
@@ -224,7 +206,7 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 			// offset = 0 reading from beginning of the file
 
-			partitionOffsetSubscriber <- int64(0)
+			partitionOffsetSubscriber <- 0
 
 		}
 
@@ -232,18 +214,23 @@ func createSubscriberGroupOffsetFile(index int, channelName string, groupName st
 
 }
 
-func SubscribeGroupChannel(channelName string, groupName string, packetObject *pojo.PacketStruct, clientObj *pojo.ClientObject, start_from string){
+/*
+	Subscriber Group Channel Method, here in this method the subscriber listens to file change in seperate go routines and publishes to subscriber
+*/
+
+func subscribeGroupChannel(channelName string, groupName string, packetObject pojo.PacketStruct, start_from string, socketDisconnect *bool){
 
 	defer ChannelList.Recover()
-
-	// offsetByteSize
-
-	offsetByteSize := make([]int64, pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
 
 	// creating channels for creating directory
 
 	checkDirectoryChan := make(chan bool, 1)
 	defer close(checkDirectoryChan)
+
+
+	// offsetByteSize
+
+	offsetByteSize := make([]int64, ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount)
 
 	// creating channels for partition offsets
 
@@ -252,11 +239,9 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 	// checking for directory existence
 
-	go checkCreateGroupDirectory(channelName, groupName, clientObj, checkDirectoryChan)
+	go checkCreateGroupDirectory(channelName, groupName, checkDirectoryChan)
 
 	if false == <-checkDirectoryChan{
-
-		pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
 
 		return
 
@@ -264,63 +249,41 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 	// setting file descriptor 
 
-	packetObject.SubscriberFD = ChannelList.CreateSubscriberGrpFD(packetObject.ChannelName)
+	packetObject.SubscriberFD = createSubscriberGrpFD(packetObject.ChannelName)
 
-	filesOpenedFailed := false
+	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
-	for i:=0;i<pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
+		go createSubscriberGroupOffsetFile(i, channelName, groupName, packetObject, partitionOffsetSubscriber, start_from) // race
 
-		go createSubscriberGroupOffsetFile(i, channelName, groupName, packetObject, start_from, clientObj, partitionOffsetSubscriber) // race
+		offsetByteSize[i] = <-partitionOffsetSubscriber
 
-		offsetByteSize[i] = <- partitionOffsetSubscriber
-
-		if offsetByteSize[i] == -2{
-
-			filesOpenedFailed = true
-		}
-
-	}
-
-	if filesOpenedFailed{
-
-		ChannelList.ThroughGroupError(channelName, groupName, ChannelList.INVALID_SUBSCRIBER_OFFSET)
-
-		pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
-
-		return
 	}
 
 	// checking file descriptor length for all partitions
 
 	if len(packetObject.SubscriberFD) == 0{
 
-		ChannelList.ThroughGroupError(channelName, groupName, ChannelList.INVALID_SUBSCRIBER_OFFSET)
-
-		pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
+		throughGroupError(channelName, groupName, INVALID_SUBSCRIBER_OFFSET)
 
 		return
 
 	}
 
-	// declaring a mutex variable
-
-	groupMsgChan := make(chan map[string]interface{}, 1024)
-
-	exitParentLoop := false
-
-	go packetListener(channelName, groupName, packetObject, groupMsgChan, &exitParentLoop)
-
 	// iterating to all partitions and start listening to file change with go routines
 
-	for i:=0;i<pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
+	for i:=0;i<ChannelList.TCPStorage[packetObject.ChannelName].PartitionCount;i++{
 
-		go func(index int, cursor int64, packetObject *pojo.PacketStruct, clientObj *pojo.ClientObject){
+		go func(index int, cursor int64, packetObject pojo.PacketStruct){
 
 			defer ChannelList.Recover()
 
+			// declaring a mutex variable
+
+			var groupMtx sync.Mutex
+
 			// setting the file path to read the log file
 
-			filePath := pojo.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+			filePath := ChannelList.TCPStorage[packetObject.ChannelName].Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
 
 			// opening the file
 
@@ -328,22 +291,52 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 			if err != nil {
 
-				ChannelList.ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
-
-				pojo.SubscriberObj[channelName].GroupUnRegister <- groupName
+				throughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
 				return
 			}
 
 			defer file.Close()
 
+			// creating a sent message boolean channel
+
+			sentMsg := make(chan bool, 1)
+			defer close(sentMsg)
+
 			// setting a exitLoop variable which will stop the infinite loop when the subscriber is disconnected
+
+			exitLoop := false
 
 			for{
 
-				if exitParentLoop{
+				// if exitLoop == true then break and close file desciptor
+
+				if exitLoop{
+
+					consumerGroupLen := getChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+
+					if consumerGroupLen <= 0{
+
+						go closeSubscriberGrpFD(packetObject)
+
+					}
 
 					break
+
+				}
+
+				// socket client disconnected checking the length of the group if 0 then closing the loop and file descriptor
+
+				if *socketDisconnect{
+
+					consumerGroupLen := getChannelGrpMapLen(packetObject.ChannelName, packetObject.GroupName)
+
+					if consumerGroupLen <= 0{
+
+						go closeSubscriberGrpFD(packetObject)
+
+						break
+					}
 
 				}
 
@@ -353,11 +346,11 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 		 
 				if err != nil {
 
-					ChannelList.ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
+					throughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
-					pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+					exitLoop = true
 					
-					break
+					continue
 					
 				}
 
@@ -410,7 +403,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 				}
 
-
 				// adding 8 number to cursor
 
 				cursor += int64(8)
@@ -444,7 +436,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 				cursor += int64(packetSize)
 
-
 				// creating a byte buffer of type big endian
 
 				byteFileBuffer := ByteBuffer.Buffer{
@@ -477,7 +468,6 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 				bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
 
 				newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1 + len(bodyBB)
-
 
 				// creating another byte buffer in big endian 
 
@@ -513,84 +503,94 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 				byteSendBuffer.Put(bodyBB) // actual body
 
+				// log.Println(ChannelList.TCPStorage[packetObject.ChannelName][packetObject.GroupName])
+
 				// sending to group and waiting for call back
 
-				chanMap := make(map[string]interface{})
+				go sendGroup(index, groupMtx, int(cursor), packetObject, byteSendBuffer, sentMsg) // race
 
-				chanMap["index"] = index
-				chanMap["cursor"] = int(cursor)
-				chanMap["msg"] = byteSendBuffer.Array()
+				// waiting for callback
 
-				groupMsgChan <- chanMap
+				message, ok := <-sentMsg
+
+				if ok{
+
+					// if message if false then loop will exit
+
+					if !message{
+
+						exitLoop = true
+
+
+					}else{
+
+						exitLoop = false
+
+					}
+				}
 
 			}
 
-			go ChannelList.WriteLog("Socket group subscribers client closed...")
-
-		}(i, offsetByteSize[i], packetObject, clientObj)
+		}(i, offsetByteSize[i], packetObject)
 
 	}
+
 }
 
-func packetListener(channelName string, groupName string, packetObject *pojo.PacketStruct, groupMsgChan chan map[string]interface{}, exitParentLoop *bool){
+/*
+	method to send data to subscriber group
+*/
+
+func sendGroup(index int, groupMtx sync.Mutex, cursor int, packetObject pojo.PacketStruct, packetBuffer ByteBuffer.Buffer, sentMsg chan bool){
 
 	defer ChannelList.Recover()
 
-	exitLoop:
-		for chanMap := range groupMsgChan{
+	// locking the method using mutex to prevent concurrent write to tcp
 
-			cursor := chanMap["cursor"].(int)
-			index := chanMap["index"].(int)
-			msg := chanMap["msg"].([]byte)
+	groupMtx.Lock()
 
-			RETRY:
+	defer groupMtx.Unlock()
 
-			groupLen := ChannelList.GetChannelGrpMapLen(channelName, groupName)
+	groupId := 0
 
-			groupId := index % groupLen
+	var group *pojo.PacketStruct
 
-			if groupLen > 0{
+	// setting a state of retry if disconnection happens then the data should be written to another subscriber
 
-				clientObj := ChannelList.GetClientObject(channelName, groupName, groupId)
+	RETRY:
 
-				_, err := clientObj.Conn.Write(msg)
+	group, groupId = getValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
 
-				if err != nil {
+	if group == nil{
 
-					groupLen = ChannelList.GetChannelGrpMapLen(channelName, groupName)
+		sentMsg <- false
 
-					if groupLen == 0{
+		return
+	}
 
-						break exitLoop
+	// writing to tcp 
+	
+	_, err := group.Conn.Write(packetBuffer.Array())
+	
+	if err != nil {
 
-					}
+		group, groupId = getValue(packetObject.ChannelName, packetObject.GroupName, &groupId, index)
 
-					groupId = groupLen - 1
+		if group == nil{
 
-					goto RETRY
+			sentMsg <- false
 
-				}
-
-				// creating subscriber offset and writing into subscriber offset file
-
-				byteArrayCursor := make([]byte, 8)
-				binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
-
-				ChannelList.WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
-
-			}
+			return
 		}
 
-	for index :=  range packetObject.SubscriberFD{
-
-		packetObject.SubscriberFD[index].Close()
+		goto RETRY
 
 	}
 
-	go ChannelList.WriteLog("Socket group subscriber channel closed...")
+	// creating subscriber offset and writing into subscriber offset file
 
-	*exitParentLoop = true
+	byteArrayCursor := make([]byte, 8)
+	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-	groupMsgChan = nil
-
+	sentMsg <- writeSubscriberGrpOffset(index, packetObject, byteArrayCursor)
 }
