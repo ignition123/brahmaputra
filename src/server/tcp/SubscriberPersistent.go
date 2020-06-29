@@ -368,7 +368,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					if cursor >= fileStat.Size(){
 
-						time.Sleep(2 * time.Second)
+						time.Sleep(1 * time.Second)
 
 						continue
 
@@ -384,7 +384,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					if err != nil {
 
-						time.Sleep(2 * time.Second)
+						time.Sleep(1 * time.Second)
 
 						continue
 
@@ -396,7 +396,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
 
-						time.Sleep(2 * time.Second)
+						time.Sleep(1 * time.Second)
 
 						continue
 
@@ -416,7 +416,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					if errPacket != nil{
 
-						time.Sleep(2 * time.Second)
+						time.Sleep(1 * time.Second)
 
 						continue
 
@@ -426,7 +426,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					if totalByteLen <= 0{
 
-						time.Sleep(2 * time.Second)
+						time.Sleep(1 * time.Second)
 
 						continue
 

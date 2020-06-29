@@ -4,6 +4,7 @@ import(
 	"ChannelList"
 	"pojo"
 	"ByteBuffer"
+	_"time"
 	_"log"
 )
 
@@ -12,11 +13,13 @@ func SubscriberInmemory(clientObj *pojo.ClientObject){
 	defer ChannelList.Recover()
 
 	exitLoop:
+
 		for msg := range clientObj.Channel{
 
 			if msg == nil || !sendMessageToClient(clientObj, msg){
 
 				break exitLoop
+
 			}
 
 		}

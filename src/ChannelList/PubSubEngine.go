@@ -2,7 +2,7 @@ package ChannelList
 
 import(
 	"pojo"
-	"time"
+	_"time"
 	_"sync"
 	_"log"
 )
@@ -30,16 +30,13 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break
-
 			case clientObj, channelStat := <-SubscriberObj.UnRegister:
 
 				if channelStat{
-					
+
 					clientObj.Channel <- nil
 
-					groupLen := len(SubscriberObj.Groups[clientObj.GroupMapName])
-
-					if groupLen > 0{
+					if clientObj.GroupMapName != ""{
 
 						UnRegisterGroup(clientObj, SubscriberObj)
 
@@ -50,7 +47,6 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break
-
 			case groupName, channelStat := <-SubscriberObj.GroupUnRegister:
 
 				if channelStat{
@@ -59,7 +55,6 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 
 				}
 			break
-
 			case message, channelStat := <-SubscriberObj.BroadCast:
 
 				if channelStat{
@@ -73,32 +68,9 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break
-			
-			case <-time.After(10 * time.Second):
-		 	break 
 
 		}
 
 	}
-
-}
-
-func RegisterGroup(channelName string, clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribers){
-
-	defer Recover()
-
-	groupLen := len(SubscriberObj.Groups[clientObj.GroupMapName])
-
-	// if group length == channel partition count then error
-
-	if groupLen == SubscriberObj.Channel.PartitionCount{
-
-		ThroughClientError(clientObj.Conn, SUBSCRIBER_FULL)
-
-		return
-
-	}
-
-	CreateGroup(channelName, clientObj, SubscriberObj)
 
 }

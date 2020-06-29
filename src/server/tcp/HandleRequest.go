@@ -12,6 +12,7 @@ import (
 	"ChannelList"
 	"io"
 	"pojo"
+	"time"
 )
 
 // creating a closeTCP variale with boolean value false, it is set to true when the application crashes it will close all tcp client
@@ -104,6 +105,9 @@ func HandleRequest(conn net.TCPConn) {
 		packetSize := int64(binary.BigEndian.Uint64(sizeBuf))
 
 		if packetSize < 0 {
+
+			time.Sleep(1 * time.Second)
+
 			continue
 		}
 
@@ -159,7 +163,7 @@ func HandleRequest(conn net.TCPConn) {
 
 		// calling the parseMessage method and waiting for callback
 		
-		go parseMsg(packetSize, completePacket, conn, parseChan, &clientObj, writeCount)
+		go parseMsg(packetSize, completePacket, conn, parseChan, &clientObj, &writeCount)
 
 		<-parseChan
 

@@ -85,6 +85,7 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 	var groupLen int
 
 	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RLock()
+	defer pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RUnlock()
 
 	_, ok := pojo.SubscriberObj[channelName].Groups[groupName]
 
@@ -97,8 +98,6 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 		groupLen = len(pojo.SubscriberObj[channelName].Groups[groupName])
 	}
 	
-	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RUnlock()
-
 	return groupLen
 }
 
@@ -107,6 +106,8 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 func CreateGroup(channelName string, clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribers){
 
 	defer Recover()
+
+	runtime.Gosched()
 
 	SubscriberObj.Channel.SubscriberFileChannelLock.Lock()
 	defer SubscriberObj.Channel.SubscriberFileChannelLock.Unlock()
@@ -122,15 +123,65 @@ func CreateGroup(channelName string, clientObj *pojo.ClientObject, SubscriberObj
 
 // get clientObject
 
-func GetClientObject(channelName string, groupName string, groupId int) *pojo.ClientObject{
+func GetClientObject(channelName string, groupName string, index int) (*pojo.ClientObject, int, int){
 
 	defer Recover()
 
-	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RLock()
-	defer pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RUnlock()
+	runtime.Gosched()
 
-	return pojo.SubscriberObj[channelName].Groups[groupName][groupId]
+	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.Lock()
+
+	defer pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.Unlock()
+
+	var groupLen, groupId int
+
+	_, ok := pojo.SubscriberObj[channelName].Groups[groupName]
+
+	if ok{
+
+		groupLen = len(pojo.SubscriberObj[channelName].Groups[groupName])
+
+		if groupLen > 0{
+
+			groupId = index % groupLen
+
+		}
+
+		if len(pojo.SubscriberObj[channelName].Groups[groupName]) > 0{
+
+			return pojo.SubscriberObj[channelName].Groups[groupName][groupId], groupId, groupLen
+
+		} 
+
+	}
+
+	return nil, 0, 0
 }
+
+// register in group
+
+func RegisterGroup(channelName string, clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribers){
+
+	defer Recover()
+
+	runtime.Gosched()
+
+	groupLen := GetChannelGrpMapLen(channelName, clientObj.GroupMapName)
+
+	// if group length == channel partition count then error
+
+	if groupLen == SubscriberObj.Channel.PartitionCount{
+
+		ThroughClientError(clientObj.Conn, SUBSCRIBER_FULL)
+
+		return
+
+	}
+
+	CreateGroup(channelName, clientObj, SubscriberObj)
+
+}
+
 
 // UnregisterUser from group
 
@@ -138,8 +189,9 @@ func UnRegisterGroup(clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribe
 
 	defer Recover()
 
-	SubscriberObj.Channel.SubscriberFileChannelLock.Lock()
+	runtime.Gosched()
 
+	SubscriberObj.Channel.SubscriberFileChannelLock.Lock()
 	defer SubscriberObj.Channel.SubscriberFileChannelLock.Unlock()
 
 	for index := range SubscriberObj.Groups[clientObj.GroupMapName]{
@@ -159,6 +211,8 @@ func UnRegisterGroup(clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribe
 func DeleteGroup(groupName string, SubscriberObj *pojo.Subscribers){
 
 	defer Recover()
+
+	runtime.Gosched()
 
 	for index := range SubscriberObj.Groups[groupName]{
 

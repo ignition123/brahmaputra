@@ -18,7 +18,7 @@ import (
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *pojo.ClientObject, writeCount int){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *pojo.ClientObject, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -236,7 +236,7 @@ func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType s
 
 }
 
-func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount int){
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
 
 	defer ChannelList.Recover()
 

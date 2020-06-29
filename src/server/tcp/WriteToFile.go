@@ -8,7 +8,7 @@ import(
 
 // writing data to file, in append mode
 
-func WriteData(packet pojo.PacketStruct, writeCount int, clientObj *pojo.ClientObject) bool{
+func WriteData(packet pojo.PacketStruct, writeCount *int, clientObj *pojo.ClientObject) bool{
 
 	defer ChannelList.Recover()
 
@@ -44,7 +44,7 @@ func WriteData(packet pojo.PacketStruct, writeCount int, clientObj *pojo.ClientO
 
 	byteBuffer.Put(packet.BodyBB)
 
-	_, err := pojo.SubscriberObj[packet.ChannelName].Channel.FD[writeCount].Write(byteBuffer.Array())
+	_, err := pojo.SubscriberObj[packet.ChannelName].Channel.FD[*writeCount].Write(byteBuffer.Array())
 
 
 	if (err != nil){
