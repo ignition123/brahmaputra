@@ -336,7 +336,15 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 	if pojo.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
 
-		pojo.SubscriberObj[channelName].BroadCast <- packetObject
+		select{
+
+			case pojo.SubscriberObj[channelName].BroadCast <- packetObject:
+			break
+
+			case <-time.After(1 * time.Second):
+			break
+
+		}
 
 	}else{
 

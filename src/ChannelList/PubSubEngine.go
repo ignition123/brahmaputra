@@ -2,7 +2,7 @@ package ChannelList
 
 import(
 	"pojo"
-	_"time"
+	"time"
 	_"sync"
 	_"log"
 )
@@ -34,7 +34,15 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 
 				if channelStat{
 
-					clientObj.Channel <- nil
+					select{
+
+						case clientObj.Channel <- nil:
+						break
+
+						case <-time.After(1 * time.Second):
+						break
+
+					}
 
 					if clientObj.GroupMapName != ""{
 
@@ -61,9 +69,19 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 
 					for clientObj, _ :=  range SubscriberObj.Clients{
 
-						clientObj.Channel <- message
+						select{
+
+							case clientObj.Channel <- message:
+							break
+
+							case <-time.After(1 * time.Second):
+							break
+
+						}
+
 
 					}
+
 
 				}
 
