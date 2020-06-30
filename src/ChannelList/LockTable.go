@@ -7,9 +7,11 @@ package ChannelList
 import(
 	"pojo"
 	"os"
-	"runtime"
+	"sync"
 )
 
+
+var channelLock = &sync.RWMutex{}
 
 //######################################################### Persistent Channel Methods #############################################################################
 
@@ -19,11 +21,7 @@ func WriteSubscriberOffset(index int, packetObject *pojo.PacketStruct, clientObj
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	pojo.SubscriberObj[packetObject.ChannelName].Channel.SubscriberFileChannelLock.Lock()
 	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
-	pojo.SubscriberObj[packetObject.ChannelName].Channel.SubscriberFileChannelLock.Unlock()
 
 	if (err != nil){
 
@@ -42,11 +40,9 @@ func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	pojo.SubscriberObj[ChannelName].Channel.SubscriberFileChannelLock.Lock()
+	channelLock.RLock()
 	fileFDArray := make([]*os.File, pojo.SubscriberObj[ChannelName].Channel.PartitionCount)
-	pojo.SubscriberObj[ChannelName].Channel.SubscriberFileChannelLock.Unlock()
+	channelLock.RUnlock()
 
 	return fileFDArray
 
@@ -58,11 +54,7 @@ func WriteSubscriberGrpOffset(index int, packetObject *pojo.PacketStruct, byteAr
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	pojo.SubscriberObj[packetObject.ChannelName].Channel.SubscriberFileChannelLock.Lock()
 	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
-	pojo.SubscriberObj[packetObject.ChannelName].Channel.SubscriberFileChannelLock.Unlock()
 
 	if (err != nil){
 
@@ -80,14 +72,11 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 
 	defer Recover()
 
-	runtime.Gosched()
-
 	var groupLen int
 
-	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RLock()
-	defer pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.RUnlock()
-
+	channelLock.RLock()
 	_, ok := pojo.SubscriberObj[channelName].Groups[groupName]
+	channelLock.RUnlock()
 
 	if !ok{
 
@@ -95,7 +84,9 @@ func GetChannelGrpMapLen(channelName string, groupName string) int{
 
 	}else{
 
+		channelLock.RLock()
 		groupLen = len(pojo.SubscriberObj[channelName].Groups[groupName])
+		channelLock.RUnlock()
 	}
 	
 	return groupLen
@@ -107,10 +98,8 @@ func CreateGroup(channelName string, clientObj *pojo.ClientObject, SubscriberObj
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	SubscriberObj.Channel.SubscriberFileChannelLock.Lock()
-	defer SubscriberObj.Channel.SubscriberFileChannelLock.Unlock()
+	channelLock.Lock()
+	defer channelLock.Unlock()
 
 	_, ok := SubscriberObj.Groups[clientObj.GroupMapName]
 
@@ -127,13 +116,10 @@ func GetClientObject(channelName string, groupName string, index int) (*pojo.Cli
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.Lock()
-
-	defer pojo.SubscriberObj[channelName].Channel.SubscriberFileChannelLock.Unlock()
-
 	var groupLen, groupId int
+
+	channelLock.RLock()
+	defer channelLock.RUnlock()
 
 	_, ok := pojo.SubscriberObj[channelName].Groups[groupName]
 
@@ -164,8 +150,6 @@ func RegisterGroup(channelName string, clientObj *pojo.ClientObject, SubscriberO
 
 	defer Recover()
 
-	runtime.Gosched()
-
 	groupLen := GetChannelGrpMapLen(channelName, clientObj.GroupMapName)
 
 	// if group length == channel partition count then error
@@ -189,10 +173,8 @@ func UnRegisterGroup(clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribe
 
 	defer Recover()
 
-	runtime.Gosched()
-
-	SubscriberObj.Channel.SubscriberFileChannelLock.Lock()
-	defer SubscriberObj.Channel.SubscriberFileChannelLock.Unlock()
+	channelLock.Lock()
+	defer channelLock.Unlock()
 
 	for index := range SubscriberObj.Groups[clientObj.GroupMapName]{
 
@@ -211,8 +193,6 @@ func UnRegisterGroup(clientObj *pojo.ClientObject, SubscriberObj *pojo.Subscribe
 func DeleteGroup(groupName string, SubscriberObj *pojo.Subscribers){
 
 	defer Recover()
-
-	runtime.Gosched()
 
 	for index := range SubscriberObj.Groups[groupName]{
 

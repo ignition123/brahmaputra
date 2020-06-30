@@ -8,6 +8,13 @@ import(
 
 var SubscriberObj = make(map[string]*Subscribers)
 
+// message struct
+
+type PublishMsg struct{
+	Index int
+	Msg []byte
+	Cursor int64
+}
 
 // client objetc
 
@@ -17,7 +24,7 @@ type ClientObject struct{
 	MessageMapType string
 	GroupMapName string
 	Conn net.TCPConn
-	Channel chan *PacketStruct
+	Channel chan *PublishMsg
 }
 
 // packet struct, packet received fromt the client
@@ -51,7 +58,7 @@ type Subscribers struct{
 	Register  chan *ClientObject
 	UnRegister chan *ClientObject
 	GroupUnRegister chan string
-	BroadCast chan *PacketStruct
+	BroadCast chan *PublishMsg
 	Clients map[*ClientObject] bool 
 	Groups map[string] []*ClientObject 
 	CurrentTime time.Time

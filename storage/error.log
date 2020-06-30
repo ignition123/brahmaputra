@@ -2236,3 +2236,612 @@ read tcp 127.0.0.1:8100->127.0.0.1:57683: wsarecv: An existing connection was fo
 ############################### 
 2020-06-30 01:58:07.26517 +0530 IST m=+58.486494501
 Socket subscriber client closed...
+############################### 
+2020-06-30 23:54:39.7072203 +0530 IST m=+1.013288001
+Loading log files...
+############################### 
+2020-06-30 23:54:39.708221 +0530 IST m=+1.014288701
+Starting Brahmaputra TCP server...
+############################### 
+2020-06-30 23:54:39.7112105 +0530 IST m=+1.017278201
+Started Brahmaputra TCP server...
+############################### 
+2020-06-30 23:55:16.2055537 +0530 IST m=+1.012262501
+Loading log files...
+############################### 
+2020-06-30 23:55:16.2065531 +0530 IST m=+1.013261901
+Starting Brahmaputra TCP server...
+############################### 
+2020-06-30 23:55:16.2085465 +0530 IST m=+1.015255301
+Started Brahmaputra TCP server...
+############################### 
+2020-06-30 23:55:31.3639921 +0530 IST m=+16.170700901
+write tcp 127.0.0.1:8100->127.0.0.1:60806: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:31.3649907 +0530 IST m=+16.171699501
+read tcp 127.0.0.1:8100->127.0.0.1:60806: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:31.3689788 +0530 IST m=+16.175687601
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:55:35.3253913 +0530 IST m=+20.132100101
+write tcp 127.0.0.1:8100->127.0.0.1:60809: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:35.3523215 +0530 IST m=+20.159030301
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:55:35.3533178 +0530 IST m=+20.160026601
+read tcp 127.0.0.1:8100->127.0.0.1:60809: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:39.5052069 +0530 IST m=+24.311915701
+write tcp 127.0.0.1:8100->127.0.0.1:60827: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:39.5271479 +0530 IST m=+24.333856701
+read tcp 127.0.0.1:8100->127.0.0.1:60827: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:39.529143 +0530 IST m=+24.335851801
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:55:44.087944 +0530 IST m=+28.894652801
+write tcp 127.0.0.1:8100->127.0.0.1:60833: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:44.0889413 +0530 IST m=+28.895650101
+read tcp 127.0.0.1:8100->127.0.0.1:60833: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:44.0929302 +0530 IST m=+28.899639001
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:55:46.5463648 +0530 IST m=+31.353073601
+read tcp 127.0.0.1:8100->127.0.0.1:60830: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:55:47.4429652 +0530 IST m=+32.249674001
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:55:47.4439638 +0530 IST m=+32.250672601
+write tcp 127.0.0.1:8100->127.0.0.1:60830: use of closed network connection
+############################### 
+2020-06-30 23:56:12.2350099 +0530 IST m=+57.041718701
+write tcp 127.0.0.1:8100->127.0.0.1:60839: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:12.2659276 +0530 IST m=+57.072636401
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:56:12.2679227 +0530 IST m=+57.074631501
+read tcp 127.0.0.1:8100->127.0.0.1:60839: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:13.5973656 +0530 IST m=+58.404074401
+write tcp 127.0.0.1:8100->127.0.0.1:60837: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:13.6193053 +0530 IST m=+58.426014101
+read tcp 127.0.0.1:8100->127.0.0.1:60837: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:13.6213003 +0530 IST m=+58.428009101
+Socket subscriber client closed...
+############################### 
+2020-06-30 23:56:15.5631042 +0530 IST m=+60.369813001
+read tcp 127.0.0.1:8100->127.0.0.1:60813: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5730773 +0530 IST m=+60.379786101
+read tcp 127.0.0.1:8100->127.0.0.1:60814: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5770938 +0530 IST m=+60.383802601
+write tcp 127.0.0.1:8100->127.0.0.1:60815: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5780641 +0530 IST m=+60.384772901
+read tcp 127.0.0.1:8100->127.0.0.1:60815: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5800595 +0530 IST m=+60.386768301
+read tcp 127.0.0.1:8100->127.0.0.1:60816: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5820535 +0530 IST m=+60.388762301
+write tcp 127.0.0.1:8100->127.0.0.1:60816: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5880382 +0530 IST m=+60.394747001
+read tcp 127.0.0.1:8100->127.0.0.1:60818: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.589036 +0530 IST m=+60.395744801
+read tcp 127.0.0.1:8100->127.0.0.1:60817: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5910295 +0530 IST m=+60.397738301
+write tcp 127.0.0.1:8100->127.0.0.1:60817: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5930267 +0530 IST m=+60.399735501
+write tcp 127.0.0.1:8100->127.0.0.1:60819: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5940218 +0530 IST m=+60.400730601
+read tcp 127.0.0.1:8100->127.0.0.1:60819: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5970149 +0530 IST m=+60.403723701
+write tcp 127.0.0.1:8100->127.0.0.1:60820: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.5990094 +0530 IST m=+60.405718201
+read tcp 127.0.0.1:8100->127.0.0.1:60820: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.6000055 +0530 IST m=+60.406714301
+write tcp 127.0.0.1:8100->127.0.0.1:60821: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.6010046 +0530 IST m=+60.407713401
+read tcp 127.0.0.1:8100->127.0.0.1:60821: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.6079841 +0530 IST m=+60.414692901
+write tcp 127.0.0.1:8100->127.0.0.1:60822: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:56:15.6089831 +0530 IST m=+60.415691901
+read tcp 127.0.0.1:8100->127.0.0.1:60822: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-06-30 23:58:46.6769661 +0530 IST m=+1.014302601
+Loading log files...
+############################### 
+2020-06-30 23:58:46.6789431 +0530 IST m=+1.016279601
+Starting Brahmaputra TCP server...
+############################### 
+2020-06-30 23:58:46.6809376 +0530 IST m=+1.018274101
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:00:39.0499013 +0530 IST m=+113.387237801
+write tcp 127.0.0.1:8100->127.0.0.1:60951: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:39.0518972 +0530 IST m=+113.389233701
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:00:39.0528934 +0530 IST m=+113.390229901
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:00:39.0538912 +0530 IST m=+113.391227701
+read tcp 127.0.0.1:8100->127.0.0.1:60951: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:39.726092 +0530 IST m=+114.063428501
+read tcp 127.0.0.1:8100->127.0.0.1:60954: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:39.7280869 +0530 IST m=+114.065423401
+write tcp 127.0.0.1:8100->127.0.0.1:60954: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:39.7300922 +0530 IST m=+114.067428701
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:00:39.7310793 +0530 IST m=+114.068415801
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:00:40.6027449 +0530 IST m=+114.940081401
+read tcp 127.0.0.1:8100->127.0.0.1:60957: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6057378 +0530 IST m=+114.943074301
+read tcp 127.0.0.1:8100->127.0.0.1:60958: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6097273 +0530 IST m=+114.947063801
+read tcp 127.0.0.1:8100->127.0.0.1:60959: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6137168 +0530 IST m=+114.951053301
+read tcp 127.0.0.1:8100->127.0.0.1:60960: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6177054 +0530 IST m=+114.955041901
+read tcp 127.0.0.1:8100->127.0.0.1:60961: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6226922 +0530 IST m=+114.960028701
+read tcp 127.0.0.1:8100->127.0.0.1:60962: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6286767 +0530 IST m=+114.966013201
+read tcp 127.0.0.1:8100->127.0.0.1:60963: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6336623 +0530 IST m=+114.970998801
+read tcp 127.0.0.1:8100->127.0.0.1:60964: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6376527 +0530 IST m=+114.974989201
+read tcp 127.0.0.1:8100->127.0.0.1:60965: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:40.6436356 +0530 IST m=+114.980972101
+read tcp 127.0.0.1:8100->127.0.0.1:60966: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:00:45.8656904 +0530 IST m=+1.013316201
+Loading log files...
+############################### 
+2020-07-01 00:00:45.8666602 +0530 IST m=+1.014286001
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:00:45.868655 +0530 IST m=+1.016280801
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:02:17.9494709 +0530 IST m=+1.014305501
+Loading log files...
+############################### 
+2020-07-01 00:02:17.950449 +0530 IST m=+1.015283601
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:02:17.9524427 +0530 IST m=+1.017277301
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:03:52.6839494 +0530 IST m=+1.012290001
+Loading log files...
+############################### 
+2020-07-01 00:03:52.6849467 +0530 IST m=+1.013287301
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:03:52.6869419 +0530 IST m=+1.015282501
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:04:00.7992347 +0530 IST m=+9.127575301
+write tcp 127.0.0.1:8100->127.0.0.1:59501: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:00.8022264 +0530 IST m=+9.130567001
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:04:00.803225 +0530 IST m=+9.131565601
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:04:00.803225 +0530 IST m=+9.131565601
+read tcp 127.0.0.1:8100->127.0.0.1:59501: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5262339 +0530 IST m=+15.854574501
+read tcp 127.0.0.1:8100->127.0.0.1:59505: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5352117 +0530 IST m=+15.863552301
+read tcp 127.0.0.1:8100->127.0.0.1:59506: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.536207 +0530 IST m=+15.864547601
+read tcp 127.0.0.1:8100->127.0.0.1:59507: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5372053 +0530 IST m=+15.865545901
+write tcp 127.0.0.1:8100->127.0.0.1:59508: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5382027 +0530 IST m=+15.866543301
+read tcp 127.0.0.1:8100->127.0.0.1:59508: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5391993 +0530 IST m=+15.867539901
+read tcp 127.0.0.1:8100->127.0.0.1:59509: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5401966 +0530 IST m=+15.868537201
+write tcp 127.0.0.1:8100->127.0.0.1:59509: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5411959 +0530 IST m=+15.869536501
+write tcp 127.0.0.1:8100->127.0.0.1:59510: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.542192 +0530 IST m=+15.870532601
+read tcp 127.0.0.1:8100->127.0.0.1:59510: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5431938 +0530 IST m=+15.871534401
+write tcp 127.0.0.1:8100->127.0.0.1:59513: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5441931 +0530 IST m=+15.872533701
+read tcp 127.0.0.1:8100->127.0.0.1:59513: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5452197 +0530 IST m=+15.873560301
+read tcp 127.0.0.1:8100->127.0.0.1:59511: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5481751 +0530 IST m=+15.876515701
+read tcp 127.0.0.1:8100->127.0.0.1:59512: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5491749 +0530 IST m=+15.877515501
+write tcp 127.0.0.1:8100->127.0.0.1:59514: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:04:07.5501722 +0530 IST m=+15.878512801
+read tcp 127.0.0.1:8100->127.0.0.1:59514: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:07:54.2625165 +0530 IST m=+242.590857101
+read tcp 127.0.0.1:8100->127.0.0.1:59523: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:07:54.2635041 +0530 IST m=+242.591844701
+Socket subscriber client closed...
+############################### 
+2020-07-01 00:08:01.0363801 +0530 IST m=+1.014284201
+Loading log files...
+############################### 
+2020-07-01 00:08:01.037379 +0530 IST m=+1.015283101
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:08:01.0394125 +0530 IST m=+1.017316601
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:09:42.6793944 +0530 IST m=+102.657298501
+write tcp 127.0.0.1:8100->127.0.0.1:50361: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:09:42.6863738 +0530 IST m=+102.664277901
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:09:42.6873723 +0530 IST m=+102.665276401
+read tcp 127.0.0.1:8100->127.0.0.1:50361: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:09:42.690365 +0530 IST m=+102.668269101
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:24:44.7553431 +0530 IST m=+1004.733247201
+read tcp 127.0.0.1:8100->127.0.0.1:50364: i/o timeout
+############################### 
+2020-07-01 00:24:44.7573397 +0530 IST m=+1004.735243801
+read tcp 127.0.0.1:8100->127.0.0.1:50365: i/o timeout
+############################### 
+2020-07-01 00:24:44.7583355 +0530 IST m=+1004.736239601
+read tcp 127.0.0.1:8100->127.0.0.1:50368: i/o timeout
+############################### 
+2020-07-01 00:24:44.7593347 +0530 IST m=+1004.737238801
+read tcp 127.0.0.1:8100->127.0.0.1:50370: i/o timeout
+############################### 
+2020-07-01 00:24:44.7603321 +0530 IST m=+1004.738236201
+read tcp 127.0.0.1:8100->127.0.0.1:50367: i/o timeout
+############################### 
+2020-07-01 00:24:44.7603321 +0530 IST m=+1004.738236201
+read tcp 127.0.0.1:8100->127.0.0.1:50366: i/o timeout
+############################### 
+2020-07-01 00:24:44.7613288 +0530 IST m=+1004.739232901
+read tcp 127.0.0.1:8100->127.0.0.1:50372: i/o timeout
+############################### 
+2020-07-01 00:24:44.7623266 +0530 IST m=+1004.740230701
+read tcp 127.0.0.1:8100->127.0.0.1:50371: i/o timeout
+############################### 
+2020-07-01 00:24:44.7633225 +0530 IST m=+1004.741226601
+read tcp 127.0.0.1:8100->127.0.0.1:50369: i/o timeout
+############################### 
+2020-07-01 00:24:44.7633225 +0530 IST m=+1004.741226601
+read tcp 127.0.0.1:8100->127.0.0.1:50373: i/o timeout
+############################### 
+2020-07-01 00:28:21.4415182 +0530 IST m=+1.012259901
+Loading log files...
+############################### 
+2020-07-01 00:28:21.4425086 +0530 IST m=+1.013250301
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:28:21.4435073 +0530 IST m=+1.014249001
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:34:01.0866348 +0530 IST m=+1.011293601
+Loading log files...
+############################### 
+2020-07-01 00:34:01.0876322 +0530 IST m=+1.012291001
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:34:01.0896272 +0530 IST m=+1.014286001
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:39:21.0544281 +0530 IST m=+1.012290301
+Loading log files...
+############################### 
+2020-07-01 00:39:21.0554249 +0530 IST m=+1.013287101
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:39:21.0574222 +0530 IST m=+1.015284401
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:39:36.7574085 +0530 IST m=+16.715270701
+write tcp 127.0.0.1:8100->127.0.0.1:51694: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:36.8421816 +0530 IST m=+16.800043801
+read tcp 127.0.0.1:8100->127.0.0.1:51694: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:36.8571418 +0530 IST m=+16.815004001
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:39:36.8581391 +0530 IST m=+16.816001301
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:39:41.0439376 +0530 IST m=+21.001799801
+write tcp 127.0.0.1:8100->127.0.0.1:51691: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:41.0479283 +0530 IST m=+21.005790501
+read tcp 127.0.0.1:8100->127.0.0.1:51691: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:41.0489247 +0530 IST m=+21.006786901
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:39:41.0499234 +0530 IST m=+21.007785601
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:39:46.6678894 +0530 IST m=+26.625751601
+write tcp 127.0.0.1:8100->127.0.0.1:51713: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:46.6868387 +0530 IST m=+26.644700901
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:39:46.6878356 +0530 IST m=+26.645697801
+read tcp 127.0.0.1:8100->127.0.0.1:51713: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:46.6888331 +0530 IST m=+26.646695301
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:39:50.8646581 +0530 IST m=+30.822520301
+write tcp 127.0.0.1:8100->127.0.0.1:51721: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:50.8746316 +0530 IST m=+30.832493801
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:39:50.8766269 +0530 IST m=+30.834489101
+read tcp 127.0.0.1:8100->127.0.0.1:51721: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:39:50.8776247 +0530 IST m=+30.835486901
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:40:20.9132507 +0530 IST m=+1.014285201
+Loading log files...
+############################### 
+2020-07-01 00:40:20.9152452 +0530 IST m=+1.016279701
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:40:20.9172399 +0530 IST m=+1.018274401
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:44:35.5189496 +0530 IST m=+1.013289701
+Loading log files...
+############################### 
+2020-07-01 00:44:35.5199465 +0530 IST m=+1.014286601
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:44:35.521941 +0530 IST m=+1.016281101
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:48:08.8889886 +0530 IST m=+214.383328701
+read tcp 127.0.0.1:8100->127.0.0.1:51908: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:08.889987 +0530 IST m=+214.384327101
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:48:09.5911107 +0530 IST m=+215.085450801
+read tcp 127.0.0.1:8100->127.0.0.1:51911: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:09.5921087 +0530 IST m=+215.086448801
+Socket group subscriber channel closed...
+############################### 
+2020-07-01 00:48:11.2546607 +0530 IST m=+216.749000801
+read tcp 127.0.0.1:8100->127.0.0.1:51913: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2596463 +0530 IST m=+216.753986401
+read tcp 127.0.0.1:8100->127.0.0.1:51914: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2646345 +0530 IST m=+216.758974601
+read tcp 127.0.0.1:8100->127.0.0.1:51915: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.269631 +0530 IST m=+216.763971101
+read tcp 127.0.0.1:8100->127.0.0.1:51916: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2746055 +0530 IST m=+216.768945601
+read tcp 127.0.0.1:8100->127.0.0.1:51917: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.278596 +0530 IST m=+216.772936101
+read tcp 127.0.0.1:8100->127.0.0.1:51918: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2835822 +0530 IST m=+216.777922301
+read tcp 127.0.0.1:8100->127.0.0.1:51919: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2875711 +0530 IST m=+216.781911201
+read tcp 127.0.0.1:8100->127.0.0.1:51920: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2935927 +0530 IST m=+216.787932801
+read tcp 127.0.0.1:8100->127.0.0.1:51921: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:11.2985808 +0530 IST m=+216.792920901
+read tcp 127.0.0.1:8100->127.0.0.1:51922: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:48:26.6444778 +0530 IST m=+1.012291501
+Loading log files...
+############################### 
+2020-07-01 00:48:26.6454747 +0530 IST m=+1.013288401
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:48:26.6474699 +0530 IST m=+1.015283601
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:49:19.5459184 +0530 IST m=+1.015283801
+Loading log files...
+############################### 
+2020-07-01 00:49:19.5469152 +0530 IST m=+1.016280601
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:49:19.5489095 +0530 IST m=+1.018274901
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:49:44.9369721 +0530 IST m=+1.014285401
+Loading log files...
+############################### 
+2020-07-01 00:49:44.9379708 +0530 IST m=+1.015284101
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:49:44.9409745 +0530 IST m=+1.018287801
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:51:55.5833739 +0530 IST m=+1.012290201
+Loading log files...
+############################### 
+2020-07-01 00:51:55.5843724 +0530 IST m=+1.013288701
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:51:55.5863662 +0530 IST m=+1.015282501
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:53:34.7261187 +0530 IST m=+1.012290901
+Loading log files...
+############################### 
+2020-07-01 00:53:34.727116 +0530 IST m=+1.013288201
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:53:34.7291108 +0530 IST m=+1.015283001
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:54:21.0491626 +0530 IST m=+1.013287001
+Loading log files...
+############################### 
+2020-07-01 00:54:21.0501598 +0530 IST m=+1.014284201
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:54:21.0521548 +0530 IST m=+1.016279201
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:54:31.5680152 +0530 IST m=+11.532139601
+write tcp 127.0.0.1:8100->127.0.0.1:52354: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5700105 +0530 IST m=+11.534134901
+read tcp 127.0.0.1:8100->127.0.0.1:52356: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5720045 +0530 IST m=+11.536128901
+read tcp 127.0.0.1:8100->127.0.0.1:52357: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.573999 +0530 IST m=+11.538123401
+read tcp 127.0.0.1:8100->127.0.0.1:52354: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5749965 +0530 IST m=+11.539120901
+read tcp 127.0.0.1:8100->127.0.0.1:52359: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5779906 +0530 IST m=+11.542115001
+write tcp 127.0.0.1:8100->127.0.0.1:52355: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5779906 +0530 IST m=+11.542115001
+read tcp 127.0.0.1:8100->127.0.0.1:52355: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5799842 +0530 IST m=+11.544108601
+read tcp 127.0.0.1:8100->127.0.0.1:52360: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5829764 +0530 IST m=+11.547100801
+read tcp 127.0.0.1:8100->127.0.0.1:52362: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5839728 +0530 IST m=+11.548097201
+read tcp 127.0.0.1:8100->127.0.0.1:52363: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5849705 +0530 IST m=+11.549094901
+read tcp 127.0.0.1:8100->127.0.0.1:52358: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5859685 +0530 IST m=+11.550092901
+write tcp 127.0.0.1:8100->127.0.0.1:52361: wsasend: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:31.5869659 +0530 IST m=+11.551090301
+read tcp 127.0.0.1:8100->127.0.0.1:52361: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:54:32.3918104 +0530 IST m=+12.355934801
+read tcp 127.0.0.1:8100->127.0.0.1:52351: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:55:26.4661138 +0530 IST m=+1.015280001
+Loading log files...
+############################### 
+2020-07-01 00:55:26.4671098 +0530 IST m=+1.016276001
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:55:26.470107 +0530 IST m=+1.019273201
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:58:38.2159796 +0530 IST m=+192.765145801
+read tcp 127.0.0.1:8100->127.0.0.1:52409: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:58:38.875214 +0530 IST m=+193.424380201
+read tcp 127.0.0.1:8100->127.0.0.1:52429: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:58:43.541755 +0530 IST m=+1.014312801
+Loading log files...
+############################### 
+2020-07-01 00:58:43.5437218 +0530 IST m=+1.016279601
+Starting Brahmaputra TCP server...
+############################### 
+2020-07-01 00:58:43.5457171 +0530 IST m=+1.018274901
+Started Brahmaputra TCP server...
+############################### 
+2020-07-01 00:58:53.1340601 +0530 IST m=+10.606617901
+read tcp 127.0.0.1:8100->127.0.0.1:52555: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:58:57.8105451 +0530 IST m=+15.283102901
+read tcp 127.0.0.1:8100->127.0.0.1:52557: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:59:02.5967395 +0530 IST m=+20.069297301
+read tcp 127.0.0.1:8100->127.0.0.1:52573: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:59:03.7686016 +0530 IST m=+21.241159401
+read tcp 127.0.0.1:8100->127.0.0.1:52577: wsarecv: An existing connection was forcibly closed by the remote host.
+############################### 
+2020-07-01 00:59:03.771595 +0530 IST m=+21.244152801
+Socket group subscribers file reader closed...
+############################### 
+2020-07-01 00:59:03.7725921 +0530 IST m=+21.245149901
+Socket group subscriber channel closed...

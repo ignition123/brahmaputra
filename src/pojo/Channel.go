@@ -2,7 +2,6 @@ package pojo
 
 import(
 	"os"
-	"sync"
 )
 
 // channel config struct
@@ -12,6 +11,4 @@ type ChannelStruct struct{
 	Path string
 	ChannelStorageType string
 	PartitionCount int
-	ChannelLock sync.RWMutex
-	SubscriberFileChannelLock sync.RWMutex
 }

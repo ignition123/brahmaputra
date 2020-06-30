@@ -49,9 +49,6 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	defer Recover()
 
-	pojo.SubscriberObj[channelName].Channel.ChannelLock.Lock()
-	defer pojo.SubscriberObj[channelName].Channel.ChannelLock.Unlock()
-
 	totalByteLen := len(message)
 
 	byteSendBuffer := ByteBuffer.Buffer{
@@ -63,6 +60,8 @@ func ThroughGroupError(channelName string, groupName string, message string){
 	byteSendBuffer.PutByte(byte(1)) // status code
 
 	byteSendBuffer.Put([]byte(message)) // actual body
+
+	channelLock.Lock()
 
 	for index :=  range pojo.SubscriberObj[channelName].Groups[groupName]{
 
@@ -77,6 +76,8 @@ func ThroughGroupError(channelName string, groupName string, message string){
 		pojo.SubscriberObj[channelName].UnRegister <- pojo.SubscriberObj[channelName].Groups[groupName][index]
 
 	}
+	
+	channelLock.Unlock()
 
 	go WriteLog(message)
 

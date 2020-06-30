@@ -30,6 +30,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break
+
 			case clientObj, channelStat := <-SubscriberObj.UnRegister:
 
 				if channelStat{
@@ -55,6 +56,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break
+
 			case groupName, channelStat := <-SubscriberObj.GroupUnRegister:
 
 				if channelStat{
@@ -63,6 +65,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 
 				}
 			break
+
 			case message, channelStat := <-SubscriberObj.BroadCast:
 
 				if channelStat{
@@ -85,7 +88,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 
 				}
 
-			break
+			break 
 
 		}
 

@@ -30,7 +30,7 @@ func SubscriberInmemory(clientObj *pojo.ClientObject){
 
 }
 
-func sendMessageToClient(clientObj *pojo.ClientObject, message *pojo.PacketStruct) bool{
+func createBufferPacket(message *pojo.PacketStruct) []byte{
 
 	defer ChannelList.Recover()
 
@@ -74,7 +74,14 @@ func sendMessageToClient(clientObj *pojo.ClientObject, message *pojo.PacketStruc
 
 	byteBuffer.Put(message.BodyBB) // actual body
 
-	_, err := clientObj.Conn.Write(byteBuffer.Array())
+	return byteBuffer.Array()
+}
+
+func sendMessageToClient(clientObj *pojo.ClientObject, message *pojo.PublishMsg) bool{
+
+	defer ChannelList.Recover()
+
+	_, err := clientObj.Conn.Write(message.Msg)
 		
 	if err != nil {
 

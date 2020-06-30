@@ -338,10 +338,11 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 		select{
 
-			case pojo.SubscriberObj[channelName].BroadCast <- packetObject:
-			break
-
-			case <-time.After(1 * time.Second):
+			case pojo.SubscriberObj[channelName].BroadCast <- &pojo.PublishMsg{
+				Index: 0,
+				Cursor: 0,
+				Msg: createBufferPacket(packetObject),
+			}:
 			break
 
 		}

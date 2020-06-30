@@ -304,17 +304,17 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 	// declaring a mutex variable
 
-	groupMsgChan := make(chan map[string]interface{}, 100)
+	groupMsgChan := make(chan *pojo.PublishMsg)
 
 	closeChannel := make(chan bool, 1)
 
-	go packetListener(channelName, groupName, packetObject, groupMsgChan, closeChannel)
+	go packetGroupPersistentListener(channelName, groupName, packetObject, groupMsgChan, closeChannel)
 
 	// iterating to all partitions and start listening to file change with go routines
 
 	for i:=0;i<pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-		go func(index int, cursor int64, packetObject *pojo.PacketStruct, clientObj *pojo.ClientObject){
+		go func(index int, cursor int64, packetObject *pojo.PacketStruct, clientObj *pojo.ClientObject, groupMsgChan chan *pojo.PublishMsg){
 
 			defer ChannelList.Recover()
 
@@ -350,10 +350,13 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 						ChannelList.ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
-						pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
-						
-						break
-						
+						select{
+
+							case pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj:
+							case groupMsgChan <- nil:
+								break exitParentLoop
+						}
+
 					}
 
 					// if cursor == -1 then cursor  = file size
@@ -510,59 +513,58 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *p
 
 					// sending to group and waiting for call back
 
-					chanMap := make(map[string]interface{})
-
-					chanMap["index"] = index
-					chanMap["cursor"] = int(cursor)
-					chanMap["msg"] = byteSendBuffer.Array()
-
 					select{
-						case groupMsgChan <- chanMap:
+						case groupMsgChan <- &pojo.PublishMsg{
+							Index: index,
+							Cursor: cursor,
+							Msg: byteSendBuffer.Array(),
+						}:
 						break
 
-						case _, ok := <-closeChannel:
+						case _, channStat := <-closeChannel:
 
-							if ok{
+							if channStat{
 
 								break exitParentLoop
 							}
 
 						break
 
-						case <-time.After(1 * time.Second):
-						break
 					}
 
 				}
 
+			packetObject.SubscriberFD[index].Close()
+
 			go ChannelList.WriteLog("Socket group subscribers file reader closed...")
 
-		}(i, offsetByteSize[i], packetObject, clientObj)
+		}(i, offsetByteSize[i], packetObject, clientObj, groupMsgChan)
 
 	}
 }
 
-func packetListener(channelName string, groupName string, packetObject *pojo.PacketStruct, groupMsgChan chan map[string]interface{}, closeChannel chan bool){
+func packetGroupPersistentListener(channelName string, groupName string, packetObject *pojo.PacketStruct, groupMsgChan chan *pojo.PublishMsg, closeChannel chan bool){
 
 	defer ChannelList.Recover()
 
 	exitLoop:
-		for chanMap := range groupMsgChan{
+		for message := range groupMsgChan{
 
-			cursor := chanMap["cursor"].(int)
-			index := chanMap["index"].(int)
-			msg := chanMap["msg"].([]byte)
+			if message == nil{
+
+				break exitLoop
+			}
 
 			RETRY:
 
-			clientObj, _, groupLen := ChannelList.GetClientObject(channelName, groupName, index)
+			clientObj, _, groupLen := ChannelList.GetClientObject(channelName, groupName, message.Index)
 
 			if groupLen == 0{
 
 				break exitLoop
 			}
 
-			_, err := clientObj.Conn.Write(msg)
+			_, err := clientObj.Conn.Write(message.Msg)
 
 			if err != nil {
 
@@ -573,16 +575,10 @@ func packetListener(channelName string, groupName string, packetObject *pojo.Pac
 			// creating subscriber offset and writing into subscriber offset file
 
 			byteArrayCursor := make([]byte, 8)
-			binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
+			binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
 
-			ChannelList.WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
+			ChannelList.WriteSubscriberGrpOffset(message.Index, packetObject, byteArrayCursor)
 		}
-
-	for index :=  range packetObject.SubscriberFD{
-
-		packetObject.SubscriberFD[index].Close()
-
-	}
 
 	go ChannelList.WriteLog("Socket group subscriber channel closed...")
 

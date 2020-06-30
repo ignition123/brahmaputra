@@ -21,7 +21,7 @@ func CreateSubscriberChannels(channelName string, channelObject *pojo.ChannelStr
 		GroupUnRegister: make(chan string, *ConfigTCPObj.Server.TCP.BufferRead),
 		Register: make(chan *pojo.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
 		UnRegister: make(chan *pojo.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
-		BroadCast: make(chan *pojo.PacketStruct, *ConfigTCPObj.Server.TCP.BufferRead),
+		BroadCast: make(chan *pojo.PublishMsg, *ConfigTCPObj.Server.TCP.BufferRead),
 		Clients: make(map[*pojo.ClientObject] bool),
 		CurrentTime: time.Now(),
 	}

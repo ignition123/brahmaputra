@@ -51,7 +51,7 @@ func HandleRequest(conn net.TCPConn) {
 	// creating client object
 
 	clientObj := pojo.ClientObject{
-		Channel: make(chan *pojo.PacketStruct, 1024),
+		Channel: make(chan *pojo.PublishMsg, 1024),
 		SubscriberMapName: "",
 		MessageMapType: "",
 		GroupMapName: "",

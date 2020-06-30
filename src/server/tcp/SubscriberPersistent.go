@@ -7,7 +7,7 @@ import(
 	"strconv"
 	"io/ioutil"
 	"encoding/binary"
-	"sync"
+	_"sync"
 	"time"
 	"ByteBuffer"
 	_"log"
@@ -84,7 +84,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 		// opening the file and setting file descriptor
 
 		fDes, err := os.OpenFile(consumerOffsetPath,
-			os.O_WRONLY, 0644)
+			os.O_WRONLY, os.ModeAppend)
 
 		// if error 
 
@@ -305,9 +305,11 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 	}
 
-	// creating a subscriberMtx mutex
+	closeChannel := make(chan bool, 1)
 
-	var subscriberMtx sync.Mutex
+	// running subscriber listener
+
+	go packetSinglePersistentListener(clientObj, closeChannel, packetObject)
 
 	// iterating over the paritition count to start listening to file change using go routines
 
@@ -336,9 +338,9 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 				return
 			}
 
-			// creating exitLoop variable
+			// creating parentExitLoop variable
 
-			exitLoop:
+			parentExitLoop:
 				for{
 
 					// reading the file stat
@@ -349,10 +351,12 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 						ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-						pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+						select{
+							case pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj:
+							case clientObj.Channel <- nil:
+								break parentExitLoop
+						}
 
-						break exitLoop
-						
 					}
 
 
@@ -504,18 +508,31 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					// sending to the subscriber and waiting for callback
 
-					if !send(index, int(cursor), subscriberMtx, packetObject, clientObj, byteSendBuffer){
+					select{
 
-						pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+						case clientObj.Channel <- &pojo.PublishMsg{
+							Index: index,
+							Cursor: cursor,
+							Msg: byteSendBuffer.Array(),
+						}:
+						break
 
-						break exitLoop
+						case _, channStat := <- closeChannel:
+
+							if channStat{
+
+								break parentExitLoop
+
+							}
+						break
+
 					}
-
+ 
 				}
 
 			packetObject.SubscriberFD[index].Close()
 
-			go ChannelList.WriteLog("Socket subscriber client closed...")
+			go ChannelList.WriteLog("Socket group subscribers file reader closed...")
 
 		}(i, offsetByteSize[i], clientObj, packetObject)
 
@@ -523,16 +540,35 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 	
 }
 
-func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject *pojo.PacketStruct, clientObj *pojo.ClientObject, packetBuffer ByteBuffer.Buffer) bool{ 
+func packetSinglePersistentListener(clientObj *pojo.ClientObject, closeChannel chan bool, packetObject *pojo.PacketStruct){
 
 	defer ChannelList.Recover()
 
-	// locking the method using mutex to prevent concurrent write to tcp
+	exitLoop:
 
-	subscriberMtx.Lock()
-	defer subscriberMtx.Unlock()
+		for msg := range clientObj.Channel{
 
-	_, err := clientObj.Conn.Write(packetBuffer.Array())
+			if msg == nil || !sendMessageToClientPersistent(clientObj, msg, packetObject){
+
+				break exitLoop
+
+			}
+
+		}
+
+	clientObj.Conn.Close()
+
+	go ChannelList.WriteLog("Socket group subscriber channel closed...")
+
+	closeChannel <- true
+
+}
+
+func sendMessageToClientPersistent(clientObj *pojo.ClientObject, message *pojo.PublishMsg, packetObject *pojo.PacketStruct) bool{ 
+
+	defer ChannelList.Recover()
+
+	_, err := clientObj.Conn.Write(message.Msg)
 	
 	if err != nil {
 	
@@ -544,8 +580,8 @@ func send(index int, cursor int, subscriberMtx sync.Mutex, packetObject *pojo.Pa
 	// creating subscriber offset and writing into subscriber offset file
 
 	byteArrayCursor := make([]byte, 8)
-	binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
+	binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
 
-	return ChannelList.WriteSubscriberOffset(index, packetObject, clientObj, byteArrayCursor)
+	return ChannelList.WriteSubscriberOffset(message.Index, packetObject, clientObj, byteArrayCursor)
 
 }
