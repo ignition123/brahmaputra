@@ -2,15 +2,17 @@ package tcp
 
 import(
 	"ChannelList"
-	"pojo"
+	"objects"
 	"ByteBuffer"
 	_"time"
 	_"log"
 )
 
-func SubscriberInmemory(clientObj *pojo.ClientObject){
+func SubscriberInmemory(clientObj *objects.ClientObject){
 
 	defer ChannelList.Recover()
+
+	defer clientObj.Conn.Close()
 
 	exitLoop:
 
@@ -24,13 +26,11 @@ func SubscriberInmemory(clientObj *pojo.ClientObject){
 
 		}
 
-	clientObj.Conn.Close()
-
 	go ChannelList.WriteLog("Socket subscriber client closed...")
 
 }
 
-func createBufferPacket(message *pojo.PacketStruct) []byte{
+func createBufferPacket(message *objects.PacketStruct) []byte{
 
 	defer ChannelList.Recover()
 
@@ -77,7 +77,7 @@ func createBufferPacket(message *pojo.PacketStruct) []byte{
 	return byteBuffer.Array()
 }
 
-func sendMessageToClient(clientObj *pojo.ClientObject, message *pojo.PublishMsg) bool{
+func sendMessageToClient(clientObj *objects.ClientObject, message *objects.PublishMsg) bool{
 
 	defer ChannelList.Recover()
 

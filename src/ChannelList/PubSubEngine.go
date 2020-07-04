@@ -1,13 +1,13 @@
 package ChannelList
 
 import(
-	"pojo"
+	"objects"
 	"time"
 	_"sync"
 	_"log"
 )
 
-func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscribers){
+func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscribers){
 
 	defer Recover()
 
@@ -40,7 +40,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 						case clientObj.Channel <- nil:
 						break
 
-						case <-time.After(1 * time.Second):
+						case <-time.After(5 * time.Second):
 						break
 
 					}
@@ -77,7 +77,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 							case clientObj.Channel <- message:
 							break
 
-							case <-time.After(1 * time.Second):
+							case <-time.After(5 * time.Second):
 							break
 
 						}
@@ -89,6 +89,9 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *pojo.Subscriber
 				}
 
 			break 
+
+			case <-time.After(5 * time.Second):
+			break
 
 		}
 

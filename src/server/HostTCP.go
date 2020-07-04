@@ -1,7 +1,7 @@
 package server
 
 import (
-	"pojo"
+	"objects"
 	"net"
 	"log"
 	"os"
@@ -11,7 +11,7 @@ import (
 	"runtime"
 )
 
-func HostTCP(configObj pojo.Config){
+func HostTCP(configObj objects.Config){
 
 	defer ChannelList.Recover()
 
@@ -106,19 +106,34 @@ func acceptSocket(serverObject net.Listener){
         // checking for read and write timeout
         
         if *ChannelList.ConfigTCPObj.Server.TCP.Timeout != 0{
+
         	tcpObject.SetDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.Timeout) * time.Millisecond))
+
+        }else{
+
+        	tcpObject.SetDeadline(time.Time{})
         }
 
         // checking for read timeout
 
         if *ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout != 0{
+
         	tcpObject.SetReadDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout) * time.Millisecond))
+
+        }else{
+
+        	tcpObject.SetReadDeadline(time.Time{})
         }
 			
 		// checking for write timeout
 
 		if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
 			tcpObject.SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+		}else{
+
+			tcpObject.SetWriteDeadline(time.Time{})
 		}
 		
 		// handling the new socket

@@ -5,7 +5,7 @@ import(
 	"os"
 	"io/ioutil"
 	"path/filepath"
-	"pojo"
+	"objects"
 	"encoding/json"
 	"strconv"
 	_"log"
@@ -101,7 +101,7 @@ func ReadFile(path string, file os.FileInfo){
 
 		if channelMap["type"] == "channel"{
 
-			channelObject := &pojo.ChannelStruct{
+			channelObject := &objects.ChannelStruct{
 				ChannelStorageType: channelMap["channelStorageType"].(string),
 			}
 
@@ -172,7 +172,7 @@ func LoadTCPChannelsToMemory(){
 
 // opening file descriptor for the log files
 
-func openDataFile(channelObject *pojo.ChannelStruct, channelMap map[string]interface{}) *pojo.ChannelStruct{
+func openDataFile(channelObject *objects.ChannelStruct, channelMap map[string]interface{}) *objects.ChannelStruct{
 
 	defer ChannelList.Recover()
 

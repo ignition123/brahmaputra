@@ -11,7 +11,7 @@ import (
 	"net"
 	"ChannelList"
 	"io"
-	"pojo"
+	"objects"
 	"time"
 )
 
@@ -50,8 +50,8 @@ func HandleRequest(conn net.TCPConn) {
 
 	// creating client object
 
-	clientObj := pojo.ClientObject{
-		Channel: make(chan *pojo.PublishMsg, 1024),
+	clientObj := objects.ClientObject{
+		Channel: make(chan *objects.PublishMsg, 1024),
 		SubscriberMapName: "",
 		MessageMapType: "",
 		GroupMapName: "",
@@ -146,11 +146,11 @@ func HandleRequest(conn net.TCPConn) {
 
 		// checking if the clientObj.ChannelMapName exists and is not nul
 
-		if pojo.SubscriberObj[clientObj.ChannelMapName] != nil && pojo.SubscriberObj[clientObj.ChannelMapName].Channel != nil{
+		if objects.SubscriberObj[clientObj.ChannelMapName] != nil && objects.SubscriberObj[clientObj.ChannelMapName].Channel != nil{
 
-			// if writeCount >= pojo.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
+			// if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
 
-			if writeCount >= pojo.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount{
+			if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount{
 
 				writeCount = 0
 
@@ -171,9 +171,9 @@ func HandleRequest(conn net.TCPConn) {
 
 	}
 
-	if pojo.SubscriberObj[clientObj.ChannelMapName] != nil{
+	if objects.SubscriberObj[clientObj.ChannelMapName] != nil{
 
-		pojo.SubscriberObj[clientObj.ChannelMapName].UnRegister <- &clientObj
+		objects.SubscriberObj[clientObj.ChannelMapName].UnRegister <- &clientObj
 	}
 
 }

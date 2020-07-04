@@ -1,7 +1,7 @@
 package ChannelList
 
 import(
-	"pojo"
+	"objects"
 	"time"
 )
 
@@ -9,22 +9,22 @@ import(
 
 // global object to store channel config inmemory and packet object + producer and subscriber details
 
-var ConfigTCPObj pojo.Config
-var ConfigUDPObj pojo.Config
+var ConfigTCPObj objects.Config
+var ConfigUDPObj objects.Config
 
-func CreateSubscriberChannels(channelName string, channelObject *pojo.ChannelStruct){
+func CreateSubscriberChannels(channelName string, channelObject *objects.ChannelStruct){
 
 	defer Recover()
 
-	pojo.SubscriberObj[channelName] = &pojo.Subscribers{
+	objects.SubscriberObj[channelName] = &objects.Subscribers{
 		Channel: channelObject,
 		GroupUnRegister: make(chan string, *ConfigTCPObj.Server.TCP.BufferRead),
-		Register: make(chan *pojo.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
-		UnRegister: make(chan *pojo.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
-		BroadCast: make(chan *pojo.PublishMsg, *ConfigTCPObj.Server.TCP.BufferRead),
-		Clients: make(map[*pojo.ClientObject] bool),
+		Register: make(chan *objects.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
+		UnRegister: make(chan *objects.ClientObject, *ConfigTCPObj.Server.TCP.BufferRead),
+		BroadCast: make(chan *objects.PublishMsg, *ConfigTCPObj.Server.TCP.BufferRead),
+		Clients: make(map[*objects.ClientObject] bool),
 		CurrentTime: time.Now(),
 	}
 
-	go HandleSubscriberMessages(channelName, pojo.SubscriberObj[channelName])
+	go HandleSubscriberMessages(channelName, objects.SubscriberObj[channelName])
 }

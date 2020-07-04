@@ -11,14 +11,14 @@ import (
 	"time"
 	_"log"
 	"ChannelList"
-	"pojo"
+	"objects"
 	"ByteBuffer"
 	"encoding/binary"
 )
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *pojo.ClientObject, writeCount *int){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *objects.ClientObject, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -57,7 +57,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	// checking if channel name does not exists in the system
 
-	_, chanExits := pojo.SubscriberObj[channelName]
+	_, chanExits := objects.SubscriberObj[channelName]
 
 	if !chanExits{
 
@@ -68,7 +68,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	// create object of struct PacketStruct
 
-	packetObject := pojo.PacketStruct{
+	packetObject := objects.PacketStruct{
 		MessageTypeLen: messageTypeLen,
 		MessageType: messageType,
 		ChannelNameLen: channelNameLen,
@@ -81,7 +81,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	}else if messageType == "subscribe"{
 
-		if pojo.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
+		if objects.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
 
 			handleSubscriberInmemoryMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen)
 				
@@ -96,7 +96,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 	parseChan <- true	
 }
 
-func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
 
 	defer ChannelList.Recover()
 
@@ -171,7 +171,7 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 		}
 
-		pojo.SubscriberObj[channelName].Register <- clientObj
+		objects.SubscriberObj[channelName].Register <- clientObj
 
 	}else{
 
@@ -181,7 +181,7 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 		// storing the client in the subscriber list
 
-		pojo.SubscriberObj[channelName].Register <- clientObj
+		objects.SubscriberObj[channelName].Register <- clientObj
 
 		// infinitely listening to the log file for changes and publishing to subscriber individually listening
 
@@ -191,7 +191,7 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 }
 
-func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
 
 	defer ChannelList.Recover()
 
@@ -230,13 +230,13 @@ func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType s
 	clientObj.SubscriberMapName = channelName+subscriberName
 	clientObj.MessageMapType = messageType
 
-	pojo.SubscriberObj[channelName].Register <- clientObj
+	objects.SubscriberObj[channelName].Register <- clientObj
 
 	go SubscriberInmemory(clientObj)
 
 }
 
-func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *pojo.ClientObject, channelName string, conn net.TCPConn, packetObject *pojo.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -310,7 +310,7 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 	// if channel name does not exists in the system then error
 
-	if pojo.SubscriberObj[channelName] == nil{
+	if objects.SubscriberObj[channelName] == nil{
 
 		ChannelList.ThroughClientError(conn, ChannelList.INVALID_CHANNEL)
 
@@ -334,15 +334,18 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 	clientObj.Conn = conn
 
-	if pojo.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
+	if objects.SubscriberObj[channelName].Channel.ChannelStorageType == "inmemory"{
 
 		select{
 
-			case pojo.SubscriberObj[channelName].BroadCast <- &pojo.PublishMsg{
+			case objects.SubscriberObj[channelName].BroadCast <- &objects.PublishMsg{
 				Index: 0,
 				Cursor: 0,
 				Msg: createBufferPacket(packetObject),
 			}:
+			break
+
+			case <-time.After(5 * time.Second):
 			break
 
 		}

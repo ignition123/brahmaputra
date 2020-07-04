@@ -2,7 +2,7 @@ package tcp
 
 import(
 	"ChannelList"
-	"pojo"
+	"objects"
 	"os"
 	"strconv"
 	"io/ioutil"
@@ -13,7 +13,7 @@ import(
 	_"log"
 )
 
-func checkCreateDirectory(clientObj *pojo.ClientObject, packetObject *pojo.PacketStruct, checkDirectoryChan chan bool){
+func checkCreateDirectory(clientObj *objects.ClientObject, packetObject *objects.PacketStruct, checkDirectoryChan chan bool){
 
 	defer ChannelList.Recover()
 
@@ -23,7 +23,7 @@ func checkCreateDirectory(clientObj *pojo.ClientObject, packetObject *pojo.Packe
 
 	// declaring directory path
 
-	directoryPath := pojo.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+consumerName
+	directoryPath := objects.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+consumerName
 
 	if _, err := os.Stat(directoryPath); err == nil{
 
@@ -39,7 +39,7 @@ func checkCreateDirectory(clientObj *pojo.ClientObject, packetObject *pojo.Packe
 
 			// deleting the subscriber from the list, locking the channel list array using mutex
 
-			pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+			objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 			checkDirectoryChan <- false
 
@@ -61,7 +61,7 @@ func checkCreateDirectory(clientObj *pojo.ClientObject, packetObject *pojo.Packe
 
 }
 
-func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetObject *pojo.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
+func createSubscriberOffsetFile(index int, clientObj *objects.ClientObject, packetObject *objects.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
 
 	defer ChannelList.Recover()
 
@@ -71,7 +71,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 	// declaring directory path
 
-	directoryPath := pojo.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+consumerName
+	directoryPath := objects.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+consumerName
 
 	// declaring the consumer offset path
 
@@ -92,7 +92,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 			ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-			pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+			objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 			partitionOffsetSubscriber <- int64(-2)
 
@@ -121,7 +121,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 				ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-				pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+				objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 				partitionOffsetSubscriber <- int64(-2)
 
@@ -157,7 +157,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 			ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-			pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+			objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 			partitionOffsetSubscriber <- int64(-2)
 
@@ -199,7 +199,7 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 				ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-				pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+				objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 				partitionOffsetSubscriber <- int64(-2)
 
@@ -231,13 +231,13 @@ func createSubscriberOffsetFile(index int, clientObj *pojo.ClientObject, packetO
 
 }
 
-func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *pojo.PacketStruct, start_from string){
+func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *objects.PacketStruct, start_from string){
 
 	defer ChannelList.Recover()
 
 	// creating offset byte size variable
 
-	offsetByteSize := make([]int64, pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
+	offsetByteSize := make([]int64, objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
 
 	// creating directory channel boolean
 
@@ -257,7 +257,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 	if false == <-checkDirectoryChan{
 
-		pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+		objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 		return
 
@@ -265,13 +265,13 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 	// creating file descriptor
 
-	packetObject.SubscriberFD = make([]*os.File, pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
+	packetObject.SubscriberFD = make([]*os.File, objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
 
 	// iterating over the partition count and adding file desciptor object
 
 	filesOpenedFailed := false
 
-	for i:=0;i<pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
+	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
 		go createSubscriberOffsetFile(i, clientObj, packetObject, start_from, partitionOffsetSubscriber)
 
@@ -288,7 +288,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 		ChannelList.ThroughClientError(clientObj.Conn, ChannelList.INVALID_SUBSCRIBER_OFFSET)
 
-		pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+		objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 		return
 	}
@@ -299,7 +299,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 		ChannelList.ThroughClientError(clientObj.Conn, ChannelList.INVALID_SUBSCRIBER_OFFSET)
 
-		pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+		objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 		return
 
@@ -313,15 +313,15 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 	// iterating over the paritition count to start listening to file change using go routines
 
-	for i:=0;i<pojo.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
+	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-		go func(index int, cursor int64, clientObj *pojo.ClientObject, packetObject *pojo.PacketStruct){
+		go func(index int, cursor int64, clientObj *objects.ClientObject, packetObject *objects.PacketStruct){
 
 			defer ChannelList.Recover()
 
 			// setting file path of the logs
 
-			filePath := pojo.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
+			filePath := objects.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
 
 			// opening file 
 
@@ -333,7 +333,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 				
 				ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-				pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+				objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
 				return
 			}
@@ -352,7 +352,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 						ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
 						select{
-							case pojo.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj:
+							case objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj:
 							case clientObj.Channel <- nil:
 								break parentExitLoop
 						}
@@ -510,7 +510,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 
 					select{
 
-						case clientObj.Channel <- &pojo.PublishMsg{
+						case clientObj.Channel <- &objects.PublishMsg{
 							Index: index,
 							Cursor: cursor,
 							Msg: byteSendBuffer.Array(),
@@ -524,6 +524,9 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 								break parentExitLoop
 
 							}
+						break
+
+						case <-time.After(5 * time.Second):
 						break
 
 					}
@@ -540,7 +543,7 @@ func SubscriberSinglePersistent(clientObj *pojo.ClientObject,  packetObject *poj
 	
 }
 
-func packetSinglePersistentListener(clientObj *pojo.ClientObject, closeChannel chan bool, packetObject *pojo.PacketStruct){
+func packetSinglePersistentListener(clientObj *objects.ClientObject, closeChannel chan bool, packetObject *objects.PacketStruct){
 
 	defer ChannelList.Recover()
 
@@ -564,7 +567,7 @@ func packetSinglePersistentListener(clientObj *pojo.ClientObject, closeChannel c
 
 }
 
-func sendMessageToClientPersistent(clientObj *pojo.ClientObject, message *pojo.PublishMsg, packetObject *pojo.PacketStruct) bool{ 
+func sendMessageToClientPersistent(clientObj *objects.ClientObject, message *objects.PublishMsg, packetObject *objects.PacketStruct) bool{ 
 
 	defer ChannelList.Recover()
 

@@ -9,7 +9,7 @@ package ChannelList
 import(
 	"net"
 	"ByteBuffer"
-	"pojo"
+	"objects"
 )
 
 // method throwing error to individual subscriber or publisher
@@ -63,9 +63,9 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 	channelLock.Lock()
 
-	for index :=  range pojo.SubscriberObj[channelName].Groups[groupName]{
+	for index :=  range objects.SubscriberObj[channelName].Groups[groupName]{
 
-		_, err := pojo.SubscriberObj[channelName].Groups[groupName][index].Conn.Write(byteSendBuffer.Array())
+		_, err := objects.SubscriberObj[channelName].Groups[groupName][index].Conn.Write(byteSendBuffer.Array())
 		
 		if (err != nil){
 
@@ -73,7 +73,7 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 		}
 
-		pojo.SubscriberObj[channelName].UnRegister <- pojo.SubscriberObj[channelName].Groups[groupName][index]
+		objects.SubscriberObj[channelName].UnRegister <- objects.SubscriberObj[channelName].Groups[groupName][index]
 
 	}
 	
@@ -85,7 +85,7 @@ func ThroughGroupError(channelName string, groupName string, message string){
 
 // Producer Acknowledgement method
 
-func SendAck(messageMap *pojo.PacketStruct, clientObj *pojo.ClientObject){
+func SendAck(messageMap *objects.PacketStruct, clientObj *objects.ClientObject){
 
 	defer Recover()
 
