@@ -579,6 +579,7 @@ func packetGroupPersistentListener(channelName string, groupName string, packetO
 			// creating subscriber offset and writing into subscriber offset file
 
 			byteArrayCursor := make([]byte, 8)
+			
 			binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
 
 			ChannelList.WriteSubscriberGrpOffset(message.Index, packetObject, byteArrayCursor)

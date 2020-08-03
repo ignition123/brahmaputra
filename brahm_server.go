@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 	"io/ioutil"
-	"pojo"
+	"objects"
 	"encoding/json"
 	"server"
 	"flag"
@@ -128,7 +128,7 @@ func runConfigFile(configPath string){
 		return
 	}
 
-	var configObj = pojo.Config{}
+	var configObj = objects.Config{}
 
 	pojoErr := json.Unmarshal(data, &configObj)
 

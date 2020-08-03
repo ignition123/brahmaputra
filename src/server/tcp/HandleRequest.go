@@ -21,21 +21,26 @@ var closeTCP = false
 
 // method to check if the packet is having 0 bytes in packets
 
-func allZero(s []byte) bool {
+func allZero(s []byte) bool{
 
 	defer ChannelList.Recover()
 	
-	for _, v := range s {
-		if v != 0 {
+	for _, v := range s{
+
+		if v != 0{
+
 			return false
+
 		}
+
 	}
+
 	return true
 }
 
 // handling the tcp socket
 
-func HandleRequest(conn net.TCPConn) {
+func HandleRequest(conn net.TCPConn){
 	
 	defer ChannelList.Recover()
 

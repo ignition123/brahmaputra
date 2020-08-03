@@ -29,8 +29,6 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscri
 
 				}
 
-			break
-
 			case clientObj, channelStat := <-SubscriberObj.UnRegister:
 
 				if channelStat{
@@ -38,10 +36,7 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscri
 					select{
 
 						case clientObj.Channel <- nil:
-						break
-
-						case <-time.After(5 * time.Second):
-						break
+						case <-time.After(1 * time.Millisecond):
 
 					}
 
@@ -55,8 +50,6 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscri
 
 				}
 
-			break
-
 			case groupName, channelStat := <-SubscriberObj.GroupUnRegister:
 
 				if channelStat{
@@ -64,7 +57,6 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscri
 					DeleteGroup(groupName, SubscriberObj)
 
 				}
-			break
 
 			case message, channelStat := <-SubscriberObj.BroadCast:
 
@@ -75,24 +67,15 @@ func HandleSubscriberMessages(channelName string, SubscriberObj *objects.Subscri
 						select{
 
 							case clientObj.Channel <- message:
-							break
-
 							case <-time.After(5 * time.Second):
-							break
-
 						}
-
 
 					}
 
 
 				}
 
-			break 
-
-			case <-time.After(5 * time.Second):
-			break
-
+			case <-time.After(1 * time.Second):
 		}
 
 	}

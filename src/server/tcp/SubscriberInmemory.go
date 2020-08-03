@@ -18,11 +18,13 @@ func SubscriberInmemory(clientObj *objects.ClientObject){
 
 		for msg := range clientObj.Channel{
 
-			if msg == nil || !sendMessageToClient(clientObj, msg){
+			if msg == nil{
 
 				break exitLoop
 
 			}
+
+			sendMessageToClient(clientObj, msg)
 
 		}
 
@@ -77,7 +79,7 @@ func createBufferPacket(message *objects.PacketStruct) []byte{
 	return byteBuffer.Array()
 }
 
-func sendMessageToClient(clientObj *objects.ClientObject, message *objects.PublishMsg) bool{
+func sendMessageToClient(clientObj *objects.ClientObject, message *objects.PublishMsg){
 
 	defer ChannelList.Recover()
 
@@ -87,10 +89,6 @@ func sendMessageToClient(clientObj *objects.ClientObject, message *objects.Publi
 
 		go ChannelList.WriteLog(err.Error())
 
-		return false
-
+		return
 	}
-
-	return true
-
 }

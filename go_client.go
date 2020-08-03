@@ -16,7 +16,7 @@ func main(){
 		Url:"brahm://127.0.0.1:8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
-		ChannelName:"brahm",
+		ChannelName:"sudeep",
 		AppType:"producer",
 		Worker:1, //runtime.NumCPU() runtime.NumCPU()
 		PoolSize:10,

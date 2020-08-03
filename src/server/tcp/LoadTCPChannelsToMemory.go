@@ -21,8 +21,10 @@ func ReadDirectory(dirPath string, file os.FileInfo){
 
 	files, err := ioutil.ReadDir(dirPath)
 
-    if err != nil {
+    if err != nil{
+
         ChannelList.WriteLog(err.Error())
+
         return
     }
 
@@ -35,7 +37,9 @@ func ReadDirectory(dirPath string, file os.FileInfo){
     	fi, err := os.Stat(dirPath+"/"+file.Name())
 
 	    if err != nil {
+
 	        ChannelList.WriteLog(err.Error())
+
 	        break
 	    }
 
@@ -102,7 +106,9 @@ func ReadFile(path string, file os.FileInfo){
 		if channelMap["type"] == "channel"{
 
 			channelObject := &objects.ChannelStruct{
+
 				ChannelStorageType: channelMap["channelStorageType"].(string),
+
 			}
 
 			// setting packet objects of the channel
@@ -143,7 +149,9 @@ func LoadTCPChannelsToMemory(){
     files, err := ioutil.ReadDir(*ChannelList.ConfigTCPObj.ChannelConfigFiles)
 
     if err != nil {
+
         ChannelList.WriteLog(err.Error())
+
         return
     }
 
@@ -152,7 +160,9 @@ func LoadTCPChannelsToMemory(){
     	fi, err := os.Stat(*ChannelList.ConfigTCPObj.ChannelConfigFiles+"/"+file.Name())
 
 	    if err != nil {
+
 	        ChannelList.WriteLog(err.Error())
+
 	        break
 	    }
 
@@ -186,7 +196,9 @@ func openDataFile(channelObject *objects.ChannelStruct, channelMap map[string]in
 			os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 
 		if err != nil {
+
 			ChannelList.WriteLog(err.Error())
+
 			break
 		}
 
@@ -195,6 +207,7 @@ func openDataFile(channelObject *objects.ChannelStruct, channelMap map[string]in
 	}
 
 	channelObject.PartitionCount = int(channelMap["partitions"].(float64))
+	
 	channelObject.Path = channelMap["path"].(string)
 
 	return channelObject

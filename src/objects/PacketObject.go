@@ -52,6 +52,7 @@ type PacketStruct struct{
 	SubscriberFD []*os.File
 }
 
+// subscriber structure
 
 type Subscribers struct{
 	Channel *ChannelStruct
