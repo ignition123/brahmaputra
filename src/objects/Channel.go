@@ -7,7 +7,8 @@ import(
 // channel config struct
 
 type ChannelStruct struct{
-	FD *os.File 
+	FD []*os.File 
 	Path string
 	ChannelStorageType string
+	PartitionCount int
 }

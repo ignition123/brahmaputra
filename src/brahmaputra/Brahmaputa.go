@@ -63,7 +63,7 @@ type CreateProperties struct{
 	AuthReconnect bool
 	Acknowledge bool
 	Polling int
-	AutoAcknowledge bool
+	AutoCommit bool
 	subContentmatcher bool
 	Compression string
 	TCP *TCPConf

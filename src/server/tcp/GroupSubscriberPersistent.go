@@ -6,6 +6,7 @@ import(
 	"os"
 	"io/ioutil"
 	"encoding/binary"
+	"strconv"
 )
 
 // create a directory for subscriber group
@@ -56,7 +57,7 @@ func checkCreateGroupDirectory(channelName string, groupName string, clientObj *
 
 // create subscriber group offset
 
-func createSubscriberGroupOffsetFile(channelName string, groupName string, packetObject *objects.PacketStruct, start_from string, clientObj *objects.ClientObject, partitionOffsetSubscriber chan int64){
+func createSubscriberGroupOffsetFile(index int, channelName string, groupName string, packetObject *objects.PacketStruct, start_from string, clientObj *objects.ClientObject, partitionOffsetSubscriber chan int64){
 
 	defer ChannelList.Recover()
 
@@ -66,7 +67,7 @@ func createSubscriberGroupOffsetFile(channelName string, groupName string, packe
 
 	// setting consumer offset path
 
-	consumerOffsetPath := directoryPath+"\\"+groupName+"_offset_.index"
+	consumerOffsetPath := directoryPath+"\\"+groupName+"_offset_"+strconv.Itoa(index)+".index"
 
 	// getting the os stat
 
@@ -90,7 +91,7 @@ func createSubscriberGroupOffsetFile(channelName string, groupName string, packe
 
 		// adding to fD to packetObject
 
-		packetObject.SubscriberFD = fDes // race
+		packetObject.SubscriberFD[index] = fDes // race
 
 		// start_from == BEGINNING then offset = 0 means it will start reading file from beginning
 
@@ -160,13 +161,13 @@ func createSubscriberGroupOffsetFile(channelName string, groupName string, packe
 
 		// then adding the file descriptor object
 
-		packetObject.SubscriberFD = fDes
+		packetObject.SubscriberFD[index] = fDes
 
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- int64(0)
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL" || start_from == "LASTRECEIVED"{
 
 			partitionOffsetSubscriber <- int64(-1)
 
@@ -227,5 +228,3 @@ func createSubscriberGroupOffsetFile(channelName string, groupName string, packe
 	}
 
 }
-
-

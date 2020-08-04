@@ -7,6 +7,7 @@ import(
 	"path/filepath"
 	"objects"
 	"encoding/json"
+	"strconv"
 	_"log"
 )
 
@@ -185,20 +186,28 @@ func openDataFile(channelObject *objects.ChannelStruct, channelMap map[string]in
 
 	defer ChannelList.Recover()
 
-	filePath := channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+".br"
+	partitions := int(channelMap["partitions"].(float64))
 
-	f, err := os.OpenFile(filePath,
-		os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	for i:=0;i<partitions;i++{
 
-	if err != nil {
+		filePath := channelMap["path"].(string)+"/"+channelMap["channelName"].(string)+"_partition_"+strconv.Itoa(i)+".br"
 
-		ChannelList.WriteLog(err.Error())
+		f, err := os.OpenFile(filePath,
+			os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
 
-		return nil
+		if err != nil {
+
+			ChannelList.WriteLog(err.Error())
+
+			break
+		}
+
+		channelObject.FD = append(channelObject.FD, f)
+
 	}
 
-	channelObject.FD = f
-
+	channelObject.PartitionCount = int(channelMap["partitions"].(float64))
+	
 	channelObject.Path = channelMap["path"].(string)
 
 	return channelObject

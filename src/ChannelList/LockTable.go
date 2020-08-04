@@ -17,11 +17,11 @@ var channelLock = &sync.RWMutex{}
 
 // method to write cursor counter, locking with mutex
 
-func WriteSubscriberOffset(packetObject *objects.PacketStruct, clientObj *objects.ClientObject, byteArrayCursor []byte) bool{
+func WriteSubscriberOffset(index int, packetObject *objects.PacketStruct, clientObj *objects.ClientObject, byteArrayCursor []byte) bool{
 
 	defer Recover()
 
-	_, err := packetObject.SubscriberFD.WriteAt(byteArrayCursor, 0)
+	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
 
 	if (err != nil){
 
@@ -36,12 +36,12 @@ func WriteSubscriberOffset(packetObject *objects.PacketStruct, clientObj *object
 
 // creating file descriptor array to read from the log file
 
-func CreateSubscriberGrpFD(ChannelName string) *os.File{
+func CreateSubscriberGrpFD(ChannelName string) []*os.File{
 
 	defer Recover()
 
 	channelLock.RLock()
-	var fileFDArray *os.File
+	fileFDArray := make([]*os.File, objects.SubscriberObj[ChannelName].Channel.PartitionCount)
 	channelLock.RUnlock()
 
 	return fileFDArray
@@ -50,11 +50,11 @@ func CreateSubscriberGrpFD(ChannelName string) *os.File{
 
 // method to write cursor counter, locking with mutex
 
-func WriteSubscriberGrpOffset(packetObject *objects.PacketStruct, byteArrayCursor []byte) bool{
+func WriteSubscriberGrpOffset(index int, packetObject *objects.PacketStruct, byteArrayCursor []byte) bool{
 
 	defer Recover()
 
-	_, err := packetObject.SubscriberFD.WriteAt(byteArrayCursor, 0)
+	_, err := packetObject.SubscriberFD[index].WriteAt(byteArrayCursor, 0)
 
 	if (err != nil){
 
@@ -112,11 +112,11 @@ func CreateGroup(channelName string, clientObj *objects.ClientObject, Subscriber
 
 // get clientObject
 
-func GetClientObject(channelName string, groupName string) (*objects.ClientObject, int, int){
+func GetClientObject(channelName string, groupName string, index int) (*objects.ClientObject, int, int){
 
 	defer Recover()
 
-	var groupLen int
+	var groupLen, groupId int
 
 	channelLock.RLock()
 	defer channelLock.RUnlock()
@@ -127,9 +127,15 @@ func GetClientObject(channelName string, groupName string) (*objects.ClientObjec
 
 		groupLen = len(objects.SubscriberObj[channelName].Groups[groupName])
 
+		if groupLen > 0{
+
+			groupId = index % groupLen
+
+		}
+
 		if len(objects.SubscriberObj[channelName].Groups[groupName]) > 0{
 
-			return objects.SubscriberObj[channelName].Groups[groupName][groupLen], groupLen, groupLen
+			return objects.SubscriberObj[channelName].Groups[groupName][groupId], groupId, groupLen
 
 		} 
 
@@ -143,6 +149,18 @@ func GetClientObject(channelName string, groupName string) (*objects.ClientObjec
 func RegisterGroup(channelName string, clientObj *objects.ClientObject, SubscriberObj *objects.Subscribers){
 
 	defer Recover()
+
+	groupLen := GetChannelGrpMapLen(channelName, clientObj.GroupMapName)
+
+	// if group length == channel partition count then error
+
+	if groupLen == SubscriberObj.Channel.PartitionCount{
+
+		ThroughClientError(clientObj.Conn, SUBSCRIBER_FULL)
+
+		return
+
+	}
 
 	CreateGroup(channelName, clientObj, SubscriberObj)
 

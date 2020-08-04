@@ -6,6 +6,7 @@ import(
 	"os"
 	"io/ioutil"
 	"encoding/binary"
+	"strconv"
 )
 
 func checkCreateDirectory(clientObj *objects.ClientObject, packetObject *objects.PacketStruct, checkDirectoryChan chan bool){
@@ -56,7 +57,7 @@ func checkCreateDirectory(clientObj *objects.ClientObject, packetObject *objects
 
 }
 
-func createSubscriberOffsetFile(clientObj *objects.ClientObject, packetObject *objects.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
+func createSubscriberOffsetFile(index int, clientObj *objects.ClientObject, packetObject *objects.PacketStruct, start_from string, partitionOffsetSubscriber chan int64){
 
 	defer ChannelList.Recover()
 
@@ -70,7 +71,7 @@ func createSubscriberOffsetFile(clientObj *objects.ClientObject, packetObject *o
 
 	// declaring the consumer offset path
 
-	consumerOffsetPath := directoryPath+"\\"+packetObject.SubscriberName+"_offset_.index"
+	consumerOffsetPath := directoryPath+"\\"+packetObject.SubscriberName+"_offset_"+strconv.Itoa(index)+".index"
 
 	// checking the os stat of the path
 
@@ -96,7 +97,7 @@ func createSubscriberOffsetFile(clientObj *objects.ClientObject, packetObject *o
 
 		// adding file descriptor object to packetObject
 
-		packetObject.SubscriberFD = fDes
+		packetObject.SubscriberFD[index] = fDes
 
 		// if the start from flag is beginning then the offset will bet set to 0
 
@@ -162,13 +163,13 @@ func createSubscriberOffsetFile(clientObj *objects.ClientObject, packetObject *o
 
 		// then setting the file descriptor
 
-		packetObject.SubscriberFD = fDes
+		packetObject.SubscriberFD[index] = fDes
 
 		if start_from == "BEGINNING"{
 
 			partitionOffsetSubscriber <- int64(0)
 
-		}else if start_from == "NOPULL"{
+		}else if start_from == "NOPULL" || start_from == "LASTRECEIVED"{
 
 			partitionOffsetSubscriber <- int64(-1)
 

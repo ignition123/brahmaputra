@@ -18,14 +18,14 @@ func main() {
 		ConnectionType:"tcp",
 		ChannelName:"brahm",
 		AppType:"consumer",
-		AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
+		AlwaysStartFrom:"NOPULL", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber_fo",
 		// GroupName:"brahm_group", //brahm_group_123
 		Worker:1,
 		AuthReconnect:false,
 		// Polling:0,
-		// AutoAcknowledge:false,
+		// AutoCommit:true,
 	}
 
 	// sigs := make(chan os.Signal, 1)

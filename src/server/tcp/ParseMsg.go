@@ -17,7 +17,7 @@ import (
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientObj *objects.ClientObject){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientObj *objects.ClientObject, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -76,7 +76,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientO
 
 	if messageType == "publish"{
 
-		handleProducerMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen)
+		handleProducerMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen, writeCount)
 
 	}else if messageType == "subscribe"{
 
@@ -256,7 +256,7 @@ func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType s
 
 }
 
-func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -374,7 +374,7 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 		if *ChannelList.ConfigTCPObj.Storage.File.Active{
 
-			if !WriteData(*packetObject, clientObj){
+			if !WriteData(*packetObject, writeCount, clientObj){
 
 				ChannelList.ThroughClientError(conn, ChannelList.LOG_WRITE_FAILURE)
 

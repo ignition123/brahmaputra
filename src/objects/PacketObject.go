@@ -54,7 +54,7 @@ type PacketStruct struct{
 	ProducerAck bool
 	CompressionType byte
 	ActiveMode bool
-	SubscriberFD *os.File
+	SubscriberFD []*os.File
 }
 
 // subscriber structure

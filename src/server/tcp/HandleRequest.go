@@ -59,6 +59,10 @@ func HandleRequest(conn net.TCPConn){
 		Disconnection:false,
 	}
 
+	// writeCount for round robin writes in file
+
+	writeCount := 0
+
 	// staring infinite loop
 
 	for {
@@ -141,9 +145,28 @@ func HandleRequest(conn net.TCPConn){
 			break
 		}
 
+		// checking if the clientObj.ChannelMapName exists and is not nul
+
+		if objects.SubscriberObj[clientObj.ChannelMapName] != nil && objects.SubscriberObj[clientObj.ChannelMapName].Channel != nil{
+
+			// if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
+
+			if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount{
+
+				writeCount = 0
+
+			}
+
+		}else{
+
+			writeCount = 0
+		}
+
 		// calling the parseMessage method and waiting for callback
 		
-		parseMsg(packetSize, completePacket, conn, &clientObj)
+		parseMsg(packetSize, completePacket, conn, &clientObj, &writeCount)
+
+		writeCount += 1
 
 	}
 

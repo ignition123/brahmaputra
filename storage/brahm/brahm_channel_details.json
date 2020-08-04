@@ -1,1 +1,1 @@
-{"channelName":"brahm","channelStorageType":"persistent","channelType":"tcp","path":"D:\\pounze_go_project\\brahmaputra\\storage\\brahm","type":"channel"}
+{"channelName":"brahm","channelStorageType":"persistent","channelType":"tcp","partitions":5,"path":"D:\\pounze_go_project\\brahmaputra\\storage\\brahm","type":"channel"}

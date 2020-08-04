@@ -8,6 +8,7 @@ import(
 	"os"
 	"encoding/binary"
 	"sync/atomic"
+	"strconv"
 )
 
 func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *objects.PacketStruct, start_from string){
@@ -16,7 +17,7 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 	// creating offset byte size variable
 
-	var cursor int64
+	offsetByteSize := make([]int64, objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
 
 	// creating directory channel boolean
 
@@ -42,17 +43,25 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 	}
 
+	// creating file descriptor
+
+	packetObject.SubscriberFD = make([]*os.File, objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
+
 	// iterating over the partition count and adding file desciptor object
 
 	filesOpenedFailed := false
 
-	go createSubscriberOffsetFile(clientObj, packetObject, start_from, partitionOffsetSubscriber)
+	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-	cursor =  <-partitionOffsetSubscriber
+		go createSubscriberOffsetFile(i, clientObj, packetObject, start_from, partitionOffsetSubscriber)
 
-	if cursor == -2{
+		offsetByteSize[i] = <-partitionOffsetSubscriber
 
-		filesOpenedFailed = true
+		if offsetByteSize[i] == -2{
+
+			filesOpenedFailed = true
+		}
+
 	}
 
 	if filesOpenedFailed{
@@ -66,7 +75,7 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 	// checking file descriptor length
 
-	if packetObject.SubscriberFD == nil{
+	if len(packetObject.SubscriberFD) == 0{
 
 		ChannelList.ThroughClientError(clientObj.Conn, ChannelList.INVALID_SUBSCRIBER_OFFSET)
 
@@ -86,270 +95,285 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 	go packetSinglePersistentListener(clientObj, closeChannel, packetObject, &pollingCount)
 
-	// setting file path of the logs
+	// iterating over the paritition count to start listening to file change using go routines
 
-	filePath := objects.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+packetObject.ChannelName+".br"
+	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-	// opening file 
+		go func(index int, cursor int64, clientObj *objects.ClientObject, packetObject *objects.PacketStruct, pollingCount *uint32){
 
-	file, err := os.Open(filePath)
+			defer ChannelList.Recover()
 
-	defer file.Close()
+			// setting file path of the logs
 
-	if err != nil {
-		
-		ChannelList.ThroughClientError(clientObj.Conn, err.Error())
+			filePath := objects.SubscriberObj[packetObject.ChannelName].Channel.Path+"/"+packetObject.ChannelName+"_partition_"+strconv.Itoa(index)+".br"
 
-		objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+			// opening file 
 
-		return
-	}
+			file, err := os.Open(filePath)
 
-	// creating parentExitLoop variable
+			defer file.Close()
 
-	parentExitLoop:
-
-		for{
-
-			// if the client object is true then break the loop
-
-			if clientObj.Disconnection{
-
-				objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
-
-				clientObj.Channel <- nil
-
-				break parentExitLoop
-			}
-
-			// checking if the subscriber type is polling or pushing method
-
-			if clientObj.Polling > 0{
-
-				if !clientObj.StartPoll{
-
-					time.Sleep(10 * time.Millisecond)
-
-					continue
-				}
-
-				// commit the last sent offset
-
-				if clientObj.Commit{
-
-					clientObj.Commit = false
-
-					// creating subscriber offset and writing into subscriber offset file
-
-					byteArrayCursor := make([]byte, 8)
-
-					binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
-
-					ChannelList.WriteSubscriberOffset(packetObject, clientObj, byteArrayCursor)
-				}
-
-			}
-
-			// reading the file stat
-
-			fileStat, err := os.Stat(filePath)
-	 
 			if err != nil {
-
+				
 				ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
 				objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
-				clientObj.Channel <- nil
-
-				break parentExitLoop
-
+				return
 			}
 
+			// creating parentExitLoop variable
 
-			// cursor == -1 then cursor == file size
+			parentExitLoop:
 
-			if cursor == -1{
+				for{
 
-				cursor = fileStat.Size()
+					// if the client object is true then break the loop
 
-			}
+					if clientObj.Disconnection{
 
-			// if cursor >=  file size then skipping the iteration
+						objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
-			if cursor >= fileStat.Size(){
+						clientObj.Channel <- nil
 
-				if clientObj.Polling > 0{
+						break parentExitLoop
+					}
 
-					SendFinPacket(clientObj)
+					// checking if the subscriber type is polling or pushing method
 
-				}
+					if clientObj.Polling > 0{
 
-				time.Sleep(1 * time.Second)
+						if !clientObj.StartPoll{
 
-				continue
+							time.Sleep(10 * time.Millisecond)
 
-			}
+							continue
+						}
 
-			// creating 8 byte empty array
+						// commit the last sent offset
 
-			data := make([]byte, 8)
+						if clientObj.Commit{
 
-			// reading the file at the cursor point
+							clientObj.Commit = false
 
-			count, err := file.ReadAt(data, cursor)
+							// creating subscriber offset and writing into subscriber offset file
 
-			if err != nil {
+							byteArrayCursor := make([]byte, 8)
 
-				time.Sleep(1 * time.Second)
+							binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
 
-				continue
+							ChannelList.WriteSubscriberOffset(index, packetObject, clientObj, byteArrayCursor)
+						}
 
-			}
+					}
 
-			// converting the packet size to big endian
+					// reading the file stat
 
-			packetSize := binary.BigEndian.Uint64(data)
+					fileStat, err := os.Stat(filePath)
+			 
+					if err != nil {
 
-			if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
+						ChannelList.ThroughClientError(clientObj.Conn, err.Error())
 
-				time.Sleep(1 * time.Second)
+						objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
 
-				continue
-
-			}
-
-			// adding 8 number to cursor
-
-			cursor += int64(8)
-
-			// creating restPacket byte array of packetSize
-
-			restPacket := make([]byte, packetSize)
-
-			// reading the file to exact cursor counter
-
-			totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
-
-			if errPacket != nil{
-
-				time.Sleep(1 * time.Second)
-
-				continue
-
-			}
-
-			// if total byte length == 0 skipping the iteration
-
-			if totalByteLen <= 0{
-
-				time.Sleep(1 * time.Second)
-
-				continue
-
-			}
-
-			// adding packetsize to cursor
-
-			cursor += int64(packetSize)
-
-			// creating byte buffer in big endian
-
-			byteFileBuffer := ByteBuffer.Buffer{
-				Endian:"big",
-			}
-
-			// wrapping the restPacket
-
-			byteFileBuffer.Wrap(restPacket)
-
-			// setting the values to local variables
-
-			messageTypeLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
-			messageType := byteFileBuffer.Get(messageTypeLen)
-
-			channelNameLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
-			channelName := byteFileBuffer.Get(channelNameLen)
-
-			producer_idLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
-			producer_id := byteFileBuffer.Get(producer_idLen)
-
-			agentNameLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
-			agentName := byteFileBuffer.Get(agentNameLen)
-
-			id := binary.BigEndian.Uint64(byteFileBuffer.GetLong())
-
-			CompressionType := byteFileBuffer.GetByte()
-
-			bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1)
-
-			bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
-
-			newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1 + len(bodyBB)
-
-			// creating bytebuffer of big endian and setting the values to be published
-
-			byteSendBuffer := ByteBuffer.Buffer{
-				Endian:"big",
-			}
-
-			byteSendBuffer.PutLong(newTotalByteLen) // total packet length
-
-			byteSendBuffer.PutByte(byte(2)) // status code
-
-			byteSendBuffer.PutShort(messageTypeLen) // total message type length
-
-			byteSendBuffer.Put([]byte(messageType)) // message type value
-
-			byteSendBuffer.PutShort(channelNameLen) // total channel name length
-
-			byteSendBuffer.Put([]byte(channelName)) // channel name value
-
-			byteSendBuffer.PutShort(producer_idLen) // producerid length
-
-			byteSendBuffer.Put([]byte(producer_id)) // producerid value
-
-			byteSendBuffer.PutShort(agentNameLen) // agentName length
-
-			byteSendBuffer.Put([]byte(agentName)) // agentName value
-
-			byteSendBuffer.PutLong(int(id)) // backend offset
-
-			byteSendBuffer.PutByte(CompressionType[0]) // compression type
-
-			byteSendBuffer.Put(bodyBB) // actual body
-
-			// sending to the subscriber and waiting for callback
-
-			select{
-
-				case clientObj.Channel <- &objects.PublishMsg{
-					Cursor: cursor,
-					Msg: byteSendBuffer.Array(),
-				}:
-
-				case _, channStat := <- closeChannel:
-
-					if channStat{
+						clientObj.Channel <- nil
 
 						break parentExitLoop
 
 					}
 
-				case <-time.After(5 * time.Second):
-			}
 
-		}
+					// cursor == -1 then cursor == file size
 
-	packetObject.SubscriberFD.Close()
+					if cursor == -1{
 
-	go ChannelList.WriteLog("Socket subscribers file reader closed...")
+						cursor = fileStat.Size()
+
+					}
+
+					// if cursor >=  file size then skipping the iteration
+
+					if cursor >= fileStat.Size(){
+
+						if clientObj.Polling > 0{
+
+							SendFinPacket(clientObj)
+
+						}
+
+						time.Sleep(1 * time.Second)
+
+						continue
+
+					}
+
+					// creating 8 byte empty array
+
+					data := make([]byte, 8)
+
+					// reading the file at the cursor point
+
+					count, err := file.ReadAt(data, cursor)
+
+					if err != nil {
+
+						time.Sleep(1 * time.Second)
+
+						continue
+
+					}
+
+					// converting the packet size to big endian
+
+					packetSize := binary.BigEndian.Uint64(data)
+
+					if int64(count) <= 0 || int64(packetSize) >= fileStat.Size(){
+
+						time.Sleep(1 * time.Second)
+
+						continue
+
+					}
+
+					// adding 8 number to cursor
+
+					cursor += int64(8)
+
+					// creating restPacket byte array of packetSize
+
+					restPacket := make([]byte, packetSize)
+
+					// reading the file to exact cursor counter
+
+					totalByteLen, errPacket := file.ReadAt(restPacket, cursor)
+
+					if errPacket != nil{
+
+						time.Sleep(1 * time.Second)
+
+						continue
+
+					}
+
+					// if total byte length == 0 skipping the iteration
+
+					if totalByteLen <= 0{
+
+						time.Sleep(1 * time.Second)
+
+						continue
+
+					}
+
+					// adding packetsize to cursor
+
+					cursor += int64(packetSize)
+
+					// creating byte buffer in big endian
+
+					byteFileBuffer := ByteBuffer.Buffer{
+						Endian:"big",
+					}
+
+					// wrapping the restPacket
+
+					byteFileBuffer.Wrap(restPacket)
+
+					// setting the values to local variables
+
+					messageTypeLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
+					messageType := byteFileBuffer.Get(messageTypeLen)
+
+					channelNameLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
+					channelName := byteFileBuffer.Get(channelNameLen)
+
+					producer_idLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
+					producer_id := byteFileBuffer.Get(producer_idLen)
+
+					agentNameLen := int(binary.BigEndian.Uint16(byteFileBuffer.GetShort()))
+					agentName := byteFileBuffer.Get(agentNameLen)
+
+					id := binary.BigEndian.Uint64(byteFileBuffer.GetLong())
+
+					CompressionType := byteFileBuffer.GetByte()
+
+					bodyPacketSize := int64(packetSize) - int64(2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1)
+
+					bodyBB := byteFileBuffer.Get(int(bodyPacketSize))
+
+					newTotalByteLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + producer_idLen + 2 + agentNameLen + 8 + 1 + len(bodyBB)
+
+					// creating bytebuffer of big endian and setting the values to be published
+
+					byteSendBuffer := ByteBuffer.Buffer{
+						Endian:"big",
+					}
+
+					byteSendBuffer.PutLong(newTotalByteLen) // total packet length
+
+					byteSendBuffer.PutByte(byte(2)) // status code
+
+					byteSendBuffer.PutShort(messageTypeLen) // total message type length
+
+					byteSendBuffer.Put([]byte(messageType)) // message type value
+
+					byteSendBuffer.PutShort(channelNameLen) // total channel name length
+
+					byteSendBuffer.Put([]byte(channelName)) // channel name value
+
+					byteSendBuffer.PutShort(producer_idLen) // producerid length
+
+					byteSendBuffer.Put([]byte(producer_id)) // producerid value
+
+					byteSendBuffer.PutShort(agentNameLen) // agentName length
+
+					byteSendBuffer.Put([]byte(agentName)) // agentName value
+
+					byteSendBuffer.PutLong(int(id)) // backend offset
+
+					byteSendBuffer.PutByte(CompressionType[0]) // compression type
+
+					byteSendBuffer.Put(bodyBB) // actual body
+
+					// sending to the subscriber and waiting for callback
+
+					select{
+
+						case clientObj.Channel <- &objects.PublishMsg{
+							Index: index,
+							Cursor: cursor,
+							Msg: byteSendBuffer.Array(),
+						}:
+
+						case _, channStat := <- closeChannel:
+
+							if channStat{
+
+								break parentExitLoop
+
+							}
+
+						case <-time.After(5 * time.Second):
+					}
+ 
+				}
+
+			packetObject.SubscriberFD[index].Close()
+
+			go ChannelList.WriteLog("Socket group subscribers file reader closed...")
+
+		}(i, offsetByteSize[i], clientObj, packetObject, &pollingCount)
+
+	}
 	
 }
 
 func packetSinglePersistentListener(clientObj *objects.ClientObject, closeChannel chan bool, packetObject *objects.PacketStruct, pollingCount *uint32){
 
 	defer ChannelList.Recover()
+
+	// send message to client, fetching from channel
 
 	exitLoop:
 
@@ -408,7 +432,7 @@ func sendMessageToClientPersistent(clientObj *objects.ClientObject, message *obj
 
 		binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
 
-		ChannelList.WriteSubscriberOffset(packetObject, clientObj, byteArrayCursor)
+		ChannelList.WriteSubscriberOffset(message.Index, packetObject, clientObj, byteArrayCursor)
 	}
-	
+
 }

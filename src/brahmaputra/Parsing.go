@@ -51,7 +51,7 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 
 		if string(messageType) == "FIN"{
 
-			if e.AutoAcknowledge{
+			if e.AutoCommit{
 
 				e.Commit()
 			}
