@@ -291,7 +291,7 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	// getting the total length of the packet
 
-	totalLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + startFromLen + 2 + SubscriberNameLen + 2 + subscriberTypeLen
+	totalLen := 2 + messageTypeLen + 2 + channelNameLen + 2 + startFromLen + 2 + SubscriberNameLen + 2 + subscriberTypeLen + 4
 
 	// pushing total length
 
@@ -337,6 +337,17 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	byteBuffer.Put([]byte(e.GroupName))
 
+	// adding subscriber polling flag
+
+	if e.Polling > 0{
+
+		byteBuffer.PutInt(e.Polling) // add subscriber polling
+
+	}else{
+
+		byteBuffer.PutInt(0) // add subscriber polling as 0
+	}
+
 	// writing to the tcp packet
 
 	_, err := e.Conn.Write(byteBuffer.Array())
@@ -353,6 +364,71 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 
 	return true
 } 
+
+// subsriber polling received acknowledgment
+
+func (e *CreateProperties) Commit() bool{
+
+	defer handlepanic()
+
+	// adding message type as subscriber
+
+	messageType := "poll"
+
+	// getting the message type length
+
+	messageTypeLen := len(messageType)
+
+	// getting channel name length
+
+	channelNameLen := len(e.ChannelName)
+
+	// getting the total length of the packet
+
+	totalLen := 2 + messageTypeLen + 2 + channelNameLen
+
+	// creating byte buffer in big endian
+
+	byteBuffer := ByteBuffer.Buffer{
+		Endian:"big",
+	}
+
+	// pushing total length
+
+	byteBuffer.PutLong(totalLen) // 8
+
+	// pushing message type length
+
+	byteBuffer.PutShort(messageTypeLen) // 2
+
+	// pushing message type
+
+	byteBuffer.Put([]byte(messageType)) // messageTypeLen
+
+	// pushing the channel name length
+
+	byteBuffer.PutShort(channelNameLen) // 2
+
+	// pushing the channel name
+
+	byteBuffer.Put([]byte(e.ChannelName)) // channelNameLen
+
+	// writing to the tcp packet
+
+	_, err := e.Conn.Write(byteBuffer.Array())
+
+	if err != nil {
+
+		e.connectStatus = false
+
+		go log.Println(err)
+
+		return false
+
+	}
+
+	return true
+}
 
 // method to publish the message to the server
 

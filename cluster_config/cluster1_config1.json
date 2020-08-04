@@ -7,7 +7,7 @@
         "tcp":{
             "host":"127.0.0.1",
             "port":"8100",
-            "bufferRead":10000000,
+            "bufferRead":1000000,
             "timeout":1000000,
             "socketReadTimeout":1000000,
             "socketWriteTimeout":1000000,

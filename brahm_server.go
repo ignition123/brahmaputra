@@ -63,8 +63,6 @@ func main(){
 
 	channelType := flag.String("channeltype", "persistent", "a string")
 
-	partionCount := flag.Int("partionCount", 5, "an int")
-
 	authUrl := flag.String("authUrl", "", "a string")
 
 	flag.Parse()
@@ -77,7 +75,7 @@ func main(){
 
 	}else if *channelName != "default"{
 
-		createChannel(*path, *channelName, *channelType, *partionCount, *authUrl)
+		createChannel(*path, *channelName, *channelType, *authUrl)
 
 	}else{
 
@@ -184,17 +182,12 @@ func printLogo(){
 
 // creating tcp channels
 
-func createChannel(path string, channelName string, channelType string, partionCount int, authUrl string){
+func createChannel(path string, channelName string, channelType string, authUrl string){
 
 	defer ChannelList.Recover()
 
 	if path == "default"{
 		log.Println("Please set a path for the channel storage...")
-		return
-	}
-
-	if partionCount <= 0{
-		log.Println("Patition count must be greater than 0...")
 		return
 	}
 
@@ -224,35 +217,31 @@ func createChannel(path string, channelName string, channelType string, partionC
 
 	}
 
-	for i:=0;i<partionCount;i++{
+	var filePath = directoryPath+"\\"+channelName+".br"
 
-		var filePath = directoryPath+"\\"+channelName+"_partition_"+strconv.Itoa(i)+".br"
+	if _, err := os.Stat(filePath); err == nil{
 
-		if _, err := os.Stat(filePath); err == nil{
+	  	log.Println("Failed to create name : "+channelName+"...")
 
-		  	log.Println("Failed to create partion name : "+channelName+"...")
+		return
+
+	}else if os.IsNotExist(err){
+
+		fDes, err := os.Create(filePath)
+
+		if err != nil{
+
+			log.Println(err)
 
 			return
 
-		}else if os.IsNotExist(err){
-
-			fDes, err := os.Create(filePath)
-
-			if err != nil{
-
-				log.Println(err)
-
-				return
-
-			}
-
-			defer fDes.Close()
-
-		}else{
-		  
-			log.Println("Error")
-
 		}
+
+		defer fDes.Close()
+
+	}else{
+	  
+		log.Println("Error")
 
 	}
 	
@@ -264,7 +253,6 @@ func createChannel(path string, channelName string, channelType string, partionC
 	storage[channelName]["type"] = "channel"
 	storage[channelName]["channelStorageType"] = channelType
 	storage[channelName]["path"] = directoryPath
-	storage[channelName]["partitions"] = partionCount
 	storage[channelName]["authUrl"] = authUrl
 
 	jsonData, err := json.Marshal(storage[channelName])

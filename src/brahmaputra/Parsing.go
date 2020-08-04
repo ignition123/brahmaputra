@@ -47,7 +47,20 @@ func (e *CreateProperties) parseMsg(packetSize int64, message []byte, msgType st
 		// parsing the message type
 
 		messageTypeLen := int(binary.BigEndian.Uint16(byteBuffer.GetShort()))
-		byteBuffer.Get(messageTypeLen)
+		messageType := byteBuffer.Get(messageTypeLen)
+
+		if string(messageType) == "FIN"{
+
+			if e.AutoAcknowledge{
+
+				e.Commit()
+			}
+
+			callbackChan <- "SUCCESS"
+
+			return
+
+		}
 
 		// parsing the channelName
 

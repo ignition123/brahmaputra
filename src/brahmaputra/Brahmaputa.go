@@ -62,6 +62,8 @@ type CreateProperties struct{
 	SubscriberName string
 	AuthReconnect bool
 	Acknowledge bool
+	Polling int
+	AutoAcknowledge bool
 	subContentmatcher bool
 	Compression string
 	TCP *TCPConf
@@ -81,9 +83,9 @@ const(
 
 func handlepanic() { 
   
-    if a := recover(); a != nil { 
-        log.Println(a)
-    } 
+    // if a := recover(); a != nil { 
+    //     log.Println(a)
+    // } 
 } 
 
 // validating the connection type and app type

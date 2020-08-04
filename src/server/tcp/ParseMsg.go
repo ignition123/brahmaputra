@@ -9,7 +9,6 @@ package tcp
 import (
 	"net"
 	"time"
-	_"log"
 	"ChannelList"
 	"objects"
 	"ByteBuffer"
@@ -18,7 +17,7 @@ import (
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseChan chan bool, clientObj *objects.ClientObject, writeCount *int){
+func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientObj *objects.ClientObject){
 
 	defer ChannelList.Recover()
 
@@ -77,7 +76,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 	if messageType == "publish"{
 
-		handleProducerMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen, writeCount)
+		handleProducerMessage(byteBuffer, messageType, clientObj, channelName, conn, &packetObject, packetSize, messageTypeLen, channelNameLen)
 
 	}else if messageType == "subscribe"{
 
@@ -91,9 +90,12 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, parseCh
 
 		}
 		
-	}
+	}else if messageType == "poll"{
 
-	parseChan <- true	
+		clientObj.Commit = true
+
+		clientObj.StartPoll = true
+	}	
 }
 
 func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
@@ -151,11 +153,25 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 	}
 
+	// adding offset to client object
+
+	clientObj.PollOffset = 0
+
+	// client commit set to false 
+
+	clientObj.Commit = false
+
+	clientObj.StartPoll = true
+
 	if subscriberTypeLen > 0{
 
 		// getting the groupName
 
 		packetObject.GroupName = string(byteBuffer.Get(int(subscriberTypeLen))) 
+
+		// getting the polling length
+
+		clientObj.Polling = int(binary.BigEndian.Uint32(byteBuffer.GetInt()))
 
 		// setting the subscriber mapName, messageType and groupName pointers for reference
 
@@ -174,6 +190,10 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 		objects.SubscriberObj[channelName].Register <- clientObj
 
 	}else{
+
+		// getting the polling length
+
+		clientObj.Polling = int(binary.BigEndian.Uint32(byteBuffer.GetInt()))
 
     	// setting the subscriber mapName, messageType and groupName pointers for reference
 
@@ -236,7 +256,7 @@ func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType s
 
 }
 
-func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
 
 	defer ChannelList.Recover()
 
@@ -354,7 +374,7 @@ func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, cli
 
 		if *ChannelList.ConfigTCPObj.Storage.File.Active{
 
-			if !WriteData(*packetObject, writeCount, clientObj){
+			if !WriteData(*packetObject, clientObj){
 
 				ChannelList.ThroughClientError(conn, ChannelList.LOG_WRITE_FAILURE)
 

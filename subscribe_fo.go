@@ -16,14 +16,16 @@ func main() {
 		Url:"brahm://127.0.0.1:8100",
 		AuthToken:"dkhashdkjshakhdksahkdghsagdghsakdsa",
 		ConnectionType:"tcp",
-		ChannelName:"sudeep",
+		ChannelName:"brahm",
 		AppType:"consumer",
-		AlwaysStartFrom:"NOPULL", // BEGINNING | NOPULL | LASTRECEIVED,
+		AlwaysStartFrom:"LASTRECEIVED", // BEGINNING | NOPULL | LASTRECEIVED,
 		ReadDelay:0, // nano second
 		SubscriberName:"sudeep_subscriber_fo",
-		//GroupName:"brahm_group", //brahm_group_123
+		// GroupName:"brahm_group", //brahm_group_123
 		Worker:1,
 		AuthReconnect:false,
+		// Polling:0,
+		// AutoAcknowledge:false,
 	}
 
 	// sigs := make(chan os.Signal, 1)

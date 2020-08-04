@@ -48,11 +48,6 @@ func HandleRequest(conn net.TCPConn){
 
 	defer conn.Close()
 
-	// creating a boolean channel to sync threads
-
-	parseChan := make(chan bool, 1)
-	defer close(parseChan)
-
 	// creating client object
 
 	clientObj := objects.ClientObject{
@@ -61,11 +56,8 @@ func HandleRequest(conn net.TCPConn){
 		MessageMapType: "",
 		GroupMapName: "",
 		ChannelMapName: "",
+		Disconnection:false,
 	}
-
-	// writeCount for round robin writes in file
-
-	writeCount := 0
 
 	// staring infinite loop
 
@@ -149,30 +141,9 @@ func HandleRequest(conn net.TCPConn){
 			break
 		}
 
-		// checking if the clientObj.ChannelMapName exists and is not nul
-
-		if objects.SubscriberObj[clientObj.ChannelMapName] != nil && objects.SubscriberObj[clientObj.ChannelMapName].Channel != nil{
-
-			// if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount then writeCount = 0 this is used to load balance in writing in multiple files using round robin algorithm
-
-			if writeCount >= objects.SubscriberObj[clientObj.ChannelMapName].Channel.PartitionCount{
-
-				writeCount = 0
-
-			}
-
-		}else{
-
-			writeCount = 0
-		}
-
 		// calling the parseMessage method and waiting for callback
 		
-		go parseMsg(packetSize, completePacket, conn, parseChan, &clientObj, &writeCount)
-
-		<-parseChan
-
-		writeCount += 1
+		parseMsg(packetSize, completePacket, conn, &clientObj)
 
 	}
 
@@ -180,6 +151,8 @@ func HandleRequest(conn net.TCPConn){
 
 		objects.SubscriberObj[clientObj.ChannelMapName].UnRegister <- &clientObj
 	}
+
+	clientObj.Disconnection = true
 
 }
 

@@ -25,6 +25,11 @@ type ClientObject struct{
 	GroupMapName string
 	Conn net.TCPConn
 	Channel chan *PublishMsg
+	Polling int
+	PollOffset int64
+	Commit bool
+	StartPoll bool
+	Disconnection bool
 }
 
 // packet struct, packet received fromt the client
@@ -49,7 +54,7 @@ type PacketStruct struct{
 	ProducerAck bool
 	CompressionType byte
 	ActiveMode bool
-	SubscriberFD []*os.File
+	SubscriberFD *os.File
 }
 
 // subscriber structure
