@@ -8,6 +8,7 @@ import(
 	"os"
 	"encoding/binary"
 	"strconv"
+	"sync/atomic"
 )
 
 func SubscribeGroupChannel(channelName string, groupName string, packetObject *objects.PacketStruct, clientObj *objects.ClientObject, start_from string){
@@ -84,15 +85,21 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 
 	groupMsgChan := make(chan *objects.PublishMsg)
 
+	offsetReset := make(chan int, 1)
+
 	closeChannel := make(chan bool, 1)
 
-	go packetGroupPersistentListener(channelName, groupName, packetObject, groupMsgChan, closeChannel)
+	// polling subscriber count
+
+	var pollingCount uint32
+
+	go packetGroupPersistentListener(channelName, groupName, packetObject, groupMsgChan, closeChannel, offsetReset, &pollingCount, objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount)
 
 	// iterating to all partitions and start listening to file change with go routines
 
 	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-		go func(index int, cursor int64, packetObject *objects.PacketStruct, clientObj *objects.ClientObject, groupMsgChan chan *objects.PublishMsg){
+		go func(index int, cursor int64, packetObject *objects.PacketStruct, groupMsgChan chan *objects.PublishMsg){
 
 			defer ChannelList.Recover()
 
@@ -115,11 +122,54 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 
 			defer file.Close()
 
+			// committed offset of the packets
+
+			commitOffsetCursor := cursor
+
 			// setting a exitLoop variable which will stop the infinite loop when the subscriber is disconnected
 
 			exitParentLoop:
 
 				for{
+				
+					clientObj, _, groupLen := ChannelList.GetClientObject(packetObject.ChannelName, packetObject.GroupName, index)
+
+					if groupLen == 0{
+
+						break exitParentLoop
+
+					}
+
+					// checking if the subscriber type is polling or pushing method
+
+					if clientObj.Polling > 0{
+
+						if !clientObj.StartPoll{
+
+							time.Sleep(10 * time.Millisecond)
+
+							continue
+						}
+
+						// commit the last sent offset
+
+						if clientObj.Commit{
+
+							clientObj.Commit = false
+
+							// creating subscriber offset and writing into subscriber offset file
+
+							commitOffsetCursor = cursor
+
+							byteArrayCursor := make([]byte, 8)
+							
+							binary.BigEndian.PutUint64(byteArrayCursor, uint64(cursor))
+
+							ChannelList.WriteSubscriberGrpOffset(index, packetObject, byteArrayCursor)
+						}
+
+					}
+
 					// getting the file stat
 
 					fileStat, err := os.Stat(filePath)
@@ -128,12 +178,9 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 
 						ChannelList.ThroughGroupError(packetObject.ChannelName, packetObject.GroupName, err.Error())
 
-						select{
-
-							case objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj:
-							case groupMsgChan <- nil:
-								break exitParentLoop
-						}
+						objects.SubscriberObj[packetObject.ChannelName].UnRegister <- clientObj
+						
+						break exitParentLoop
 
 					}
 
@@ -148,6 +195,14 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 					// if cursor  >= file size then skip the iteration
 
 					if cursor >= fileStat.Size(){
+
+						cursor = fileStat.Size()
+
+						if clientObj.Polling > 0{
+
+							SendFinPacket(clientObj)
+
+						}
 
 						time.Sleep(1 * time.Second)
 
@@ -296,9 +351,9 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 						case groupMsgChan <- &objects.PublishMsg{
 							Index: index,
 							Cursor: cursor,
+							ClientObj: clientObj,
 							Msg: byteSendBuffer.Array(),
 						}:
-						break
 
 						case _, channStat := <-closeChannel:
 
@@ -307,10 +362,19 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 								break exitParentLoop
 							}
 
-						break
+						case partitionNo, channStat := <-offsetReset:
+
+							if channStat{
+
+								if partitionNo == index{
+
+									cursor = commitOffsetCursor
+
+								}
+
+							}
 
 						case <-time.After(5 * time.Second):
-						break
 
 					}
 
@@ -320,12 +384,17 @@ func SubscribeGroupChannel(channelName string, groupName string, packetObject *o
 
 			go ChannelList.WriteLog("Socket group subscribers file reader closed...")
 
-		}(i, offsetByteSize[i], packetObject, clientObj, groupMsgChan)
+			select{
+				case groupMsgChan <- nil:
+				case <-time.After(1 * time.Second): 
+			}
+
+		}(i, offsetByteSize[i], packetObject, groupMsgChan)
 
 	}
 }
 
-func packetGroupPersistentListener(channelName string, groupName string, packetObject *objects.PacketStruct, groupMsgChan chan *objects.PublishMsg, closeChannel chan bool){
+func packetGroupPersistentListener(channelName string, groupName string, packetObject *objects.PacketStruct, groupMsgChan chan *objects.PublishMsg, closeChannel chan bool, offsetReset chan int, pollingCount *uint32, totalPartition int){
 
 	defer ChannelList.Recover()
 
@@ -337,30 +406,44 @@ func packetGroupPersistentListener(channelName string, groupName string, packetO
 				break exitLoop
 			}
 
-			RETRY:
-
-			clientObj, _, groupLen := ChannelList.GetClientObject(channelName, groupName, message.Index)
-
-			if groupLen == 0{
-
-				break exitLoop
-			}
-
-			_, err := clientObj.Conn.Write(message.Msg)
+			_, err := message.ClientObj.Conn.Write(message.Msg)
 
 			if err != nil {
 
-				goto RETRY
+				offsetReset <- message.Index
+
+				go ChannelList.WriteLog(err.Error())
+
+				continue
 
 			}
 
-			// creating subscriber offset and writing into subscriber offset file
+			if message.ClientObj.Polling > 0{
 
-			byteArrayCursor := make([]byte, 8)
-			
-			binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
+				// incrementing the polling the count 
 
-			ChannelList.WriteSubscriberGrpOffset(message.Index, packetObject, byteArrayCursor)
+				atomic.AddUint32(pollingCount, 1)
+
+				if (int(*pollingCount) * totalPartition) >= (message.ClientObj.Polling * totalPartition){
+
+					atomic.StoreUint32(pollingCount, 0)
+
+					message.ClientObj.StartPoll = false
+
+					SendFinPacket(message.ClientObj)
+				}
+
+			}else{
+
+				// creating subscriber offset and writing into subscriber offset file
+
+				byteArrayCursor := make([]byte, 8)
+
+				binary.BigEndian.PutUint64(byteArrayCursor, uint64(message.Cursor))
+
+				ChannelList.WriteSubscriberOffset(message.Index, packetObject, message.ClientObj, byteArrayCursor)
+			}
+
 		}
 
 	go ChannelList.WriteLog("Socket group subscriber channel closed...")

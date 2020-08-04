@@ -14,6 +14,7 @@ type PublishMsg struct{
 	Index int
 	Msg []byte
 	Cursor int64
+	ClientObj *ClientObject
 }
 
 // client objetc
@@ -26,7 +27,6 @@ type ClientObject struct{
 	Conn net.TCPConn
 	Channel chan *PublishMsg
 	Polling int
-	PollOffset int64
 	Commit bool
 	StartPoll bool
 	Disconnection bool

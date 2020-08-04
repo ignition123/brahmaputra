@@ -153,10 +153,6 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 	}
 
-	// adding offset to client object
-
-	clientObj.PollOffset = 0
-
 	// client commit set to false 
 
 	clientObj.Commit = false

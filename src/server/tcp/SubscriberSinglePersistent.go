@@ -99,7 +99,7 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 	for i:=0;i<objects.SubscriberObj[packetObject.ChannelName].Channel.PartitionCount;i++{
 
-		go func(index int, cursor int64, clientObj *objects.ClientObject, packetObject *objects.PacketStruct, pollingCount *uint32){
+		go func(index int, cursor int64, clientObj *objects.ClientObject, packetObject *objects.PacketStruct){
 
 			defer ChannelList.Recover()
 
@@ -195,6 +195,8 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 					// if cursor >=  file size then skipping the iteration
 
 					if cursor >= fileStat.Size(){
+
+						cursor = fileStat.Size()
 
 						if clientObj.Polling > 0{
 
@@ -363,7 +365,7 @@ func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *
 
 			go ChannelList.WriteLog("Socket group subscribers file reader closed...")
 
-		}(i, offsetByteSize[i], clientObj, packetObject, &pollingCount)
+		}(i, offsetByteSize[i], clientObj, packetObject)
 
 	}
 	
