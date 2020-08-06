@@ -1,5 +1,5 @@
 {
-    "worker":2,
+    "worker":16,
     "logWrite":true,
     "server":{
         "clusterName":"cluster1",
@@ -8,12 +8,14 @@
             "host":"127.0.0.1",
             "port":"8100",
             "bufferRead":1000000,
-            "timeout":1000000,
-            "socketReadTimeout":1000000,
-            "socketWriteTimeout":1000000,
-            "linger":1,
+            "timeout":0,
+            "socketReadTimeout":0,
+            "socketWriteTimeout":0,
+            "nodelay":true,
+            "linger":0,
             "keepAlive":true,
-            "noDelay":true
+            "readBuffer":0,
+            "writeBuffer":0
         }
     },
     "channelConfigFiles":"D:\\pounze_go_project\\brahmaputra\\storage",

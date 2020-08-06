@@ -22,8 +22,6 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 	defer handlepanic()
 
-	// locking the method with mutex
-
 	e.Lock()
 	defer e.Unlock()
 
@@ -32,8 +30,6 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 	if conn == nil{
 
 		go log.Println("No connection is made...")
-
-		e.requestChan <- false
 
 		return
 
@@ -190,7 +186,7 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 	// if error while compression then return
 
 	if byteArrayResp == nil{
-		e.requestChan <- false
+
 		return
 	}
 
@@ -200,6 +196,12 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 		e.TransactionList[producer_id] = byteArrayResp	
 
+	}
+
+	// write timeout
+
+	if e.TCP.SocketWriteTimeout != 0{
+		conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
 	}
 
 	// writing to the tcp sockets
@@ -216,12 +218,9 @@ func (e *CreateProperties) publishMsg(bodyBB []byte, conn net.Conn){
 
 		go log.Println(err)
 
-		e.requestChan <- false
-
 		return
 	}
 
-	e.requestChan <- true
 }
 
 // method to subscribe for messages
@@ -348,6 +347,12 @@ func (e *CreateProperties) Subscribe(contentMatcher string) bool{
 		byteBuffer.PutInt(0) // add subscriber polling as 0
 	}
 
+	// write timeout
+
+	if e.TCP.SocketWriteTimeout != 0{
+		e.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
+	}
+
 	// writing to the tcp packet
 
 	_, err := e.Conn.Write(byteBuffer.Array())
@@ -413,6 +418,12 @@ func (e *CreateProperties) Commit() bool{
 
 	byteBuffer.Put([]byte(e.ChannelName)) // channelNameLen
 
+	// write timeout
+
+	if e.TCP.SocketWriteTimeout != 0{
+		e.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
+	}
+
 	// writing to the tcp packet
 
 	_, err := e.Conn.Write(byteBuffer.Array())
@@ -430,69 +441,65 @@ func (e *CreateProperties) Commit() bool{
 	return true
 }
 
-// method to publish the message to the server
 
-func (e *CreateProperties) Publish(bodyBB []byte, channcb chan bool){
+func (e *CreateProperties) startProducerListener(){
 
 	defer handlepanic()
 
-	// checking connection status
+	for bodyBB := range e.PublishChannel{
 
-	if !e.connectStatus{
+		// checking connection status
 
-		// appending the packet 
+		if !e.connectStatus{
 
-		e.requestPull = append(e.requestPull, bodyBB)
+			// appending the packet 
 
-		channcb <- false
+			e.requestPull = append(e.requestPull, bodyBB)
 
-		return
-
-	}
-
-	// checking the write delay
-
-	if e.WriteDelay > 0{
-		time.Sleep(time.Duration(e.WriteDelay) * time.Nanosecond)
-	}
-	
-	// checking if pool size is set
-
-	if e.PoolSize > 0{
-
-		if e.roundRobin == e.PoolSize{
-
-			e.roundRobin = 0
+			continue
 
 		}
 
-		// using round robin algorithm
+		// checking the write delay
 
-		if e.roundRobin >= e.PoolSize{
+		if e.WriteDelay > 0{
 
-			channcb <- false
-
-			return
+			time.Sleep(time.Duration(e.WriteDelay) * time.Nanosecond)
 
 		}
 
-		// publising to server
-		
-		go e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
+		// checking if pool size is set
 
-		<-e.requestChan
+		if e.PoolSize > 0{
 
-		e.roundRobin += 1
+			if e.roundRobin == e.PoolSize{
 
-	}else{
+				e.roundRobin = 0
 
-		// publishing in single tcp connection no pool size set
+			}
 
-	 	go e.publishMsg(bodyBB, e.ConnPool[0])
+			// using round robin algorithm
 
-	 	<-e.requestChan
+			if e.roundRobin >= e.PoolSize{
+
+				continue
+
+			}
+
+			// publising to server
+			
+			e.publishMsg(bodyBB, e.ConnPool[e.roundRobin])
+
+			e.roundRobin += 1
+
+		}else{
+
+			// publishing in single tcp connection no pool size set
+
+		 	e.publishMsg(bodyBB, e.ConnPool[0])
+
+		}
 
 	}
 
-	channcb <- true
 }

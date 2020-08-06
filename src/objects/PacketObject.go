@@ -24,7 +24,7 @@ type ClientObject struct{
 	ChannelMapName string
 	MessageMapType string
 	GroupMapName string
-	Conn net.TCPConn
+	Conn net.Conn
 	Channel chan *PublishMsg
 	Polling int
 	Commit bool

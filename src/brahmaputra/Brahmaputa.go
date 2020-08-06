@@ -51,7 +51,6 @@ type CreateProperties struct{
 	connectStatus bool
 	requestWg sync.WaitGroup
 	ReceiveSync sync.WaitGroup
-	requestChan chan bool
 	contentMatcher string
 	contentMatcherMap map[string]interface{}
 	AlwaysStartFrom string
@@ -67,6 +66,8 @@ type CreateProperties struct{
 	subContentmatcher bool
 	Compression string
 	TCP *TCPConf
+	PublishBufferSize int
+	PublishChannel chan []byte
 }	
 
 // compression constant
@@ -83,9 +84,9 @@ const(
 
 func handlepanic() { 
   
-    // if a := recover(); a != nil { 
-    //     log.Println(a)
-    // } 
+    if a := recover(); a != nil { 
+        log.Println(a)
+    } 
 } 
 
 // validating the connection type and app type
@@ -121,6 +122,19 @@ func (e *CreateProperties) Connect(){
 		return
 	}
 
+	go e.startProducerListener()
+
+	// setting default producer buffer size
+
+	if e.PublishBufferSize == 0{
+
+		e.PublishBufferSize = 1024
+	}
+
+	// creating producer channel
+
+	e.PublishChannel = make(chan []byte, e.PublishBufferSize)
+
 	// by default reconnect flag is false
 
 	e.subContentmatcher = false
@@ -138,10 +152,6 @@ func (e *CreateProperties) Connect(){
 	var agentErr error
 
 	e.AgentName, agentErr = os.Hostname()
-
-	// creating a request boolean channel
-
-	e.requestChan = make(chan bool, 1)
 
 	if agentErr != nil{
 		

@@ -83,62 +83,54 @@ func acceptSocket(serverObject net.Listener){
             continue
 		}
 
-		tcpObject := conn.(*net.TCPConn)
-
 		// checking for nodelay flag of tcp
 
 		if *ChannelList.ConfigTCPObj.Server.TCP.NoDelay != false{
-			tcpObject.SetNoDelay(*ChannelList.ConfigTCPObj.Server.TCP.NoDelay)
+			conn.(*net.TCPConn).SetNoDelay(*ChannelList.ConfigTCPObj.Server.TCP.NoDelay)
 		}
 
 		// checking for keepalive flag
 
 		if *ChannelList.ConfigTCPObj.Server.TCP.KeepAlive != false{
-			tcpObject.SetKeepAlive(*ChannelList.ConfigTCPObj.Server.TCP.KeepAlive)
+			conn.(*net.TCPConn).SetKeepAlive(*ChannelList.ConfigTCPObj.Server.TCP.KeepAlive)
 		}
 
 		// checking for linger
         
         if *ChannelList.ConfigTCPObj.Server.TCP.Linger != 0{
-        	tcpObject.SetLinger(*ChannelList.ConfigTCPObj.Server.TCP.Linger)
+        	conn.(*net.TCPConn).SetLinger(*ChannelList.ConfigTCPObj.Server.TCP.Linger)
         }
 
         // checking for read and write timeout
         
         if *ChannelList.ConfigTCPObj.Server.TCP.Timeout != 0{
 
-        	tcpObject.SetDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.Timeout) * time.Millisecond))
+        	conn.(*net.TCPConn).SetDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.Timeout) * time.Millisecond))
 
         }else{
 
-        	tcpObject.SetDeadline(time.Time{})
+        	conn.(*net.TCPConn).SetDeadline(time.Time{})
         }
 
-        // checking for read timeout
+		// setting read buffer size
 
-        if *ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout != 0{
+		if *ChannelList.ConfigTCPObj.Server.TCP.ReadBuffer != 0{
 
-        	tcpObject.SetReadDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout) * time.Millisecond))
+			conn.(*net.TCPConn).SetReadBuffer(*ChannelList.ConfigTCPObj.Server.TCP.ReadBuffer)
 
-        }else{
+		}
 
-        	tcpObject.SetReadDeadline(time.Time{})
-        }
-			
-		// checking for write timeout
+		// setting write buffer size
 
-		if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+		if *ChannelList.ConfigTCPObj.Server.TCP.WriteBuffer != 0{
 
-			tcpObject.SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+			conn.(*net.TCPConn).SetWriteBuffer(*ChannelList.ConfigTCPObj.Server.TCP.WriteBuffer)
 
-		}else{
-
-			tcpObject.SetWriteDeadline(time.Time{})
 		}
 		
 		// handling the new socket
 
-		go tcp.HandleRequest(*tcpObject)
+		go tcp.HandleRequest(conn)
 	}
 	
 }

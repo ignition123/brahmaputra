@@ -12,6 +12,7 @@ import(
 	"log"
 	"time"
 	"io"
+	"bufio"
 )
 
 // method to check if the packet is blank
@@ -44,6 +45,8 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 	callbackChan := make(chan string, 1)
 	defer close(callbackChan)
 
+	bufferReader := bufio.NewReader(conn)
+
 	// checking the connection Type
 
 	if e.ConnectionType == "tcp"{
@@ -52,11 +55,17 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 		for {
 
+			// read timeout
+
+			if e.TCP.SocketReadTimeout != 0{
+				conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
+			}
+
 			// creating a byte array of 8 byte size	
 
 			sizeBuf := make([]byte, 8)
 
-			_, err := conn.Read(sizeBuf)
+			_, err := io.ReadAtLeast(bufferReader, sizeBuf[:int(8)], 8)
 
 			// reading from tcp socket getting the size of the total packet
 
@@ -80,7 +89,7 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 			statusBuf := make([]byte, 1)
 
-			_, err =conn.Read(statusBuf)
+			_, err = io.ReadAtLeast(bufferReader, sizeBuf[:int(8)], 8)
 
 			// reading from tcp socket getting the size of the total packet
 
@@ -98,7 +107,7 @@ func (e *CreateProperties) receiveSubMsg(conn net.Conn){
 
 			// reading the complete packet
 
-			_, err = conn.Read(completePacket)
+			_, err = io.ReadAtLeast(bufferReader, completePacket[:int(packetSize)], int(packetSize))
 
 			// reading from tcp socket getting the size of the total packet
 
@@ -167,9 +176,17 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 	callbackChan := make(chan string, 1)
 	defer close(callbackChan)
 
+	bufferReader := bufio.NewReader(conn)
+
 	// listening to sockets
 
 	for {	
+
+		// read timeout
+
+		if e.TCP.SocketReadTimeout != 0{
+			conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
+		}
 
 		// creating a empty byte array of size 8 to get the total size of the packet
 
@@ -177,7 +194,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 
 		// reading 8 bytes from tcp sockets
 
-		_, err := conn.Read(sizeBuf)
+		_, err := io.ReadAtLeast(bufferReader, sizeBuf[:int(8)], 8)
 
 		// reading from tcp socket getting the size of the total packet
 
@@ -203,7 +220,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 
 		statusBuf := make([]byte, 1)
 
-		_, err = conn.Read(statusBuf)
+		_, err = io.ReadAtLeast(bufferReader, sizeBuf[:int(1)], 1)
 
 		// reading from tcp socket getting the size of the total packet
 
@@ -221,7 +238,7 @@ func (e *CreateProperties) receiveMsg(conn net.Conn){
 
 		// reading the entire packet from tcp pipe
 
-		_, err = conn.Read(completePacket)
+		_, err = io.ReadAtLeast(bufferReader, completePacket[:int(packetSize)], int(packetSize))
 
 		// reading from tcp socket getting the size of the total packet
 

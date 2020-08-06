@@ -17,7 +17,7 @@ import (
 
 // method to parse message from socket client
 
-func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientObj *objects.ClientObject, writeCount *int){
+func parseMsg(packetSize int64, completePacket []byte, conn net.Conn, clientObj *objects.ClientObject, writeCount *int){
 
 	defer ChannelList.Recover()
 
@@ -98,7 +98,7 @@ func parseMsg(packetSize int64, completePacket []byte, conn net.TCPConn, clientO
 	}	
 }
 
-func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.Conn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
 
 	defer ChannelList.Recover()
 
@@ -207,7 +207,7 @@ func handleSubscriberPersistentMessage(byteBuffer ByteBuffer.Buffer, messageType
 
 }
 
-func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
+func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.Conn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int){
 
 	defer ChannelList.Recover()
 
@@ -252,7 +252,7 @@ func handleSubscriberInmemoryMessage(byteBuffer ByteBuffer.Buffer, messageType s
 
 }
 
-func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.TCPConn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
+func handleProducerMessage(byteBuffer ByteBuffer.Buffer, messageType string, clientObj *objects.ClientObject, channelName string, conn net.Conn, packetObject *objects.PacketStruct, packetSize int64, messageTypeLen int, channelNameLen int, writeCount *int){
 
 	defer ChannelList.Recover()
 

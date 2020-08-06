@@ -4,8 +4,8 @@ import(
 	"ChannelList"
 	"objects"
 	"ByteBuffer"
-	_"time"
-	_"log"
+	"time"
+	"net"
 )
 
 func SubscriberInmemory(clientObj *objects.ClientObject){
@@ -82,6 +82,15 @@ func createBufferPacket(message *objects.PacketStruct) []byte{
 func sendMessageToClient(clientObj *objects.ClientObject, message *objects.PublishMsg){
 
 	defer ChannelList.Recover()
+
+	if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+	}else{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+	}
 
 	_, err := clientObj.Conn.Write(message.Msg)
 		

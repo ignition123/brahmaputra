@@ -13,6 +13,7 @@ import (
 	"io"
 	"objects"
 	"time"
+	"bufio"
 )
 
 // creating a closeTCP variale with boolean value false, it is set to true when the application crashes it will close all tcp client
@@ -40,7 +41,7 @@ func allZero(s []byte) bool{
 
 // handling the tcp socket
 
-func HandleRequest(conn net.TCPConn){
+func HandleRequest(conn net.Conn){
 	
 	defer ChannelList.Recover()
 
@@ -63,6 +64,10 @@ func HandleRequest(conn net.TCPConn){
 
 	writeCount := 0
 
+	// creating bufio reader
+
+	bufferReader := bufio.NewReader(conn)
+
 	// staring infinite loop
 
 	for {
@@ -70,10 +75,24 @@ func HandleRequest(conn net.TCPConn){
 		// if closeTCP == true then all connections will be closed
 		
 		if closeTCP{
+
 			go ChannelList.WriteLog("Closing all current sockets...")
+
 			conn.Close()
+			
 			break
 		}
+
+		// checking for read timeout
+
+        if *ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout != 0{
+
+        	conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketReadTimeout) * time.Millisecond))
+
+        }else{
+
+        	conn.(*net.TCPConn).SetReadDeadline(time.Time{})
+        }
 
 		// creating a 8 byte buffer array
 
@@ -81,7 +100,7 @@ func HandleRequest(conn net.TCPConn){
 
 		// reading from tcp sockets
 
-		_, err := conn.Read(sizeBuf)
+		_, err := io.ReadAtLeast(bufferReader, sizeBuf[:int(8)], 8)
 
 		// checking the error type
 
@@ -116,7 +135,7 @@ func HandleRequest(conn net.TCPConn){
 
 		completePacket := make([]byte, packetSize)
 
-		_, err = conn.Read(completePacket)
+		_, err = io.ReadAtLeast(bufferReader, completePacket[:int(packetSize)], int(packetSize))
 
 		// checking error type
 

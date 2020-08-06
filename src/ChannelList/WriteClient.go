@@ -10,11 +10,12 @@ import(
 	"net"
 	"ByteBuffer"
 	"objects"
+	"time"
 )
 
 // method throwing error to individual subscriber or publisher
 
-func ThroughClientError(conn net.TCPConn, message string){
+func ThroughClientError(conn net.Conn, message string){
 
 	defer Recover()
 
@@ -29,6 +30,15 @@ func ThroughClientError(conn net.TCPConn, message string){
 	byteSendBuffer.PutByte(byte(1)) // status code
 
 	byteSendBuffer.Put([]byte(message)) // actual body
+
+	if *ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+		conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+	}else{
+
+		conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+	}
 
 	_, err := conn.Write(byteSendBuffer.Array())
 
@@ -64,6 +74,15 @@ func ThroughGroupError(channelName string, groupName string, message string){
 	channelLock.Lock()
 
 	for index :=  range objects.SubscriberObj[channelName].Groups[groupName]{
+
+		if *ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+			objects.SubscriberObj[channelName].Groups[groupName][index].Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+		}else{
+
+			objects.SubscriberObj[channelName].Groups[groupName][index].Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+		}
 
 		_, err := objects.SubscriberObj[channelName].Groups[groupName][index].Conn.Write(byteSendBuffer.Array())
 		
@@ -102,6 +121,15 @@ func SendAck(messageMap *objects.PacketStruct, clientObj *objects.ClientObject){
 	byteBuffer.Put([]byte(messageMap.Producer_id))
 
 	// writing to tcp socket
+
+	if *ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+	}else{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+	}
 
 	_, err := clientObj.Conn.Write(byteBuffer.Array())
 

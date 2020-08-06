@@ -9,6 +9,7 @@ import(
 	"encoding/binary"
 	"strconv"
 	"sync/atomic"
+	"net"
 )
 
 func SubscribeGroupChannel(channelName string, groupName string, packetObject *objects.PacketStruct, clientObj *objects.ClientObject, start_from string){
@@ -404,6 +405,15 @@ func packetGroupPersistentListener(channelName string, groupName string, packetO
 			if message == nil{
 
 				break exitLoop
+			}
+
+			if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+				message.ClientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+			}else{
+
+				message.ClientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
 			}
 
 			_, err := message.ClientObj.Conn.Write(message.Msg)

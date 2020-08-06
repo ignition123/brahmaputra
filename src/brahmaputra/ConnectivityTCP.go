@@ -89,20 +89,12 @@ func (e *CreateProperties) connectTCP(){
 
 	if len(e.requestPull) > 0{
 
-		// creating a boolean channel
-
-		chancb := make(chan bool, 1)
-		defer close(chancb)
-
 		// after reconnection if any message are pending in the request pull then it will publish message to the server again
 
 		for _, bodyMap := range e.requestPull{
 
-			go e.Publish(bodyMap, chancb)
-
-			// waiting for callbacks
-
-			<-chancb
+			e.PublishChannel <- bodyMap
+			
 		}
 
 	}
@@ -286,18 +278,6 @@ func (e *CreateProperties) createTCPConnection() net.Conn{
 
 		if e.TCP.Timeout != 0{
 			conn.(*net.TCPConn).SetDeadline(time.Now().Add(time.Duration(e.TCP.Timeout) * time.Millisecond))
-		}
-
-		// read timeout
-
-		if e.TCP.SocketReadTimeout != 0{
-			conn.(*net.TCPConn).SetReadDeadline(time.Now().Add(time.Duration(e.TCP.SocketReadTimeout) * time.Millisecond))
-		}
-
-		// write timeout
-
-		if e.TCP.SocketWriteTimeout != 0{
-			conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(e.TCP.SocketWriteTimeout) * time.Millisecond))
 		}
 
 	}

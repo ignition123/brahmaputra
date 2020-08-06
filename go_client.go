@@ -27,9 +27,9 @@ func main(){
 			Linger:1,
 			NoDelay:true,
 			KeepAlive:true,
-			Timeout:1000000,
-			SocketReadTimeout:1000000,
-			SocketWriteTimeout:1000000,
+			Timeout:0,
+			SocketReadTimeout:0,
+			SocketWriteTimeout:0,
 		},
 	}
 
@@ -92,38 +92,11 @@ func main(){
 		return
 	}
 	
-
-	// go subscribe()
-
-	// var parseWait sync.WaitGroup
-
-	// var parseWait1 sync.WaitGroup
-
-	var channel = make(chan bool, 1)
-
 	start := time.Now()
 	
-	for i := 0; i < 1000000; i++ {
+	for i := 0; i < 1000000000; i++ {
 
-		// parseWait.Add(1)
-
-		// log.Println("message fired")
-
-		// time.Sleep(1 * time.Nanosecond)
-
-		go brahm.Publish(jsonByte, channel)
-
-		select {
-
-			case _, ok := <-channel :	
-
-				if ok{
-
-				}
-			break
-		}
-
-		// parseWait.Wait()
+		brahm.PublishChannel <- jsonByte
 		
 	}
 

@@ -9,6 +9,7 @@ import(
 	"encoding/binary"
 	"sync/atomic"
 	"strconv"
+	"net"
 )
 
 func SubscriberSinglePersistent(clientObj *objects.ClientObject,  packetObject *objects.PacketStruct, start_from string){
@@ -401,6 +402,15 @@ func packetSinglePersistentListener(clientObj *objects.ClientObject, closeChanne
 func sendMessageToClientPersistent(clientObj *objects.ClientObject, message *objects.PublishMsg, packetObject *objects.PacketStruct, pollingCount *uint32){ 
 
 	defer ChannelList.Recover()
+
+	if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+	}else{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+	}
 
 	_, err := clientObj.Conn.Write(message.Msg)
 	

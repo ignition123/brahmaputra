@@ -4,6 +4,8 @@ import(
 	"ByteBuffer"
 	"objects"
 	"ChannelList"
+	"net"
+	"time"
 )
 
 func SendFinPacket(clientObj *objects.ClientObject){
@@ -29,6 +31,17 @@ func SendFinPacket(clientObj *objects.ClientObject){
 	byteSendBuffer.PutShort(messageTypeLen)
 
 	byteSendBuffer.Put([]byte(messageType))
+
+	// checking for write timeout
+
+	if *ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout != 0{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Now().Add(time.Duration(*ChannelList.ConfigTCPObj.Server.TCP.SocketWriteTimeout) * time.Millisecond))
+
+	}else{
+
+		clientObj.Conn.(*net.TCPConn).SetWriteDeadline(time.Time{})
+	}
 
 	_, err := clientObj.Conn.Write(byteSendBuffer.Array())
 	

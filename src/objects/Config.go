@@ -20,6 +20,8 @@ type TCPStruct struct{
 	Linger *int
 	KeepAlive *bool
 	NoDelay *bool
+	ReadBuffer *int
+	WriteBuffer *int
 }
 
 // config struct
